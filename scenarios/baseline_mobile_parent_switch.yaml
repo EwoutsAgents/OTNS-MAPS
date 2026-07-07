@@ -1,0 +1,52 @@
+name: baseline_mobile_parent_switch
+title: Stock OpenThread mobility benchmark
+description: >
+  Baseline OTNS scenario with two routers and one mobile MED moving from
+  Router A toward Router B without modifying OpenThread parent selection.
+
+radio_model:
+  preferred: MutualInterference
+  fallbacks:
+    - MIDisc
+    - Ideal_Rssi
+    - Ideal
+
+timing:
+  settle_seconds: 120
+  step_seconds: 10
+  movement_steps: 24
+
+nodes:
+  router_a:
+    type: router
+    x: 100
+    y: 300
+  router_b:
+    type: router
+    x: 500
+    y: 300
+  mobile:
+    type: med
+    x: 140
+    y: 300
+
+movement:
+  node: mobile
+  start:
+    x: 140
+    y: 300
+  end:
+    x: 460
+    y: 300
+
+traffic_probes:
+  - name: router_a_to_mobile
+    kind: ping
+    src: router_a
+    dst: mobile
+    count: 1
+  - name: router_b_to_mobile
+    kind: ping
+    src: router_b
+    dst: mobile
+    count: 1

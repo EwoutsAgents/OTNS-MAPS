@@ -8,3 +8,17 @@ __pycache__/
 # Virtual environments
 .venv/
 venv/
+
+# Local tools and editor state
+.idea/
+.vscode/
+
+# Generated benchmark outputs
+results/*.csv
+results/*.json
+results/*.png
+results/*.log
+!results/.gitkeep
+
+# Misc local files
+*.tmp
