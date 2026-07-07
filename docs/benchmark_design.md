@@ -8,13 +8,27 @@ This benchmark is intentionally not a new parent-selection algorithm. It measure
 
 ## Scenario design
 
-The baseline scenario uses three nodes:
+The repository currently carries two closely related stock scenarios:
+
+- `baseline_mobile_parent_switch` is the original reference setup.
+- `calibrated_mobile_parent_switch` delays Router B introduction so the mobile node first has time to attach to Router A before movement begins.
+
+Both scenarios use three nodes:
 
 - Router A
 - Router B
 - one mobile MED
 
-The mobile node starts near Router A and gradually moves toward Router B in fixed position increments. The movement path is deterministic and defined in [`../scenarios/baseline_mobile_parent_switch.yaml`](../scenarios/baseline_mobile_parent_switch.yaml).
+The original baseline uses a direct two-router topology with the movement path defined in [`../scenarios/baseline_mobile_parent_switch.yaml`](../scenarios/baseline_mobile_parent_switch.yaml).
+
+The calibrated variant is defined in [`../scenarios/calibrated_mobile_parent_switch.yaml`](../scenarios/calibrated_mobile_parent_switch.yaml). It uses a pre-movement stabilization phase:
+
+1. Router A and the mobile MED are created first.
+2. The mobile MED is allowed to attach to Router A.
+3. Router B is introduced later.
+4. A further settle period runs before movement starts.
+
+This keeps the benchmark within stock OTNS/OpenThread behavior while making initial attachment to Router A much more likely.
 
 The initial baseline uses a MED instead of a regular SED. OTNS CLI documentation notes that a regular SED typically does not respond to ping traffic, which makes packet-delivery measurement less direct for a first benchmark. A later extension can add a dedicated SED or CSL-based scenario once the baseline harness is stable.
 
@@ -50,12 +64,14 @@ The runner writes:
 - `results/baseline_run_<timestamp>.csv`
 - `results/baseline_summary_<timestamp>.json`
 
-For reproducibility and downstream tooling checks, the repository also includes one curated committed artifact under `examples/real-baseline/`:
+For reproducibility and downstream tooling checks, the repository includes two curated committed artifact sets:
 
 - `examples/real-baseline/baseline_run_example.csv`
 - `examples/real-baseline/baseline_summary_example.json`
+- `examples/switch-attempt/baseline_run_switch_attempt.csv`
+- `examples/switch-attempt/baseline_summary_switch_attempt.json`
 
-The `results/` directory is for local generated outputs. The `examples/real-baseline/` directory is a small checked-in reference artifact for format validation and analysis testing.
+The `results/` directory is for local generated outputs. The `examples/real-baseline/` directory preserves the original no-switch reference artifact. The `examples/switch-attempt/` directory stores a calibrated stock-switch attempt artifact.
 
 ## Known limitations
 
@@ -69,6 +85,7 @@ Several limitations are currently explicit:
 - Plot generation in `analysis/analyze_baseline.py` is optional and only enabled when `matplotlib` is installed.
 - Real OTNS execution was validated in the local workspace on July 7, 2026 using a local OTNS checkout, explicit OTNS workdir, and headless OTNS launch flags.
 - The committed example artifact is a single representative run, not a repeated experiment and not a statistically meaningful dataset.
+- Even the calibrated scenario can remain a no-switch run on some executions. That variability is part of the observed stock OpenThread behavior under the tested OTNS conditions.
 
 ## How to run
 
@@ -76,6 +93,15 @@ Real OTNS run:
 
 ```bash
 python3 scripts/run_baseline.py
+```
+
+Calibrated stock-switch attempt:
+
+```bash
+python3 scripts/run_baseline.py \
+  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns
 ```
 
 Mock smoke test:
@@ -100,6 +126,7 @@ To validate the committed example artifact:
 
 ```bash
 python3 analysis/analyze_baseline.py examples/real-baseline/baseline_run_example.csv
+python3 analysis/analyze_baseline.py examples/switch-attempt/baseline_run_switch_attempt.csv
 ```
 
 ## Validation checklist

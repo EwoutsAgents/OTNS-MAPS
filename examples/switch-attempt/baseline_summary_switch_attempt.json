@@ -1,0 +1,33 @@
+{
+  "expected_initial_parent": "router_a",
+  "final_observed_parent": "router_b",
+  "first_switch_time_s": 960.0,
+  "initial_observed_parent": "router_a",
+  "mock": false,
+  "notes": [
+    "Delayed node activation applied: router_b after 300 simulated seconds.",
+    "Live OTNS scan compatibility is inconsistent in this setup; scan-derived RSSI/LQI fields are left empty."
+  ],
+  "oscillation_events": 0,
+  "packet_delivery_ratio": 0.4375,
+  "parent_sequence": [
+    "router_a",
+    "router_b"
+  ],
+  "pre_movement_parent_before_delayed_nodes": "router_a",
+  "result_classification": "switch_observed",
+  "sample_count": 40,
+  "scenario_name": "calibrated_mobile_parent_switch",
+  "scenario_title": "Calibrated stock OpenThread mobility benchmark",
+  "selected_radio_model": "MutualInterference",
+  "switch_count": 1,
+  "switch_events": [
+    {
+      "from_parent": "router_a",
+      "sample_index": 23,
+      "sim_time_s": 960.0,
+      "to_parent": "router_b"
+    }
+  ],
+  "total_outage_s": 100.0
+}

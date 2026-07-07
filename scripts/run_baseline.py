@@ -265,6 +265,7 @@ class RealBenchmarkRunner:
         self.otns_workdir = otns_workdir
         self.notes: list[str] = []
         self.node_refs: dict[str, NodeRef] = {}
+        self.parent_before_delayed_nodes: str | None = None
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         if shutil.which(self.otns_command.split()[0]) is None:
@@ -283,8 +284,7 @@ class RealBenchmarkRunner:
             session.command_output("speed 0")
             session.command_output(f'title "{self.scenario["title"]}"')
             radio_model = self._select_radio_model(session)
-            named_ids = self._create_nodes(session)
-            session.command_output(f'go {timing["settle_seconds"]}')
+            named_ids = self._activate_nodes(session, timing)
             self._refresh_node_identity(session)
 
             samples: list[dict[str, Any]] = []
@@ -306,7 +306,7 @@ class RealBenchmarkRunner:
                 sample["selected_radio_model"] = radio_model
 
                 parent_identity = (
-                    sample.get("parent_extaddr") or sample.get("parent_rloc16") or sample.get("parent_node_guess")
+                    sample.get("parent_node_guess") or sample.get("parent_extaddr") or sample.get("parent_rloc16")
                 )
                 switch = bool(previous_parent and parent_identity and parent_identity != previous_parent)
                 sample["parent_switch"] = switch
@@ -344,6 +344,7 @@ class RealBenchmarkRunner:
             selected_radio_model=rows[0]["selected_radio_model"] if rows else None,
             total_outage_s=round(total_outage, 3),
             mock=False,
+            parent_before_delayed_nodes=self.parent_before_delayed_nodes,
         )
         return rows, summary
 
@@ -359,15 +360,51 @@ class RealBenchmarkRunner:
         self.notes.append("Unable to confirm configured OTNS radio model from CLI output.")
         return "unknown"
 
-    def _create_nodes(self, session: OtnsSession) -> dict[str, int]:
+    def _create_nodes(self, session: OtnsSession, node_names: list[str]) -> dict[str, int]:
         named_ids: dict[str, int] = {}
-        for name, config in self.scenario["nodes"].items():
+        for name in node_names:
+            config = self.scenario["nodes"][name]
             # OTNS-specific command: create a stock node type in the simulator.
             output = session.command_output(f'add {config["type"]}')
             node_id = int(output[0])
             named_ids[name] = node_id
             session.command_output(f'move {node_id} {config["x"]} {config["y"]}')
             self.node_refs[name] = NodeRef(name=name, node_id=node_id, x=config["x"], y=config["y"])
+        return named_ids
+
+    def _activate_nodes(self, session: OtnsSession, timing: dict[str, Any]) -> dict[str, int]:
+        activation = self.scenario.get("activation", {})
+        configured_names = list(self.scenario["nodes"].keys())
+        initial_node_names = activation.get("initial_nodes") or configured_names
+        named_ids = self._create_nodes(session, list(initial_node_names))
+
+        delayed_groups = activation.get("delayed_node_groups", [])
+        if not delayed_groups:
+            session.command_output(f'go {timing["settle_seconds"]}')
+            return named_ids
+
+        for group in delayed_groups:
+            delay_seconds = int(group.get("delay_seconds", 0))
+            if delay_seconds:
+                session.command_output(f"go {delay_seconds}")
+            self._refresh_node_identity(session)
+            mobile_ref = self.node_refs.get("mobile")
+            if mobile_ref is not None and self.parent_before_delayed_nodes is None:
+                parent_info = parse_key_value_lines(session.command_output(f'node {mobile_ref.node_id} "parent"'))
+                self.parent_before_delayed_nodes = self._parent_name_from_identity(parent_info)
+
+            group_names = list(group["nodes"])
+            for name in group_names:
+                named_ids.update(self._create_nodes(session, [name]))
+            self.notes.append(
+                "Delayed node activation applied: "
+                + ", ".join(group_names)
+                + f" after {delay_seconds} simulated seconds."
+            )
+
+        post_activation_settle_seconds = int(activation.get("post_activation_settle_seconds", 0))
+        if post_activation_settle_seconds:
+            session.command_output(f"go {post_activation_settle_seconds}")
         return named_ids
 
     def _refresh_node_identity(self, session: OtnsSession) -> None:
@@ -630,6 +667,7 @@ def build_summary(
     selected_radio_model: str | None,
     total_outage_s: float,
     mock: bool,
+    parent_before_delayed_nodes: str | None = None,
 ) -> dict[str, Any]:
     total_tx = 0
     total_rx = 0
@@ -645,6 +683,18 @@ def build_summary(
             total_rx += int(probe["rx"] or 0)
 
     pdr = (total_rx / total_tx) if total_tx else None
+    compact_parent_sequence = [value for index, value in enumerate(parent_sequence) if index == 0 or value != parent_sequence[index - 1]]
+    initial_observed_parent = samples[0].get("parent_node_guess") if samples else None
+    final_observed_parent = samples[-1].get("parent_node_guess") if samples else None
+    expected_initial_parent = scenario.get("expected_initial_parent")
+    if expected_initial_parent and initial_observed_parent != expected_initial_parent:
+        result_classification = "initial_parent_unexpected"
+    elif switch_events:
+        result_classification = "switch_observed"
+    elif initial_observed_parent and final_observed_parent:
+        result_classification = "no_switch_observed"
+    else:
+        result_classification = "inconclusive"
 
     return {
         "scenario_name": scenario["name"],
@@ -652,6 +702,12 @@ def build_summary(
         "mock": mock,
         "selected_radio_model": selected_radio_model,
         "sample_count": len(samples),
+        "expected_initial_parent": expected_initial_parent,
+        "pre_movement_parent_before_delayed_nodes": parent_before_delayed_nodes,
+        "initial_observed_parent": initial_observed_parent,
+        "final_observed_parent": final_observed_parent,
+        "parent_sequence": compact_parent_sequence,
+        "result_classification": result_classification,
         "switch_count": len(switch_events),
         "first_switch_time_s": switch_events[0]["sim_time_s"] if switch_events else None,
         "switch_events": switch_events,

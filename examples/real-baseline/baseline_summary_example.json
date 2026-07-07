@@ -1,11 +1,19 @@
 {
+  "expected_initial_parent": null,
+  "final_observed_parent": "router_b",
   "first_switch_time_s": null,
+  "initial_observed_parent": "router_b",
   "mock": false,
   "notes": [
     "OTNS scan output was skipped in live mode because scan did not return synchronously in this setup."
   ],
   "oscillation_events": 0,
   "packet_delivery_ratio": 1.0,
+  "parent_sequence": [
+    "router_b"
+  ],
+  "pre_movement_parent_before_delayed_nodes": null,
+  "result_classification": "no_switch_observed",
   "sample_count": 24,
   "scenario_name": "baseline_mobile_parent_switch",
   "scenario_title": "Stock OpenThread mobility benchmark",

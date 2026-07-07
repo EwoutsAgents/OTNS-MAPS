@@ -1,6 +1,6 @@
 # Real baseline example artifact
 
-This directory contains one representative real OTNS baseline artifact copied from a live run of the stock benchmark harness.
+This directory contains the original representative real OTNS no-switch baseline artifact copied from a live run of the stock benchmark harness.
 
 ## Run metadata
 
@@ -24,7 +24,7 @@ It is not a statistically meaningful experiment and should not be treated as a f
 ## Known limitations
 
 - This representative run recorded no parent switch events.
-- The mobile node remained attached to a single observed parent for the full path.
+- The mobile node started and ended on the same observed parent (`router_b`).
 - Live scan-derived candidate-parent RSSI and LQI fields are empty because `scan` did not behave synchronously through the OTNS CLI session used by the runner in this setup.
 - This run is a stock OpenThread baseline only. No mobility-aware parent-selection changes were applied.
 

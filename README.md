@@ -18,12 +18,18 @@ OTNS-MAPS/
 │       ├── README.md
 │       ├── baseline_run_example.csv
 │       └── baseline_summary_example.json
+│   └── switch-attempt/
+│       ├── README.md
+│       ├── baseline_run_switch_attempt.csv
+│       └── baseline_summary_switch_attempt.json
 ├── results/
 │   └── .gitkeep
 ├── scenarios/
 │   └── baseline_mobile_parent_switch.yaml
+│   └── calibrated_mobile_parent_switch.yaml
 └── scripts/
-    └── run_baseline.py
+    ├── run_baseline.py
+    └── validate_otns_cli.py
 ```
 
 ## Setup
@@ -85,12 +91,26 @@ The benchmark prefers the `MutualInterference` OTNS radio model. If it is unavai
 
 The mobile node is a MED instead of a regular SED. OTNS documents that a regular SED typically does not respond to ping traffic, which makes packet-delivery benchmarking less direct for the first baseline.
 
+The repository now includes two stock benchmark scenarios:
+
+- `scenarios/baseline_mobile_parent_switch.yaml` for the original reference run
+- `scenarios/calibrated_mobile_parent_switch.yaml` for a delayed-router variant that tries to induce an observable stock parent change without modifying OpenThread logic
+
 ## Run
 
 Real OTNS run:
 
 ```bash
 python3 scripts/run_baseline.py
+```
+
+Calibrated switch-attempt run:
+
+```bash
+python3 scripts/run_baseline.py \
+  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns
 ```
 
 Local smoke test without OTNS installed:
@@ -163,6 +183,12 @@ Generated benchmark outputs in `results/` remain ignored by default.
 A small curated real OTNS artifact is committed under [`examples/real-baseline/`](examples/real-baseline/).
 
 It exists for reproducibility, format validation, and downstream analysis testing. It is not intended to represent a statistically meaningful experiment. Normal benchmark runs should still write fresh local outputs into `results/`.
+
+## Example switch-attempt output
+
+A second curated real OTNS artifact is committed under [`examples/switch-attempt/`](examples/switch-attempt/).
+
+This artifact comes from the calibrated scenario that delays Router B introduction so the mobile node first attaches to Router A before movement begins. It is still a stock OpenThread benchmark, not a mobility-aware algorithm.
 
 ## Status
 

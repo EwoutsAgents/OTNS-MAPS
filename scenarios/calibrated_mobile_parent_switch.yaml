@@ -1,0 +1,65 @@
+name: calibrated_mobile_parent_switch
+title: Calibrated stock OpenThread mobility benchmark
+description: >
+  Stock OTNS parent-switching benchmark variant that stages Router B into the
+  topology after the mobile MED has time to attach to Router A, then moves the
+  MED toward Router B to induce an observable stock parent change.
+
+expected_initial_parent: router_a
+
+radio_model:
+  preferred: MutualInterference
+  fallbacks:
+    - MIDisc
+    - Ideal_Rssi
+    - Ideal
+
+timing:
+  settle_seconds: 120
+  step_seconds: 20
+  movement_steps: 40
+
+activation:
+  initial_nodes:
+    - router_a
+    - mobile
+  delayed_node_groups:
+    - delay_seconds: 300
+      nodes:
+        - router_b
+  post_activation_settle_seconds: 180
+
+nodes:
+  router_a:
+    type: router
+    x: 100
+    y: 300
+  router_b:
+    type: router
+    x: 900
+    y: 300
+  mobile:
+    type: med
+    x: 100
+    y: 300
+
+movement:
+  node: mobile
+  start:
+    x: 100
+    y: 300
+  end:
+    x: 900
+    y: 300
+
+traffic_probes:
+  - name: router_a_to_mobile
+    kind: ping
+    src: router_a
+    dst: mobile
+    count: 1
+  - name: router_b_to_mobile
+    kind: ping
+    src: router_b
+    dst: mobile
+    count: 1

@@ -76,14 +76,30 @@ def summarize_run(path: Path) -> dict[str, Any]:
     total_outage_s = round(sum(end - start for start, end in outages), 6)
 
     parent_sequence = [row.get("parent_node_guess") for row in rows if row.get("parent_node_guess")]
+    compact_parent_sequence = [
+        value for index, value in enumerate(parent_sequence) if index == 0 or value != parent_sequence[index - 1]
+    ]
     oscillations = 0
     for left, middle, right in zip(parent_sequence, parent_sequence[1:], parent_sequence[2:]):
         if left == right and left != middle:
             oscillations += 1
 
+    initial_observed_parent = rows[0].get("parent_node_guess")
+    final_observed_parent = rows[-1].get("parent_node_guess")
+    if switch_times:
+        result_classification = "switch_observed"
+    elif initial_observed_parent and final_observed_parent:
+        result_classification = "no_switch_observed"
+    else:
+        result_classification = "inconclusive"
+
     return {
         "file": str(path),
         "sample_count": len(rows),
+        "initial_observed_parent": initial_observed_parent,
+        "final_observed_parent": final_observed_parent,
+        "parent_sequence": compact_parent_sequence,
+        "result_classification": result_classification,
         "switch_count": len(switch_times),
         "first_switch_time_s": switch_times[0] if switch_times else None,
         "total_outage_s": total_outage_s,
