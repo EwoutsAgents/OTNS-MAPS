@@ -57,9 +57,10 @@ Several limitations are currently explicit:
 - OTNS upstream currently has an open issue that a direct `"Set Parent"` event is not emitted from OTNS/OpenThread issue tracking, so switch events are inferred from observed parent state rather than consumed as a first-class simulator event.
 - Parent details depend on OpenThread CLI support for the `parent` command and its output format.
 - Candidate-parent RSSI/LQI is derived from `scan` output when possible, but scan visibility can differ from actual parent-selection internals.
+- In the current validated OTNS setup, `scan` did not behave synchronously through the CLI session used by the benchmark runner, so live CSV output currently leaves scan-derived fields empty and records this as a run note.
 - A MED is used for the baseline packet-delivery probe. That means this first benchmark is a mobility baseline for stock OpenThread attachment and parent switching, not a low-power-optimized SED study yet.
 - Plot generation in `analysis/analyze_baseline.py` is optional and only enabled when `matplotlib` is installed.
-- In the current local workspace where this scaffold was created, `otns` was not available on `PATH`, so only the mock mode of the runner was smoke-tested here.
+- Real OTNS execution was validated in the local workspace on July 7, 2026 using a local OTNS checkout, explicit OTNS workdir, and headless OTNS launch flags.
 
 ## How to run
 

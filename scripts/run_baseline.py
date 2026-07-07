@@ -8,6 +8,8 @@ import csv
 import json
 import math
 import os
+import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -24,6 +26,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCENARIO = ROOT / "scenarios" / "baseline_mobile_parent_switch.yaml"
 DEFAULT_RESULTS_DIR = ROOT / "results"
 PROMPT_RE = r"(?:node \d+> |> )"
+ANSI_RE = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
+PING_NODE_RE = re.compile(r"Node<(\d+)>")
 
 
 @dataclass
@@ -44,6 +48,12 @@ def parse_args() -> argparse.Namespace:
         "--otns-command",
         default=os.environ.get("OTNS_COMMAND", "otns"),
         help="OTNS executable or full command string",
+    )
+    parser.add_argument(
+        "--otns-workdir",
+        type=Path,
+        default=Path(os.environ["OTNS_WORKDIR"]) if os.environ.get("OTNS_WORKDIR") else None,
+        help="Optional working directory used to launch OTNS. Needed when OTNS relies on relative node paths.",
     )
     parser.add_argument(
         "--mock",
@@ -78,12 +88,24 @@ def linear_positions(start: dict[str, float], end: dict[str, float], steps: int)
     return positions
 
 
-def sanitize_command_output(text: str) -> list[str]:
+def sanitize_command_output(text: str, command: str | None = None) -> list[str]:
     lines = []
-    for line in text.replace("\r", "").split("\n"):
+    cleaned = ANSI_RE.sub("", text).replace("\x08", "").replace("\r", "")
+    if command:
+        marker = f"{command}\n"
+        if marker in cleaned:
+            cleaned = cleaned.rsplit(marker, 1)[-1]
+    for line in cleaned.split("\n"):
         stripped = line.strip()
+        if stripped.startswith(">"):
+            stripped = stripped.lstrip("> ").strip()
         if not stripped or stripped == "Done":
             continue
+        if command:
+            if stripped == command:
+                continue
+            if command.startswith(stripped):
+                continue
         lines.append(stripped)
     return lines
 
@@ -122,6 +144,17 @@ def parse_ping_summary(lines: list[str]) -> dict[str, Any]:
                 result["rtt_avg_ms"] = float(values[1])
                 result["rtt_max_ms"] = float(values[2].split()[0])
     return result
+
+
+def parse_ping_summaries_by_source(lines: list[str]) -> dict[int, dict[str, Any]]:
+    grouped: dict[int, list[str]] = {}
+    for line in lines:
+        match = PING_NODE_RE.match(line)
+        if not match:
+            continue
+        source_id = int(match.group(1))
+        grouped.setdefault(source_id, []).append(line)
+    return {source_id: parse_ping_summary(group_lines) for source_id, group_lines in grouped.items()}
 
 
 def parse_nodes(lines: list[str]) -> dict[int, dict[str, str]]:
@@ -164,13 +197,21 @@ def parse_scan_table(lines: list[str]) -> list[dict[str, str]]:
 
 
 class OtnsSession:
-    def __init__(self, command: str) -> None:
+    def __init__(self, command: str, cwd: Path | None = None) -> None:
         self.command = command
+        self.cwd = str(cwd) if cwd else None
         self.child: pexpect.spawn[str] | None = None
 
     def __enter__(self) -> "OtnsSession":
-        parts = self.command if isinstance(self.command, str) else " ".join(self.command)
-        self.child = pexpect.spawn(parts, encoding="utf-8", timeout=120, echo=False)
+        argv = shlex.split(self.command) if isinstance(self.command, str) else list(self.command)
+        self.child = pexpect.spawn(
+            argv[0],
+            argv[1:],
+            cwd=self.cwd,
+            encoding="utf-8",
+            timeout=120,
+            echo=False,
+        )
         self.child.expect(PROMPT_RE)
         return self
 
@@ -186,14 +227,17 @@ class OtnsSession:
     def command_output(self, command: str) -> list[str]:
         assert self.child is not None
         self.child.sendline(command)
+        self.child.expect(r"Done\r\n")
+        output = self.child.before
         self.child.expect(PROMPT_RE)
-        return sanitize_command_output(self.child.before)
+        return sanitize_command_output(output, command=command)
 
 
 class RealBenchmarkRunner:
-    def __init__(self, scenario: dict[str, Any], otns_command: str) -> None:
+    def __init__(self, scenario: dict[str, Any], otns_command: str, otns_workdir: Path | None = None) -> None:
         self.scenario = scenario
         self.otns_command = otns_command
+        self.otns_workdir = otns_workdir
         self.notes: list[str] = []
         self.node_refs: dict[str, NodeRef] = {}
 
@@ -210,7 +254,7 @@ class RealBenchmarkRunner:
             int(timing["movement_steps"]),
         )
 
-        with OtnsSession(self.otns_command) as session:
+        with OtnsSession(self.otns_command, cwd=self.otns_workdir) as session:
             session.command_output("speed 0")
             session.command_output(f'title "{self.scenario["title"]}"')
             radio_model = self._select_radio_model(session)
@@ -226,9 +270,14 @@ class RealBenchmarkRunner:
 
             for index, (x, y) in enumerate(positions):
                 mobile_id = named_ids["mobile"]
-                session.command_output(f"move {mobile_id} {x} {y}")
-                session.command_output(f'go {timing["step_seconds"]}')
-                sample = self._collect_sample(session, index, x, y)
+                session.command_output(f"move {mobile_id} {int(round(x))} {int(round(y))}")
+                for probe in self.scenario["traffic_probes"]:
+                    src_id = self.node_refs[probe["src"]].node_id
+                    dst_id = self.node_refs[probe["dst"]].node_id
+                    # OTNS schedules ping results that become visible during the following go interval.
+                    session.command_output(f'ping {src_id} {dst_id} count {probe["count"]}')
+                go_output_lines = session.command_output(f'go {timing["step_seconds"]}')
+                sample = self._collect_sample(session, index, x, y, go_output_lines)
                 sample["selected_radio_model"] = radio_model
 
                 parent_identity = (
@@ -307,7 +356,14 @@ class RealBenchmarkRunner:
             if "y" in entry:
                 node_ref.y = float(entry["y"])
 
-    def _collect_sample(self, session: OtnsSession, index: int, x: float, y: float) -> dict[str, Any]:
+    def _collect_sample(
+        self,
+        session: OtnsSession,
+        index: int,
+        x: float,
+        y: float,
+        go_output_lines: list[str],
+    ) -> dict[str, Any]:
         mobile = self.node_refs["mobile"]
         sim_time_us = int(session.command_output("time")[0])
         state_lines = session.command_output(f'node {mobile.node_id} "state"')
@@ -315,11 +371,15 @@ class RealBenchmarkRunner:
         parent_lines = session.command_output(f'node {mobile.node_id} "parent"')
         ip_counter_lines = session.command_output(f'node {mobile.node_id} "counters ip"')
         mle_counter_lines = session.command_output(f'node {mobile.node_id} "counters mle"')
-        scan_rows = parse_scan_table(session.command_output(f"scan {mobile.node_id}"))
+        scan_rows: list[dict[str, str]] = []
+        scan_note = "OTNS scan output was skipped in live mode because scan did not return synchronously in this setup."
+        if scan_note not in self.notes:
+            self.notes.append(scan_note)
 
         parent_info = parse_key_value_lines(parent_lines)
         ip_counters = parse_key_value_lines(ip_counter_lines)
         mle_counters = parse_key_value_lines(mle_counter_lines)
+        ping_results_by_source = parse_ping_summaries_by_source(go_output_lines)
 
         sample: dict[str, Any] = {
             "sample_index": index,
@@ -348,10 +408,17 @@ class RealBenchmarkRunner:
 
         for probe in self.scenario["traffic_probes"]:
             src_id = self.node_refs[probe["src"]].node_id
-            dst_id = self.node_refs[probe["dst"]].node_id
-            # OTNS-specific command: perform a single ICMP probe to quantify reachability during motion.
-            lines = session.command_output(f'ping {src_id} {dst_id} count {probe["count"]}')
-            sample["probe_results"][probe["name"]] = parse_ping_summary(lines)
+            sample["probe_results"][probe["name"]] = ping_results_by_source.get(
+                src_id,
+                {
+                    "tx": None,
+                    "rx": None,
+                    "loss_pct": None,
+                    "rtt_min_ms": None,
+                    "rtt_avg_ms": None,
+                    "rtt_max_ms": None,
+                },
+            )
 
         return sample
 
@@ -592,7 +659,11 @@ def main() -> int:
     json_path = args.results_dir / f"baseline_summary_{token}.json"
 
     runner: RealBenchmarkRunner | MockBenchmarkRunner
-    runner = MockBenchmarkRunner(scenario) if args.mock else RealBenchmarkRunner(scenario, args.otns_command)
+    runner = (
+        MockBenchmarkRunner(scenario)
+        if args.mock
+        else RealBenchmarkRunner(scenario, args.otns_command, args.otns_workdir)
+    )
 
     try:
         rows, summary = runner.run()

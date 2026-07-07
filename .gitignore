@@ -18,6 +18,7 @@ results/*.csv
 results/*.json
 results/*.png
 results/*.log
+results/plots/
 !results/.gitkeep
 
 # Misc local files

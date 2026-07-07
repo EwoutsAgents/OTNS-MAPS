@@ -56,6 +56,14 @@ If you do not want to expose `otns` on `PATH`, the benchmark runner can use an e
 python3 scripts/run_baseline.py --otns-command /path/to/otns
 ```
 
+If OTNS is launched from outside its own checkout, relative node executable paths may not resolve. In that case, also pass the OTNS checkout as the launch working directory:
+
+```bash
+python3 scripts/run_baseline.py \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns
+```
+
 ## Benchmark
 
 The baseline scenario contains:
@@ -110,6 +118,8 @@ If OTNS is installed elsewhere, override the command:
 ```bash
 python3 scripts/run_baseline.py --otns-command /path/to/otns
 ```
+
+For local OTNS source checkouts, `--otns-workdir /path/to/ot-ns` may also be needed so OTNS can find its bundled `ot-rfsim` node executables.
 
 ## Validation checklist
 
