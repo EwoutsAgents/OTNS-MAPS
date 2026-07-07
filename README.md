@@ -25,7 +25,7 @@ OTNS-MAPS/
 ├── results/
 │   └── .gitkeep
 ├── scenarios/
-│   └── baseline_mobile_parent_switch.yaml
+│   ├── baseline_mobile_parent_switch.yaml
 │   └── calibrated_mobile_parent_switch.yaml
 └── scripts/
     ├── run_baseline.py
