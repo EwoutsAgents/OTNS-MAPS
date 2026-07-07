@@ -266,6 +266,7 @@ class RealBenchmarkRunner:
         self.notes: list[str] = []
         self.node_refs: dict[str, NodeRef] = {}
         self.parent_before_delayed_nodes: str | None = None
+        self.observability = scenario.get("observability", {})
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         if shutil.which(self.otns_command.split()[0]) is None:
@@ -321,9 +322,7 @@ class RealBenchmarkRunner:
                     )
                 previous_parent = parent_identity or previous_parent
 
-                connectivity_ok = any(
-                    probe["rx"] and probe["rx"] > 0 for probe in sample["probe_results"].values()
-                )
+                connectivity_ok = self._connectivity_ok(sample)
                 if not connectivity_ok and outage_start is None:
                     outage_start = sample["sim_time_s"]
                 elif connectivity_ok and outage_start is not None:
@@ -453,6 +452,9 @@ class RealBenchmarkRunner:
             "mobile_y": y,
             "mobile_state": state_lines[0] if state_lines else None,
             "mobile_rloc16": rloc_lines[0] if rloc_lines else None,
+            "device_profile": self.scenario.get("device_profile", "mobile_end_device"),
+            "packet_probe_reliable": self.observability.get("packet_probe_reliable", True),
+            "primary_parent_observation": self.observability.get("primary_parent_observation", "packet_probe"),
             "parent_extaddr": parent_info.get("Ext Addr"),
             "parent_rloc16": parent_info.get("Rloc") or parent_info.get("RLOC16"),
             "parent_link_quality_in": parent_info.get("Link Quality In"),
@@ -487,6 +489,21 @@ class RealBenchmarkRunner:
 
         return sample
 
+    def _connectivity_ok(self, sample: dict[str, Any]) -> bool:
+        packet_probe_reliable = self.observability.get("packet_probe_reliable", True)
+        if packet_probe_reliable:
+            return any(probe["rx"] and probe["rx"] > 0 for probe in sample["probe_results"].values())
+
+        mobile_state = str(sample.get("mobile_state") or "").lower()
+        parent_observed = bool(
+            sample.get("parent_node_guess") or sample.get("parent_extaddr") or sample.get("parent_rloc16")
+        )
+        if mobile_state in {"child", "router", "leader"} and parent_observed:
+            return True
+        if mobile_state in {"detached", "disabled"}:
+            return False
+        return parent_observed
+
     def _parent_name_from_identity(self, parent_info: dict[str, str]) -> str | None:
         extaddr = parent_info.get("Ext Addr", "").lower()
         rloc16 = (parent_info.get("Rloc") or parent_info.get("RLOC16") or "").lower()
@@ -501,6 +518,7 @@ class RealBenchmarkRunner:
 class MockBenchmarkRunner:
     def __init__(self, scenario: dict[str, Any]) -> None:
         self.scenario = scenario
+        self.observability = scenario.get("observability", {})
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         timing = self.scenario["timing"]
@@ -544,7 +562,10 @@ class MockBenchmarkRunner:
                 )
             previous_parent = parent
 
-            connectivity_ok = bool(ping_a_rx or ping_b_rx)
+            if self.observability.get("packet_probe_reliable", True):
+                connectivity_ok = bool(ping_a_rx or ping_b_rx)
+            else:
+                connectivity_ok = mobile_state == "child"
             if not connectivity_ok and not outage_active:
                 outage_start = sim_time_s
                 outage_active = True
@@ -559,6 +580,9 @@ class MockBenchmarkRunner:
                 "mobile_y": y,
                 "mobile_state": mobile_state,
                 "mobile_rloc16": "0x5400" if parent == "router_a" else "0x9800",
+                "device_profile": self.scenario.get("device_profile", "mobile_end_device"),
+                "packet_probe_reliable": self.observability.get("packet_probe_reliable", True),
+                "primary_parent_observation": self.observability.get("primary_parent_observation", "packet_probe"),
                 "parent_extaddr": "aa00aa00aa00aa00" if parent == "router_a" else "bb00bb00bb00bb00",
                 "parent_rloc16": "0x1000" if parent == "router_a" else "0x2000",
                 "parent_link_quality_in": 3 if connectivity_ok else 0,
@@ -640,6 +664,9 @@ def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "parent_switch": sample["parent_switch"],
             "connectivity_ok": sample["connectivity_ok"],
             "selected_radio_model": sample["selected_radio_model"],
+            "device_profile": sample.get("device_profile"),
+            "packet_probe_reliable": sample.get("packet_probe_reliable"),
+            "primary_parent_observation": sample.get("primary_parent_observation"),
             "router_a_scan_dbm": sample["router_a_scan_dbm"],
             "router_a_scan_lqi": sample["router_a_scan_lqi"],
             "router_b_scan_dbm": sample["router_b_scan_dbm"],
@@ -699,8 +726,14 @@ def build_summary(
     return {
         "scenario_name": scenario["name"],
         "scenario_title": scenario["title"],
+        "device_profile": scenario.get("device_profile", "mobile_end_device"),
         "mock": mock,
         "selected_radio_model": selected_radio_model,
+        "packet_probe_reliable": scenario.get("observability", {}).get("packet_probe_reliable", True),
+        "primary_parent_observation": scenario.get("observability", {}).get(
+            "primary_parent_observation",
+            "packet_probe",
+        ),
         "sample_count": len(samples),
         "expected_initial_parent": expected_initial_parent,
         "pre_movement_parent_before_delayed_nodes": parent_before_delayed_nodes,
@@ -714,7 +747,7 @@ def build_summary(
         "total_outage_s": total_outage_s,
         "packet_delivery_ratio": round(pdr, 6) if pdr is not None else None,
         "oscillation_events": oscillations,
-        "notes": notes,
+        "notes": [*scenario.get("observability", {}).get("notes", []), *notes],
     }
 
 

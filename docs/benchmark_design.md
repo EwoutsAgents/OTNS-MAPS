@@ -8,16 +8,17 @@ This benchmark is intentionally not a new parent-selection algorithm. It measure
 
 ## Scenario design
 
-The repository currently carries two closely related stock scenarios:
+The repository currently carries three closely related stock scenarios:
 
 - `baseline_mobile_parent_switch` is the original reference setup.
 - `calibrated_mobile_parent_switch` delays Router B introduction so the mobile node first has time to attach to Router A before movement begins.
+- `sed_mobile_parent_switch` applies the delayed-router idea to a mobile Sleepy End Device and shifts primary observability away from ping replies.
 
-Both scenarios use three nodes:
+All scenarios use three nodes:
 
 - Router A
 - Router B
-- one mobile MED
+- one mobile end device
 
 The original baseline uses a direct two-router topology with the movement path defined in [`../scenarios/baseline_mobile_parent_switch.yaml`](../scenarios/baseline_mobile_parent_switch.yaml).
 
@@ -30,7 +31,15 @@ The calibrated variant is defined in [`../scenarios/calibrated_mobile_parent_swi
 
 This keeps the benchmark within stock OTNS/OpenThread behavior while making initial attachment to Router A much more likely.
 
-The initial baseline uses a MED instead of a regular SED. OTNS CLI documentation notes that a regular SED typically does not respond to ping traffic, which makes packet-delivery measurement less direct for a first benchmark. A later extension can add a dedicated SED or CSL-based scenario once the baseline harness is stable.
+The initial baseline and calibrated switch-attempt scenarios use a MED instead of a regular SED. OTNS CLI documentation notes that a regular SED typically does not respond to ping traffic, which makes packet-delivery measurement less direct for a first benchmark.
+
+The SED variant is defined in [`../scenarios/sed_mobile_parent_switch.yaml`](../scenarios/sed_mobile_parent_switch.yaml). It keeps the delayed Router B introduction, changes the mobile node type to `sed`, and records explicit observability metadata:
+
+- `device_profile: sleepy_end_device`
+- `packet_probe_reliable: false`
+- `primary_parent_observation: parent_command`
+
+This keeps the benchmark aligned with what a regular stock SED actually exposes in OTNS. Future work can add CSL or `ssed` experiments if reliable packet-response probing becomes necessary.
 
 ## RF propagation model
 
@@ -64,14 +73,17 @@ The runner writes:
 - `results/baseline_run_<timestamp>.csv`
 - `results/baseline_summary_<timestamp>.json`
 
-For reproducibility and downstream tooling checks, the repository includes two curated committed artifact sets:
+For reproducibility and downstream tooling checks, the repository includes three curated committed artifact sets:
 
 - `examples/real-baseline/baseline_run_example.csv`
 - `examples/real-baseline/baseline_summary_example.json`
 - `examples/switch-attempt/baseline_run_switch_attempt.csv`
 - `examples/switch-attempt/baseline_summary_switch_attempt.json`
+- `examples/sed-baseline/baseline_run_sed_example.csv`
+- `examples/sed-baseline/baseline_summary_sed_example.json`
 
 The `results/` directory is for local generated outputs. The `examples/real-baseline/` directory preserves the original no-switch reference artifact. The `examples/switch-attempt/` directory stores a calibrated stock-switch attempt artifact.
+The `examples/sed-baseline/` directory stores a real SED reference artifact that emphasizes parent observation over ping observability.
 
 Repeated experiments can be launched with `scripts/run_repeated_baseline.py`. They write one experiment directory under `results/repeated/`, with one subdirectory per run and a top-level manifest for traceability.
 
@@ -83,7 +95,8 @@ Several limitations are currently explicit:
 - Parent details depend on OpenThread CLI support for the `parent` command and its output format.
 - Candidate-parent RSSI/LQI is derived from `scan` output when possible, but scan visibility can differ from actual parent-selection internals.
 - In the current validated OTNS setup, `scan` behaves as a background/asynchronous command rather than a simple synchronous query. Live CSV output currently leaves scan-derived fields empty rather than depending on unstable per-sample scan capture. See [`otns_cli_compatibility.md`](otns_cli_compatibility.md).
-- A MED is used for the baseline packet-delivery probe. That means this first benchmark is a mobility baseline for stock OpenThread attachment and parent switching, not a low-power-optimized SED study yet.
+- For a regular SED, OTNS can expose parent information and MLE counters, but packet probes are not reliable evidence of reachability. The SED scenario therefore treats the `parent` command as the primary attachment observation path and does not equate 100% ping loss with disconnection.
+- The validated real SED example remained attached to `router_a` for the full path even after Router B was introduced and became spatially closer. That is useful evidence about observed stock OpenThread behavior under the tested parameters, but it is not proof that SED parent switching never occurs.
 - Plot generation in `analysis/analyze_baseline.py` is optional and only enabled when `matplotlib` is installed.
 - Real OTNS execution was validated in the local workspace on July 7, 2026 using a local OTNS checkout, explicit OTNS workdir, and headless OTNS launch flags.
 - The committed example artifact is a single representative run, not a repeated experiment and not a statistically meaningful dataset.
@@ -102,6 +115,15 @@ Calibrated stock-switch attempt:
 ```bash
 python3 scripts/run_baseline.py \
   --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns
+```
+
+SED stock benchmark:
+
+```bash
+python3 scripts/run_baseline.py \
+  --scenario scenarios/sed_mobile_parent_switch.yaml \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns
 ```
@@ -145,6 +167,7 @@ To validate the committed example artifact:
 ```bash
 python3 analysis/analyze_baseline.py examples/real-baseline/baseline_run_example.csv
 python3 analysis/analyze_baseline.py examples/switch-attempt/baseline_run_switch_attempt.csv
+python3 analysis/analyze_baseline.py examples/sed-baseline/baseline_run_sed_example.csv
 ```
 
 ## Validation checklist
@@ -166,5 +189,6 @@ The main questions this benchmark should answer are:
 - How long does it take before it attaches via Router B?
 - Is there a measurable outage or degraded packet-delivery window?
 - Does parent switching happen once, or does the device oscillate between candidate parents?
+- For a SED, does parent observation remain stable even when packet probes are uninformative?
 
 This baseline will later act as the comparison point for any mobility-aware parent-switching policy introduced in OTNS-MAPS.

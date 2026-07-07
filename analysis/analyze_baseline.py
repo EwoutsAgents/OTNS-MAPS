@@ -72,6 +72,9 @@ def summarize_run(path: Path) -> dict[str, Any]:
     if not rows:
         raise ValueError(f"No rows in {path}")
 
+    device_profile = rows[0].get("device_profile") or "mobile_end_device"
+    packet_probe_reliable = to_bool(rows[0].get("packet_probe_reliable"))
+    primary_parent_observation = rows[0].get("primary_parent_observation") or "packet_probe"
     switch_times = [to_float(row["sim_time_s"]) for row in rows if to_bool(row.get("parent_switch"))]
     connectivity = [to_bool(row.get("connectivity_ok")) for row in rows]
     times = [to_float(row["sim_time_s"]) or 0.0 for row in rows]
@@ -119,6 +122,9 @@ def summarize_run(path: Path) -> dict[str, Any]:
 
     return {
         "file": str(path),
+        "device_profile": device_profile,
+        "packet_probe_reliable": packet_probe_reliable,
+        "primary_parent_observation": primary_parent_observation,
         "sample_count": len(rows),
         "initial_observed_parent": initial_observed_parent,
         "final_observed_parent": final_observed_parent,
@@ -131,6 +137,11 @@ def summarize_run(path: Path) -> dict[str, Any]:
         "oscillation_events": oscillations,
         "parent_ids_seen": sorted({value for value in parent_sequence if value}),
         "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+        "observability_note": (
+            "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation."
+            if not packet_probe_reliable
+            else None
+        ),
     }
 
 

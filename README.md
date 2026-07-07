@@ -22,11 +22,16 @@ OTNS-MAPS/
 │       ├── README.md
 │       ├── baseline_run_switch_attempt.csv
 │       └── baseline_summary_switch_attempt.json
+│   └── sed-baseline/
+│       ├── README.md
+│       ├── baseline_run_sed_example.csv
+│       └── baseline_summary_sed_example.json
 ├── results/
 │   └── .gitkeep
 ├── scenarios/
 │   ├── baseline_mobile_parent_switch.yaml
-│   └── calibrated_mobile_parent_switch.yaml
+│   ├── calibrated_mobile_parent_switch.yaml
+│   └── sed_mobile_parent_switch.yaml
 └── scripts/
     ├── run_baseline.py
     ├── run_repeated_baseline.py
@@ -90,12 +95,13 @@ The benchmark prefers the `MutualInterference` OTNS radio model. If it is unavai
 2. `Ideal_Rssi`
 3. `Ideal`
 
-The mobile node is a MED instead of a regular SED. OTNS documents that a regular SED typically does not respond to ping traffic, which makes packet-delivery benchmarking less direct for the first baseline.
-
-The repository now includes two stock benchmark scenarios:
+The repository now includes three stock benchmark scenarios:
 
 - `scenarios/baseline_mobile_parent_switch.yaml` for the original reference run
 - `scenarios/calibrated_mobile_parent_switch.yaml` for a delayed-router variant that tries to induce an observable stock parent change without modifying OpenThread logic
+- `scenarios/sed_mobile_parent_switch.yaml` for a Sleepy End Device variant that treats the `parent` command as the primary attachment observation path
+
+The original baseline and calibrated switch-attempt scenario use a MED because OTNS documents that a regular SED typically does not respond to ping traffic. The SED benchmark is documented separately and marks packet probes as unreliable by design.
 
 ## Run
 
@@ -140,6 +146,15 @@ Analyze a repeated-run experiment directory:
 
 ```bash
 python3 analysis/analyze_baseline.py results/repeated/<experiment-name>
+```
+
+Run the SED scenario:
+
+```bash
+python3 scripts/run_baseline.py \
+  --scenario scenarios/sed_mobile_parent_switch.yaml \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns
 ```
 
 Generate plots when `matplotlib` is installed:
@@ -208,6 +223,12 @@ It exists for reproducibility, format validation, and downstream analysis testin
 A second curated real OTNS artifact is committed under [`examples/switch-attempt/`](examples/switch-attempt/).
 
 This artifact comes from the calibrated scenario that delays Router B introduction so the mobile node first attaches to Router A before movement begins. It is still a stock OpenThread benchmark, not a mobility-aware algorithm.
+
+## Example SED output
+
+A third curated real OTNS artifact is committed under [`examples/sed-baseline/`](examples/sed-baseline/).
+
+It documents a real `sed` run where OTNS parent observation worked through the `parent` command and MLE counters, while ping-based packet probes remained unreliable. It is still stock OpenThread behavior only.
 
 ## Status
 

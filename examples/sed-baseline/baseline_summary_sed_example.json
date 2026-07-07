@@ -1,0 +1,31 @@
+{
+  "device_profile": "sleepy_end_device",
+  "expected_initial_parent": "router_a",
+  "final_observed_parent": "router_a",
+  "first_switch_time_s": null,
+  "initial_observed_parent": "router_a",
+  "mock": false,
+  "notes": [
+    "Regular SEDs typically do not respond to ping probes in OTNS.",
+    "Parent attachment is inferred from the OT CLI parent command and child state.",
+    "MLE and IP counters are collected, but packet loss alone is not treated as disconnection.",
+    "Delayed node activation applied: router_b after 360 simulated seconds.",
+    "Live OTNS scan compatibility is inconsistent in this setup; scan-derived RSSI/LQI fields are left empty."
+  ],
+  "oscillation_events": 0,
+  "packet_delivery_ratio": 0.0,
+  "packet_probe_reliable": false,
+  "parent_sequence": [
+    "router_a"
+  ],
+  "pre_movement_parent_before_delayed_nodes": "router_a",
+  "primary_parent_observation": "parent_command",
+  "result_classification": "no_switch_observed",
+  "sample_count": 36,
+  "scenario_name": "sed_mobile_parent_switch",
+  "scenario_title": "Stock OpenThread SED mobility benchmark",
+  "selected_radio_model": "MutualInterference",
+  "switch_count": 0,
+  "switch_events": [],
+  "total_outage_s": 0.0
+}
