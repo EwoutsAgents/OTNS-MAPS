@@ -21,5 +21,10 @@ results/*.log
 results/plots/
 !results/.gitkeep
 
+# OTNS local artifacts
+*.pcap
+*.replay
+tmp/
+
 # Misc local files
 *.tmp

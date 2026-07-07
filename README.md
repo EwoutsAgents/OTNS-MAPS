@@ -111,6 +111,14 @@ Generate plots when `matplotlib` is installed:
 python3 analysis/analyze_baseline.py results/baseline_run_*.csv --plot-dir results/plots
 ```
 
+Validate OTNS CLI compatibility:
+
+```bash
+python3 scripts/validate_otns_cli.py \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns
+```
+
 ## OTNS setup
 
 The runner expects an `otns` executable on `PATH` by default. Official install docs:
@@ -125,6 +133,8 @@ python3 scripts/run_baseline.py --otns-command /path/to/otns
 ```
 
 For local OTNS source checkouts, `--otns-workdir /path/to/ot-ns` may also be needed so OTNS can find its bundled `ot-rfsim` node executables.
+
+Compatibility notes for the validated local OTNS CLI behavior are in [`docs/otns_cli_compatibility.md`](docs/otns_cli_compatibility.md).
 
 ## Validation checklist
 

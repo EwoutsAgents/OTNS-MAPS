@@ -11,6 +11,7 @@ import os
 import re
 import shlex
 import shutil
+import time
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -18,16 +19,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import pexpect
 import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCENARIO = ROOT / "scenarios" / "baseline_mobile_parent_switch.yaml"
 DEFAULT_RESULTS_DIR = ROOT / "results"
-PROMPT_RE = r"(?:node \d+> |> )"
-ANSI_RE = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
 PING_NODE_RE = re.compile(r"Node<(\d+)>")
+SCAN_NODE_PREFIX_RE = re.compile(r"^Node<\d+>\s+")
 
 
 @dataclass
@@ -88,26 +87,8 @@ def linear_positions(start: dict[str, float], end: dict[str, float], steps: int)
     return positions
 
 
-def sanitize_command_output(text: str, command: str | None = None) -> list[str]:
-    lines = []
-    cleaned = ANSI_RE.sub("", text).replace("\x08", "").replace("\r", "")
-    if command:
-        marker = f"{command}\n"
-        if marker in cleaned:
-            cleaned = cleaned.rsplit(marker, 1)[-1]
-    for line in cleaned.split("\n"):
-        stripped = line.strip()
-        if stripped.startswith(">"):
-            stripped = stripped.lstrip("> ").strip()
-        if not stripped or stripped == "Done":
-            continue
-        if command:
-            if stripped == command:
-                continue
-            if command.startswith(stripped):
-                continue
-        lines.append(stripped)
-    return lines
+def sanitize_command_output(lines: list[str]) -> list[str]:
+    return [line.rstrip("\r\n") for line in lines if line not in {"Done", "Started"} and line]
 
 
 def parse_key_value_lines(lines: list[str]) -> dict[str, str]:
@@ -176,61 +157,105 @@ def parse_nodes(lines: list[str]) -> dict[int, dict[str, str]]:
 def parse_scan_table(lines: list[str]) -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
     for line in lines:
+        line = SCAN_NODE_PREFIX_RE.sub("", line).strip()
         if not line.startswith("|") or "MAC Address" in line or line.startswith("+-"):
             continue
         cells = [cell.strip() for cell in line.strip("|").split("|")]
-        if len(cells) < 8:
+        if len(cells) >= 8:
+            rows.append(
+                {
+                    "joinable": cells[0],
+                    "network_name": cells[1],
+                    "extpanid": cells[2],
+                    "panid": cells[3],
+                    "mac_address": cells[4].lower(),
+                    "channel": cells[5],
+                    "dbm": cells[6],
+                    "lqi": cells[7],
+                }
+            )
             continue
-        rows.append(
-            {
-                "joinable": cells[0],
-                "network_name": cells[1],
-                "extpanid": cells[2],
-                "panid": cells[3],
-                "mac_address": cells[4].lower(),
-                "channel": cells[5],
-                "dbm": cells[6],
-                "lqi": cells[7],
-            }
-        )
+        if len(cells) >= 5:
+            rows.append(
+                {
+                    "joinable": "",
+                    "network_name": "",
+                    "extpanid": "",
+                    "panid": cells[0],
+                    "mac_address": cells[1].lower(),
+                    "channel": cells[2],
+                    "dbm": cells[3],
+                    "lqi": cells[4],
+                }
+            )
+            continue
     return rows
+
+
+class OtnsSessionError(RuntimeError):
+    """Raised when OTNS exits or reports a CLI error."""
 
 
 class OtnsSession:
     def __init__(self, command: str, cwd: Path | None = None) -> None:
         self.command = command
         self.cwd = str(cwd) if cwd else None
-        self.child: pexpect.spawn[str] | None = None
+        self.process: subprocess.Popen[bytes] | None = None
 
     def __enter__(self) -> "OtnsSession":
         argv = shlex.split(self.command) if isinstance(self.command, str) else list(self.command)
-        self.child = pexpect.spawn(
-            argv[0],
-            argv[1:],
+        self.process = subprocess.Popen(
+            argv,
             cwd=self.cwd,
-            encoding="utf-8",
-            timeout=120,
-            echo=False,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            bufsize=0,
         )
-        self.child.expect(PROMPT_RE)
+        time.sleep(0.1)
+        if self.process.poll() is not None:
+            output = self.process.stdout.read().decode("utf-8", errors="replace") if self.process.stdout else ""
+            raise OtnsSessionError(
+                f"OTNS exited during startup with code {self.process.returncode}: {output.strip()}"
+            )
         return self
 
     def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
-        if self.child is None:
+        if self.process is None:
             return
         try:
             self.command_output("exit")
         except Exception:
             pass
-        self.child.close(force=True)
+        self.process.kill()
+        self.process.wait()
 
-    def command_output(self, command: str) -> list[str]:
-        assert self.child is not None
-        self.child.sendline(command)
-        self.child.expect(r"Done\r\n")
-        output = self.child.before
-        self.child.expect(PROMPT_RE)
-        return sanitize_command_output(output, command=command)
+    def command_output(self, command: str, *, force_global_scope: bool = True) -> list[str]:
+        assert self.process is not None
+        assert self.process.stdin is not None
+        assert self.process.stdout is not None
+
+        wire_command = command
+        if force_global_scope and command and not command.startswith("!"):
+            wire_command = f"!{command}"
+
+        try:
+            self.process.stdin.write(wire_command.encode("ascii") + b"\n")
+            self.process.stdin.flush()
+        except (BrokenPipeError, OSError) as exc:
+            raise OtnsSessionError(f"Failed to send OTNS command {command!r}: {exc}") from exc
+
+        output: list[str] = []
+        while True:
+            line = self.process.stdout.readline()
+            if line == b"":
+                raise OtnsSessionError(f"OTNS exited while waiting for {command!r} output.")
+            text = line.rstrip(b"\r\n").decode("utf-8", errors="replace")
+            if text.startswith("Error: ") or text.startswith("Error "):
+                raise OtnsSessionError(text)
+            output.append(text)
+            if text in {"Done", "Started"}:
+                return sanitize_command_output(output)
 
 
 class RealBenchmarkRunner:
@@ -326,7 +351,7 @@ class RealBenchmarkRunner:
         preferred = [self.scenario["radio_model"]["preferred"], *self.scenario["radio_model"]["fallbacks"]]
         for model in preferred:
             output = session.command_output(f"radiomodel {model}")
-            chosen = output[-1] if output else None
+            chosen = output[0] if output else None
             if chosen and chosen.lower().startswith(model.lower()[0]):
                 if model != preferred[0]:
                     self.notes.append(f"Preferred radio model unavailable, fell back to {model}.")
@@ -372,7 +397,10 @@ class RealBenchmarkRunner:
         ip_counter_lines = session.command_output(f'node {mobile.node_id} "counters ip"')
         mle_counter_lines = session.command_output(f'node {mobile.node_id} "counters mle"')
         scan_rows: list[dict[str, str]] = []
-        scan_note = "OTNS scan output was skipped in live mode because scan did not return synchronously in this setup."
+        scan_note = (
+            "Live OTNS scan compatibility is inconsistent in this setup; "
+            "scan-derived RSSI/LQI fields are left empty."
+        )
         if scan_note not in self.notes:
             self.notes.append(scan_note)
 
@@ -670,7 +698,7 @@ def main() -> int:
     except FileNotFoundError as exc:
         print(str(exc), file=sys.stderr)
         return 2
-    except (pexpect.TIMEOUT, pexpect.EOF, subprocess.SubprocessError) as exc:
+    except (OtnsSessionError, subprocess.SubprocessError, TimeoutError) as exc:
         print(f"Benchmark execution failed: {exc}", file=sys.stderr)
         return 1
 
