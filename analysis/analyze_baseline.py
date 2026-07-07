@@ -6,13 +6,19 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import statistics
 from pathlib import Path
 from typing import Any
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("inputs", nargs="+", type=Path, help="CSV files from scripts/run_baseline.py")
+    parser.add_argument(
+        "inputs",
+        nargs="+",
+        type=Path,
+        help="CSV files or directories containing CSV files from scripts/run_baseline.py",
+    )
     parser.add_argument(
         "--output-json",
         type=Path,
@@ -26,6 +32,24 @@ def parse_args() -> argparse.Namespace:
         help="Optional output directory for plots. Requires matplotlib.",
     )
     return parser.parse_args()
+
+
+def expand_inputs(inputs: list[Path]) -> list[Path]:
+    expanded: list[Path] = []
+    for path in inputs:
+        if path.is_dir():
+            expanded.extend(sorted(path.rglob("baseline_run*.csv")))
+        else:
+            expanded.append(path)
+    unique_paths: list[Path] = []
+    seen: set[Path] = set()
+    for path in expanded:
+        resolved = path.resolve()
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        unique_paths.append(path)
+    return unique_paths
 
 
 def load_rows(path: Path) -> list[dict[str, str]]:
@@ -110,6 +134,61 @@ def summarize_run(path: Path) -> dict[str, Any]:
     }
 
 
+def _mean_or_none(values: list[float | None]) -> float | None:
+    numeric = [value for value in values if value is not None]
+    if not numeric:
+        return None
+    return round(statistics.mean(numeric), 6)
+
+
+def _min_or_none(values: list[float | None]) -> float | None:
+    numeric = [value for value in values if value is not None]
+    if not numeric:
+        return None
+    return round(min(numeric), 6)
+
+
+def _max_or_none(values: list[float | None]) -> float | None:
+    numeric = [value for value in values if value is not None]
+    if not numeric:
+        return None
+    return round(max(numeric), 6)
+
+
+def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
+    if len(summaries) < 2:
+        return None
+
+    switch_times = [summary.get("first_switch_time_s") for summary in summaries]
+    outage_values = [summary.get("total_outage_s") for summary in summaries]
+    pdr_values = [summary.get("packet_delivery_ratio") for summary in summaries]
+    switch_counts = [summary.get("switch_count") or 0 for summary in summaries]
+    classification_counts: dict[str, int] = {}
+    for summary in summaries:
+        classification = summary.get("result_classification") or "unknown"
+        classification_counts[classification] = classification_counts.get(classification, 0) + 1
+
+    switch_observed_runs = sum(1 for summary in summaries if summary.get("switch_count"))
+    return {
+        "run_count": len(summaries),
+        "switch_observed_runs": switch_observed_runs,
+        "switch_observed_rate": round(switch_observed_runs / len(summaries), 6),
+        "classification_counts": classification_counts,
+        "mean_switch_count": round(statistics.mean(switch_counts), 6),
+        "min_switch_count": min(switch_counts),
+        "max_switch_count": max(switch_counts),
+        "mean_first_switch_time_s": _mean_or_none(switch_times),
+        "min_first_switch_time_s": _min_or_none(switch_times),
+        "max_first_switch_time_s": _max_or_none(switch_times),
+        "mean_total_outage_s": _mean_or_none(outage_values),
+        "min_total_outage_s": _min_or_none(outage_values),
+        "max_total_outage_s": _max_or_none(outage_values),
+        "mean_packet_delivery_ratio": _mean_or_none(pdr_values),
+        "min_packet_delivery_ratio": _min_or_none(pdr_values),
+        "max_packet_delivery_ratio": _max_or_none(pdr_values),
+    }
+
+
 def _parent_numeric_id(parent_ids_seen: list[str], parent_value: str | None) -> int | None:
     if not parent_value:
         return None
@@ -189,12 +268,16 @@ def generate_plots(path: Path, summary: dict[str, Any], plot_dir: Path) -> str:
 
 def main() -> int:
     args = parse_args()
-    summaries = [summarize_run(path) for path in args.inputs]
+    expanded_inputs = expand_inputs(args.inputs)
+    summaries = [summarize_run(path) for path in expanded_inputs]
     plot_messages = []
     if args.plot_dir:
-        for path, summary in zip(args.inputs, summaries):
+        for path, summary in zip(expanded_inputs, summaries):
             plot_messages.append(generate_plots(path, summary, args.plot_dir))
     payload = {"runs": summaries}
+    aggregate = aggregate_runs(summaries)
+    if aggregate is not None:
+        payload["aggregate"] = aggregate
     if plot_messages:
         payload["plot_status"] = plot_messages
 

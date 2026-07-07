@@ -73,6 +73,8 @@ For reproducibility and downstream tooling checks, the repository includes two c
 
 The `results/` directory is for local generated outputs. The `examples/real-baseline/` directory preserves the original no-switch reference artifact. The `examples/switch-attempt/` directory stores a calibrated stock-switch attempt artifact.
 
+Repeated experiments can be launched with `scripts/run_repeated_baseline.py`. They write one experiment directory under `results/repeated/`, with one subdirectory per run and a top-level manifest for traceability.
+
 ## Known limitations
 
 Several limitations are currently explicit:
@@ -114,6 +116,22 @@ Analyze results:
 
 ```bash
 python3 analysis/analyze_baseline.py results/baseline_run_*.csv
+```
+
+Run repeated experiments:
+
+```bash
+python3 scripts/run_repeated_baseline.py \
+  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --repeat-count 5 \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns
+```
+
+Aggregate a repeated-run experiment:
+
+```bash
+python3 analysis/analyze_baseline.py results/repeated/<experiment-name>
 ```
 
 Generate plots when `matplotlib` is installed:

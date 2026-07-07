@@ -29,6 +29,7 @@ OTNS-MAPS/
 │   └── calibrated_mobile_parent_switch.yaml
 └── scripts/
     ├── run_baseline.py
+    ├── run_repeated_baseline.py
     └── validate_otns_cli.py
 ```
 
@@ -125,6 +126,22 @@ Analyze one or more result files:
 python3 analysis/analyze_baseline.py results/baseline_run_*.csv
 ```
 
+Run repeated experiments:
+
+```bash
+python3 scripts/run_repeated_baseline.py \
+  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --repeat-count 5 \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns
+```
+
+Analyze a repeated-run experiment directory:
+
+```bash
+python3 analysis/analyze_baseline.py results/repeated/<experiment-name>
+```
+
 Generate plots when `matplotlib` is installed:
 
 ```bash
@@ -175,6 +192,8 @@ Each run writes:
 - `results/baseline_summary_<timestamp>.json`
 
 The CSV records parent state over time for the mobile node, movement position, packet-delivery probe results, and any parent-switch events inferred from observed parent state.
+
+Repeated experiments create a subdirectory under `results/repeated/` with one subdirectory per run plus a `repeated_run_manifest.json` file.
 
 Generated benchmark outputs in `results/` remain ignored by default.
 
