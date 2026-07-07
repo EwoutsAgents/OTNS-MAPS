@@ -1,0 +1,5 @@
+pexpect>=4.9
+PyYAML>=6.0
+
+# Optional analysis plotting support
+matplotlib>=3.8

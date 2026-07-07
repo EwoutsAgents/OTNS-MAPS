@@ -19,6 +19,12 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional summary JSON output path",
     )
+    parser.add_argument(
+        "--plot-dir",
+        type=Path,
+        default=None,
+        help="Optional output directory for plots. Requires matplotlib.",
+    )
     return parser.parse_args()
 
 
@@ -88,10 +94,93 @@ def summarize_run(path: Path) -> dict[str, Any]:
     }
 
 
+def _parent_numeric_id(parent_ids_seen: list[str], parent_value: str | None) -> int | None:
+    if not parent_value:
+        return None
+    try:
+        return parent_ids_seen.index(parent_value)
+    except ValueError:
+        return None
+
+
+def generate_plots(path: Path, summary: dict[str, Any], plot_dir: Path) -> str:
+    try:
+        import matplotlib.pyplot as plt
+    except ImportError:
+        return "matplotlib is not installed; skipping plot generation."
+
+    rows = load_rows(path)
+    plot_dir.mkdir(parents=True, exist_ok=True)
+
+    times = [to_float(row["sim_time_s"]) or 0.0 for row in rows]
+    positions = [to_float(row["mobile_x"]) or 0.0 for row in rows]
+    connectivity = [1 if to_bool(row.get("connectivity_ok")) else 0 for row in rows]
+    parent_values = [row.get("parent_node_guess") for row in rows]
+    parent_labels = summary["parent_ids_seen"]
+    parent_numeric = [_parent_numeric_id(parent_labels, value) for value in parent_values]
+
+    packet_columns = [key for key in rows[0].keys() if key.endswith("_loss_pct")]
+    packet_delivery = []
+    for row in rows:
+        losses = [to_float(row.get(column)) for column in packet_columns]
+        valid_losses = [loss for loss in losses if loss is not None]
+        if not valid_losses:
+            packet_delivery.append(None)
+            continue
+        packet_delivery.append(1.0 - (sum(valid_losses) / len(valid_losses) / 100.0))
+
+    stem = path.stem
+
+    fig, axis = plt.subplots(figsize=(10, 4))
+    axis.step(times, parent_numeric, where="post")
+    axis.set_title("Parent over time")
+    axis.set_xlabel("Simulation time (s)")
+    axis.set_ylabel("Parent")
+    axis.set_yticks(range(len(parent_labels)))
+    axis.set_yticklabels(parent_labels)
+    axis.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(plot_dir / f"{stem}_parent_over_time.png")
+    plt.close(fig)
+
+    fig, axis = plt.subplots(figsize=(10, 4))
+    axis.plot(times, positions)
+    axis.set_title("Mobile position over time")
+    axis.set_xlabel("Simulation time (s)")
+    axis.set_ylabel("Mobile x-position")
+    axis.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(plot_dir / f"{stem}_position_over_time.png")
+    plt.close(fig)
+
+    fig, axis = plt.subplots(figsize=(10, 4))
+    axis.step(times, connectivity, where="post", label="connectivity_ok")
+    if any(value is not None for value in packet_delivery):
+        numeric_delivery = [value if value is not None else float("nan") for value in packet_delivery]
+        axis.plot(times, numeric_delivery, label="packet_delivery_ratio")
+    axis.set_title("Connectivity and packet delivery over time")
+    axis.set_xlabel("Simulation time (s)")
+    axis.set_ylabel("1 = good, 0 = outage")
+    axis.set_ylim(-0.05, 1.05)
+    axis.grid(True, alpha=0.3)
+    axis.legend()
+    fig.tight_layout()
+    fig.savefig(plot_dir / f"{stem}_connectivity_over_time.png")
+    plt.close(fig)
+
+    return f"plots written to {plot_dir}"
+
+
 def main() -> int:
     args = parse_args()
     summaries = [summarize_run(path) for path in args.inputs]
+    plot_messages = []
+    if args.plot_dir:
+        for path, summary in zip(args.inputs, summaries):
+            plot_messages.append(generate_plots(path, summary, args.plot_dir))
     payload = {"runs": summaries}
+    if plot_messages:
+        payload["plot_status"] = plot_messages
 
     if args.output_json:
         with args.output_json.open("w", encoding="utf-8") as handle:

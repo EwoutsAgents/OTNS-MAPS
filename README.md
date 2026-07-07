@@ -21,6 +21,41 @@ OTNS-MAPS/
     └── run_baseline.py
 ```
 
+## Setup
+
+Create and activate a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Install repository dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Install OTNS locally:
+
+```bash
+git clone https://github.com/openthread/ot-ns.git
+cd ot-ns
+./script/bootstrap
+```
+
+Ensure the `otns` executable is on `PATH`. OTNS documents that it is typically installed into `$(go env GOPATH)/bin`:
+
+```bash
+export PATH="$(go env GOPATH)/bin:$PATH"
+```
+
+If you do not want to expose `otns` on `PATH`, the benchmark runner can use an explicit path:
+
+```bash
+python3 scripts/run_baseline.py --otns-command /path/to/otns
+```
+
 ## Benchmark
 
 The baseline scenario contains:
@@ -57,6 +92,12 @@ Analyze one or more result files:
 python3 analysis/analyze_baseline.py results/baseline_run_*.csv
 ```
 
+Generate plots when `matplotlib` is installed:
+
+```bash
+python3 analysis/analyze_baseline.py results/baseline_run_*.csv --plot-dir results/plots
+```
+
 ## OTNS setup
 
 The runner expects an `otns` executable on `PATH` by default. Official install docs:
@@ -69,6 +110,17 @@ If OTNS is installed elsewhere, override the command:
 ```bash
 python3 scripts/run_baseline.py --otns-command /path/to/otns
 ```
+
+## Validation checklist
+
+- Run `python3 scripts/run_baseline.py --mock`
+- Run `python3 analysis/analyze_baseline.py results/baseline_run_*.csv`
+- Confirm a real `otns` launch works from the shell
+- Run `python3 scripts/run_baseline.py` against a real OTNS install
+- Confirm CSV and JSON outputs are created in `results/`
+- Confirm parent-switch events are populated when a switch occurs
+- Confirm packet-delivery metrics are populated in the CSV
+- Confirm outage/connectivity fields are populated in the CSV and summary JSON
 
 ## Outputs
 

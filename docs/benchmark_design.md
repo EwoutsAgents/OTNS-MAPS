@@ -14,7 +14,7 @@ The baseline scenario uses three nodes:
 - Router B
 - one mobile MED
 
-The mobile node starts near Router A and gradually moves toward Router B in fixed position increments. The movement path is deterministic and defined in [`scenarios/baseline_mobile_parent_switch.yaml`](/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/scenarios/baseline_mobile_parent_switch.yaml:1).
+The mobile node starts near Router A and gradually moves toward Router B in fixed position increments. The movement path is deterministic and defined in [`../scenarios/baseline_mobile_parent_switch.yaml`](../scenarios/baseline_mobile_parent_switch.yaml).
 
 The initial baseline uses a MED instead of a regular SED. OTNS CLI documentation notes that a regular SED typically does not respond to ping traffic, which makes packet-delivery measurement less direct for a first benchmark. A later extension can add a dedicated SED or CSL-based scenario once the baseline harness is stable.
 
@@ -80,6 +80,23 @@ Analyze results:
 ```bash
 python3 analysis/analyze_baseline.py results/baseline_run_*.csv
 ```
+
+Generate plots when `matplotlib` is installed:
+
+```bash
+python3 analysis/analyze_baseline.py results/baseline_run_*.csv --plot-dir results/plots
+```
+
+## Validation checklist
+
+- `python3 scripts/run_baseline.py --mock`
+- `python3 analysis/analyze_baseline.py results/baseline_run_*.csv`
+- Real OTNS launch test with `otns`
+- Real baseline run with `python3 scripts/run_baseline.py`
+- Confirm CSV and JSON outputs are created
+- Confirm parent-switch events are populated when a switch occurs
+- Confirm packet-delivery metrics are populated
+- Confirm outage metrics are populated
 
 ## Baseline interpretation
 
