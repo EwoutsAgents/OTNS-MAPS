@@ -72,6 +72,8 @@ The runner writes:
 
 - `results/baseline_run_<timestamp>.csv`
 - `results/baseline_summary_<timestamp>.json`
+- `results/replays/<scenario_name>_<timestamp>.replay` when replay capture is enabled
+- `results/replays/<scenario_name>_<timestamp>.replay.json` when replay capture is enabled
 
 For reproducibility and downstream tooling checks, the repository includes three curated committed artifact sets:
 
@@ -87,6 +89,8 @@ The `examples/sed-baseline/` directory stores a real SED reference artifact that
 
 Repeated experiments can be launched with `scripts/run_repeated_baseline.py`. They write one experiment directory under `results/repeated/`, with one subdirectory per run and a top-level manifest for traceability.
 
+Scratch outputs under `results/` remain ignored by Git. Curated benchmark evidence can be copied into tracked `artifacts/` directories when `--copy-results-to-artifact` is used. That export keeps CSV, summary JSON, replay, replay metadata, and a manifest together for later comparison work.
+
 ## Known limitations
 
 Several limitations are currently explicit:
@@ -97,6 +101,7 @@ Several limitations are currently explicit:
 - In the current validated OTNS setup, `scan` behaves as a background/asynchronous command rather than a simple synchronous query. Live CSV output currently leaves scan-derived fields empty rather than depending on unstable per-sample scan capture. See [`otns_cli_compatibility.md`](otns_cli_compatibility.md).
 - For a regular SED, OTNS can expose parent information and MLE counters, but packet probes are not reliable evidence of reachability. The SED scenario therefore treats the `parent` command as the primary attachment observation path and does not equate 100% ping loss with disconnection.
 - The validated real SED example remained attached to `router_a` for the full path even after Router B was introduced and became spatially closer. That is useful evidence about observed stock OpenThread behavior under the tested parameters, but it is not proof that SED parent switching never occurs.
+- Replay capture is non-fatal by design. If replay capture is requested but no replay file is found, the benchmark still preserves CSV and summary outputs and records the missing replay as a note.
 - Plot generation in `analysis/analyze_baseline.py` is optional and only enabled when `matplotlib` is installed.
 - Real OTNS execution was validated in the local workspace on July 7, 2026 using a local OTNS checkout, explicit OTNS workdir, and headless OTNS launch flags.
 - The committed example artifact is a single representative run, not a repeated experiment and not a statistically meaningful dataset.
@@ -117,6 +122,21 @@ python3 scripts/run_baseline.py \
   --scenario scenarios/calibrated_mobile_parent_switch.yaml \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns
+```
+
+Calibrated stock-switch attempt with replay capture and tracked artifact export:
+
+```bash
+python3 scripts/run_baseline.py \
+  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns \
+  --capture-replay \
+  --copy-results-to-artifact \
+  --artifact-name calibrated-med-switch-observed \
+  --firmware-variant stock-openthread \
+  --openthread-commit <sha> \
+  --otns-commit <sha>
 ```
 
 SED stock benchmark:
@@ -156,6 +176,22 @@ Aggregate a repeated-run experiment:
 python3 analysis/analyze_baseline.py results/repeated/<experiment-name>
 ```
 
+Run repeated experiments with replay capture and tracked artifact export:
+
+```bash
+python3 scripts/run_repeated_baseline.py \
+  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --repeat-count 3 \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns \
+  --capture-replay \
+  --copy-results-to-artifact \
+  --artifact-name calibrated-med-repeated-demo \
+  --firmware-variant stock-openthread \
+  --openthread-commit <sha> \
+  --otns-commit <sha>
+```
+
 Generate plots when `matplotlib` is installed:
 
 ```bash
@@ -176,10 +212,23 @@ python3 analysis/analyze_baseline.py examples/sed-baseline/baseline_run_sed_exam
 - `python3 analysis/analyze_baseline.py results/baseline_run_*.csv`
 - Real OTNS launch test with `otns`
 - Real baseline run with `python3 scripts/run_baseline.py`
+- Calibrated replay capture run with `python3 scripts/run_baseline.py --scenario scenarios/calibrated_mobile_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --capture-replay --copy-results-to-artifact --artifact-name calibrated-med-switch-observed`
+- Confirm a replay file and replay metadata JSON are created
+- Confirm tracked outputs are copied into `artifacts/`
 - Confirm CSV and JSON outputs are created
 - Confirm parent-switch events are populated when a switch occurs
 - Confirm packet-delivery metrics are populated
 - Confirm outage metrics are populated
+
+## Replay interpretation
+
+Replay files can be replayed with:
+
+```bash
+otns-replay artifacts/<artifact-name>/replay/<captured-file>.replay
+```
+
+Replay metadata records scenario, firmware label, OpenThread commit, OTNS commit, command, workdir, and the associated CSV and summary file paths. That metadata is necessary for future stock-vs-modified firmware comparisons because the replay file alone does not explain what build or benchmark context produced it.
 
 ## Baseline interpretation
 

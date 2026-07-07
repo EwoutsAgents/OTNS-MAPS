@@ -11,6 +11,8 @@ OTNS-MAPS/
 ├── README.md
 ├── analysis/
 │   └── analyze_baseline.py
+├── artifacts/
+│   └── .gitkeep
 ├── docs/
 │   └── benchmark_design.md
 ├── examples/
@@ -111,6 +113,21 @@ Real OTNS run:
 python3 scripts/run_baseline.py
 ```
 
+Calibrated run with replay capture and tracked artifact export:
+
+```bash
+python3 scripts/run_baseline.py \
+  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns \
+  --capture-replay \
+  --copy-results-to-artifact \
+  --artifact-name calibrated-med-switch-observed \
+  --firmware-variant stock-openthread \
+  --openthread-commit <sha> \
+  --otns-commit <sha>
+```
+
 Calibrated switch-attempt run:
 
 ```bash
@@ -140,6 +157,22 @@ python3 scripts/run_repeated_baseline.py \
   --repeat-count 5 \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns
+```
+
+Run repeated experiments with replay capture and tracked artifact export:
+
+```bash
+python3 scripts/run_repeated_baseline.py \
+  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --repeat-count 3 \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns \
+  --capture-replay \
+  --copy-results-to-artifact \
+  --artifact-name calibrated-med-repeated-demo \
+  --firmware-variant stock-openthread \
+  --openthread-commit <sha> \
+  --otns-commit <sha>
 ```
 
 Analyze a repeated-run experiment directory:
@@ -194,7 +227,10 @@ Compatibility notes for the validated local OTNS CLI behavior are in [`docs/otns
 - Run `python3 analysis/analyze_baseline.py results/baseline_run_*.csv`
 - Confirm a real `otns` launch works from the shell
 - Run `python3 scripts/run_baseline.py` against a real OTNS install
+- Run `python3 scripts/run_baseline.py --scenario scenarios/calibrated_mobile_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --capture-replay --copy-results-to-artifact --artifact-name calibrated-med-switch-observed`
 - Confirm CSV and JSON outputs are created in `results/`
+- Confirm a replay file and replay metadata JSON are created in `results/replays/`
+- Confirm tracked artifacts are copied into `artifacts/<artifact-name>/`
 - Confirm parent-switch events are populated when a switch occurs
 - Confirm packet-delivery metrics are populated in the CSV
 - Confirm outage/connectivity fields are populated in the CSV and summary JSON
@@ -206,11 +242,35 @@ Each run writes:
 - `results/baseline_run_<timestamp>.csv`
 - `results/baseline_summary_<timestamp>.json`
 
+When replay capture is enabled, the runner also writes:
+
+- `results/replays/<scenario_name>_<timestamp>.replay`
+- `results/replays/<scenario_name>_<timestamp>.replay.json`
+
 The CSV records parent state over time for the mobile node, movement position, packet-delivery probe results, and any parent-switch events inferred from observed parent state.
 
 Repeated experiments create a subdirectory under `results/repeated/` with one subdirectory per run plus a `repeated_run_manifest.json` file.
 
 Generated benchmark outputs in `results/` remain ignored by default.
+
+Curated benchmark evidence can be copied into tracked `artifacts/` directories when `--copy-results-to-artifact` is used. That export includes the CSV, summary JSON, replay file if captured, replay metadata JSON, and an artifact manifest.
+
+Replay files can be opened with:
+
+```bash
+otns-replay artifacts/<artifact-name>/replay/<captured-file>.replay
+```
+
+Replay metadata matters because later firmware comparisons will need to distinguish stock OpenThread runs from modified OpenThread or future MAPS variants.
+
+## Artifact output
+
+The repository now keeps two result paths separate:
+
+- `results/` is scratch space for local ad-hoc runs and stays ignored by Git.
+- `artifacts/` is for curated benchmark evidence that should be committed and shared.
+
+Tracked artifact exports are opt-in. Normal runs behave as before when `--capture-replay` and `--copy-results-to-artifact` are not used.
 
 ## Example real baseline output
 

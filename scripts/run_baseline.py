@@ -25,6 +25,8 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCENARIO = ROOT / "scenarios" / "baseline_mobile_parent_switch.yaml"
 DEFAULT_RESULTS_DIR = ROOT / "results"
+DEFAULT_REPLAY_DIR = DEFAULT_RESULTS_DIR / "replays"
+DEFAULT_ARTIFACTS_DIR = ROOT / "artifacts"
 PING_NODE_RE = re.compile(r"Node<(\d+)>")
 SCAN_NODE_PREFIX_RE = re.compile(r"^Node<\d+>\s+")
 
@@ -59,6 +61,50 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Generate deterministic mock output without OTNS",
     )
+    parser.add_argument("--capture-replay", action="store_true", help="Copy a replay file after a real OTNS run.")
+    parser.add_argument(
+        "--replay-source",
+        type=Path,
+        default=None,
+        help="Optional replay file to copy. Defaults to an OTNS workdir replay when possible.",
+    )
+    parser.add_argument(
+        "--replay-dir",
+        type=Path,
+        default=DEFAULT_REPLAY_DIR,
+        help="Scratch output directory for copied replay files.",
+    )
+    parser.add_argument(
+        "--firmware-variant",
+        default="stock-openthread",
+        help="Firmware or build label recorded in replay/artifact metadata.",
+    )
+    parser.add_argument(
+        "--openthread-commit",
+        default="unknown",
+        help="Optional OpenThread commit or build label recorded in metadata.",
+    )
+    parser.add_argument(
+        "--otns-commit",
+        default="unknown",
+        help="Optional OTNS commit or build label recorded in metadata.",
+    )
+    parser.add_argument(
+        "--copy-results-to-artifact",
+        action="store_true",
+        help="Copy CSV, summary, replay, and manifest into a tracked artifact directory.",
+    )
+    parser.add_argument(
+        "--commit-artifact-dir",
+        type=Path,
+        default=None,
+        help="Explicit tracked artifact directory. Defaults to artifacts/<artifact-name>.",
+    )
+    parser.add_argument(
+        "--artifact-name",
+        default=None,
+        help="Artifact directory name. Defaults to <scenario_name>_<timestamp> when exporting.",
+    )
     return parser.parse_args()
 
 
@@ -73,6 +119,315 @@ def timestamp_token() -> str:
 
 def ensure_results_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
+
+
+def scenario_file_label(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path.resolve())
+
+
+def unique_file_path(directory: Path, filename: str) -> Path:
+    base = Path(filename)
+    candidate = directory / base.name
+    counter = 1
+    while candidate.exists():
+        candidate = directory / f"{base.stem}_{counter}{base.suffix}"
+        counter += 1
+    return candidate
+
+
+def snapshot_replay_files(workdir: Path | None) -> dict[Path, float]:
+    if workdir is None or not workdir.exists():
+        return {}
+    snapshot: dict[Path, float] = {}
+    for path in workdir.glob("otns_*.replay"):
+        try:
+            snapshot[path.resolve()] = path.stat().st_mtime
+        except FileNotFoundError:
+            continue
+    return snapshot
+
+
+def infer_replay_source(
+    explicit_source: Path | None,
+    otns_workdir: Path | None,
+    replay_before: dict[Path, float],
+) -> tuple[Path | None, str | None]:
+    if explicit_source is not None:
+        return explicit_source, None
+    if otns_workdir is None:
+        return None, "Replay capture requested but no replay source or OTNS workdir was provided."
+
+    replay_after = snapshot_replay_files(otns_workdir)
+    candidates: list[tuple[float, Path]] = []
+    for path, mtime in replay_after.items():
+        previous_mtime = replay_before.get(path)
+        if previous_mtime is None or mtime > previous_mtime:
+            candidates.append((mtime, path))
+    if candidates:
+        candidates.sort()
+        return candidates[-1][1], None
+
+    default_source = otns_workdir / "otns_0.replay"
+    if default_source.exists():
+        return default_source, None
+
+    return None, f"Replay capture requested but no replay file was found in {otns_workdir}."
+
+
+def maybe_capture_replay(
+    *,
+    capture_replay: bool,
+    mock: bool,
+    scenario: dict[str, Any],
+    scenario_path: Path,
+    token: str,
+    otns_command: str,
+    otns_workdir: Path | None,
+    replay_source: Path | None,
+    replay_dir: Path,
+    firmware_variant: str,
+    openthread_commit: str,
+    otns_commit: str,
+    csv_path: Path,
+    json_path: Path,
+    summary: dict[str, Any],
+    replay_before: dict[Path, float],
+) -> dict[str, Any]:
+    info: dict[str, Any] = {
+        "requested": capture_replay,
+        "captured": False,
+        "source": None,
+        "copied_path": None,
+        "metadata_path": None,
+        "warning": None,
+    }
+    if not capture_replay:
+        return info
+    if mock:
+        info["warning"] = "Replay capture was requested in mock mode; no replay file was captured."
+        return info
+
+    detected_source, warning = infer_replay_source(replay_source, otns_workdir, replay_before)
+    if detected_source is None:
+        info["warning"] = warning
+        return info
+    if not detected_source.exists():
+        info["warning"] = f"Replay capture requested but source replay file does not exist: {detected_source}"
+        info["source"] = str(detected_source)
+        return info
+
+    ensure_results_dir(replay_dir)
+    replay_name = f'{scenario["name"]}_{token}.replay'
+    copied_path = unique_file_path(replay_dir, replay_name)
+    shutil.copy2(detected_source, copied_path)
+
+    metadata_path = copied_path.with_suffix(".replay.json")
+    metadata = {
+        "scenario_name": scenario["name"],
+        "scenario_title": scenario["title"],
+        "scenario_file": scenario_file_label(scenario_path),
+        "firmware_variant": firmware_variant,
+        "openthread_commit": openthread_commit,
+        "otns_commit": otns_commit,
+        "otns_command": otns_command,
+        "otns_workdir": str(otns_workdir) if otns_workdir is not None else None,
+        "replay_source": str(detected_source),
+        "copied_replay_path": str(copied_path),
+        "csv_path": str(csv_path),
+        "summary_json_path": str(json_path),
+        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "mock": False,
+        "selected_radio_model": summary.get("selected_radio_model"),
+        "initial_observed_parent": summary.get("initial_observed_parent"),
+        "final_observed_parent": summary.get("final_observed_parent"),
+        "switch_count": summary.get("switch_count"),
+        "first_switch_time_s": summary.get("first_switch_time_s"),
+        "result_classification": summary.get("result_classification"),
+    }
+    write_json(metadata, metadata_path)
+
+    info.update(
+        {
+            "captured": True,
+            "source": str(detected_source),
+            "copied_path": str(copied_path),
+            "metadata_path": str(metadata_path),
+        }
+    )
+    return info
+
+
+def resolve_artifact_dir(
+    commit_artifact_dir: Path | None,
+    artifact_name: str | None,
+    scenario_name: str,
+    token: str,
+) -> Path:
+    if commit_artifact_dir is not None:
+        return commit_artifact_dir
+    final_name = artifact_name or f"{scenario_name}_{token}"
+    return DEFAULT_ARTIFACTS_DIR / final_name
+
+
+def artifact_manifest(
+    *,
+    artifact_name: str,
+    scenario: dict[str, Any],
+    scenario_path: Path,
+    firmware_variant: str,
+    openthread_commit: str,
+    otns_commit: str,
+    otns_command: str,
+    otns_workdir: Path | None,
+    csv_file: str,
+    summary_file: str,
+    replay_file: str | None,
+    replay_metadata_file: str | None,
+    token: str,
+    summary: dict[str, Any],
+) -> dict[str, Any]:
+    return {
+        "artifact_name": artifact_name,
+        "scenario_name": scenario["name"],
+        "scenario_file": scenario_file_label(scenario_path),
+        "firmware_variant": firmware_variant,
+        "openthread_commit": openthread_commit,
+        "otns_commit": otns_commit,
+        "otns_command": otns_command,
+        "otns_workdir": str(otns_workdir) if otns_workdir is not None else None,
+        "csv_file": csv_file,
+        "summary_file": summary_file,
+        "replay_file": replay_file,
+        "replay_metadata_file": replay_metadata_file,
+        "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "selected_radio_model": summary.get("selected_radio_model"),
+        "initial_observed_parent": summary.get("initial_observed_parent"),
+        "final_observed_parent": summary.get("final_observed_parent"),
+        "switch_count": summary.get("switch_count"),
+        "first_switch_time_s": summary.get("first_switch_time_s"),
+        "packet_delivery_ratio": summary.get("packet_delivery_ratio"),
+        "total_outage_s": summary.get("total_outage_s"),
+        "result_classification": summary.get("result_classification"),
+    }
+
+
+def write_artifact_readme(
+    path: Path,
+    *,
+    manifest: dict[str, Any],
+    scenario: dict[str, Any],
+    replay_file: str | None,
+) -> None:
+    replay_instruction = (
+        f"otns-replay {replay_file}" if replay_file is not None else "Replay was not captured for this artifact."
+    )
+    content = "\n".join(
+        [
+            f'# Artifact: {manifest["artifact_name"]}',
+            "",
+            scenario.get("description", "").strip() or "Curated OTNS benchmark artifact.",
+            "",
+            "## Metadata",
+            "",
+            f'- Scenario: `{manifest["scenario_name"]}`',
+            f'- Scenario file: `{manifest["scenario_file"]}`',
+            f'- Firmware variant: `{manifest["firmware_variant"]}`',
+            f'- OpenThread commit: `{manifest["openthread_commit"]}`',
+            f'- OTNS commit: `{manifest["otns_commit"]}`',
+            f'- OTNS command: `{manifest["otns_command"]}`',
+            f'- OTNS workdir: `{manifest["otns_workdir"]}`',
+            f'- Selected radio model: `{manifest["selected_radio_model"]}`',
+            f'- Initial observed parent: `{manifest["initial_observed_parent"]}`',
+            f'- Final observed parent: `{manifest["final_observed_parent"]}`',
+            f'- Switch count: `{manifest["switch_count"]}`',
+            f'- First switch time (s): `{manifest["first_switch_time_s"]}`',
+            f'- Packet delivery ratio: `{manifest["packet_delivery_ratio"]}`',
+            f'- Total outage (s): `{manifest["total_outage_s"]}`',
+            f'- Result classification: `{manifest["result_classification"]}`',
+            "",
+            "## Replay",
+            "",
+            "Replay command:",
+            "",
+            "```bash",
+            replay_instruction,
+            "```",
+        ]
+    )
+    path.write_text(content + "\n", encoding="utf-8")
+
+
+def export_artifact(
+    *,
+    artifact_dir: Path,
+    artifact_name: str,
+    scenario: dict[str, Any],
+    scenario_path: Path,
+    firmware_variant: str,
+    openthread_commit: str,
+    otns_commit: str,
+    otns_command: str,
+    otns_workdir: Path | None,
+    token: str,
+    csv_path: Path,
+    json_path: Path,
+    replay_info: dict[str, Any],
+    summary: dict[str, Any],
+) -> dict[str, str]:
+    if artifact_dir.exists():
+        raise FileExistsError(f"Artifact directory already exists: {artifact_dir}")
+    artifact_dir.mkdir(parents=True, exist_ok=False)
+
+    artifact_csv = artifact_dir / csv_path.name
+    artifact_summary = artifact_dir / json_path.name
+    shutil.copy2(csv_path, artifact_csv)
+    shutil.copy2(json_path, artifact_summary)
+
+    replay_relpath = None
+    metadata_relpath = None
+    if replay_info.get("copied_path"):
+        replay_dir = artifact_dir / "replay"
+        replay_dir.mkdir(parents=True, exist_ok=True)
+        replay_source = Path(replay_info["copied_path"])
+        artifact_replay = replay_dir / replay_source.name
+        shutil.copy2(replay_source, artifact_replay)
+        replay_relpath = str(artifact_replay.relative_to(artifact_dir))
+        metadata_source = Path(replay_info["metadata_path"])
+        artifact_replay_metadata = replay_dir / metadata_source.name
+        shutil.copy2(metadata_source, artifact_replay_metadata)
+        metadata_relpath = str(artifact_replay_metadata.relative_to(artifact_dir))
+
+    manifest = artifact_manifest(
+        artifact_name=artifact_name,
+        scenario=scenario,
+        scenario_path=scenario_path,
+        firmware_variant=firmware_variant,
+        openthread_commit=openthread_commit,
+        otns_commit=otns_commit,
+        otns_command=otns_command,
+        otns_workdir=otns_workdir,
+        csv_file=artifact_csv.name,
+        summary_file=artifact_summary.name,
+        replay_file=replay_relpath,
+        replay_metadata_file=metadata_relpath,
+        token=token,
+        summary=summary,
+    )
+    manifest_path = artifact_dir / "manifest.json"
+    write_json(manifest, manifest_path)
+    write_artifact_readme(
+        artifact_dir / "README.md",
+        manifest=manifest,
+        scenario=scenario,
+        replay_file=replay_relpath,
+    )
+    return {
+        "artifact_dir": str(artifact_dir),
+        "manifest_path": str(manifest_path),
+    }
 
 
 def linear_positions(start: dict[str, float], end: dict[str, float], steps: int) -> list[tuple[float, float]]:
@@ -774,6 +1129,7 @@ def main() -> int:
     token = timestamp_token()
     csv_path = args.results_dir / f"baseline_run_{token}.csv"
     json_path = args.results_dir / f"baseline_summary_{token}.json"
+    replay_before = snapshot_replay_files(args.otns_workdir) if args.capture_replay and not args.mock else {}
 
     runner: RealBenchmarkRunner | MockBenchmarkRunner
     runner = (
@@ -791,8 +1147,65 @@ def main() -> int:
         print(f"Benchmark execution failed: {exc}", file=sys.stderr)
         return 1
 
+    replay_info = maybe_capture_replay(
+        capture_replay=args.capture_replay,
+        mock=args.mock,
+        scenario=scenario,
+        scenario_path=args.scenario,
+        token=token,
+        otns_command=args.otns_command,
+        otns_workdir=args.otns_workdir,
+        replay_source=args.replay_source,
+        replay_dir=args.replay_dir,
+        firmware_variant=args.firmware_variant,
+        openthread_commit=args.openthread_commit,
+        otns_commit=args.otns_commit,
+        csv_path=csv_path,
+        json_path=json_path,
+        summary=summary,
+        replay_before=replay_before,
+    )
+    if replay_info.get("warning"):
+        summary.setdefault("notes", []).append(str(replay_info["warning"]))
+    summary["firmware_variant"] = args.firmware_variant
+    summary["openthread_commit"] = args.openthread_commit
+    summary["otns_commit"] = args.otns_commit
+    summary["replay_capture_requested"] = args.capture_replay
+    summary["replay_file"] = replay_info.get("copied_path")
+    summary["replay_metadata_file"] = replay_info.get("metadata_path")
+
     write_csv(rows, csv_path)
     write_json(summary, json_path)
+
+    if args.copy_results_to_artifact:
+        artifact_dir = resolve_artifact_dir(
+            args.commit_artifact_dir,
+            args.artifact_name,
+            scenario["name"],
+            token,
+        )
+        try:
+            artifact_info = export_artifact(
+                artifact_dir=artifact_dir,
+                artifact_name=artifact_dir.name,
+                scenario=scenario,
+                scenario_path=args.scenario,
+                firmware_variant=args.firmware_variant,
+                openthread_commit=args.openthread_commit,
+                otns_commit=args.otns_commit,
+                otns_command=args.otns_command,
+                otns_workdir=args.otns_workdir,
+                token=token,
+                csv_path=csv_path,
+                json_path=json_path,
+                replay_info=replay_info,
+                summary=summary,
+            )
+        except FileExistsError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+        print(artifact_info["artifact_dir"])
+        print(artifact_info["manifest_path"])
 
     print(csv_path)
     print(json_path)

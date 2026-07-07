@@ -19,11 +19,14 @@ results/*.json
 results/*.png
 results/*.log
 results/plots/
+results/replays/
+results/repeated/
 !results/.gitkeep
 
 # OTNS local artifacts
 *.pcap
 *.replay
+!artifacts/**/*.replay
 tmp/
 
 # Misc local files

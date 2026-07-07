@@ -1,0 +1,22 @@
+{
+  "copied_replay_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260707T192957Z/run_001/replay/calibrated_mobile_parent_switch_20260707T192957Z.replay",
+  "created_at_utc": "2026-07-07T19:29:58.456525+00:00",
+  "csv_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260707T192957Z/run_001/baseline_run_20260707T192957Z.csv",
+  "final_observed_parent": "router_b",
+  "firmware_variant": "stock-openthread",
+  "first_switch_time_s": 1200.0,
+  "initial_observed_parent": "router_a",
+  "mock": false,
+  "openthread_commit": "7874555ef",
+  "otns_command": "/home/ewout/go/bin/otns -web=false -autogo=false -speed 1 -listen localhost:9950",
+  "otns_commit": "099a6c2",
+  "otns_workdir": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns",
+  "replay_source": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/otns_95.replay",
+  "result_classification": "switch_observed",
+  "scenario_file": "scenarios/calibrated_mobile_parent_switch.yaml",
+  "scenario_name": "calibrated_mobile_parent_switch",
+  "scenario_title": "Calibrated stock OpenThread mobility benchmark",
+  "selected_radio_model": "MutualInterference",
+  "summary_json_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260707T192957Z/run_001/baseline_summary_20260707T192957Z.json",
+  "switch_count": 1
+}
