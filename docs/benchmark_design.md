@@ -50,6 +50,13 @@ The runner writes:
 - `results/baseline_run_<timestamp>.csv`
 - `results/baseline_summary_<timestamp>.json`
 
+For reproducibility and downstream tooling checks, the repository also includes one curated committed artifact under `examples/real-baseline/`:
+
+- `examples/real-baseline/baseline_run_example.csv`
+- `examples/real-baseline/baseline_summary_example.json`
+
+The `results/` directory is for local generated outputs. The `examples/real-baseline/` directory is a small checked-in reference artifact for format validation and analysis testing.
+
 ## Known limitations
 
 Several limitations are currently explicit:
@@ -61,6 +68,7 @@ Several limitations are currently explicit:
 - A MED is used for the baseline packet-delivery probe. That means this first benchmark is a mobility baseline for stock OpenThread attachment and parent switching, not a low-power-optimized SED study yet.
 - Plot generation in `analysis/analyze_baseline.py` is optional and only enabled when `matplotlib` is installed.
 - Real OTNS execution was validated in the local workspace on July 7, 2026 using a local OTNS checkout, explicit OTNS workdir, and headless OTNS launch flags.
+- The committed example artifact is a single representative run, not a repeated experiment and not a statistically meaningful dataset.
 
 ## How to run
 
@@ -86,6 +94,12 @@ Generate plots when `matplotlib` is installed:
 
 ```bash
 python3 analysis/analyze_baseline.py results/baseline_run_*.csv --plot-dir results/plots
+```
+
+To validate the committed example artifact:
+
+```bash
+python3 analysis/analyze_baseline.py examples/real-baseline/baseline_run_example.csv
 ```
 
 ## Validation checklist

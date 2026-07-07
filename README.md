@@ -13,6 +13,11 @@ OTNS-MAPS/
 │   └── analyze_baseline.py
 ├── docs/
 │   └── benchmark_design.md
+├── examples/
+│   └── real-baseline/
+│       ├── README.md
+│       ├── baseline_run_example.csv
+│       └── baseline_summary_example.json
 ├── results/
 │   └── .gitkeep
 ├── scenarios/
@@ -140,6 +145,14 @@ Each run writes:
 - `results/baseline_summary_<timestamp>.json`
 
 The CSV records parent state over time for the mobile node, movement position, packet-delivery probe results, and any parent-switch events inferred from observed parent state.
+
+Generated benchmark outputs in `results/` remain ignored by default.
+
+## Example real baseline output
+
+A small curated real OTNS artifact is committed under [`examples/real-baseline/`](examples/real-baseline/).
+
+It exists for reproducibility, format validation, and downstream analysis testing. It is not intended to represent a statistically meaningful experiment. Normal benchmark runs should still write fresh local outputs into `results/`.
 
 ## Status
 
