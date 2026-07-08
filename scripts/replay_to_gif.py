@@ -8,6 +8,7 @@ import base64
 import hashlib
 import json
 import os
+import re
 import shlex
 import shutil
 import socket
@@ -29,6 +30,10 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_DIR = ROOT / "results" / "gifs"
 DEFAULT_UI_URL = "http://127.0.0.1:8997/visualize?addr=localhost:8998"
+OUTER_TIMESTAMP_RE = re.compile(r"^timestamp:(\d+)(\s+event:\{.*)$")
+ADVANCE_TIME_RE = re.compile(r"advance_time:\{timestamp:(\d+)([^}]*)\}")
+SPEED_FIELD_RE = re.compile(r"\s+speed:([^\s}]+)")
+SET_SPEED_RE = re.compile(r"set_speed:\{(?:speed:([^\s}]+))?\}")
 
 
 class ReplayGifError(RuntimeError):
@@ -42,6 +47,8 @@ class ReplaySession:
     temp_dir: Path
     ui_url: str
     cdp_url: str
+    prepared_replay_file: Path
+    prepared_replay_duration_us: int
 
     def close(self) -> None:
         for process in (self.chrome_process, self.replay_process):
@@ -207,7 +214,7 @@ def parse_args() -> argparse.Namespace:
         "--frame-interval-ms",
         type=int,
         default=100,
-        help="Delay between screenshots in milliseconds",
+        help="Delay between screenshots in milliseconds. Ignored when --cover-full-replay is used",
     )
     parser.add_argument(
         "--warmup-ms",
@@ -242,6 +249,17 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=120,
         help="Per-frame duration written into the output GIF",
+    )
+    parser.add_argument(
+        "--cover-full-replay",
+        action="store_true",
+        help="Spread screenshots across the normalized replay duration instead of sampling only the first few seconds",
+    )
+    parser.add_argument(
+        "--replay-speed",
+        type=float,
+        default=4.0,
+        help="Target OTNS replay speed written into a temporary normalized replay before rendering",
     )
     parser.add_argument(
         "--verbose",
@@ -296,10 +314,81 @@ def wait_for_cdp_target(port: int, timeout_s: float, ui_url: str) -> str:
     raise ReplayGifError("Timed out waiting for the OTNS replay page target in Chrome DevTools.")
 
 
+def rewrite_speed_fields(line: str, replay_speed: float) -> str:
+    if "set_speed:{" in line:
+        return SET_SPEED_RE.sub(f"set_speed:{{speed:{replay_speed:g}}}", line)
+
+    if "advance_time:{" in line and "speed:" in line:
+        return SPEED_FIELD_RE.sub(f" speed:{replay_speed:g}", line, count=1)
+    return line
+
+
+def normalize_replay_timing(replay_file: Path, temp_dir: Path, replay_speed: float) -> tuple[Path, int]:
+    if replay_speed <= 0:
+        raise ReplayGifError("--replay-speed must be > 0")
+
+    output_path = temp_dir / f"{replay_file.stem}.normalized.replay"
+    lines = replay_file.read_text(encoding="utf-8").splitlines()
+
+    normalized_lines: list[str] = []
+    initial_wall_us: int | None = None
+    base_sim_us: int | None = None
+    last_normalized_us: int | None = None
+    min_normalized_us: int | None = None
+    post_sim_counter = 0
+
+    for line in lines:
+        outer_match = OUTER_TIMESTAMP_RE.match(line)
+        if outer_match is None:
+            normalized_lines.append(rewrite_speed_fields(line, replay_speed))
+            continue
+
+        original_wall_us = int(outer_match.group(1))
+        suffix = outer_match.group(2)
+        if initial_wall_us is None:
+            initial_wall_us = original_wall_us
+
+        advance_match = ADVANCE_TIME_RE.search(suffix)
+        if advance_match is not None:
+            sim_us = int(advance_match.group(1))
+            if base_sim_us is None:
+                base_sim_us = sim_us
+            normalized_us = initial_wall_us + int(round((sim_us - base_sim_us) / replay_speed))
+            if last_normalized_us is not None and normalized_us <= last_normalized_us:
+                normalized_us = last_normalized_us + 1
+            if min_normalized_us is None:
+                min_normalized_us = normalized_us
+            last_normalized_us = normalized_us
+            post_sim_counter = 0
+            rewritten_suffix = rewrite_speed_fields(suffix, replay_speed)
+            normalized_lines.append(f"timestamp:{normalized_us}{rewritten_suffix}")
+            continue
+
+        rewritten_suffix = rewrite_speed_fields(suffix, replay_speed)
+        if last_normalized_us is None:
+            normalized_lines.append(f"timestamp:{original_wall_us}{rewritten_suffix}")
+            continue
+
+        post_sim_counter += 1
+        normalized_lines.append(f"timestamp:{last_normalized_us + post_sim_counter}{rewritten_suffix}")
+
+    output_path.write_text("\n".join(normalized_lines) + "\n", encoding="utf-8")
+    if min_normalized_us is None or last_normalized_us is None:
+        raise ReplayGifError("Replay did not contain any advance_time events.")
+    return output_path, max(1, last_normalized_us - min_normalized_us)
+
+
 def launch_replay_session(args: argparse.Namespace) -> ReplaySession:
+    temp_dir = Path(tempfile.mkdtemp(prefix="otns-replay-gif-"))
+    prepared_replay_file, prepared_replay_duration_us = normalize_replay_timing(
+        args.replay_file,
+        temp_dir,
+        args.replay_speed,
+    )
+
     replay_command = shlex.split(args.otns_replay_command)
     replay_command[0] = ensure_tool(replay_command[0])
-    replay_command.append(str(args.replay_file))
+    replay_command.append(str(prepared_replay_file))
 
     chrome_command = shlex.split(args.chrome_command)
     chrome_command[0] = ensure_tool(chrome_command[0])
@@ -317,7 +406,6 @@ def launch_replay_session(args: argparse.Namespace) -> ReplaySession:
         ]
     )
 
-    temp_dir = Path(tempfile.mkdtemp(prefix="otns-replay-gif-"))
     chrome_profile_dir = temp_dir / "chrome-profile"
     chrome_profile_dir.mkdir(parents=True, exist_ok=True)
     chrome_command.extend([f"--user-data-dir={chrome_profile_dir}", args.ui_url])
@@ -360,6 +448,8 @@ def launch_replay_session(args: argparse.Namespace) -> ReplaySession:
         temp_dir=temp_dir,
         ui_url=args.ui_url,
         cdp_url=cdp_url,
+        prepared_replay_file=prepared_replay_file,
+        prepared_replay_duration_us=prepared_replay_duration_us,
     )
 
 
@@ -368,6 +458,13 @@ def capture_frames(session: ReplaySession, args: argparse.Namespace) -> list[Ima
     unique_hashes: set[str] = set()
 
     time.sleep(args.warmup_ms / 1000.0)
+    frame_interval_ms = args.frame_interval_ms
+    if args.cover_full_replay:
+        frame_interval_ms = max(
+            1,
+            int((session.prepared_replay_duration_us / 1000.0) / max(1, args.frame_count - 1)),
+        )
+
     with DevToolsWebSocket(session.cdp_url, timeout_s=max(5.0, args.page_ready_timeout_s)) as cdp:
         for index in range(args.frame_count):
             result = cdp.call("Page.captureScreenshot", {"format": "png", "fromSurface": True})
@@ -375,7 +472,7 @@ def capture_frames(session: ReplaySession, args: argparse.Namespace) -> list[Ima
             unique_hashes.add(hashlib.md5(png_bytes).hexdigest())
             image = Image.open(io_from_bytes(png_bytes)).convert("P", palette=Image.ADAPTIVE)
             frames.append(image.copy())
-            time.sleep(args.frame_interval_ms / 1000.0)
+            time.sleep(frame_interval_ms / 1000.0)
 
     if len(unique_hashes) < 2:
         raise ReplayGifError(

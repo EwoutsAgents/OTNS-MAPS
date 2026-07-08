@@ -233,10 +233,13 @@ Replay files can also be rendered into a GIF via the OTNS web UI with:
 
 ```bash
 python3 scripts/replay_to_gif.py \
-  artifacts/<artifact-name>/replay/<captured-file>.replay
+  artifacts/<artifact-name>/replay/<captured-file>.replay \
+  --replay-speed 4 \
+  --cover-full-replay
 ```
 
 That script launches `otns-replay`, opens one persistent headless Chrome session, captures repeated screenshots through the Chrome DevTools protocol, and stitches the frames into a GIF with Pillow.
+`--replay-speed` normalizes the replay into a temporary constant-speed copy before playback, and `--cover-full-replay` spaces the captures across that normalized replay timeline.
 
 Replay metadata records scenario, firmware label, OpenThread commit, OTNS commit, command, workdir, and the associated CSV and summary file paths. That metadata is necessary for future stock-vs-modified firmware comparisons because the replay file alone does not explain what build or benchmark context produced it.
 
