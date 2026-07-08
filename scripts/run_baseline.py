@@ -552,6 +552,20 @@ def linear_positions(start: dict[str, float], end: dict[str, float], steps: int)
     return positions
 
 
+def movement_positions(scenario: dict[str, Any]) -> list[tuple[float, float]]:
+    timing = scenario["timing"]
+    movement = scenario["movement"]
+    positions = linear_positions(
+        movement["start"],
+        movement["end"],
+        int(timing["movement_steps"]),
+    )
+    hold_end_steps = int(movement.get("hold_end_steps", 0))
+    if hold_end_steps > 0 and positions:
+        positions.extend([positions[-1]] * hold_end_steps)
+    return positions
+
+
 def sanitize_command_output(lines: list[str]) -> list[str]:
     return [line.rstrip("\r\n") for line in lines if line not in {"Done", "Started"} and line]
 
@@ -750,11 +764,7 @@ class RealBenchmarkRunner:
             )
 
         timing = self.scenario["timing"]
-        positions = linear_positions(
-            self.scenario["movement"]["start"],
-            self.scenario["movement"]["end"],
-            int(timing["movement_steps"]),
-        )
+        positions = movement_positions(self.scenario)
 
         with OtnsSession(self.otns_command, cwd=self.otns_runtime_cwd) as session:
             session.command_output("speed 0")
@@ -997,11 +1007,7 @@ class MockBenchmarkRunner:
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         timing = self.scenario["timing"]
-        positions = linear_positions(
-            self.scenario["movement"]["start"],
-            self.scenario["movement"]["end"],
-            int(timing["movement_steps"]),
-        )
+        positions = movement_positions(self.scenario)
         router_a = self.scenario["nodes"]["router_a"]
         router_b = self.scenario["nodes"]["router_b"]
 

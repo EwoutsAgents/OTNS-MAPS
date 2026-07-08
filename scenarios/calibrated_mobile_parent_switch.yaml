@@ -3,7 +3,9 @@ title: Calibrated stock OpenThread mobility benchmark
 description: >
   Stock OTNS parent-switching benchmark variant that stages Router B into the
   topology after the mobile MED has time to attach to Router A, then moves the
-  MED toward Router B to induce an observable stock parent change.
+  MED toward Router B to induce an observable stock parent change, with the
+  mobile node traveling slightly below the routers and dwelling near Router B
+  at the end of the path.
 
 expected_initial_parent: router_a
 
@@ -41,16 +43,17 @@ nodes:
   mobile:
     type: med
     x: 100
-    y: 300
+    y: 380
 
 movement:
   node: mobile
   start:
     x: 100
-    y: 300
+    y: 380
   end:
     x: 900
-    y: 300
+    y: 380
+  hold_end_steps: 8
 
 traffic_probes:
   - name: router_a_to_mobile
