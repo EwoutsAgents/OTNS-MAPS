@@ -27,3 +27,7 @@ Replay command:
 ```bash
 otns-replay replay/calibrated_mobile_parent_switch_20260707T192927Z.replay
 ```
+
+Rendered GIF:
+
+- `gif/calibrated_mobile_parent_switch_20260707T192927Z.gif`
