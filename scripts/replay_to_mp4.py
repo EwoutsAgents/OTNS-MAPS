@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render an OTNS replay file into a GIF via the OTNS web UI."""
+"""Render an OTNS replay file into an MP4 via the OTNS web UI."""
 
 from __future__ import annotations
 
@@ -29,7 +29,6 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT_DIR = ROOT / "results" / "gifs"
 DEFAULT_UI_URL = "http://127.0.0.1:8997/visualize?addr=localhost:8998"
 OUTER_TIMESTAMP_RE = re.compile(r"^timestamp:(\d+)(\s+event:\{.*)$")
 ADVANCE_TIME_RE = re.compile(r"advance_time:\{timestamp:(\d+)([^}]*)\}")
@@ -67,8 +66,8 @@ NODE_TYPE_DISPLAY = {
 }
 
 
-class ReplayGifError(RuntimeError):
-    """Raised when replay-to-GIF rendering fails."""
+class ReplayVideoError(RuntimeError):
+    """Raised when replay-to-video rendering fails."""
 
 
 @dataclass
@@ -105,7 +104,7 @@ class DevToolsWebSocket:
     def __enter__(self) -> "DevToolsWebSocket":
         parsed = urlparse(self.websocket_url)
         if parsed.scheme != "ws":
-            raise ReplayGifError(f"Unsupported DevTools websocket scheme: {parsed.scheme}")
+            raise ReplayVideoError(f"Unsupported DevTools websocket scheme: {parsed.scheme}")
         self.socket = socket.create_connection((parsed.hostname, parsed.port), timeout=self.timeout_s)
         self.socket.settimeout(self.timeout_s)
 
@@ -128,12 +127,12 @@ class DevToolsWebSocket:
         while b"\r\n\r\n" not in response:
             chunk = self.socket.recv(4096)
             if not chunk:
-                raise ReplayGifError("DevTools websocket closed during handshake.")
+                raise ReplayVideoError("DevTools websocket closed during handshake.")
             response += chunk
 
         status_line = response.split(b"\r\n", 1)[0].decode("ascii", errors="replace")
         if "101" not in status_line:
-            raise ReplayGifError(f"DevTools websocket handshake failed: {status_line}")
+            raise ReplayVideoError(f"DevTools websocket handshake failed: {status_line}")
         return self
 
     def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
@@ -163,7 +162,7 @@ class DevToolsWebSocket:
         assert self.socket is not None
         first_two = self.socket.recv(2)
         if not first_two:
-            raise ReplayGifError("DevTools websocket closed while reading a frame.")
+            raise ReplayVideoError("DevTools websocket closed while reading a frame.")
         first, second = first_two
         opcode = first & 0x0F
         masked = bool(second >> 7)
@@ -204,7 +203,7 @@ class DevToolsWebSocket:
             if body.get("id") != call_id:
                 continue
             if "error" in body:
-                raise ReplayGifError(f"DevTools call failed for {method}: {body['error']}")
+                raise ReplayVideoError(f"DevTools call failed for {method}: {body['error']}")
             return body["result"]
 
     def _send_pong(self, payload: bytes) -> None:
@@ -225,12 +224,12 @@ class ReplayLogEvent:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("replay_file", type=Path, help="Replay file to render, for example artifacts/.../*.replay")
+    parser.add_argument("replay_file", type=Path, help="Replay file to render, for example results/.../*.replay")
     parser.add_argument(
-        "--output-gif",
+        "--output-mp4",
         type=Path,
         default=None,
-        help="Output GIF path. Defaults to results/gifs/<replay-stem>.gif",
+        help="Output MP4 path. Defaults to the replay file path with an .mp4 suffix in the same directory.",
     )
     parser.add_argument(
         "--otns-replay-command",
@@ -283,10 +282,12 @@ def parse_args() -> argparse.Namespace:
         help="Maximum time to wait for OTNS and Chrome to expose their HTTP endpoints",
     )
     parser.add_argument(
-        "--gif-frame-duration-ms",
-        type=int,
-        default=120,
-        help="Per-frame duration written into the output GIF",
+        "--video-fps",
+        "--mp4-fps",
+        dest="video_fps",
+        type=float,
+        default=2.0,
+        help="Frames per second written into the output MP4.",
     )
     parser.add_argument(
         "--cover-full-replay",
@@ -308,7 +309,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--show-log-panel",
         action="store_true",
-        help="Overlay a readable OTNS-style event log panel into the GIF frames.",
+        help="Overlay a readable OTNS-style event log panel into the captured frames.",
     )
     parser.add_argument(
         "--log-panel-width",
@@ -340,11 +341,11 @@ def ensure_tool(command: str) -> str:
     if home_go.exists():
         return str(home_go)
 
-    raise ReplayGifError(f"Required executable not found: {executable}")
+        raise ReplayVideoError(f"Required executable not found: {executable}")
 
 
-def default_output_gif(replay_file: Path) -> Path:
-    return DEFAULT_OUTPUT_DIR / f"{replay_file.stem}.gif"
+def default_output_mp4(replay_file: Path) -> Path:
+    return replay_file.with_suffix(".mp4")
 
 
 def wait_for_http(url: str, timeout_s: float) -> None:
@@ -356,7 +357,7 @@ def wait_for_http(url: str, timeout_s: float) -> None:
                     return
         except urllib.error.URLError:
             time.sleep(0.1)
-    raise ReplayGifError(f"Timed out waiting for {url}")
+    raise ReplayVideoError(f"Timed out waiting for {url}")
 
 
 def wait_for_cdp_target(port: int, timeout_s: float, ui_url: str) -> str:
@@ -372,7 +373,7 @@ def wait_for_cdp_target(port: int, timeout_s: float, ui_url: str) -> str:
             time.sleep(0.1)
             continue
         time.sleep(0.1)
-    raise ReplayGifError("Timed out waiting for the OTNS replay page target in Chrome DevTools.")
+    raise ReplayVideoError("Timed out waiting for the OTNS replay page target in Chrome DevTools.")
 
 
 def rewrite_speed_fields(line: str, replay_speed: float) -> str:
@@ -693,7 +694,7 @@ def normalize_replay_timing(
     end_device_y_offset: int,
 ) -> tuple[Path, int, list[ReplayLogEvent]]:
     if replay_speed <= 0:
-        raise ReplayGifError("--replay-speed must be > 0")
+        raise ReplayVideoError("--replay-speed must be > 0")
 
     output_path = temp_dir / f"{replay_file.stem}.normalized.replay"
     lines = replay_file.read_text(encoding="utf-8").splitlines()
@@ -744,12 +745,12 @@ def normalize_replay_timing(
 
     output_path.write_text("\n".join(normalized_lines) + "\n", encoding="utf-8")
     if min_normalized_us is None or last_normalized_us is None:
-        raise ReplayGifError("Replay did not contain any advance_time events.")
+        raise ReplayVideoError("Replay did not contain any advance_time events.")
     return output_path, max(1, last_normalized_us - min_normalized_us), extract_log_events(normalized_lines)
 
 
 def launch_replay_session(args: argparse.Namespace) -> ReplaySession:
-    temp_dir = Path(tempfile.mkdtemp(prefix="otns-replay-gif-"))
+    temp_dir = Path(tempfile.mkdtemp(prefix="otns-replay-mp4-"))
     prepared_replay_file, prepared_replay_duration_us, replay_log_events = normalize_replay_timing(
         args.replay_file,
         temp_dir,
@@ -897,7 +898,7 @@ def capture_frames(session: ReplaySession, args: argparse.Namespace) -> list[Ima
             time.sleep(frame_interval_ms / 1000.0)
 
     if len(unique_hashes) < 2:
-        raise ReplayGifError(
+        raise ReplayVideoError(
             "Captured fewer than two distinct replay frames. "
             "Try increasing --frame-count, reducing --warmup-ms, or confirming the replay page is animating."
         )
@@ -910,17 +911,76 @@ def io_from_bytes(data: bytes) -> Any:
     return io.BytesIO(data)
 
 
-def write_gif(frames: list[Image.Image], output_path: Path, frame_duration_ms: int) -> None:
+def write_mp4(frames: list[Image.Image], output_path: Path, fps: float) -> None:
+    if fps <= 0:
+        raise ReplayVideoError("--video-fps must be > 0")
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    first, *rest = frames
-    first.save(
-        output_path,
-        save_all=True,
-        append_images=rest,
-        duration=frame_duration_ms,
-        loop=0,
-        optimize=False,
+    ffmpeg = ensure_tool(str(Path.home() / ".local" / "bin" / "ffmpeg")) if (Path.home() / ".local" / "bin" / "ffmpeg").exists() else ensure_tool("ffmpeg")
+    frame_dir = output_path.parent / f".{output_path.stem}_frames"
+    frame_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        for index, frame in enumerate(frames, start=1):
+            frame.save(frame_dir / f"frame_{index:04d}.png", format="PNG")
+        command = [
+            ffmpeg,
+            "-y",
+            "-framerate",
+            f"{fps:g}",
+            "-i",
+            str(frame_dir / "frame_%04d.png"),
+            "-vf",
+            "pad=ceil(iw/2)*2:ceil(ih/2)*2:color=black,format=yuv420p",
+            "-c:v",
+            "libx264",
+            "-pix_fmt",
+            "yuv420p",
+            str(output_path),
+        ]
+        completed = subprocess.run(command, capture_output=True, text=True)
+        if completed.returncode != 0:
+            raise ReplayVideoError(completed.stderr.strip() or completed.stdout.strip() or "ffmpeg encoding failed")
+    finally:
+        shutil.rmtree(frame_dir, ignore_errors=True)
+
+
+def maybe_update_run_metadata(replay_file: Path, output_mp4: Path, args: argparse.Namespace) -> None:
+    manifest_path = replay_file.parent / "manifest.json"
+    if not manifest_path.exists():
+        return
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return
+
+    manifest["video_file"] = output_mp4.name
+    manifest["video_fps"] = args.video_fps
+    manifest["video_show_log_panel"] = bool(args.show_log_panel)
+    manifest["video_replay_speed"] = args.replay_speed
+    manifest["end_device_y_offset"] = args.end_device_y_offset
+    manifest["video_log_lines"] = args.log_lines
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
     )
+
+    readme_path = replay_file.parent / "README.md"
+    if not readme_path.exists():
+        return
+    render_command = (
+        f"python3 scripts/replay_to_mp4.py {replay_file.name} "
+        f"--replay-speed {args.replay_speed:g} --cover-full-replay "
+        f"--end-device-y-offset {args.end_device_y_offset} --video-fps {args.video_fps:g}"
+        f"{' --show-log-panel --log-lines ' + str(args.log_lines) if args.show_log_panel else ''}"
+    )
+    content = readme_path.read_text(encoding="utf-8")
+    content = re.sub(
+        r"- Rendered from the replay with `python3 scripts/replay_to_[^`]+`",
+        f"- Rendered from the replay with `{render_command}`",
+        content,
+    )
+    if "Rendered from the replay with" not in content:
+        content = content.rstrip() + f"\n\n- Rendered from the replay with `{render_command}`\n"
+    readme_path.write_text(content, encoding="utf-8")
 
 
 def main() -> int:
@@ -937,22 +997,27 @@ def main() -> int:
         print(f"Replay file not found: {replay_file}", file=sys.stderr)
         return 2
 
-    output_gif = (args.output_gif or default_output_gif(replay_file)).resolve()
-    if output_gif.exists():
-        print(f"Output GIF already exists: {output_gif}", file=sys.stderr)
+    if args.video_fps <= 0:
+        print("--video-fps must be > 0", file=sys.stderr)
+        return 2
+
+    output_mp4 = (args.output_mp4 or default_output_mp4(replay_file)).resolve()
+    if output_mp4.exists():
+        print(f"Output MP4 already exists: {output_mp4}", file=sys.stderr)
         return 2
 
     session = launch_replay_session(args)
     try:
         frames = capture_frames(session, args)
-        write_gif(frames, output_gif, args.gif_frame_duration_ms)
-    except ReplayGifError as exc:
+        write_mp4(frames, output_mp4, args.video_fps)
+        maybe_update_run_metadata(replay_file, output_mp4, args)
+    except ReplayVideoError as exc:
         print(str(exc), file=sys.stderr)
         return 1
     finally:
         session.close()
 
-    print(output_gif)
+    print(output_mp4)
     return 0
 
 

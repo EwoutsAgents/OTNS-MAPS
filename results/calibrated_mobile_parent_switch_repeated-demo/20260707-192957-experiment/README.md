@@ -1,6 +1,6 @@
-# Artifact: calibrated-med-repeated-demo
+# Result set: calibrated_mobile_parent_switch_repeated-demo / 20260707-192957-experiment
 
-Curated repeated-run OTNS benchmark artifact.
+Tracked OTNS repeated-run result set.
 
 ## Metadata
 

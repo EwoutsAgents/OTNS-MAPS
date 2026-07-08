@@ -1,6 +1,6 @@
-# Artifact: sed-baseline
+# Result: sed_mobile_parent_switch_sed-baseline / 20260708-154943-run01
 
-Stock OTNS parent-switching benchmark variant for a mobile Sleepy End Device. The scenario mirrors the calibrated delayed-router setup, but uses a SED and treats parent-command output as the primary attachment observation path because ping-based packet probing is not reliable for regular SEDs.
+Tracked OTNS benchmark result.
 
 ## Metadata
 
@@ -25,10 +25,7 @@ Stock OTNS parent-switching benchmark variant for a mobile Sleepy End Device. Th
 Replay command:
 
 ```bash
-otns-replay replay/sed_mobile_parent_switch_20260708T154943Z.replay
+otns-replay sed_mobile_parent_switch_20260708T154943Z.replay
 ```
 
-Rendered GIF:
-
-- `gif/sed_mobile_parent_switch_20260708T154943Z.gif`
-- Rendered from the replay with `python3 scripts/replay_to_gif.py replay/sed_mobile_parent_switch_20260708T154943Z.replay --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --gif-frame-duration-ms 500 --show-log-panel`
+- Rendered from the replay with `python3 scripts/replay_to_mp4.py sed_mobile_parent_switch_20260708T154943Z.replay --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --video-fps 3 --show-log-panel --log-lines 10`

@@ -17,7 +17,6 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCENARIO = ROOT / "scenarios" / "baseline_mobile_parent_switch.yaml"
 DEFAULT_RESULTS_DIR = ROOT / "results" / "repeated"
-DEFAULT_ARTIFACTS_DIR = ROOT / "artifacts"
 RUNNER = ROOT / "scripts" / "run_baseline.py"
 
 
@@ -73,18 +72,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--copy-results-to-artifact",
         action="store_true",
-        help="Copy each run plus aggregate outputs into a tracked artifact directory.",
+        help="Copy each run plus aggregate outputs into tracked results directories.",
     )
     parser.add_argument(
         "--commit-artifact-dir",
         type=Path,
         default=None,
-        help="Explicit repeated-run artifact directory. Defaults to artifacts/<artifact-name>.",
+        help="Explicit repeated-run tracked results directory.",
     )
     parser.add_argument(
         "--artifact-name",
         default=None,
-        help="Artifact directory name for repeated-run exports. Defaults to the experiment name.",
+        help="Legacy name for the tracked results variant suffix.",
     )
     parser.add_argument("--mock", action="store_true", help="Run in mock mode.")
     return parser.parse_args()
@@ -92,6 +91,28 @@ def parse_args() -> argparse.Namespace:
 
 def timestamp_token() -> str:
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+
+def slugify_variant(value: str) -> str:
+    import re
+
+    lowered = value.strip().lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", lowered).strip("-")
+    return slug or "run"
+
+
+def format_run_id(token: str, run_index: int) -> str:
+    return f"{token[:8]}-{token[9:15]}-run{run_index:02d}"
+
+
+def format_experiment_id(token: str) -> str:
+    return f"{token[:8]}-{token[9:15]}-experiment"
+
+
+def tracked_results_collection_name(scenario_stem: str, variant: str | None) -> str:
+    if not variant:
+        return scenario_stem
+    return f"{scenario_stem}_{slugify_variant(variant)}"
 
 
 def ensure_results_dir(path: Path) -> None:
@@ -114,9 +135,9 @@ def write_json(data: dict[str, Any], path: Path) -> None:
         handle.write("\n")
 
 
-def write_artifact_readme(path: Path, experiment_name: str, scenario: Path, aggregate_summary_exists: bool) -> None:
+def write_results_readme(path: Path, experiment_name: str, scenario: Path, aggregate_summary_exists: bool) -> None:
     lines = [
-        f"# Artifact: {path.parent.name}",
+        f"# Result set: {path.parent.name}",
         "",
         "Curated repeated-run OTNS benchmark artifact.",
         "",
@@ -129,14 +150,16 @@ def write_artifact_readme(path: Path, experiment_name: str, scenario: Path, aggr
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def resolve_artifact_dir(
+def resolve_tracked_results_dir(
     commit_artifact_dir: Path | None,
     artifact_name: str | None,
-    experiment_name: str,
+    scenario_stem: str,
+    experiment_token: str,
 ) -> Path:
     if commit_artifact_dir is not None:
         return commit_artifact_dir
-    return DEFAULT_ARTIFACTS_DIR / (artifact_name or experiment_name)
+    collection = tracked_results_collection_name(scenario_stem, artifact_name)
+    return ROOT / "results" / collection / format_experiment_id(experiment_token)
 
 
 def main() -> int:
@@ -148,20 +171,28 @@ def main() -> int:
         print("--listen-port-base must be >= 9000 and divisible by 10 for real OTNS runs", file=sys.stderr)
         return 2
 
-    experiment_name = args.experiment_name or f"{scenario_name(args.scenario)}_{timestamp_token()}"
+    experiment_token = timestamp_token()
+    experiment_name = args.experiment_name or f"{scenario_name(args.scenario)}_{experiment_token}"
     experiment_dir = args.results_dir / experiment_name
     ensure_results_dir(experiment_dir)
-    artifact_dir = None
+    tracked_experiment_dir = None
     if args.copy_results_to_artifact:
-        artifact_dir = resolve_artifact_dir(args.commit_artifact_dir, args.artifact_name, experiment_name)
-        if artifact_dir.exists():
-            print(f"Artifact directory already exists: {artifact_dir}", file=sys.stderr)
+        tracked_experiment_dir = resolve_tracked_results_dir(
+            args.commit_artifact_dir,
+            args.artifact_name,
+            scenario_name(args.scenario),
+            experiment_token,
+        )
+        if tracked_experiment_dir.exists():
+            print(f"Tracked results directory already exists: {tracked_experiment_dir}", file=sys.stderr)
             return 2
 
     runs: list[dict[str, Any]] = []
     for index in range(args.repeat_count):
         run_dir = experiment_dir / f"run_{index + 1:03d}"
         ensure_results_dir(run_dir)
+        run_token = timestamp_token()
+        run_id = format_run_id(run_token, index + 1)
 
         cmd = [
             "python3",
@@ -170,6 +201,8 @@ def main() -> int:
             str(args.scenario),
             "--results-dir",
             str(run_dir),
+            "--timestamp-token",
+            run_token,
         ]
         if args.mock:
             cmd.append("--mock")
@@ -193,12 +226,12 @@ def main() -> int:
             ]
         )
         if args.copy_results_to_artifact:
-            run_artifact_dir = artifact_dir / f"run_{index + 1:03d}"
+            run_tracked_dir = tracked_experiment_dir / run_id / run_id
             cmd.extend(
                 [
                     "--copy-results-to-artifact",
                     "--commit-artifact-dir",
-                    str(run_artifact_dir),
+                    str(run_tracked_dir),
                 ]
             )
 
@@ -244,12 +277,12 @@ def main() -> int:
         json.dump(manifest, handle, indent=2, sort_keys=True)
         handle.write("\n")
 
-    if artifact_dir is not None:
-        artifact_dir.mkdir(parents=True, exist_ok=True)
-        artifact_manifest_path = artifact_dir / "repeated_run_manifest.json"
+    if tracked_experiment_dir is not None:
+        tracked_experiment_dir.mkdir(parents=True, exist_ok=True)
+        artifact_manifest_path = tracked_experiment_dir / "repeated_run_manifest.json"
         shutil.copy2(manifest_path, artifact_manifest_path)
 
-        aggregate_summary_path = artifact_dir / "aggregate_summary.json"
+        aggregate_summary_path = tracked_experiment_dir / "aggregate_summary.json"
         analysis_cmd = [
             "python3",
             str(ROOT / "analysis" / "analyze_baseline.py"),
@@ -262,14 +295,14 @@ def main() -> int:
             print(completed.stderr or completed.stdout, file=sys.stderr)
             return 1
 
-        artifact_readme = artifact_dir / "README.md"
-        write_artifact_readme(
+        artifact_readme = tracked_experiment_dir / "README.md"
+        write_results_readme(
             artifact_readme,
             experiment_name=experiment_name,
             scenario=args.scenario,
             aggregate_summary_exists=aggregate_summary_path.exists(),
         )
-        print(artifact_dir)
+        print(tracked_experiment_dir)
         print(artifact_manifest_path)
         print(aggregate_summary_path)
 

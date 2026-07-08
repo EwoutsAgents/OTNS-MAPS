@@ -89,8 +89,8 @@ The `examples/sed-baseline/` directory stores a real SED reference artifact that
 
 Repeated experiments can be launched with `scripts/run_repeated_baseline.py`. They write one experiment directory under `results/repeated/`, with one subdirectory per run and a top-level manifest for traceability.
 
-Scratch outputs under `results/` remain ignored by Git. Curated benchmark evidence can be copied into tracked `artifacts/` directories when `--copy-results-to-artifact` is used. That export keeps CSV, summary JSON, replay, replay metadata, and a manifest together for later comparison work.
-Replay-derived GIFs are scratch outputs as well and default to `results/gifs/`.
+Scratch outputs under `results/` remain ignored by Git. Curated benchmark evidence can be copied into tracked nested `results/<scenario>_<variant>/<run-id>/<run-id>/` directories when `--copy-results-to-artifact` is used. That export keeps CSV, summary JSON, replay, replay metadata, and a manifest together for later comparison work.
+Replay-derived MP4s are stored beside the replay file in the same tracked run directory by default.
 
 ## Known limitations
 
@@ -134,7 +134,7 @@ python3 scripts/run_baseline.py \
   --otns-workdir /path/to/ot-ns \
   --capture-replay \
   --copy-results-to-artifact \
-  --artifact-name calibrated-med-switch-observed \
+  --artifact-name switch-observed \
   --firmware-variant stock-openthread \
   --openthread-commit <sha> \
   --otns-commit <sha>
@@ -187,7 +187,7 @@ python3 scripts/run_repeated_baseline.py \
   --otns-workdir /path/to/ot-ns \
   --capture-replay \
   --copy-results-to-artifact \
-  --artifact-name calibrated-med-repeated-demo \
+  --artifact-name repeated-demo \
   --firmware-variant stock-openthread \
   --openthread-commit <sha> \
   --otns-commit <sha>
@@ -213,9 +213,9 @@ python3 analysis/analyze_baseline.py examples/sed-baseline/baseline_run_sed_exam
 - `python3 analysis/analyze_baseline.py results/baseline_run_*.csv`
 - Real OTNS launch test with `otns`
 - Real baseline run with `python3 scripts/run_baseline.py`
-- Calibrated replay capture run with `python3 scripts/run_baseline.py --scenario scenarios/calibrated_mobile_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --capture-replay --copy-results-to-artifact --artifact-name calibrated-med-switch-observed`
+- Calibrated replay capture run with `python3 scripts/run_baseline.py --scenario scenarios/calibrated_mobile_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --capture-replay --copy-results-to-artifact --artifact-name switch-observed`
 - Confirm a replay file and replay metadata JSON are created
-- Confirm tracked outputs are copied into `artifacts/`
+- Confirm tracked outputs are copied into `results/<scenario>_<variant>/<run-id>/<run-id>/`
 - Confirm CSV and JSON outputs are created
 - Confirm parent-switch events are populated when a switch occurs
 - Confirm packet-delivery metrics are populated
@@ -226,18 +226,18 @@ python3 analysis/analyze_baseline.py examples/sed-baseline/baseline_run_sed_exam
 Replay files can be replayed with:
 
 ```bash
-otns-replay artifacts/<artifact-name>/replay/<captured-file>.replay
+otns-replay results/<scenario>_<variant>/<run-id>/<run-id>/<captured-file>.replay
 ```
 
 Replay files can also be rendered into a GIF via the OTNS web UI with:
 
 ```bash
-python3 scripts/replay_to_gif.py \
-  artifacts/<artifact-name>/replay/<captured-file>.replay \
+python3 scripts/replay_to_mp4.py \
+  results/<scenario>_<variant>/<run-id>/<run-id>/<captured-file>.replay \
   --replay-speed 4 \
   --cover-full-replay \
   --end-device-y-offset 40 \
-  --gif-frame-duration-ms 500 \
+  --video-fps 3 \
   --show-log-panel
 ```
 

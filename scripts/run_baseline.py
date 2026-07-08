@@ -26,9 +26,9 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCENARIO = ROOT / "scenarios" / "baseline_mobile_parent_switch.yaml"
 DEFAULT_RESULTS_DIR = ROOT / "results"
 DEFAULT_REPLAY_DIR = DEFAULT_RESULTS_DIR / "replays"
-DEFAULT_ARTIFACTS_DIR = ROOT / "artifacts"
 PING_NODE_RE = re.compile(r"Node<(\d+)>")
 SCAN_NODE_PREFIX_RE = re.compile(r"^Node<\d+>\s+")
+TIMESTAMP_TOKEN_RE = re.compile(r"^(?P<date>\d{8})T(?P<time>\d{6})Z$")
 
 
 @dataclass
@@ -92,18 +92,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--copy-results-to-artifact",
         action="store_true",
-        help="Copy CSV, summary, replay, and manifest into a tracked artifact directory.",
+        help="Copy CSV, summary, replay, and manifest into a tracked results directory.",
     )
     parser.add_argument(
         "--commit-artifact-dir",
         type=Path,
         default=None,
-        help="Explicit tracked artifact directory. Defaults to artifacts/<artifact-name>.",
+        help="Explicit tracked results run directory. Defaults to results/<scenario>_<variant>/<run-id>/<run-id>.",
     )
     parser.add_argument(
         "--artifact-name",
         default=None,
-        help="Artifact directory name. Defaults to <scenario_name>_<timestamp> when exporting.",
+        help="Legacy name for the tracked results variant suffix.",
+    )
+    parser.add_argument(
+        "--timestamp-token",
+        default=None,
+        help="Optional UTC token reused for filenames and tracked results directories.",
     )
     return parser.parse_args()
 
@@ -126,6 +131,25 @@ def scenario_file_label(path: Path) -> str:
         return str(path.resolve().relative_to(ROOT))
     except ValueError:
         return str(path.resolve())
+
+
+def slugify_variant(value: str) -> str:
+    lowered = value.strip().lower()
+    slug = re.sub(r"[^a-z0-9]+", "-", lowered).strip("-")
+    return slug or "run"
+
+
+def format_run_id(token: str, run_index: int = 1) -> str:
+    match = TIMESTAMP_TOKEN_RE.match(token)
+    if match is None:
+        raise ValueError(f"Unsupported timestamp token format: {token}")
+    return f'{match.group("date")}-{match.group("time")}-run{run_index:02d}'
+
+
+def tracked_results_collection_name(scenario_name: str, variant: str | None) -> str:
+    if not variant:
+        return scenario_name
+    return f"{scenario_name}_{slugify_variant(variant)}"
 
 
 def unique_file_path(directory: Path, filename: str) -> Path:
@@ -260,7 +284,7 @@ def maybe_capture_replay(
     return info
 
 
-def resolve_artifact_dir(
+def resolve_tracked_results_dir(
     commit_artifact_dir: Path | None,
     artifact_name: str | None,
     scenario_name: str,
@@ -268,13 +292,15 @@ def resolve_artifact_dir(
 ) -> Path:
     if commit_artifact_dir is not None:
         return commit_artifact_dir
-    final_name = artifact_name or f"{scenario_name}_{token}"
-    return DEFAULT_ARTIFACTS_DIR / final_name
+    collection = tracked_results_collection_name(scenario_name, artifact_name)
+    run_id = format_run_id(token)
+    return DEFAULT_RESULTS_DIR / collection / run_id / run_id
 
 
-def artifact_manifest(
+def tracked_results_manifest(
     *,
-    artifact_name: str,
+    collection_name: str,
+    run_id: str,
     scenario: dict[str, Any],
     scenario_path: Path,
     firmware_variant: str,
@@ -290,7 +316,8 @@ def artifact_manifest(
     summary: dict[str, Any],
 ) -> dict[str, Any]:
     return {
-        "artifact_name": artifact_name,
+        "results_collection": collection_name,
+        "run_id": run_id,
         "scenario_name": scenario["name"],
         "scenario_file": scenario_file_label(scenario_path),
         "firmware_variant": firmware_variant,
@@ -314,7 +341,7 @@ def artifact_manifest(
     }
 
 
-def write_artifact_readme(
+def write_tracked_results_readme(
     path: Path,
     *,
     manifest: dict[str, Any],
@@ -326,9 +353,9 @@ def write_artifact_readme(
     )
     content = "\n".join(
         [
-            f'# Artifact: {manifest["artifact_name"]}',
+            f'# Result: {manifest["results_collection"]} / {manifest["run_id"]}',
             "",
-            scenario.get("description", "").strip() or "Curated OTNS benchmark artifact.",
+            scenario.get("description", "").strip() or "Tracked OTNS benchmark result.",
             "",
             "## Metadata",
             "",
@@ -360,10 +387,11 @@ def write_artifact_readme(
     path.write_text(content + "\n", encoding="utf-8")
 
 
-def export_artifact(
+def export_tracked_results(
     *,
-    artifact_dir: Path,
-    artifact_name: str,
+    tracked_dir: Path,
+    tracked_collection: str,
+    run_id: str,
     scenario: dict[str, Any],
     scenario_path: Path,
     firmware_variant: str,
@@ -377,31 +405,30 @@ def export_artifact(
     replay_info: dict[str, Any],
     summary: dict[str, Any],
 ) -> dict[str, str]:
-    if artifact_dir.exists():
-        raise FileExistsError(f"Artifact directory already exists: {artifact_dir}")
-    artifact_dir.mkdir(parents=True, exist_ok=False)
+    if tracked_dir.exists():
+        raise FileExistsError(f"Tracked results directory already exists: {tracked_dir}")
+    tracked_dir.mkdir(parents=True, exist_ok=False)
 
-    artifact_csv = artifact_dir / csv_path.name
-    artifact_summary = artifact_dir / json_path.name
-    shutil.copy2(csv_path, artifact_csv)
-    shutil.copy2(json_path, artifact_summary)
+    tracked_csv = tracked_dir / csv_path.name
+    tracked_summary = tracked_dir / json_path.name
+    shutil.copy2(csv_path, tracked_csv)
+    shutil.copy2(json_path, tracked_summary)
 
     replay_relpath = None
     metadata_relpath = None
     if replay_info.get("copied_path"):
-        replay_dir = artifact_dir / "replay"
-        replay_dir.mkdir(parents=True, exist_ok=True)
         replay_source = Path(replay_info["copied_path"])
-        artifact_replay = replay_dir / replay_source.name
-        shutil.copy2(replay_source, artifact_replay)
-        replay_relpath = str(artifact_replay.relative_to(artifact_dir))
+        tracked_replay = tracked_dir / replay_source.name
+        shutil.copy2(replay_source, tracked_replay)
+        replay_relpath = tracked_replay.name
         metadata_source = Path(replay_info["metadata_path"])
-        artifact_replay_metadata = replay_dir / metadata_source.name
-        shutil.copy2(metadata_source, artifact_replay_metadata)
-        metadata_relpath = str(artifact_replay_metadata.relative_to(artifact_dir))
+        tracked_replay_metadata = tracked_dir / metadata_source.name
+        shutil.copy2(metadata_source, tracked_replay_metadata)
+        metadata_relpath = tracked_replay_metadata.name
 
-    manifest = artifact_manifest(
-        artifact_name=artifact_name,
+    manifest = tracked_results_manifest(
+        collection_name=tracked_collection,
+        run_id=run_id,
         scenario=scenario,
         scenario_path=scenario_path,
         firmware_variant=firmware_variant,
@@ -409,23 +436,23 @@ def export_artifact(
         otns_commit=otns_commit,
         otns_command=otns_command,
         otns_workdir=otns_workdir,
-        csv_file=artifact_csv.name,
-        summary_file=artifact_summary.name,
+        csv_file=tracked_csv.name,
+        summary_file=tracked_summary.name,
         replay_file=replay_relpath,
         replay_metadata_file=metadata_relpath,
         token=token,
         summary=summary,
     )
-    manifest_path = artifact_dir / "manifest.json"
+    manifest_path = tracked_dir / "manifest.json"
     write_json(manifest, manifest_path)
-    write_artifact_readme(
-        artifact_dir / "README.md",
+    write_tracked_results_readme(
+        tracked_dir / "README.md",
         manifest=manifest,
         scenario=scenario,
         replay_file=replay_relpath,
     )
     return {
-        "artifact_dir": str(artifact_dir),
+        "tracked_dir": str(tracked_dir),
         "manifest_path": str(manifest_path),
     }
 
@@ -1126,7 +1153,7 @@ def main() -> int:
     scenario = load_scenario(args.scenario)
     ensure_results_dir(args.results_dir)
 
-    token = timestamp_token()
+    token = args.timestamp_token or timestamp_token()
     csv_path = args.results_dir / f"baseline_run_{token}.csv"
     json_path = args.results_dir / f"baseline_summary_{token}.json"
     replay_before = snapshot_replay_files(args.otns_workdir) if args.capture_replay and not args.mock else {}
@@ -1178,16 +1205,19 @@ def main() -> int:
     write_json(summary, json_path)
 
     if args.copy_results_to_artifact:
-        artifact_dir = resolve_artifact_dir(
+        tracked_dir = resolve_tracked_results_dir(
             args.commit_artifact_dir,
             args.artifact_name,
             scenario["name"],
             token,
         )
+        tracked_collection = tracked_results_collection_name(scenario["name"], args.artifact_name)
+        run_id = format_run_id(token)
         try:
-            artifact_info = export_artifact(
-                artifact_dir=artifact_dir,
-                artifact_name=artifact_dir.name,
+            tracked_info = export_tracked_results(
+                tracked_dir=tracked_dir,
+                tracked_collection=tracked_collection,
+                run_id=run_id,
                 scenario=scenario,
                 scenario_path=args.scenario,
                 firmware_variant=args.firmware_variant,
@@ -1204,8 +1234,8 @@ def main() -> int:
         except FileExistsError as exc:
             print(str(exc), file=sys.stderr)
             return 2
-        print(artifact_info["artifact_dir"])
-        print(artifact_info["manifest_path"])
+        print(tracked_info["tracked_dir"])
+        print(tracked_info["manifest_path"])
 
     print(csv_path)
     print(json_path)

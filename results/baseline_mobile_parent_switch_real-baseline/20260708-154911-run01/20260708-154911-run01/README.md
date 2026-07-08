@@ -1,6 +1,6 @@
-# Artifact: real-baseline
+# Result: baseline_mobile_parent_switch_real-baseline / 20260708-154911-run01
 
-Baseline OTNS scenario with two routers and one mobile MED moving from Router A toward Router B without modifying OpenThread parent selection.
+Tracked OTNS benchmark result.
 
 ## Metadata
 
@@ -25,10 +25,7 @@ Baseline OTNS scenario with two routers and one mobile MED moving from Router A 
 Replay command:
 
 ```bash
-otns-replay replay/baseline_mobile_parent_switch_20260708T154911Z.replay
+otns-replay baseline_mobile_parent_switch_20260708T154911Z.replay
 ```
 
-Rendered GIF:
-
-- `gif/baseline_mobile_parent_switch_20260708T154911Z.gif`
-- Rendered from the replay with `python3 scripts/replay_to_gif.py replay/baseline_mobile_parent_switch_20260708T154911Z.replay --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --gif-frame-duration-ms 500 --show-log-panel`
+- Rendered from the replay with `python3 scripts/replay_to_mp4.py baseline_mobile_parent_switch_20260708T154911Z.replay --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --video-fps 3 --show-log-panel --log-lines 10`

@@ -1,6 +1,6 @@
-# Artifact: calibrated-med-switch-observed
+# Result: calibrated_mobile_parent_switch_switch-observed / 20260707-192927-run01
 
-Stock OTNS parent-switching benchmark variant that stages Router B into the topology after the mobile MED has time to attach to Router A, then moves the MED toward Router B to induce an observable stock parent change.
+Tracked OTNS benchmark result.
 
 ## Metadata
 
@@ -25,10 +25,7 @@ Stock OTNS parent-switching benchmark variant that stages Router B into the topo
 Replay command:
 
 ```bash
-otns-replay replay/calibrated_mobile_parent_switch_20260707T192927Z.replay
+otns-replay calibrated_mobile_parent_switch_20260707T192927Z.replay
 ```
 
-Rendered GIF:
-
-- `gif/calibrated_mobile_parent_switch_20260707T192927Z.gif`
-- Rendered from the replay with `python3 scripts/replay_to_gif.py replay/calibrated_mobile_parent_switch_20260707T192927Z.replay --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --gif-frame-duration-ms 500 --show-log-panel`
+- Rendered from the replay with `python3 scripts/replay_to_mp4.py calibrated_mobile_parent_switch_20260707T192927Z.replay --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --video-fps 3 --show-log-panel --log-lines 10`
