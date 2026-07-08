@@ -9,7 +9,15 @@
   "openthread_commit": "7874555ef",
   "otns_command": "/home/ewout/go/bin/otns -web=false -autogo=false -speed 1 -listen localhost:9960",
   "otns_commit": "099a6c2",
+  "otns_watch_level": "info",
   "otns_workdir": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns",
+  "node_log_capture_note": "Raw per-device OTNS node logs were captured later on 2026-07-08 from a supplemental watch-enabled calibrated scenario run and added to this tracked result without replacing the original benchmark summary.",
+  "node_log_capture_utc": "2026-07-08T20:32:42Z",
+  "node_log_files": [
+    "node_log_mobile_2.log",
+    "node_log_router_a_1.log",
+    "node_log_router_b_3.log"
+  ],
   "packet_delivery_ratio": 0.4625,
   "replay_file": "calibrated_mobile_parent_switch_20260707T192927Z.replay",
   "replay_metadata_file": "calibrated_mobile_parent_switch_20260707T192927Z.replay.json",
