@@ -291,7 +291,7 @@ python3 scripts/replay_to_gif.py \
   --show-log-panel
 ```
 
-`--replay-speed` rewrites the replay into a temporary constant-speed copy before rendering. `--cover-full-replay` then spaces screenshots across that normalized replay so the GIF covers the full run instead of just the first event burst. `--end-device-y-offset` is a visual-only tweak for clearer separation from routers in the replay UI. `--show-log-panel` overlays a readable OTNS-style event panel into the GIF.
+`--replay-speed` rewrites the replay into a temporary constant-speed copy before rendering. `--cover-full-replay` then spaces screenshots across that normalized replay so the GIF covers the full run instead of just the first event burst. `--end-device-y-offset` carries a consistent visual offset for the mobile end device across rendered artifacts. `--show-log-panel` overlays replay-visible OTNS log categories such as node add/delete, movement, role/mode changes, RLOC16 changes, parent updates, partition changes, radio toggles, and router/child table updates.
 
 Replay metadata matters because later firmware comparisons will need to distinguish stock OpenThread runs from modified OpenThread or future MAPS variants.
 

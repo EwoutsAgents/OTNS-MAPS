@@ -40,6 +40,21 @@ ADD_NODE_RE = re.compile(
 )
 SET_NODE_POS_RE = re.compile(r"set_node_pos:\{node_id:(\d+)(.*?)\sy:(-?\d+)(.*?)\}")
 SET_NODE_ROLE_RE = re.compile(r"set_node_role:\{node_id:(\d+)\s+role:([A-Z_]+)\}")
+SET_NODE_RLOC16_RE = re.compile(r"set_node_rloc16:\{node_id:(\d+)\s+rloc16:(\d+)\}")
+SET_NODE_PARTITION_ID_RE = re.compile(r"set_node_partition_id:\{node_id:(\d+)\s+partition_id:(\d+)\}")
+SET_NODE_MODE_RE = re.compile(r"set_node_mode:\{node_id:(\d+)\s+node_mode:\{([^}]*)\}\}")
+ON_EXT_ADDR_CHANGE_RE = re.compile(r"on_ext_addr_change:\{node_id:(\d+)\s+ext_addr:(\d+)\}")
+ON_NODE_FAIL_RE = re.compile(r"on_node_fail:\{node_id:(\d+)\}")
+ON_NODE_RECOVER_RE = re.compile(r"on_node_recover:\{node_id:(\d+)\}")
+SET_PARENT_RE = re.compile(r"set_parent:\{node_id:(\d+)\s+ext_addr:(\d+)\}")
+SET_TITLE_RE = re.compile(r'set_title:\{title:"([^"]*)"(?:\s+x:(-?\d+))?\s+y:(-?\d+)\s+font_size:(\d+)\}')
+SET_NETWORK_INFO_RE = re.compile(r"set_network_info:\{([^}]*)\}")
+ADD_ROUTER_TABLE_RE = re.compile(r"add_router_table:\{node_id:(\d+)\s+ext_addr:(\d+)\}")
+REMOVE_ROUTER_TABLE_RE = re.compile(r"remove_router_table:\{node_id:(\d+)\s+ext_addr:(\d+)\}")
+ADD_CHILD_TABLE_RE = re.compile(r"add_child_table:\{node_id:(\d+)\s+ext_addr:(\d+)\}")
+REMOVE_CHILD_TABLE_RE = re.compile(r"remove_child_table:\{node_id:(\d+)\s+ext_addr:(\d+)\}")
+DELETE_NODE_RE = re.compile(r"delete_node:\{node_id:(\d+)\}")
+NODE_ID_RE = re.compile(r"node_id:(\d+)")
 END_DEVICE_TYPES = {"fed", "med", "sed", "ssed"}
 NODE_TYPE_DISPLAY = {
     "router": "router",
@@ -406,9 +421,10 @@ def make_node_label(node_type: str, type_counts: dict[str, int]) -> str:
     count = type_counts[node_type]
     if node_type == "router":
         return f"router_{chr(ord('a') + count - 1)}" if count <= 26 else f"router_{count}"
-    display = NODE_TYPE_DISPLAY.get(node_type, node_type)
-    if display == "mobile" and count == 1:
+    if node_type in END_DEVICE_TYPES and not type_counts.get("__mobile_assigned__"):
+        type_counts["__mobile_assigned__"] = 1
         return "mobile"
+    display = NODE_TYPE_DISPLAY.get(node_type, node_type)
     return f"{display}_{count}"
 
 
@@ -417,11 +433,58 @@ def summarize_role(role: str) -> str:
     return short
 
 
+def summarize_mode(mode_text: str) -> str:
+    flags: list[str] = []
+    if "rx_on_when_idle:true" in mode_text:
+        flags.append("rx-on-idle")
+    if "secure_data_requests:true" in mode_text:
+        flags.append("secure-req")
+    if "full_thread_device:true" in mode_text:
+        flags.append("ftd")
+    if "full_network_data:true" in mode_text:
+        flags.append("full-net")
+    return ",".join(flags) if flags else "default"
+
+
+def format_rloc16(value: int) -> str:
+    return f"0x{value:04x}"
+
+
+def format_partition(value: int) -> str:
+    return f"0x{value:08x}"
+
+
+def format_extaddr(value: int) -> str:
+    return f"0x{value:016x}"
+
+
+def pretty_node(node_id: int, node_labels: dict[int, str]) -> str:
+    return node_labels.get(node_id, f"node_{node_id}")
+
+
+def pretty_extaddr(ext_addr: int, ext_to_node: dict[int, int], node_labels: dict[int, str]) -> str:
+    node_id = ext_to_node.get(ext_addr)
+    if node_id is None:
+        return format_extaddr(ext_addr)
+    return f"{pretty_node(node_id, node_labels)} ({format_extaddr(ext_addr)})"
+
+
+def format_offset(offset_us: int) -> str:
+    return f"{offset_us / 1_000_000:.1f}s"
+
+
 def extract_log_events(lines: list[str]) -> list[ReplayLogEvent]:
     events: list[ReplayLogEvent] = []
     start_us: int | None = None
     node_labels: dict[int, str] = {}
     type_counts: dict[str, int] = {}
+    ext_to_node: dict[int, int] = {}
+    prev_role: dict[int, str] = {}
+    prev_mode: dict[int, str] = {}
+    prev_rloc16: dict[int, int] = {}
+    prev_partition: dict[int, int] = {}
+    prev_parent: dict[int, int] = {}
+    real_devices_logged = False
 
     for line in lines:
         outer_match = OUTER_TIMESTAMP_RE.match(line)
@@ -438,14 +501,186 @@ def extract_log_events(lines: list[str]) -> list[ReplayLogEvent]:
             node_type = add_node_match.group(5)
             label = make_node_label(node_type, type_counts)
             node_labels[node_id] = label
-            events.append(ReplayLogEvent(offset_us, f"{label} added"))
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {label} added"))
+            continue
+
+        delete_node_match = DELETE_NODE_RE.search(line)
+        if delete_node_match is not None:
+            node_id = int(delete_node_match.group(1))
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {pretty_node(node_id, node_labels)} deleted"))
+            continue
+
+        rloc16_match = SET_NODE_RLOC16_RE.search(line)
+        if rloc16_match is not None:
+            node_id = int(rloc16_match.group(1))
+            new_value = int(rloc16_match.group(2))
+            old_value = prev_rloc16.get(node_id)
+            prev_rloc16[node_id] = new_value
+            if old_value != new_value:
+                if old_value is None:
+                    text = f"{pretty_node(node_id, node_labels)} rloc16 -> {format_rloc16(new_value)}"
+                else:
+                    text = f"{pretty_node(node_id, node_labels)} rloc16 {format_rloc16(old_value)} -> {format_rloc16(new_value)}"
+                events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
             continue
 
         role_match = SET_NODE_ROLE_RE.search(line)
         if role_match is not None:
             node_id = int(role_match.group(1))
-            label = node_labels.get(node_id, f"node_{node_id}")
-            events.append(ReplayLogEvent(offset_us, f"{label} role -> {summarize_role(role_match.group(2))}"))
+            old_role = prev_role.get(node_id)
+            new_role = role_match.group(2)
+            prev_role[node_id] = new_role
+            label = pretty_node(node_id, node_labels)
+            if old_role is None:
+                text = f"{label} role -> {summarize_role(new_role)}"
+            else:
+                text = f"{label} role {summarize_role(old_role)} -> {summarize_role(new_role)}"
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
+            continue
+
+        mode_match = SET_NODE_MODE_RE.search(line)
+        if mode_match is not None:
+            node_id = int(mode_match.group(1))
+            new_mode = summarize_mode(mode_match.group(2))
+            old_mode = prev_mode.get(node_id)
+            prev_mode[node_id] = new_mode
+            label = pretty_node(node_id, node_labels)
+            if old_mode is None:
+                text = f"{label} mode -> {new_mode}"
+            else:
+                text = f"{label} mode {old_mode} -> {new_mode}"
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
+            continue
+
+        network_info_match = SET_NETWORK_INFO_RE.search(line)
+        if network_info_match is not None:
+            fields = network_info_match.group(1)
+            node_id_match = NODE_ID_RE.search(fields)
+            if node_id_match is None and not real_devices_logged:
+                real_devices_logged = True
+                real_text = "ON" if "real:true" in fields else "OFF"
+                events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | real devices: {real_text}"))
+            continue
+
+        pos_match = SET_NODE_POS_RE.search(line)
+        if pos_match is not None:
+            node_id = int(pos_match.group(1))
+            x_match = re.search(r"\sx:(-?\d+)", pos_match.group(0))
+            y_match = re.search(r"\sy:(-?\d+)", pos_match.group(0))
+            z_match = re.search(r"\sz:(-?\d+)", pos_match.group(0))
+            if x_match and y_match:
+                z_value = z_match.group(1) if z_match else "0"
+                text = f"{pretty_node(node_id, node_labels)} moved to ({x_match.group(1)},{y_match.group(1)},{z_value})"
+                events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
+            continue
+
+        ext_match = ON_EXT_ADDR_CHANGE_RE.search(line)
+        if ext_match is not None:
+            node_id = int(ext_match.group(1))
+            ext_addr = int(ext_match.group(2))
+            ext_to_node[ext_addr] = node_id
+            text = f"{pretty_node(node_id, node_labels)} extaddr -> {format_extaddr(ext_addr)}"
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
+            continue
+
+        if ON_NODE_FAIL_RE.search(line):
+            node_id = int(ON_NODE_FAIL_RE.search(line).group(1))
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {pretty_node(node_id, node_labels)} radio OFF"))
+            continue
+
+        if ON_NODE_RECOVER_RE.search(line):
+            node_id = int(ON_NODE_RECOVER_RE.search(line).group(1))
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {pretty_node(node_id, node_labels)} radio ON"))
+            continue
+
+        parent_match = SET_PARENT_RE.search(line)
+        if parent_match is not None:
+            node_id = int(parent_match.group(1))
+            ext_addr = int(parent_match.group(2))
+            prev_parent[node_id] = ext_addr
+            text = f"{pretty_node(node_id, node_labels)} parent -> {pretty_extaddr(ext_addr, ext_to_node, node_labels)}"
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
+            continue
+
+        title_match = SET_TITLE_RE.search(line)
+        if title_match is not None:
+            title = title_match.group(1)
+            x = title_match.group(2) or "0"
+            y = title_match.group(3)
+            font_size = title_match.group(4)
+            events.append(
+                ReplayLogEvent(
+                    offset_us,
+                    f'{format_offset(offset_us)} | title "{title}" at ({x},{y}), size {font_size}',
+                )
+            )
+            continue
+
+        partition_match = SET_NODE_PARTITION_ID_RE.search(line)
+        if partition_match is not None:
+            node_id = int(partition_match.group(1))
+            new_partition = int(partition_match.group(2))
+            old_partition = prev_partition.get(node_id)
+            prev_partition[node_id] = new_partition
+            label = pretty_node(node_id, node_labels)
+            if old_partition is None:
+                text = f"{label} partition -> {format_partition(new_partition)}"
+            else:
+                text = f"{label} partition {format_partition(old_partition)} -> {format_partition(new_partition)}"
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
+            continue
+
+        if "set_speed:{" in line:
+            set_speed_match = SET_SPEED_RE.search(line)
+            if set_speed_match is not None:
+                speed = set_speed_match.group(1)
+                if speed:
+                    events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | speed set to {speed}"))
+            continue
+
+        router_add_match = ADD_ROUTER_TABLE_RE.search(line)
+        if router_add_match is not None:
+            node_id = int(router_add_match.group(1))
+            ext_addr = int(router_add_match.group(2))
+            text = f"{pretty_node(node_id, node_labels)} router table + {pretty_extaddr(ext_addr, ext_to_node, node_labels)}"
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
+            continue
+
+        router_remove_match = REMOVE_ROUTER_TABLE_RE.search(line)
+        if router_remove_match is not None:
+            node_id = int(router_remove_match.group(1))
+            ext_addr = int(router_remove_match.group(2))
+            text = f"{pretty_node(node_id, node_labels)} router table - {pretty_extaddr(ext_addr, ext_to_node, node_labels)}"
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
+            continue
+
+        child_add_match = ADD_CHILD_TABLE_RE.search(line)
+        if child_add_match is not None:
+            node_id = int(child_add_match.group(1))
+            child_ext = int(child_add_match.group(2))
+            parent_ext = None
+            for ext_addr, mapped_node_id in ext_to_node.items():
+                if mapped_node_id == node_id:
+                    parent_ext = ext_addr
+                    break
+            text = f"{pretty_node(node_id, node_labels)} child table + {pretty_extaddr(child_ext, ext_to_node, node_labels)}"
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
+            child_node_id = ext_to_node.get(child_ext)
+            if child_node_id is not None and parent_ext is not None:
+                prev_parent[child_node_id] = parent_ext
+                parent_text = (
+                    f"{pretty_node(child_node_id, node_labels)} parent -> "
+                    f"{pretty_extaddr(parent_ext, ext_to_node, node_labels)}"
+                )
+                events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {parent_text}"))
+            continue
+
+        child_remove_match = REMOVE_CHILD_TABLE_RE.search(line)
+        if child_remove_match is not None:
+            node_id = int(child_remove_match.group(1))
+            child_ext = int(child_remove_match.group(2))
+            text = f"{pretty_node(node_id, node_labels)} child table - {pretty_extaddr(child_ext, ext_to_node, node_labels)}"
+            events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | {text}"))
             continue
 
     return events
