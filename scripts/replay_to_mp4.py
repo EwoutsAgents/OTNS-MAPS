@@ -632,11 +632,6 @@ def extract_log_events(lines: list[str]) -> list[ReplayLogEvent]:
             continue
 
         if "set_speed:{" in line:
-            set_speed_match = SET_SPEED_RE.search(line)
-            if set_speed_match is not None:
-                speed = set_speed_match.group(1)
-                if speed:
-                    events.append(ReplayLogEvent(offset_us, f"{format_offset(offset_us)} | speed set to {speed}"))
             continue
 
         router_add_match = ADD_ROUTER_TABLE_RE.search(line)
