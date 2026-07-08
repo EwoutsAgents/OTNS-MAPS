@@ -214,7 +214,8 @@ python3 scripts/replay_to_gif.py \
   --replay-speed 4 \
   --cover-full-replay \
   --end-device-y-offset 40 \
-  --gif-frame-duration-ms 500
+  --gif-frame-duration-ms 500 \
+  --show-log-panel
 ```
 
 ## OTNS setup
@@ -286,10 +287,11 @@ python3 scripts/replay_to_gif.py \
   --replay-speed 4 \
   --cover-full-replay \
   --end-device-y-offset 40 \
-  --gif-frame-duration-ms 500
+  --gif-frame-duration-ms 500 \
+  --show-log-panel
 ```
 
-`--replay-speed` rewrites the replay into a temporary constant-speed copy before rendering. `--cover-full-replay` then spaces screenshots across that normalized replay so the GIF covers the full run instead of just the first event burst. `--end-device-y-offset` is a visual-only tweak for clearer separation from routers in the replay UI.
+`--replay-speed` rewrites the replay into a temporary constant-speed copy before rendering. `--cover-full-replay` then spaces screenshots across that normalized replay so the GIF covers the full run instead of just the first event burst. `--end-device-y-offset` is a visual-only tweak for clearer separation from routers in the replay UI. `--show-log-panel` overlays a readable OTNS-style event panel into the GIF.
 
 Replay metadata matters because later firmware comparisons will need to distinguish stock OpenThread runs from modified OpenThread or future MAPS variants.
 

@@ -31,4 +31,4 @@ otns-replay replay/calibrated_mobile_parent_switch_20260707T192927Z.replay
 Rendered GIF:
 
 - `gif/calibrated_mobile_parent_switch_20260707T192927Z.gif`
-- Rendered from the replay with `python3 scripts/replay_to_gif.py replay/calibrated_mobile_parent_switch_20260707T192927Z.replay --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --gif-frame-duration-ms 500`
+- Rendered from the replay with `python3 scripts/replay_to_gif.py replay/calibrated_mobile_parent_switch_20260707T192927Z.replay --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --gif-frame-duration-ms 500 --show-log-panel`

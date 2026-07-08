@@ -17,6 +17,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import textwrap
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -24,7 +25,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,7 +39,17 @@ ADD_NODE_RE = re.compile(
     r'add_node:\{node_id:(\d+)(.*?)\sy:(-?\d+)(.*?)\snode_type:"([^"]+)"(.*?)\}'
 )
 SET_NODE_POS_RE = re.compile(r"set_node_pos:\{node_id:(\d+)(.*?)\sy:(-?\d+)(.*?)\}")
+SET_NODE_ROLE_RE = re.compile(r"set_node_role:\{node_id:(\d+)\s+role:([A-Z_]+)\}")
 END_DEVICE_TYPES = {"fed", "med", "sed", "ssed"}
+NODE_TYPE_DISPLAY = {
+    "router": "router",
+    "fed": "fed",
+    "med": "mobile",
+    "sed": "sed",
+    "ssed": "ssed",
+    "br": "br",
+    "matter": "matter",
+}
 
 
 class ReplayGifError(RuntimeError):
@@ -54,6 +65,7 @@ class ReplaySession:
     cdp_url: str
     prepared_replay_file: Path
     prepared_replay_duration_us: int
+    replay_log_events: list["ReplayLogEvent"]
 
     def close(self) -> None:
         for process in (self.chrome_process, self.replay_process):
@@ -190,6 +202,12 @@ class DevToolsWebSocket:
         self.socket.sendall(header + payload)
 
 
+@dataclass
+class ReplayLogEvent:
+    offset_us: int
+    text: str
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("replay_file", type=Path, help="Replay file to render, for example artifacts/.../*.replay")
@@ -271,6 +289,23 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=0,
         help="Optional vertical offset applied to end-device nodes in the temporary replay before rendering",
+    )
+    parser.add_argument(
+        "--show-log-panel",
+        action="store_true",
+        help="Overlay a readable OTNS-style event log panel into the GIF frames.",
+    )
+    parser.add_argument(
+        "--log-panel-width",
+        type=int,
+        default=360,
+        help="Width in pixels for the overlaid log panel when --show-log-panel is enabled.",
+    )
+    parser.add_argument(
+        "--log-lines",
+        type=int,
+        default=8,
+        help="Maximum number of recent log entries shown in the overlay panel.",
     )
     parser.add_argument(
         "--verbose",
@@ -366,12 +401,62 @@ def rewrite_visual_offsets(line: str, end_device_ids: set[int], end_device_y_off
     return line
 
 
+def make_node_label(node_type: str, type_counts: dict[str, int]) -> str:
+    type_counts[node_type] = type_counts.get(node_type, 0) + 1
+    count = type_counts[node_type]
+    if node_type == "router":
+        return f"router_{chr(ord('a') + count - 1)}" if count <= 26 else f"router_{count}"
+    display = NODE_TYPE_DISPLAY.get(node_type, node_type)
+    if display == "mobile" and count == 1:
+        return "mobile"
+    return f"{display}_{count}"
+
+
+def summarize_role(role: str) -> str:
+    short = role.replace("OT_DEVICE_ROLE_", "").lower()
+    return short
+
+
+def extract_log_events(lines: list[str]) -> list[ReplayLogEvent]:
+    events: list[ReplayLogEvent] = []
+    start_us: int | None = None
+    node_labels: dict[int, str] = {}
+    type_counts: dict[str, int] = {}
+
+    for line in lines:
+        outer_match = OUTER_TIMESTAMP_RE.match(line)
+        if outer_match is None:
+            continue
+        timestamp_us = int(outer_match.group(1))
+        if start_us is None:
+            start_us = timestamp_us
+        offset_us = max(0, timestamp_us - start_us)
+
+        add_node_match = ADD_NODE_RE.search(line)
+        if add_node_match is not None:
+            node_id = int(add_node_match.group(1))
+            node_type = add_node_match.group(5)
+            label = make_node_label(node_type, type_counts)
+            node_labels[node_id] = label
+            events.append(ReplayLogEvent(offset_us, f"{label} added"))
+            continue
+
+        role_match = SET_NODE_ROLE_RE.search(line)
+        if role_match is not None:
+            node_id = int(role_match.group(1))
+            label = node_labels.get(node_id, f"node_{node_id}")
+            events.append(ReplayLogEvent(offset_us, f"{label} role -> {summarize_role(role_match.group(2))}"))
+            continue
+
+    return events
+
+
 def normalize_replay_timing(
     replay_file: Path,
     temp_dir: Path,
     replay_speed: float,
     end_device_y_offset: int,
-) -> tuple[Path, int]:
+) -> tuple[Path, int, list[ReplayLogEvent]]:
     if replay_speed <= 0:
         raise ReplayGifError("--replay-speed must be > 0")
 
@@ -425,12 +510,12 @@ def normalize_replay_timing(
     output_path.write_text("\n".join(normalized_lines) + "\n", encoding="utf-8")
     if min_normalized_us is None or last_normalized_us is None:
         raise ReplayGifError("Replay did not contain any advance_time events.")
-    return output_path, max(1, last_normalized_us - min_normalized_us)
+    return output_path, max(1, last_normalized_us - min_normalized_us), extract_log_events(normalized_lines)
 
 
 def launch_replay_session(args: argparse.Namespace) -> ReplaySession:
     temp_dir = Path(tempfile.mkdtemp(prefix="otns-replay-gif-"))
-    prepared_replay_file, prepared_replay_duration_us = normalize_replay_timing(
+    prepared_replay_file, prepared_replay_duration_us, replay_log_events = normalize_replay_timing(
         args.replay_file,
         temp_dir,
         args.replay_speed,
@@ -501,12 +586,55 @@ def launch_replay_session(args: argparse.Namespace) -> ReplaySession:
         cdp_url=cdp_url,
         prepared_replay_file=prepared_replay_file,
         prepared_replay_duration_us=prepared_replay_duration_us,
+        replay_log_events=replay_log_events,
     )
+
+
+def frame_offsets_us(session: ReplaySession, args: argparse.Namespace) -> list[int]:
+    if args.cover_full_replay:
+        if args.frame_count == 1:
+            return [0]
+        step = session.prepared_replay_duration_us / max(1, args.frame_count - 1)
+        return [int(round(step * index)) for index in range(args.frame_count)]
+    return [index * args.frame_interval_ms * 1000 for index in range(args.frame_count)]
+
+
+def overlay_log_panel(
+    image: Image.Image,
+    events: list[ReplayLogEvent],
+    frame_offset_us: int,
+    panel_width: int,
+    max_lines: int,
+) -> Image.Image:
+    recent = [event.text for event in events if event.offset_us <= frame_offset_us]
+    if not recent:
+        recent = ["waiting for notable events..."]
+    display_lines: list[str] = []
+    for line in recent[-max_lines:]:
+        display_lines.extend(textwrap.wrap(line, width=32) or [line])
+
+    image = image.convert("RGBA")
+    overlay = Image.new("RGBA", image.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+    font = ImageFont.load_default()
+    panel_width = min(panel_width, max(220, image.width - 40))
+    x0 = image.width - panel_width - 12
+    y0 = 12
+    x1 = image.width - 12
+    y1 = min(image.height - 12, y0 + 34 + 18 * (len(display_lines) + 1))
+    draw.rounded_rectangle((x0, y0, x1, y1), radius=12, fill=(12, 16, 24, 210), outline=(110, 140, 200, 255), width=2)
+    draw.text((x0 + 12, y0 + 10), "OTNS log", fill=(255, 255, 255, 255), font=font)
+    cursor_y = y0 + 32
+    for line in display_lines[-max_lines:]:
+        draw.text((x0 + 12, cursor_y), line, fill=(200, 230, 255, 255), font=font)
+        cursor_y += 16
+    return Image.alpha_composite(image, overlay).convert("RGB")
 
 
 def capture_frames(session: ReplaySession, args: argparse.Namespace) -> list[Image.Image]:
     frames: list[Image.Image] = []
     unique_hashes: set[str] = set()
+    offsets_us = frame_offsets_us(session, args)
 
     time.sleep(args.warmup_ms / 1000.0)
     frame_interval_ms = args.frame_interval_ms
@@ -521,7 +649,15 @@ def capture_frames(session: ReplaySession, args: argparse.Namespace) -> list[Ima
             result = cdp.call("Page.captureScreenshot", {"format": "png", "fromSurface": True})
             png_bytes = base64.b64decode(result["data"])
             unique_hashes.add(hashlib.md5(png_bytes).hexdigest())
-            image = Image.open(io_from_bytes(png_bytes)).convert("P", palette=Image.ADAPTIVE)
+            image = Image.open(io_from_bytes(png_bytes)).convert("RGB")
+            if args.show_log_panel:
+                image = overlay_log_panel(
+                    image,
+                    session.replay_log_events,
+                    offsets_us[index],
+                    args.log_panel_width,
+                    args.log_lines,
+                )
             frames.append(image.copy())
             time.sleep(frame_interval_ms / 1000.0)
 

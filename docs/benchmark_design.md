@@ -237,11 +237,12 @@ python3 scripts/replay_to_gif.py \
   --replay-speed 4 \
   --cover-full-replay \
   --end-device-y-offset 40 \
-  --gif-frame-duration-ms 500
+  --gif-frame-duration-ms 500 \
+  --show-log-panel
 ```
 
 That script launches `otns-replay`, opens one persistent headless Chrome session, captures repeated screenshots through the Chrome DevTools protocol, and stitches the frames into a GIF with Pillow.
-`--replay-speed` normalizes the replay into a temporary constant-speed copy before playback, `--cover-full-replay` spaces the captures across that normalized replay timeline, and `--end-device-y-offset` allows small visual-only separation from routers without changing the underlying benchmark data.
+`--replay-speed` normalizes the replay into a temporary constant-speed copy before playback, `--cover-full-replay` spaces the captures across that normalized replay timeline, `--end-device-y-offset` allows small visual-only separation from routers without changing the underlying benchmark data, and `--show-log-panel` overlays recent replay events as a readable log strip.
 
 Replay metadata records scenario, firmware label, OpenThread commit, OTNS commit, command, workdir, and the associated CSV and summary file paths. That metadata is necessary for future stock-vs-modified firmware comparisons because the replay file alone does not explain what build or benchmark context produced it.
 
