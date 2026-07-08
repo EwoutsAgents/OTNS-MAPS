@@ -12,6 +12,8 @@
   "otns_workdir": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns",
   "packet_delivery_ratio": 0.4625,
   "gif_file": "gif/calibrated_mobile_parent_switch_20260707T192927Z.gif",
+  "gif_end_device_y_offset": 40,
+  "gif_frame_duration_ms": 500,
   "gif_replay_speed": 4.0,
   "replay_file": "replay/calibrated_mobile_parent_switch_20260707T192927Z.replay",
   "replay_metadata_file": "replay/calibrated_mobile_parent_switch_20260707T192927Z.replay.json",

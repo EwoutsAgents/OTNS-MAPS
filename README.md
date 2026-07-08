@@ -212,7 +212,9 @@ python3 scripts/replay_to_gif.py \
   artifacts/calibrated-med-switch-observed/replay/<captured-file>.replay \
   --output-gif results/gifs/<captured-file>.gif \
   --replay-speed 4 \
-  --cover-full-replay
+  --cover-full-replay \
+  --end-device-y-offset 40 \
+  --gif-frame-duration-ms 500
 ```
 
 ## OTNS setup
@@ -282,10 +284,12 @@ Replay GIFs can be generated with:
 python3 scripts/replay_to_gif.py \
   artifacts/<artifact-name>/replay/<captured-file>.replay \
   --replay-speed 4 \
-  --cover-full-replay
+  --cover-full-replay \
+  --end-device-y-offset 40 \
+  --gif-frame-duration-ms 500
 ```
 
-`--replay-speed` rewrites the replay into a temporary constant-speed copy before rendering. `--cover-full-replay` then spaces screenshots across that normalized replay so the GIF covers the full run instead of just the first event burst.
+`--replay-speed` rewrites the replay into a temporary constant-speed copy before rendering. `--cover-full-replay` then spaces screenshots across that normalized replay so the GIF covers the full run instead of just the first event burst. `--end-device-y-offset` is a visual-only tweak for clearer separation from routers in the replay UI.
 
 Replay metadata matters because later firmware comparisons will need to distinguish stock OpenThread runs from modified OpenThread or future MAPS variants.
 

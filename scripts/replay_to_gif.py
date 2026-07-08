@@ -34,6 +34,11 @@ OUTER_TIMESTAMP_RE = re.compile(r"^timestamp:(\d+)(\s+event:\{.*)$")
 ADVANCE_TIME_RE = re.compile(r"advance_time:\{timestamp:(\d+)([^}]*)\}")
 SPEED_FIELD_RE = re.compile(r"\s+speed:([^\s}]+)")
 SET_SPEED_RE = re.compile(r"set_speed:\{(?:speed:([^\s}]+))?\}")
+ADD_NODE_RE = re.compile(
+    r'add_node:\{node_id:(\d+)(.*?)\sy:(-?\d+)(.*?)\snode_type:"([^"]+)"(.*?)\}'
+)
+SET_NODE_POS_RE = re.compile(r"set_node_pos:\{node_id:(\d+)(.*?)\sy:(-?\d+)(.*?)\}")
+END_DEVICE_TYPES = {"fed", "med", "sed", "ssed"}
 
 
 class ReplayGifError(RuntimeError):
@@ -262,6 +267,12 @@ def parse_args() -> argparse.Namespace:
         help="Target OTNS replay speed written into a temporary normalized replay before rendering",
     )
     parser.add_argument(
+        "--end-device-y-offset",
+        type=int,
+        default=0,
+        help="Optional vertical offset applied to end-device nodes in the temporary replay before rendering",
+    )
+    parser.add_argument(
         "--verbose",
         action="store_true",
         help="Keep replay and Chrome logs in the temporary capture directory while rendering",
@@ -323,7 +334,44 @@ def rewrite_speed_fields(line: str, replay_speed: float) -> str:
     return line
 
 
-def normalize_replay_timing(replay_file: Path, temp_dir: Path, replay_speed: float) -> tuple[Path, int]:
+def rewrite_visual_offsets(line: str, end_device_ids: set[int], end_device_y_offset: int) -> str:
+    if end_device_y_offset == 0:
+        return line
+
+    add_node_match = ADD_NODE_RE.search(line)
+    if add_node_match is not None:
+        node_id = int(add_node_match.group(1))
+        node_type = add_node_match.group(5)
+        if node_type in END_DEVICE_TYPES:
+            end_device_ids.add(node_id)
+            y = int(add_node_match.group(3)) + end_device_y_offset
+            return (
+                line[: add_node_match.start()]
+                + f'add_node:{{node_id:{node_id}{add_node_match.group(2)} y:{y}{add_node_match.group(4)} '
+                + f'node_type:"{node_type}"{add_node_match.group(6)}}}'
+                + line[add_node_match.end() :]
+            )
+
+    set_pos_match = SET_NODE_POS_RE.search(line)
+    if set_pos_match is not None:
+        node_id = int(set_pos_match.group(1))
+        if node_id in end_device_ids:
+            y = int(set_pos_match.group(3)) + end_device_y_offset
+            return (
+                line[: set_pos_match.start()]
+                + f"set_node_pos:{{node_id:{node_id}{set_pos_match.group(2)} y:{y}{set_pos_match.group(4)}}}"
+                + line[set_pos_match.end() :]
+            )
+
+    return line
+
+
+def normalize_replay_timing(
+    replay_file: Path,
+    temp_dir: Path,
+    replay_speed: float,
+    end_device_y_offset: int,
+) -> tuple[Path, int]:
     if replay_speed <= 0:
         raise ReplayGifError("--replay-speed must be > 0")
 
@@ -336,8 +384,10 @@ def normalize_replay_timing(replay_file: Path, temp_dir: Path, replay_speed: flo
     last_normalized_us: int | None = None
     min_normalized_us: int | None = None
     post_sim_counter = 0
+    end_device_ids: set[int] = set()
 
     for line in lines:
+        line = rewrite_visual_offsets(line, end_device_ids, end_device_y_offset)
         outer_match = OUTER_TIMESTAMP_RE.match(line)
         if outer_match is None:
             normalized_lines.append(rewrite_speed_fields(line, replay_speed))
@@ -384,6 +434,7 @@ def launch_replay_session(args: argparse.Namespace) -> ReplaySession:
         args.replay_file,
         temp_dir,
         args.replay_speed,
+        args.end_device_y_offset,
     )
 
     replay_command = shlex.split(args.otns_replay_command)
