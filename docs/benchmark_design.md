@@ -90,6 +90,7 @@ The `examples/sed-baseline/` directory stores a real SED reference artifact that
 Repeated experiments can be launched with `scripts/run_repeated_baseline.py`. They write one experiment directory under `results/repeated/`, with one subdirectory per run and a top-level manifest for traceability.
 
 Scratch outputs under `results/` remain ignored by Git. Curated benchmark evidence can be copied into tracked `artifacts/` directories when `--copy-results-to-artifact` is used. That export keeps CSV, summary JSON, replay, replay metadata, and a manifest together for later comparison work.
+Replay-derived GIFs are scratch outputs as well and default to `results/gifs/`.
 
 ## Known limitations
 
@@ -227,6 +228,15 @@ Replay files can be replayed with:
 ```bash
 otns-replay artifacts/<artifact-name>/replay/<captured-file>.replay
 ```
+
+Replay files can also be rendered into a GIF via the OTNS web UI with:
+
+```bash
+python3 scripts/replay_to_gif.py \
+  artifacts/<artifact-name>/replay/<captured-file>.replay
+```
+
+That script launches `otns-replay`, opens one persistent headless Chrome session, captures repeated screenshots through the Chrome DevTools protocol, and stitches the frames into a GIF with Pillow.
 
 Replay metadata records scenario, firmware label, OpenThread commit, OTNS commit, command, workdir, and the associated CSV and summary file paths. That metadata is necessary for future stock-vs-modified firmware comparisons because the replay file alone does not explain what build or benchmark context produced it.
 

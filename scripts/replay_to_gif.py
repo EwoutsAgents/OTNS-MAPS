@@ -1,0 +1,441 @@
+#!/usr/bin/env python3
+"""Render an OTNS replay file into a GIF via the OTNS web UI."""
+
+from __future__ import annotations
+
+import argparse
+import base64
+import hashlib
+import json
+import os
+import shlex
+import shutil
+import socket
+import struct
+import subprocess
+import sys
+import tempfile
+import time
+import urllib.error
+import urllib.request
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+from urllib.parse import urlparse
+
+from PIL import Image
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT_DIR = ROOT / "results" / "gifs"
+DEFAULT_UI_URL = "http://127.0.0.1:8997/visualize?addr=localhost:8998"
+
+
+class ReplayGifError(RuntimeError):
+    """Raised when replay-to-GIF rendering fails."""
+
+
+@dataclass
+class ReplaySession:
+    replay_process: subprocess.Popen[Any]
+    chrome_process: subprocess.Popen[Any]
+    temp_dir: Path
+    ui_url: str
+    cdp_url: str
+
+    def close(self) -> None:
+        for process in (self.chrome_process, self.replay_process):
+            if process.poll() is None:
+                process.terminate()
+        for process in (self.chrome_process, self.replay_process):
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait(timeout=5)
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+
+class DevToolsWebSocket:
+    def __init__(self, websocket_url: str, timeout_s: float) -> None:
+        self.websocket_url = websocket_url
+        self.timeout_s = timeout_s
+        self.socket: socket.socket | None = None
+        self.next_id = 1
+
+    def __enter__(self) -> "DevToolsWebSocket":
+        parsed = urlparse(self.websocket_url)
+        if parsed.scheme != "ws":
+            raise ReplayGifError(f"Unsupported DevTools websocket scheme: {parsed.scheme}")
+        self.socket = socket.create_connection((parsed.hostname, parsed.port), timeout=self.timeout_s)
+        self.socket.settimeout(self.timeout_s)
+
+        key = base64.b64encode(os.urandom(16)).decode("ascii")
+        path = parsed.path or "/"
+        if parsed.query:
+            path += f"?{parsed.query}"
+        request = (
+            f"GET {path} HTTP/1.1\r\n"
+            f"Host: {parsed.hostname}:{parsed.port}\r\n"
+            "Upgrade: websocket\r\n"
+            "Connection: Upgrade\r\n"
+            f"Sec-WebSocket-Key: {key}\r\n"
+            "Sec-WebSocket-Version: 13\r\n"
+            "\r\n"
+        )
+        self.socket.sendall(request.encode("ascii"))
+
+        response = b""
+        while b"\r\n\r\n" not in response:
+            chunk = self.socket.recv(4096)
+            if not chunk:
+                raise ReplayGifError("DevTools websocket closed during handshake.")
+            response += chunk
+
+        status_line = response.split(b"\r\n", 1)[0].decode("ascii", errors="replace")
+        if "101" not in status_line:
+            raise ReplayGifError(f"DevTools websocket handshake failed: {status_line}")
+        return self
+
+    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
+        if self.socket is not None:
+            self.socket.close()
+            self.socket = None
+
+    def _send_text(self, text: str) -> None:
+        assert self.socket is not None
+        payload = text.encode("utf-8")
+        header = bytearray([0x81])
+        size = len(payload)
+        if size < 126:
+            header.append(0x80 | size)
+        elif size < 65536:
+            header.append(0x80 | 126)
+            header.extend(struct.pack("!H", size))
+        else:
+            header.append(0x80 | 127)
+            header.extend(struct.pack("!Q", size))
+        mask = os.urandom(4)
+        header.extend(mask)
+        masked = bytes(byte ^ mask[index % 4] for index, byte in enumerate(payload))
+        self.socket.sendall(header + masked)
+
+    def _recv_frame(self) -> tuple[int, bytes]:
+        assert self.socket is not None
+        first_two = self.socket.recv(2)
+        if not first_two:
+            raise ReplayGifError("DevTools websocket closed while reading a frame.")
+        first, second = first_two
+        opcode = first & 0x0F
+        masked = bool(second >> 7)
+        length = second & 0x7F
+        if length == 126:
+            length = struct.unpack("!H", self.socket.recv(2))[0]
+        elif length == 127:
+            length = struct.unpack("!Q", self.socket.recv(8))[0]
+
+        mask = b""
+        if masked:
+            mask = self.socket.recv(4)
+
+        payload = b""
+        while len(payload) < length:
+            payload += self.socket.recv(length - len(payload))
+
+        if masked:
+            payload = bytes(byte ^ mask[index % 4] for index, byte in enumerate(payload))
+        return opcode, payload
+
+    def call(self, method: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
+        call_id = self.next_id
+        self.next_id += 1
+        message = {"id": call_id, "method": method}
+        if params:
+            message["params"] = params
+        self._send_text(json.dumps(message))
+
+        while True:
+            opcode, payload = self._recv_frame()
+            if opcode == 9:
+                self._send_pong(payload)
+                continue
+            if opcode != 1:
+                continue
+            body = json.loads(payload)
+            if body.get("id") != call_id:
+                continue
+            if "error" in body:
+                raise ReplayGifError(f"DevTools call failed for {method}: {body['error']}")
+            return body["result"]
+
+    def _send_pong(self, payload: bytes) -> None:
+        assert self.socket is not None
+        header = bytearray([0x8A])
+        size = len(payload)
+        if size >= 126:
+            return
+        header.append(size)
+        self.socket.sendall(header + payload)
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("replay_file", type=Path, help="Replay file to render, for example artifacts/.../*.replay")
+    parser.add_argument(
+        "--output-gif",
+        type=Path,
+        default=None,
+        help="Output GIF path. Defaults to results/gifs/<replay-stem>.gif",
+    )
+    parser.add_argument(
+        "--otns-replay-command",
+        default=os.environ.get("OTNS_REPLAY_COMMAND", "otns-replay"),
+        help="OTNS replay executable or full command string",
+    )
+    parser.add_argument(
+        "--chrome-command",
+        default=os.environ.get("CHROME_COMMAND", "google-chrome"),
+        help="Chrome or Chromium executable used for headless capture",
+    )
+    parser.add_argument(
+        "--frame-count",
+        type=int,
+        default=24,
+        help="Number of screenshots to capture from one persistent browser session",
+    )
+    parser.add_argument(
+        "--frame-interval-ms",
+        type=int,
+        default=100,
+        help="Delay between screenshots in milliseconds",
+    )
+    parser.add_argument(
+        "--warmup-ms",
+        type=int,
+        default=300,
+        help="Delay before the first screenshot, in milliseconds",
+    )
+    parser.add_argument(
+        "--window-size",
+        default="1280,720",
+        help="Headless Chrome window size as WIDTH,HEIGHT",
+    )
+    parser.add_argument(
+        "--ui-url",
+        default=DEFAULT_UI_URL,
+        help="OTNS visualize URL. Defaults to the standard otns-replay page",
+    )
+    parser.add_argument(
+        "--cdp-port",
+        type=int,
+        default=9222,
+        help="Chrome DevTools port used for screenshots",
+    )
+    parser.add_argument(
+        "--page-ready-timeout-s",
+        type=float,
+        default=10.0,
+        help="Maximum time to wait for OTNS and Chrome to expose their HTTP endpoints",
+    )
+    parser.add_argument(
+        "--gif-frame-duration-ms",
+        type=int,
+        default=120,
+        help="Per-frame duration written into the output GIF",
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Keep replay and Chrome logs in the temporary capture directory while rendering",
+    )
+    return parser.parse_args()
+
+
+def ensure_tool(command: str) -> str:
+    executable = command.split()[0]
+    resolved = shutil.which(executable)
+    if resolved is not None:
+        return resolved
+
+    home_go = Path.home() / "go" / "bin" / executable
+    if home_go.exists():
+        return str(home_go)
+
+    raise ReplayGifError(f"Required executable not found: {executable}")
+
+
+def default_output_gif(replay_file: Path) -> Path:
+    return DEFAULT_OUTPUT_DIR / f"{replay_file.stem}.gif"
+
+
+def wait_for_http(url: str, timeout_s: float) -> None:
+    deadline = time.time() + timeout_s
+    while time.time() < deadline:
+        try:
+            with urllib.request.urlopen(url, timeout=0.5) as response:
+                if 200 <= response.status < 500:
+                    return
+        except urllib.error.URLError:
+            time.sleep(0.1)
+    raise ReplayGifError(f"Timed out waiting for {url}")
+
+
+def wait_for_cdp_target(port: int, timeout_s: float, ui_url: str) -> str:
+    deadline = time.time() + timeout_s
+    while time.time() < deadline:
+        try:
+            with urllib.request.urlopen(f"http://127.0.0.1:{port}/json/list", timeout=0.5) as response:
+                targets = json.load(response)
+            for target in targets:
+                if target.get("type") == "page" and target.get("url") == ui_url:
+                    return target["webSocketDebuggerUrl"]
+        except Exception:
+            time.sleep(0.1)
+            continue
+        time.sleep(0.1)
+    raise ReplayGifError("Timed out waiting for the OTNS replay page target in Chrome DevTools.")
+
+
+def launch_replay_session(args: argparse.Namespace) -> ReplaySession:
+    replay_command = shlex.split(args.otns_replay_command)
+    replay_command[0] = ensure_tool(replay_command[0])
+    replay_command.append(str(args.replay_file))
+
+    chrome_command = shlex.split(args.chrome_command)
+    chrome_command[0] = ensure_tool(chrome_command[0])
+    chrome_command.extend(
+        [
+            "--headless=new",
+            "--disable-gpu",
+            "--hide-scrollbars",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--disable-background-networking",
+            "--disable-extensions",
+            f"--remote-debugging-port={args.cdp_port}",
+            f"--window-size={args.window_size}",
+        ]
+    )
+
+    temp_dir = Path(tempfile.mkdtemp(prefix="otns-replay-gif-"))
+    chrome_profile_dir = temp_dir / "chrome-profile"
+    chrome_profile_dir.mkdir(parents=True, exist_ok=True)
+    chrome_command.extend([f"--user-data-dir={chrome_profile_dir}", args.ui_url])
+
+    stdout_target = subprocess.DEVNULL
+    stderr_target = subprocess.DEVNULL
+    if args.verbose:
+        replay_log = (temp_dir / "replay.log").open("wb")
+        chrome_log = (temp_dir / "chrome.log").open("wb")
+        stdout_target = replay_log
+        stderr_target = subprocess.STDOUT
+        chrome_stdout = chrome_log
+    else:
+        chrome_stdout = subprocess.DEVNULL
+
+    replay_process = subprocess.Popen(
+        replay_command,
+        stdout=stdout_target,
+        stderr=stderr_target,
+    )
+
+    chrome_process = subprocess.Popen(
+        chrome_command,
+        stdout=chrome_stdout,
+        stderr=subprocess.STDOUT,
+    )
+
+    try:
+        wait_for_http(args.ui_url, args.page_ready_timeout_s)
+        cdp_url = wait_for_cdp_target(args.cdp_port, args.page_ready_timeout_s, args.ui_url)
+    except Exception:
+        for process in (chrome_process, replay_process):
+            if process.poll() is None:
+                process.terminate()
+        raise
+
+    return ReplaySession(
+        replay_process=replay_process,
+        chrome_process=chrome_process,
+        temp_dir=temp_dir,
+        ui_url=args.ui_url,
+        cdp_url=cdp_url,
+    )
+
+
+def capture_frames(session: ReplaySession, args: argparse.Namespace) -> list[Image.Image]:
+    frames: list[Image.Image] = []
+    unique_hashes: set[str] = set()
+
+    time.sleep(args.warmup_ms / 1000.0)
+    with DevToolsWebSocket(session.cdp_url, timeout_s=max(5.0, args.page_ready_timeout_s)) as cdp:
+        for index in range(args.frame_count):
+            result = cdp.call("Page.captureScreenshot", {"format": "png", "fromSurface": True})
+            png_bytes = base64.b64decode(result["data"])
+            unique_hashes.add(hashlib.md5(png_bytes).hexdigest())
+            image = Image.open(io_from_bytes(png_bytes)).convert("P", palette=Image.ADAPTIVE)
+            frames.append(image.copy())
+            time.sleep(args.frame_interval_ms / 1000.0)
+
+    if len(unique_hashes) < 2:
+        raise ReplayGifError(
+            "Captured fewer than two distinct replay frames. "
+            "Try increasing --frame-count, reducing --warmup-ms, or confirming the replay page is animating."
+        )
+    return frames
+
+
+def io_from_bytes(data: bytes) -> Any:
+    import io
+
+    return io.BytesIO(data)
+
+
+def write_gif(frames: list[Image.Image], output_path: Path, frame_duration_ms: int) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    first, *rest = frames
+    first.save(
+        output_path,
+        save_all=True,
+        append_images=rest,
+        duration=frame_duration_ms,
+        loop=0,
+        optimize=False,
+    )
+
+
+def main() -> int:
+    args = parse_args()
+    if args.frame_count < 2:
+        print("--frame-count must be >= 2", file=sys.stderr)
+        return 2
+    if args.frame_interval_ms < 1:
+        print("--frame-interval-ms must be >= 1", file=sys.stderr)
+        return 2
+
+    replay_file = args.replay_file.resolve()
+    if not replay_file.exists():
+        print(f"Replay file not found: {replay_file}", file=sys.stderr)
+        return 2
+
+    output_gif = (args.output_gif or default_output_gif(replay_file)).resolve()
+    if output_gif.exists():
+        print(f"Output GIF already exists: {output_gif}", file=sys.stderr)
+        return 2
+
+    session = launch_replay_session(args)
+    try:
+        frames = capture_frames(session, args)
+        write_gif(frames, output_gif, args.gif_frame_duration_ms)
+    except ReplayGifError as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+    finally:
+        session.close()
+
+    print(output_gif)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

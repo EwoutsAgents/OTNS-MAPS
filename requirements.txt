@@ -3,3 +3,6 @@ PyYAML>=6.0
 
 # Optional analysis plotting support
 matplotlib>=3.8
+
+# Optional replay-to-GIF support
+Pillow>=10.0

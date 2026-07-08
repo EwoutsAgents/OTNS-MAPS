@@ -36,6 +36,7 @@ OTNS-MAPS/
 │   └── sed_mobile_parent_switch.yaml
 └── scripts/
     ├── run_baseline.py
+    ├── replay_to_gif.py
     ├── run_repeated_baseline.py
     └── validate_otns_cli.py
 ```
@@ -204,6 +205,14 @@ python3 scripts/validate_otns_cli.py \
   --otns-workdir /path/to/ot-ns
 ```
 
+Render a replay file into a GIF:
+
+```bash
+python3 scripts/replay_to_gif.py \
+  artifacts/calibrated-med-switch-observed/replay/<captured-file>.replay \
+  --output-gif results/gifs/<captured-file>.gif
+```
+
 ## OTNS setup
 
 The runner expects an `otns` executable on `PATH` by default. Official install docs:
@@ -247,6 +256,10 @@ When replay capture is enabled, the runner also writes:
 - `results/replays/<scenario_name>_<timestamp>.replay`
 - `results/replays/<scenario_name>_<timestamp>.replay.json`
 
+Replay GIF rendering writes:
+
+- `results/gifs/<replay-stem>.gif` by default
+
 The CSV records parent state over time for the mobile node, movement position, packet-delivery probe results, and any parent-switch events inferred from observed parent state.
 
 Repeated experiments create a subdirectory under `results/repeated/` with one subdirectory per run plus a `repeated_run_manifest.json` file.
@@ -259,6 +272,13 @@ Replay files can be opened with:
 
 ```bash
 otns-replay artifacts/<artifact-name>/replay/<captured-file>.replay
+```
+
+Replay GIFs can be generated with:
+
+```bash
+python3 scripts/replay_to_gif.py \
+  artifacts/<artifact-name>/replay/<captured-file>.replay
 ```
 
 Replay metadata matters because later firmware comparisons will need to distinguish stock OpenThread runs from modified OpenThread or future MAPS variants.

@@ -21,6 +21,7 @@ results/*.log
 results/plots/
 results/replays/
 results/repeated/
+results/gifs/
 !results/.gitkeep
 
 # OTNS local artifacts
