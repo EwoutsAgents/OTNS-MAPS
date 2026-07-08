@@ -91,6 +91,7 @@ Repeated experiments can be launched with `scripts/run_repeated_baseline.py`. Th
 
 Scratch outputs under `results/` remain ignored by Git. Curated benchmark evidence can be copied into tracked nested `results/<scenario>_<variant>/<run-id>/<run-id>/` directories when `--copy-results-to-artifact` is used. That export keeps CSV, summary JSON, replay, replay metadata, and a manifest together for later comparison work.
 Replay-derived MP4s are stored beside the replay file in the same tracked run directory by default.
+If `--otns-watch-level` is enabled for a real OTNS run, the run directory also keeps one raw `node_log_<name>_<node-id>.log` file per simulated device without parsing those logs into benchmark metrics.
 
 ## Known limitations
 
@@ -214,9 +215,11 @@ python3 analysis/analyze_baseline.py examples/sed-baseline/baseline_run_sed_exam
 - Real OTNS launch test with `otns`
 - Real baseline run with `python3 scripts/run_baseline.py`
 - Calibrated replay capture run with `python3 scripts/run_baseline.py --scenario scenarios/calibrated_mobile_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --capture-replay --copy-results-to-artifact --artifact-name switch-observed`
+- Watch-enabled raw node-log capture run with `python3 scripts/run_baseline.py --scenario scenarios/calibrated_mobile_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --otns-watch-level info`
 - Confirm a replay file and replay metadata JSON are created
 - Confirm tracked outputs are copied into `results/<scenario>_<variant>/<run-id>/<run-id>/`
 - Confirm CSV and JSON outputs are created
+- Confirm per-device `node_log_<name>_<node-id>.log` files are created when watch is enabled
 - Confirm parent-switch events are populated when a switch occurs
 - Confirm packet-delivery metrics are populated
 - Confirm outage metrics are populated

@@ -119,6 +119,7 @@ python3 scripts/run_baseline.py \
   --scenario scenarios/calibrated_mobile_parent_switch.yaml \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns \
+  --otns-watch-level info \
   --capture-replay \
   --copy-results-to-artifact \
   --artifact-name switch-observed \
@@ -269,6 +270,7 @@ Repeated experiments create a subdirectory under `results/repeated/` with one su
 Generated benchmark outputs in `results/` remain ignored by default.
 
 Curated benchmark evidence can be copied into tracked `results/` directories when `--copy-results-to-artifact` is used. That export includes the CSV, summary JSON, replay file if captured, replay metadata JSON, and a manifest.
+If `--otns-watch-level` is enabled for a real OTNS run, the exported run directory also includes one raw `node_log_<name>_<node-id>.log` file per simulated device.
 
 Replay files can be opened with:
 

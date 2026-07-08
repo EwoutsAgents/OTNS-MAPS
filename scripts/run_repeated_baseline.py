@@ -42,6 +42,11 @@ def parse_args() -> argparse.Namespace:
         help="Optional OTNS working directory passed through to run_baseline.py",
     )
     parser.add_argument(
+        "--otns-watch-level",
+        default="off",
+        help="Optional OTNS default watch level passed through to run_baseline.py.",
+    )
+    parser.add_argument(
         "--listen-port-base",
         type=int,
         default=9990,
@@ -223,6 +228,8 @@ def main() -> int:
                 args.openthread_commit,
                 "--otns-commit",
                 args.otns_commit,
+                "--otns-watch-level",
+                args.otns_watch_level,
             ]
         )
         if args.copy_results_to_artifact:

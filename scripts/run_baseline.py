@@ -26,9 +26,11 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCENARIO = ROOT / "scenarios" / "baseline_mobile_parent_switch.yaml"
 DEFAULT_RESULTS_DIR = ROOT / "results"
 DEFAULT_REPLAY_DIR = DEFAULT_RESULTS_DIR / "replays"
+DEFAULT_OTNS_OUTPUT_DIRNAME = "tmp"
 PING_NODE_RE = re.compile(r"Node<(\d+)>")
 SCAN_NODE_PREFIX_RE = re.compile(r"^Node<\d+>\s+")
 TIMESTAMP_TOKEN_RE = re.compile(r"^(?P<date>\d{8})T(?P<time>\d{6})Z$")
+OTNS_LOG_LINE_RE = re.compile(r"^(trace|debug|info|note|warn|error)\t\d{4}-\d{2}-\d{2}\s", re.IGNORECASE)
 
 
 @dataclass
@@ -55,6 +57,11 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=Path(os.environ["OTNS_WORKDIR"]) if os.environ.get("OTNS_WORKDIR") else None,
         help="Optional working directory used to launch OTNS. Needed when OTNS relies on relative node paths.",
+    )
+    parser.add_argument(
+        "--otns-watch-level",
+        default="off",
+        help="Optional OTNS default watch level for all newly created nodes: trace, debug, info, note, warn, error, off.",
     )
     parser.add_argument(
         "--mock",
@@ -160,6 +167,23 @@ def unique_file_path(directory: Path, filename: str) -> Path:
         candidate = directory / f"{base.stem}_{counter}{base.suffix}"
         counter += 1
     return candidate
+
+
+def with_otns_watch_level(command: str, watch_level: str) -> str:
+    if watch_level.lower() == "off":
+        return command
+    parts = shlex.split(command)
+    if "-watch" in parts:
+        return command
+    return f"{command} -watch {watch_level}"
+
+
+def otns_runtime_cwd(otns_workdir: Path | None) -> Path:
+    return otns_workdir if otns_workdir is not None else ROOT
+
+
+def otns_output_dir(otns_workdir: Path | None) -> Path:
+    return otns_runtime_cwd(otns_workdir) / DEFAULT_OTNS_OUTPUT_DIRNAME
 
 
 def snapshot_replay_files(workdir: Path | None) -> dict[Path, float]:
@@ -284,6 +308,48 @@ def maybe_capture_replay(
     return info
 
 
+def capture_node_logs(
+    *,
+    results_dir: Path,
+    node_refs: dict[str, NodeRef],
+    otns_workdir: Path | None,
+    watch_level: str,
+) -> dict[str, Any]:
+    info: dict[str, Any] = {
+        "requested": watch_level.lower() != "off",
+        "watch_level": watch_level,
+        "copied_files": [],
+        "warning": None,
+    }
+    if watch_level.lower() == "off":
+        return info
+
+    output_dir = otns_output_dir(otns_workdir)
+    if not output_dir.exists():
+        info["warning"] = f"OTNS node log directory was not found: {output_dir}"
+        return info
+
+    copied: list[str] = []
+    missing: list[str] = []
+    for name, node_ref in sorted(node_refs.items()):
+        candidates = sorted(
+            output_dir.glob(f"*_{node_ref.node_id}.log"),
+            key=lambda path: path.stat().st_mtime,
+        )
+        if not candidates:
+            missing.append(f"{name}:{node_ref.node_id}")
+            continue
+        source = candidates[-1]
+        destination = results_dir / f"node_log_{name}_{node_ref.node_id}.log"
+        shutil.copy2(source, destination)
+        copied.append(str(destination))
+
+    if missing:
+        info["warning"] = "Some OTNS node logs were not found: " + ", ".join(missing)
+    info["copied_files"] = copied
+    return info
+
+
 def resolve_tracked_results_dir(
     commit_artifact_dir: Path | None,
     artifact_name: str | None,
@@ -312,6 +378,7 @@ def tracked_results_manifest(
     summary_file: str,
     replay_file: str | None,
     replay_metadata_file: str | None,
+    node_log_files: list[str],
     token: str,
     summary: dict[str, Any],
 ) -> dict[str, Any]:
@@ -329,8 +396,10 @@ def tracked_results_manifest(
         "summary_file": summary_file,
         "replay_file": replay_file,
         "replay_metadata_file": replay_metadata_file,
+        "node_log_files": node_log_files,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "selected_radio_model": summary.get("selected_radio_model"),
+        "otns_watch_level": summary.get("otns_watch_level"),
         "initial_observed_parent": summary.get("initial_observed_parent"),
         "final_observed_parent": summary.get("final_observed_parent"),
         "switch_count": summary.get("switch_count"),
@@ -366,6 +435,7 @@ def write_tracked_results_readme(
             f'- OTNS commit: `{manifest["otns_commit"]}`',
             f'- OTNS command: `{manifest["otns_command"]}`',
             f'- OTNS workdir: `{manifest["otns_workdir"]}`',
+            f'- OTNS watch level: `{manifest["otns_watch_level"]}`',
             f'- Selected radio model: `{manifest["selected_radio_model"]}`',
             f'- Initial observed parent: `{manifest["initial_observed_parent"]}`',
             f'- Final observed parent: `{manifest["final_observed_parent"]}`',
@@ -374,6 +444,10 @@ def write_tracked_results_readme(
             f'- Packet delivery ratio: `{manifest["packet_delivery_ratio"]}`',
             f'- Total outage (s): `{manifest["total_outage_s"]}`',
             f'- Result classification: `{manifest["result_classification"]}`',
+            "",
+            "## Node Logs",
+            "",
+            *([f"- `{log_file}`" for log_file in manifest.get("node_log_files", [])] or ["- No node log files were captured."]),
             "",
             "## Replay",
             "",
@@ -403,6 +477,7 @@ def export_tracked_results(
     csv_path: Path,
     json_path: Path,
     replay_info: dict[str, Any],
+    node_log_files: list[str],
     summary: dict[str, Any],
 ) -> dict[str, str]:
     if tracked_dir.exists():
@@ -426,6 +501,13 @@ def export_tracked_results(
         shutil.copy2(metadata_source, tracked_replay_metadata)
         metadata_relpath = tracked_replay_metadata.name
 
+    tracked_node_log_files: list[str] = []
+    for node_log_file in node_log_files:
+        node_log_source = Path(node_log_file)
+        tracked_node_log = tracked_dir / node_log_source.name
+        shutil.copy2(node_log_source, tracked_node_log)
+        tracked_node_log_files.append(tracked_node_log.name)
+
     manifest = tracked_results_manifest(
         collection_name=tracked_collection,
         run_id=run_id,
@@ -440,6 +522,7 @@ def export_tracked_results(
         summary_file=tracked_summary.name,
         replay_file=replay_relpath,
         replay_metadata_file=metadata_relpath,
+        node_log_files=tracked_node_log_files,
         token=token,
         summary=summary,
     )
@@ -633,6 +716,8 @@ class OtnsSession:
             if line == b"":
                 raise OtnsSessionError(f"OTNS exited while waiting for {command!r} output.")
             text = line.rstrip(b"\r\n").decode("utf-8", errors="replace")
+            if OTNS_LOG_LINE_RE.match(text):
+                continue
             if text.startswith("Error: ") or text.startswith("Error "):
                 raise OtnsSessionError(text)
             output.append(text)
@@ -641,10 +726,18 @@ class OtnsSession:
 
 
 class RealBenchmarkRunner:
-    def __init__(self, scenario: dict[str, Any], otns_command: str, otns_workdir: Path | None = None) -> None:
+    def __init__(
+        self,
+        scenario: dict[str, Any],
+        otns_command: str,
+        otns_workdir: Path | None = None,
+        otns_watch_level: str = "off",
+    ) -> None:
         self.scenario = scenario
-        self.otns_command = otns_command
+        self.otns_command = with_otns_watch_level(otns_command, otns_watch_level)
         self.otns_workdir = otns_workdir
+        self.otns_watch_level = otns_watch_level
+        self.otns_runtime_cwd = otns_runtime_cwd(otns_workdir)
         self.notes: list[str] = []
         self.node_refs: dict[str, NodeRef] = {}
         self.parent_before_delayed_nodes: str | None = None
@@ -663,7 +756,7 @@ class RealBenchmarkRunner:
             int(timing["movement_steps"]),
         )
 
-        with OtnsSession(self.otns_command, cwd=self.otns_workdir) as session:
+        with OtnsSession(self.otns_command, cwd=self.otns_runtime_cwd) as session:
             session.command_output("speed 0")
             session.command_output(f'title "{self.scenario["title"]}"')
             radio_model = self._select_radio_model(session)
@@ -1162,7 +1255,7 @@ def main() -> int:
     runner = (
         MockBenchmarkRunner(scenario)
         if args.mock
-        else RealBenchmarkRunner(scenario, args.otns_command, args.otns_workdir)
+        else RealBenchmarkRunner(scenario, args.otns_command, args.otns_workdir, args.otns_watch_level)
     )
 
     try:
@@ -1194,9 +1287,31 @@ def main() -> int:
     )
     if replay_info.get("warning"):
         summary.setdefault("notes", []).append(str(replay_info["warning"]))
+    node_log_info: dict[str, Any] = {
+        "requested": args.otns_watch_level.lower() != "off",
+        "watch_level": args.otns_watch_level,
+        "copied_files": [],
+        "warning": None,
+    }
+    if args.mock:
+        if node_log_info["requested"]:
+            summary.setdefault("notes", []).append(
+                "OTNS watch logging was requested in mock mode; no per-device OTNS node logs were captured."
+            )
+    else:
+        node_log_info = capture_node_logs(
+            results_dir=args.results_dir,
+            node_refs=runner.node_refs,
+            otns_workdir=args.otns_workdir,
+            watch_level=args.otns_watch_level,
+        )
+        if node_log_info.get("warning"):
+            summary.setdefault("notes", []).append(str(node_log_info["warning"]))
     summary["firmware_variant"] = args.firmware_variant
     summary["openthread_commit"] = args.openthread_commit
     summary["otns_commit"] = args.otns_commit
+    summary["otns_watch_level"] = args.otns_watch_level
+    summary["node_log_files"] = node_log_info.get("copied_files", [])
     summary["replay_capture_requested"] = args.capture_replay
     summary["replay_file"] = replay_info.get("copied_path")
     summary["replay_metadata_file"] = replay_info.get("metadata_path")
@@ -1229,6 +1344,7 @@ def main() -> int:
                 csv_path=csv_path,
                 json_path=json_path,
                 replay_info=replay_info,
+                node_log_files=node_log_info.get("copied_files", []),
                 summary=summary,
             )
         except FileExistsError as exc:
