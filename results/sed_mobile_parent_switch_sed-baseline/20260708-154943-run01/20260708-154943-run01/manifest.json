@@ -23,7 +23,8 @@
   "switch_count": 1,
   "total_outage_s": 0.0,
   "video_file": "sed_mobile_parent_switch_20260708T154943Z.mp4",
-  "video_fps": 3.0,
+  "video_fps": 8.0,
+  "video_frame_count": 72,
   "video_log_lines": 10,
   "video_replay_speed": 4.0,
   "video_show_log_panel": true

@@ -23,7 +23,8 @@
   "switch_count": 0,
   "total_outage_s": 0.0,
   "video_file": "baseline_mobile_parent_switch_20260708T154911Z.mp4",
-  "video_fps": 3.0,
+  "video_fps": 8.0,
+  "video_frame_count": 72,
   "video_log_lines": 10,
   "video_replay_speed": 4.0,
   "video_show_log_panel": true

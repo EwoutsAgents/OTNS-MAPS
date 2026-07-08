@@ -953,6 +953,7 @@ def maybe_update_run_metadata(replay_file: Path, output_mp4: Path, args: argpars
         return
 
     manifest["video_file"] = output_mp4.name
+    manifest["video_frame_count"] = args.frame_count
     manifest["video_fps"] = args.video_fps
     manifest["video_show_log_panel"] = bool(args.show_log_panel)
     manifest["video_replay_speed"] = args.replay_speed
@@ -968,6 +969,7 @@ def maybe_update_run_metadata(replay_file: Path, output_mp4: Path, args: argpars
         return
     render_command = (
         f"python3 scripts/replay_to_mp4.py {replay_file.name} "
+        f"--frame-count {args.frame_count} "
         f"--replay-speed {args.replay_speed:g} --cover-full-replay "
         f"--end-device-y-offset {args.end_device_y_offset} --video-fps {args.video_fps:g}"
         f"{' --show-log-panel --log-lines ' + str(args.log_lines) if args.show_log_panel else ''}"

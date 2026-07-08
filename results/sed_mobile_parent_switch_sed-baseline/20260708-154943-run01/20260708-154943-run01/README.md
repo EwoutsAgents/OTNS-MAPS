@@ -28,4 +28,4 @@ Replay command:
 otns-replay sed_mobile_parent_switch_20260708T154943Z.replay
 ```
 
-- Rendered from the replay with `python3 scripts/replay_to_mp4.py sed_mobile_parent_switch_20260708T154943Z.replay --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --video-fps 3 --show-log-panel --log-lines 10`
+- Rendered from the replay with `python3 scripts/replay_to_mp4.py sed_mobile_parent_switch_20260708T154943Z.replay --frame-count 72 --replay-speed 4 --cover-full-replay --end-device-y-offset 40 --video-fps 8 --show-log-panel --log-lines 10`
