@@ -1,0 +1,352 @@
+{
+  "aggregate": {
+    "classification_counts": {
+      "no_switch_observed": 3,
+      "switch_observed": 7
+    },
+    "iqr_first_switch_time_s": 330.0,
+    "iqr_packet_delivery_ratio": 0.403645,
+    "iqr_total_outage_s": 125.0,
+    "max_first_switch_time_s": 1440.0,
+    "max_packet_delivery_ratio": 0.9375,
+    "max_switch_count": 1,
+    "max_switch_position_x": 900.0,
+    "max_total_outage_s": 300.0,
+    "mean_first_switch_time_s": 1231.428571,
+    "mean_oscillation_events": 0,
+    "mean_packet_delivery_ratio": 0.59375,
+    "mean_switch_count": 0.7,
+    "mean_switch_position_x": 779.853429,
+    "mean_total_outage_s": 144.0,
+    "median_first_switch_time_s": 1120.0,
+    "median_packet_delivery_ratio": 0.453125,
+    "median_switch_count": 1.0,
+    "median_switch_position_x": 735.897,
+    "median_total_outage_s": 100.0,
+    "min_first_switch_time_s": 960.0,
+    "min_packet_delivery_ratio": 0.333333,
+    "min_switch_count": 0,
+    "min_switch_position_x": 571.795,
+    "min_total_outage_s": 60.0,
+    "oscillation_rate": 0.0,
+    "oscillation_runs": 0,
+    "outage_sample_size": 10,
+    "pdr_sample_size": 10,
+    "run_count": 10,
+    "stddev_first_switch_time_s": 202.60212,
+    "stddev_packet_delivery_ratio": 0.243798,
+    "stddev_switch_count": 0.483046,
+    "stddev_switch_position_x": 125.574957,
+    "stddev_total_outage_s": 92.279768,
+    "switch_observed_rate": 0.7,
+    "switch_observed_runs": 7,
+    "switch_position_sample_size": 7,
+    "switch_time_sample_size": 7
+  },
+  "runs": [
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_001/baseline_run_20260710T023336Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 1120.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 1,
+      "mle_better_parent_attach_attempts": 1,
+      "mle_parent_changes": 1,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.927083,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 48,
+      "switch_count": 1,
+      "switch_position_x": 735.897,
+      "thread_device_type": "med",
+      "total_outage_s": 60.0
+    },
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_002/baseline_run_20260710T023339Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 1100.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 2,
+      "mle_better_parent_attach_attempts": 1,
+      "mle_parent_changes": 1,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.895833,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 48,
+      "switch_count": 1,
+      "switch_position_x": 715.385,
+      "thread_device_type": "med",
+      "total_outage_s": 100.0
+    },
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_003/baseline_run_20260710T023342Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 1440.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 2,
+      "mle_better_parent_attach_attempts": 1,
+      "mle_parent_changes": 1,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.364583,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 48,
+      "switch_count": 1,
+      "switch_position_x": 900.0,
+      "thread_device_type": "med",
+      "total_outage_s": 240.0
+    },
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_004/baseline_run_20260710T023344Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 1440.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 1,
+      "mle_parent_changes": 1,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.333333,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 48,
+      "switch_count": 1,
+      "switch_position_x": 900.0,
+      "thread_device_type": "med",
+      "total_outage_s": 300.0
+    },
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_005/baseline_run_20260710T023346Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.447917,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "no_switch_observed",
+      "sample_count": 48,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "med",
+      "total_outage_s": 100.0
+    },
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_006/baseline_run_20260710T023349Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 1120.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 1,
+      "mle_better_parent_attach_attempts": 1,
+      "mle_parent_changes": 1,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.9375,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 48,
+      "switch_count": 1,
+      "switch_position_x": 735.897,
+      "thread_device_type": "med",
+      "total_outage_s": 60.0
+    },
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_007/baseline_run_20260710T023352Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 960.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.447917,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 48,
+      "switch_count": 1,
+      "switch_position_x": 571.795,
+      "thread_device_type": "med",
+      "total_outage_s": 100.0
+    },
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_008/baseline_run_20260710T023354Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 1440.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 2,
+      "mle_better_parent_attach_attempts": 1,
+      "mle_parent_changes": 1,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.6875,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 48,
+      "switch_count": 1,
+      "switch_position_x": 900.0,
+      "thread_device_type": "med",
+      "total_outage_s": 280.0
+    },
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_009/baseline_run_20260710T023357Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 2,
+      "mle_better_parent_attach_attempts": 1,
+      "mle_parent_changes": 0,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.4375,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "no_switch_observed",
+      "sample_count": 48,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "med",
+      "total_outage_s": 120.0
+    },
+    {
+      "device_profile": "mobile_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/calibrated_mobile_parent_switch_20260710T023336Z/run_010/baseline_run_20260710T023359Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 2,
+      "mle_better_parent_attach_attempts": 1,
+      "mle_parent_changes": 0,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.458333,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "enabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "no_switch_observed",
+      "sample_count": 48,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "med",
+      "total_outage_s": 80.0
+    }
+  ]
+}

@@ -52,12 +52,19 @@ The clean comparison is:
 
 The current/default local MED build is classified separately as a discovery result. In the validated local checkout, the default MTD build is equivalent by configuration to `stock-med-pps-on` because `openthread/examples/platforms/simulation/openthread-core-simulation-config.h` defines `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE 1` when no explicit build flag overrides it.
 
-Build provenance and exact commands are recorded in [`pps_build_variants.md`](pps_build_variants.md). The single-run calibrated MED comparison is recorded in [`pps_med_comparison.md`](pps_med_comparison.md). The tracked artifacts are:
+Build provenance and exact commands are recorded in [`pps_build_variants.md`](pps_build_variants.md). The single-run calibrated MED comparison is recorded in [`pps_med_comparison.md`](pps_med_comparison.md), and the 10-run follow-up is recorded in [`pps_med_repeated_comparison.md`](pps_med_repeated_comparison.md). The single-run tracked artifacts are:
 
 - `../results/calibrated_mobile_parent_switch_med-pps-off/20260710-020657-run01/20260710-020657-run01/`
 - `../results/calibrated_mobile_parent_switch_med-pps-on/20260710-020715-run01/20260710-020715-run01/`
 
 Each artifact includes CSV, summary JSON, replay, replay metadata JSON, MP4, node logs, manifest, and README.
+
+The repeated MED PPS artifacts are:
+
+- `../results/calibrated_mobile_parent_switch_med-pps-off-repeated/20260710-023301-experiment/`
+- `../results/calibrated_mobile_parent_switch_med-pps-on-repeated/20260710-023336-experiment/`
+
+The repeated result shows earlier median switch timing and lower median outage for PPS-on, but similar mean switch timing and no oscillation in either variant.
 
 ## RF propagation model
 

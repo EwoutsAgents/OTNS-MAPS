@@ -191,37 +191,93 @@ def _max_or_none(values: list[float | None]) -> float | None:
     return round(max(numeric), 6)
 
 
+def _median_or_none(values: list[float | None]) -> float | None:
+    numeric = [value for value in values if value is not None]
+    if not numeric:
+        return None
+    return round(statistics.median(numeric), 6)
+
+
+def _stddev_or_none(values: list[float | None]) -> float | None:
+    numeric = [value for value in values if value is not None]
+    if not numeric:
+        return None
+    if len(numeric) == 1:
+        return 0.0
+    return round(statistics.stdev(numeric), 6)
+
+
+def _iqr_or_none(values: list[float | None]) -> float | None:
+    numeric = sorted(value for value in values if value is not None)
+    if not numeric:
+        return None
+    if len(numeric) == 1:
+        return 0.0
+    q1, _, q3 = statistics.quantiles(numeric, n=4, method="inclusive")
+    return round(q3 - q1, 6)
+
+
+def _sample_size(values: list[float | None]) -> int:
+    return sum(1 for value in values if value is not None)
+
+
 def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
     if len(summaries) < 2:
         return None
 
     switch_times = [summary.get("first_switch_time_s") for summary in summaries]
+    switch_positions = [summary.get("switch_position_x") for summary in summaries]
     outage_values = [summary.get("total_outage_s") for summary in summaries]
     pdr_values = [summary.get("packet_delivery_ratio") for summary in summaries]
     switch_counts = [summary.get("switch_count") or 0 for summary in summaries]
+    oscillation_values = [summary.get("oscillation_events") or 0 for summary in summaries]
     classification_counts: dict[str, int] = {}
     for summary in summaries:
         classification = summary.get("result_classification") or "unknown"
         classification_counts[classification] = classification_counts.get(classification, 0) + 1
 
     switch_observed_runs = sum(1 for summary in summaries if summary.get("switch_count"))
+    oscillation_runs = sum(1 for value in oscillation_values if value > 0)
     return {
         "run_count": len(summaries),
         "switch_observed_runs": switch_observed_runs,
         "switch_observed_rate": round(switch_observed_runs / len(summaries), 6),
         "classification_counts": classification_counts,
         "mean_switch_count": round(statistics.mean(switch_counts), 6),
+        "median_switch_count": round(statistics.median(switch_counts), 6),
+        "stddev_switch_count": round(statistics.stdev(switch_counts), 6) if len(switch_counts) > 1 else 0.0,
         "min_switch_count": min(switch_counts),
         "max_switch_count": max(switch_counts),
         "mean_first_switch_time_s": _mean_or_none(switch_times),
+        "median_first_switch_time_s": _median_or_none(switch_times),
+        "stddev_first_switch_time_s": _stddev_or_none(switch_times),
+        "iqr_first_switch_time_s": _iqr_or_none(switch_times),
         "min_first_switch_time_s": _min_or_none(switch_times),
         "max_first_switch_time_s": _max_or_none(switch_times),
+        "switch_time_sample_size": _sample_size(switch_times),
+        "mean_switch_position_x": _mean_or_none(switch_positions),
+        "median_switch_position_x": _median_or_none(switch_positions),
+        "stddev_switch_position_x": _stddev_or_none(switch_positions),
+        "min_switch_position_x": _min_or_none(switch_positions),
+        "max_switch_position_x": _max_or_none(switch_positions),
+        "switch_position_sample_size": _sample_size(switch_positions),
         "mean_total_outage_s": _mean_or_none(outage_values),
+        "median_total_outage_s": _median_or_none(outage_values),
+        "stddev_total_outage_s": _stddev_or_none(outage_values),
+        "iqr_total_outage_s": _iqr_or_none(outage_values),
         "min_total_outage_s": _min_or_none(outage_values),
         "max_total_outage_s": _max_or_none(outage_values),
+        "outage_sample_size": _sample_size(outage_values),
         "mean_packet_delivery_ratio": _mean_or_none(pdr_values),
+        "median_packet_delivery_ratio": _median_or_none(pdr_values),
+        "stddev_packet_delivery_ratio": _stddev_or_none(pdr_values),
+        "iqr_packet_delivery_ratio": _iqr_or_none(pdr_values),
         "min_packet_delivery_ratio": _min_or_none(pdr_values),
         "max_packet_delivery_ratio": _max_or_none(pdr_values),
+        "pdr_sample_size": _sample_size(pdr_values),
+        "mean_oscillation_events": round(statistics.mean(oscillation_values), 6),
+        "oscillation_runs": oscillation_runs,
+        "oscillation_rate": round(oscillation_runs / len(summaries), 6),
     }
 
 

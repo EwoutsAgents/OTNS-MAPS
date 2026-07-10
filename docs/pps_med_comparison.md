@@ -112,13 +112,15 @@ For this single calibrated MED run, explicit PPS-on caused the MED to switch ear
 
 The aggregate packet delivery ratio was lower for PPS-on because the run had fewer successful ping replies overall. That should be interpreted cautiously: the packet probes are useful for this MED benchmark, but a single run is not a statistical result.
 
+A 10-run follow-up is recorded in [`pps_med_repeated_comparison.md`](pps_med_repeated_comparison.md). In that repeated sample, PPS-on retained an earlier median switch time and lower median outage, but the mean switch time was effectively unchanged and PPS-on switched in fewer runs.
+
 ## Limitations
 
-- This is a single-run comparison, not a repeated experiment.
+- This is a single-run comparison. It has been followed by a separate 10-run repeated experiment, but this page remains the initial evidence artifact.
 - The default build classification is based on compile-time configuration inspection, not a separate benchmark arm.
 - MLE counters are now promoted from `mle_counters_json`, but the interpretation still depends on OpenThread CLI counter semantics.
 - Replay rendering worked, but the MP4 is visual evidence only. The CSV and JSON summaries are the metric sources.
 
 ## Next step
 
-Run repeated trials for both explicit MED variants, then extend the PPS on/off comparison to FED and SED profiles.
+Use the repeated MED PPS result as the baseline before extending the PPS on/off comparison to FED and SED profiles.

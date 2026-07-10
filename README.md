@@ -104,7 +104,7 @@ The repository now includes three stock benchmark scenarios:
 
 The original baseline and calibrated switch-attempt scenario use a MED because OTNS documents that a regular SED typically does not respond to ping traffic. The SED benchmark is documented separately and marks packet probes as unreliable by design.
 
-The repository also carries a MED-only Periodic Parent Search comparison. PPS is OpenThread's built-in periodic search for a better parent while a child remains attached. This comparison is intentionally stock OpenThread only: `stock-med-pps-off` and `stock-med-pps-on` differ only by the compile-time value of `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE` for the MTD binary used by `add med`. The current/default local MED build is a discovery result, not a third benchmark arm; in this checkout it is classified as equivalent to `stock-med-pps-on`. See [`docs/pps_build_variants.md`](docs/pps_build_variants.md) and [`docs/pps_med_comparison.md`](docs/pps_med_comparison.md).
+The repository also carries a MED-only Periodic Parent Search comparison. PPS is OpenThread's built-in periodic search for a better parent while a child remains attached. This comparison is intentionally stock OpenThread only: `stock-med-pps-off` and `stock-med-pps-on` differ only by the compile-time value of `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE` for the MTD binary used by `add med`. The current/default local MED build is a discovery result, not a third benchmark arm; in this checkout it is classified as equivalent to `stock-med-pps-on`. See [`docs/pps_build_variants.md`](docs/pps_build_variants.md), [`docs/pps_med_comparison.md`](docs/pps_med_comparison.md), and [`docs/pps_med_repeated_comparison.md`](docs/pps_med_repeated_comparison.md).
 
 ## Run
 
@@ -210,6 +210,8 @@ python3 scripts/run_baseline.py \
 ```
 
 Repeat with `--artifact-name med-pps-on`, `--firmware-variant stock-med-pps-on`, `--parent-search-config enabled`, and the PPS-on MTD binary. The tracked artifacts are stored under `results/calibrated_mobile_parent_switch_med-pps-off/` and `results/calibrated_mobile_parent_switch_med-pps-on/`.
+
+Run the repeated calibrated MED PPS comparison with the same explicit binaries and metadata flags, using `--repeat-count 10` and artifact names `med-pps-off-repeated` and `med-pps-on-repeated`. The resulting aggregate comparison is documented in [`docs/pps_med_repeated_comparison.md`](docs/pps_med_repeated_comparison.md), with tracked artifacts under `results/calibrated_mobile_parent_switch_med-pps-off-repeated/` and `results/calibrated_mobile_parent_switch_med-pps-on-repeated/`.
 
 Generate plots when `matplotlib` is installed:
 

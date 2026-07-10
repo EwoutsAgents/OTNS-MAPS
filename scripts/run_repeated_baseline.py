@@ -167,7 +167,13 @@ def write_json(data: dict[str, Any], path: Path) -> None:
         handle.write("\n")
 
 
-def write_results_readme(path: Path, experiment_name: str, scenario: Path, aggregate_summary_exists: bool) -> None:
+def write_results_readme(
+    path: Path,
+    experiment_name: str,
+    scenario: Path,
+    aggregate_summary_exists: bool,
+    manifest: dict[str, Any],
+) -> None:
     lines = [
         f"# Result set: {path.parent.name}",
         "",
@@ -177,7 +183,16 @@ def write_results_readme(path: Path, experiment_name: str, scenario: Path, aggre
         "",
         f"- Experiment name: `{experiment_name}`",
         f"- Scenario file: `{scenario}`",
+        f"- Repeat count: `{manifest['repeat_count']}`",
+        f"- Firmware variant: `{manifest['firmware_variant']}`",
+        f"- Thread device type: `{manifest['thread_device_type'] or 'unspecified'}`",
+        f"- Parent search config: `{manifest['parent_search_config']}`",
+        f"- Node binary path: `{manifest['node_binary_path'] or 'not recorded'}`",
+        f"- Build config source: `{manifest['build_config_source'] or 'not recorded'}`",
+        f"- OpenThread commit: `{manifest['openthread_commit']}`",
+        f"- OTNS commit: `{manifest['otns_commit']}`",
         f"- Aggregate summary: `{'aggregate_summary.json' if aggregate_summary_exists else 'not generated'}`",
+        f"- Manifest: `manifest.json`",
     ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -298,6 +313,15 @@ def main() -> int:
                         "scenario": str(args.scenario),
                         "repeat_count": args.repeat_count,
                         "mock": args.mock,
+                        "firmware_variant": args.firmware_variant,
+                        "thread_device_type": args.thread_device_type,
+                        "parent_search_config": args.parent_search_config,
+                        "node_binary_path": str(args.node_binary_path) if args.node_binary_path is not None else None,
+                        "build_config_source": args.build_config_source,
+                        "openthread_commit": args.openthread_commit,
+                        "otns_commit": args.otns_commit,
+                        "otns_watch_level": args.otns_watch_level,
+                        "capture_replay": args.capture_replay,
                         "runs": runs,
                     },
                     handle,
@@ -314,6 +338,16 @@ def main() -> int:
         "scenario": str(args.scenario),
         "repeat_count": args.repeat_count,
         "mock": args.mock,
+        "firmware_variant": args.firmware_variant,
+        "thread_device_type": args.thread_device_type,
+        "parent_search_config": args.parent_search_config,
+        "node_binary_path": str(args.node_binary_path) if args.node_binary_path is not None else None,
+        "build_config_source": args.build_config_source,
+        "openthread_commit": args.openthread_commit,
+        "otns_commit": args.otns_commit,
+        "otns_watch_level": args.otns_watch_level,
+        "capture_replay": args.capture_replay,
+        "tracked_experiment_dir": str(tracked_experiment_dir) if tracked_experiment_dir is not None else None,
         "runs": runs,
     }
     manifest_path = experiment_dir / "repeated_run_manifest.json"
@@ -324,7 +358,9 @@ def main() -> int:
     if tracked_experiment_dir is not None:
         tracked_experiment_dir.mkdir(parents=True, exist_ok=True)
         artifact_manifest_path = tracked_experiment_dir / "repeated_run_manifest.json"
+        tracked_manifest_path = tracked_experiment_dir / "manifest.json"
         shutil.copy2(manifest_path, artifact_manifest_path)
+        shutil.copy2(manifest_path, tracked_manifest_path)
 
         aggregate_summary_path = tracked_experiment_dir / "aggregate_summary.json"
         analysis_cmd = [
@@ -345,8 +381,10 @@ def main() -> int:
             experiment_name=experiment_name,
             scenario=args.scenario,
             aggregate_summary_exists=aggregate_summary_path.exists(),
+            manifest=manifest,
         )
         print(tracked_experiment_dir)
+        print(tracked_manifest_path)
         print(artifact_manifest_path)
         print(aggregate_summary_path)
 
