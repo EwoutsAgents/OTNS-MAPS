@@ -73,6 +73,8 @@ def summarize_run(path: Path) -> dict[str, Any]:
         raise ValueError(f"No rows in {path}")
 
     device_profile = rows[0].get("device_profile") or "mobile_end_device"
+    thread_device_type = rows[0].get("thread_device_type") or None
+    parent_search_config = rows[0].get("parent_search_config") or "unknown"
     packet_probe_reliable = to_bool(rows[0].get("packet_probe_reliable"))
     primary_parent_observation = rows[0].get("primary_parent_observation") or "packet_probe"
     switch_times = [to_float(row["sim_time_s"]) for row in rows if to_bool(row.get("parent_switch"))]
@@ -123,6 +125,8 @@ def summarize_run(path: Path) -> dict[str, Any]:
     return {
         "file": str(path),
         "device_profile": device_profile,
+        "thread_device_type": thread_device_type,
+        "parent_search_config": parent_search_config,
         "packet_probe_reliable": packet_probe_reliable,
         "primary_parent_observation": primary_parent_observation,
         "sample_count": len(rows),

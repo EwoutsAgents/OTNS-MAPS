@@ -87,6 +87,33 @@ def parse_args() -> argparse.Namespace:
         help="Firmware or build label recorded in replay/artifact metadata.",
     )
     parser.add_argument(
+        "--thread-device-type",
+        default=None,
+        help="Thread device type for the mobile node metadata, for example med.",
+    )
+    parser.add_argument(
+        "--parent-search-config",
+        choices=("enabled", "disabled", "observed", "unknown"),
+        default="unknown",
+        help="Periodic Parent Search state recorded in metadata.",
+    )
+    parser.add_argument(
+        "--node-binary-path",
+        type=Path,
+        default=None,
+        help="Optional MTD node binary path. When provided, OTNS is told to use it for med/sed/ssed nodes.",
+    )
+    parser.add_argument(
+        "--build-config-source",
+        default=None,
+        help="Path or command that documents how the node binary was built.",
+    )
+    parser.add_argument(
+        "--equivalent-to",
+        default=None,
+        help="Optional default-build classification, for example stock-med-pps-on.",
+    )
+    parser.add_argument(
         "--openthread-commit",
         default="unknown",
         help="Optional OpenThread commit or build label recorded in metadata.",
@@ -237,6 +264,11 @@ def maybe_capture_replay(
     replay_source: Path | None,
     replay_dir: Path,
     firmware_variant: str,
+    thread_device_type: str | None,
+    parent_search_config: str,
+    node_binary_path: Path | None,
+    build_config_source: str | None,
+    equivalent_to: str | None,
     openthread_commit: str,
     otns_commit: str,
     csv_path: Path,
@@ -278,6 +310,12 @@ def maybe_capture_replay(
         "scenario_title": scenario["title"],
         "scenario_file": scenario_file_label(scenario_path),
         "firmware_variant": firmware_variant,
+        "device_profile": summary.get("device_profile"),
+        "thread_device_type": thread_device_type,
+        "parent_search_config": parent_search_config,
+        "node_binary_path": str(node_binary_path) if node_binary_path is not None else None,
+        "build_config_source": build_config_source,
+        "equivalent_to": equivalent_to,
         "openthread_commit": openthread_commit,
         "otns_commit": otns_commit,
         "otns_command": otns_command,
@@ -370,6 +408,11 @@ def tracked_results_manifest(
     scenario: dict[str, Any],
     scenario_path: Path,
     firmware_variant: str,
+    thread_device_type: str | None,
+    parent_search_config: str,
+    node_binary_path: Path | None,
+    build_config_source: str | None,
+    equivalent_to: str | None,
     openthread_commit: str,
     otns_commit: str,
     otns_command: str,
@@ -388,6 +431,12 @@ def tracked_results_manifest(
         "scenario_name": scenario["name"],
         "scenario_file": scenario_file_label(scenario_path),
         "firmware_variant": firmware_variant,
+        "device_profile": summary.get("device_profile"),
+        "thread_device_type": thread_device_type,
+        "parent_search_config": parent_search_config,
+        "node_binary_path": str(node_binary_path) if node_binary_path is not None else None,
+        "build_config_source": build_config_source,
+        "equivalent_to": equivalent_to,
         "openthread_commit": openthread_commit,
         "otns_commit": otns_commit,
         "otns_command": otns_command,
@@ -431,6 +480,12 @@ def write_tracked_results_readme(
             f'- Scenario: `{manifest["scenario_name"]}`',
             f'- Scenario file: `{manifest["scenario_file"]}`',
             f'- Firmware variant: `{manifest["firmware_variant"]}`',
+            f'- Device profile: `{manifest["device_profile"]}`',
+            f'- Thread device type: `{manifest["thread_device_type"]}`',
+            f'- Parent search config: `{manifest["parent_search_config"]}`',
+            f'- Node binary path: `{manifest["node_binary_path"]}`',
+            f'- Build config source: `{manifest["build_config_source"]}`',
+            f'- Equivalent to: `{manifest["equivalent_to"]}`',
             f'- OpenThread commit: `{manifest["openthread_commit"]}`',
             f'- OTNS commit: `{manifest["otns_commit"]}`',
             f'- OTNS command: `{manifest["otns_command"]}`',
@@ -469,6 +524,11 @@ def export_tracked_results(
     scenario: dict[str, Any],
     scenario_path: Path,
     firmware_variant: str,
+    thread_device_type: str | None,
+    parent_search_config: str,
+    node_binary_path: Path | None,
+    build_config_source: str | None,
+    equivalent_to: str | None,
     openthread_commit: str,
     otns_commit: str,
     otns_command: str,
@@ -514,6 +574,11 @@ def export_tracked_results(
         scenario=scenario,
         scenario_path=scenario_path,
         firmware_variant=firmware_variant,
+        thread_device_type=thread_device_type,
+        parent_search_config=parent_search_config,
+        node_binary_path=node_binary_path,
+        build_config_source=build_config_source,
+        equivalent_to=equivalent_to,
         openthread_commit=openthread_commit,
         otns_commit=otns_commit,
         otns_command=otns_command,
@@ -746,11 +811,17 @@ class RealBenchmarkRunner:
         otns_command: str,
         otns_workdir: Path | None = None,
         otns_watch_level: str = "off",
+        node_binary_path: Path | None = None,
+        thread_device_type: str | None = None,
+        parent_search_config: str = "unknown",
     ) -> None:
         self.scenario = scenario
         self.otns_command = with_otns_watch_level(otns_command, otns_watch_level)
         self.otns_workdir = otns_workdir
         self.otns_watch_level = otns_watch_level
+        self.node_binary_path = node_binary_path
+        self.thread_device_type = thread_device_type
+        self.parent_search_config = parent_search_config
         self.otns_runtime_cwd = otns_runtime_cwd(otns_workdir)
         self.notes: list[str] = []
         self.node_refs: dict[str, NodeRef] = {}
@@ -769,6 +840,9 @@ class RealBenchmarkRunner:
         with OtnsSession(self.otns_command, cwd=self.otns_runtime_cwd) as session:
             session.command_output("speed 0")
             session.command_output(f'title "{self.scenario["title"]}"')
+            if self.node_binary_path is not None:
+                session.command_output(f'exe mtd "{self.node_binary_path}"')
+                self.notes.append(f"OTNS MTD executable set to {self.node_binary_path}.")
             radio_model = self._select_radio_model(session)
             named_ids = self._activate_nodes(session, timing)
             self._refresh_node_identity(session)
@@ -829,6 +903,8 @@ class RealBenchmarkRunner:
             total_outage_s=round(total_outage, 3),
             mock=False,
             parent_before_delayed_nodes=self.parent_before_delayed_nodes,
+            thread_device_type=self.thread_device_type,
+            parent_search_config=self.parent_search_config,
         )
         return rows, summary
 
@@ -938,6 +1014,8 @@ class RealBenchmarkRunner:
             "mobile_state": state_lines[0] if state_lines else None,
             "mobile_rloc16": rloc_lines[0] if rloc_lines else None,
             "device_profile": self.scenario.get("device_profile", "mobile_end_device"),
+            "thread_device_type": self.thread_device_type,
+            "parent_search_config": self.parent_search_config,
             "packet_probe_reliable": self.observability.get("packet_probe_reliable", True),
             "primary_parent_observation": self.observability.get("primary_parent_observation", "packet_probe"),
             "parent_extaddr": parent_info.get("Ext Addr"),
@@ -1001,8 +1079,15 @@ class RealBenchmarkRunner:
 
 
 class MockBenchmarkRunner:
-    def __init__(self, scenario: dict[str, Any]) -> None:
+    def __init__(
+        self,
+        scenario: dict[str, Any],
+        thread_device_type: str | None = None,
+        parent_search_config: str = "unknown",
+    ) -> None:
         self.scenario = scenario
+        self.thread_device_type = thread_device_type
+        self.parent_search_config = parent_search_config
         self.observability = scenario.get("observability", {})
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -1062,6 +1147,8 @@ class MockBenchmarkRunner:
                 "mobile_state": mobile_state,
                 "mobile_rloc16": "0x5400" if parent == "router_a" else "0x9800",
                 "device_profile": self.scenario.get("device_profile", "mobile_end_device"),
+                "thread_device_type": self.thread_device_type,
+                "parent_search_config": self.parent_search_config,
                 "packet_probe_reliable": self.observability.get("packet_probe_reliable", True),
                 "primary_parent_observation": self.observability.get("primary_parent_observation", "packet_probe"),
                 "parent_extaddr": "aa00aa00aa00aa00" if parent == "router_a" else "bb00bb00bb00bb00",
@@ -1121,6 +1208,8 @@ class MockBenchmarkRunner:
             selected_radio_model="mock",
             total_outage_s=round(total_outage, 3),
             mock=True,
+            thread_device_type=self.thread_device_type,
+            parent_search_config=self.parent_search_config,
         )
         return rows, summary
 
@@ -1146,6 +1235,8 @@ def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "connectivity_ok": sample["connectivity_ok"],
             "selected_radio_model": sample["selected_radio_model"],
             "device_profile": sample.get("device_profile"),
+            "thread_device_type": sample.get("thread_device_type"),
+            "parent_search_config": sample.get("parent_search_config"),
             "packet_probe_reliable": sample.get("packet_probe_reliable"),
             "primary_parent_observation": sample.get("primary_parent_observation"),
             "router_a_scan_dbm": sample["router_a_scan_dbm"],
@@ -1176,6 +1267,8 @@ def build_summary(
     total_outage_s: float,
     mock: bool,
     parent_before_delayed_nodes: str | None = None,
+    thread_device_type: str | None = None,
+    parent_search_config: str = "unknown",
 ) -> dict[str, Any]:
     total_tx = 0
     total_rx = 0
@@ -1208,6 +1301,8 @@ def build_summary(
         "scenario_name": scenario["name"],
         "scenario_title": scenario["title"],
         "device_profile": scenario.get("device_profile", "mobile_end_device"),
+        "thread_device_type": thread_device_type,
+        "parent_search_config": parent_search_config,
         "mock": mock,
         "selected_radio_model": selected_radio_model,
         "packet_probe_reliable": scenario.get("observability", {}).get("packet_probe_reliable", True),
@@ -1259,9 +1354,21 @@ def main() -> int:
 
     runner: RealBenchmarkRunner | MockBenchmarkRunner
     runner = (
-        MockBenchmarkRunner(scenario)
+        MockBenchmarkRunner(
+            scenario,
+            thread_device_type=args.thread_device_type,
+            parent_search_config=args.parent_search_config,
+        )
         if args.mock
-        else RealBenchmarkRunner(scenario, args.otns_command, args.otns_workdir, args.otns_watch_level)
+        else RealBenchmarkRunner(
+            scenario,
+            args.otns_command,
+            args.otns_workdir,
+            args.otns_watch_level,
+            node_binary_path=args.node_binary_path,
+            thread_device_type=args.thread_device_type,
+            parent_search_config=args.parent_search_config,
+        )
     )
 
     try:
@@ -1284,6 +1391,11 @@ def main() -> int:
         replay_source=args.replay_source,
         replay_dir=args.replay_dir,
         firmware_variant=args.firmware_variant,
+        thread_device_type=args.thread_device_type,
+        parent_search_config=args.parent_search_config,
+        node_binary_path=args.node_binary_path,
+        build_config_source=args.build_config_source,
+        equivalent_to=args.equivalent_to,
         openthread_commit=args.openthread_commit,
         otns_commit=args.otns_commit,
         csv_path=csv_path,
@@ -1314,6 +1426,11 @@ def main() -> int:
         if node_log_info.get("warning"):
             summary.setdefault("notes", []).append(str(node_log_info["warning"]))
     summary["firmware_variant"] = args.firmware_variant
+    summary["thread_device_type"] = args.thread_device_type
+    summary["parent_search_config"] = args.parent_search_config
+    summary["node_binary_path"] = str(args.node_binary_path) if args.node_binary_path is not None else None
+    summary["build_config_source"] = args.build_config_source
+    summary["equivalent_to"] = args.equivalent_to
     summary["openthread_commit"] = args.openthread_commit
     summary["otns_commit"] = args.otns_commit
     summary["otns_watch_level"] = args.otns_watch_level
@@ -1342,6 +1459,11 @@ def main() -> int:
                 scenario=scenario,
                 scenario_path=args.scenario,
                 firmware_variant=args.firmware_variant,
+                thread_device_type=args.thread_device_type,
+                parent_search_config=args.parent_search_config,
+                node_binary_path=args.node_binary_path,
+                build_config_source=args.build_config_source,
+                equivalent_to=args.equivalent_to,
                 openthread_commit=args.openthread_commit,
                 otns_commit=args.otns_commit,
                 otns_command=args.otns_command,

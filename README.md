@@ -104,6 +104,8 @@ The repository now includes three stock benchmark scenarios:
 
 The original baseline and calibrated switch-attempt scenario use a MED because OTNS documents that a regular SED typically does not respond to ping traffic. The SED benchmark is documented separately and marks packet probes as unreliable by design.
 
+The repository also carries a MED-only Periodic Parent Search comparison. PPS is OpenThread's built-in periodic search for a better parent while a child remains attached. This comparison is intentionally stock OpenThread only: `stock-med-pps-off` and `stock-med-pps-on` differ only by the compile-time value of `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE` for the MTD binary used by `add med`. The current/default local MED build is a discovery result, not a third benchmark arm; in this checkout it is classified as equivalent to `stock-med-pps-on`. See [`docs/pps_build_variants.md`](docs/pps_build_variants.md) and [`docs/pps_med_comparison.md`](docs/pps_med_comparison.md).
+
 ## Run
 
 Real OTNS run:
@@ -189,6 +191,25 @@ python3 scripts/run_baseline.py \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns
 ```
+
+Run the calibrated MED PPS comparison after building the two MTD binaries:
+
+```bash
+python3 scripts/run_baseline.py \
+  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --otns-command '/home/ewout/go/bin/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns \
+  --otns-watch-level trace \
+  --capture-replay \
+  --copy-results-to-artifact \
+  --artifact-name med-pps-off \
+  --firmware-variant stock-med-pps-off \
+  --thread-device-type med \
+  --parent-search-config disabled \
+  --node-binary-path /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim/build/stock-med-pps-off/bin/ot-cli-mtd
+```
+
+Repeat with `--artifact-name med-pps-on`, `--firmware-variant stock-med-pps-on`, `--parent-search-config enabled`, and the PPS-on MTD binary. The tracked artifacts are stored under `results/calibrated_mobile_parent_switch_med-pps-off/` and `results/calibrated_mobile_parent_switch_med-pps-on/`.
 
 Generate plots when `matplotlib` is installed:
 

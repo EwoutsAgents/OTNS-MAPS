@@ -41,6 +41,24 @@ The SED variant is defined in [`../scenarios/sed_mobile_parent_switch.yaml`](../
 
 This keeps the benchmark aligned with what a regular stock SED actually exposes in OTNS. Future work can add CSL or `ssed` experiments if reliable packet-response probing becomes necessary.
 
+## Periodic Parent Search comparison
+
+Periodic Parent Search (PPS) is OpenThread's built-in mechanism that lets an attached child periodically search for a better parent. The MED PPS milestone isolates this stock behavior before any MAPS policy is implemented.
+
+The clean comparison is:
+
+- `stock-med-pps-off`
+- `stock-med-pps-on`
+
+The current/default local MED build is classified separately as a discovery result. In the validated local checkout, the default MTD build is equivalent by configuration to `stock-med-pps-on` because `openthread/examples/platforms/simulation/openthread-core-simulation-config.h` defines `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE 1` when no explicit build flag overrides it.
+
+Build provenance and exact commands are recorded in [`pps_build_variants.md`](pps_build_variants.md). The single-run calibrated MED comparison is recorded in [`pps_med_comparison.md`](pps_med_comparison.md). The tracked artifacts are:
+
+- `../results/calibrated_mobile_parent_switch_med-pps-off/20260710-020657-run01/20260710-020657-run01/`
+- `../results/calibrated_mobile_parent_switch_med-pps-on/20260710-020715-run01/20260710-020715-run01/`
+
+Each artifact includes CSV, summary JSON, replay, replay metadata JSON, MP4, node logs, manifest, and README.
+
 ## RF propagation model
 
 The runner prefers OTNS `MutualInterference` because OTNS documents that it models decreasing RSSI with distance and includes CCA/interference behaviour. If unavailable, the runner falls back in this order:
@@ -232,7 +250,7 @@ Replay files can be replayed with:
 otns-replay results/<scenario>_<variant>/<run-id>/<run-id>/<captured-file>.replay
 ```
 
-Replay files can also be rendered into a GIF via the OTNS web UI with:
+Replay files can also be rendered into an MP4 via the OTNS web UI with:
 
 ```bash
 python3 scripts/replay_to_mp4.py \
@@ -244,7 +262,7 @@ python3 scripts/replay_to_mp4.py \
   --show-log-panel
 ```
 
-That script launches `otns-replay`, opens one persistent headless Chrome session, captures repeated screenshots through the Chrome DevTools protocol, and stitches the frames into a GIF with Pillow.
+That script launches `otns-replay`, opens one persistent headless Chrome session, captures repeated screenshots through the Chrome DevTools protocol, and encodes the frames into an MP4 with `ffmpeg`.
 `--replay-speed` normalizes the replay into a temporary constant-speed copy before playback, `--cover-full-replay` spaces the captures across that normalized replay timeline, `--end-device-y-offset` carries a consistent visual separation from routers across rendered artifacts, and `--show-log-panel` overlays the replay-visible OTNS log categories as a readable log strip.
 
 Replay metadata records scenario, firmware label, OpenThread commit, OTNS commit, command, workdir, and the associated CSV and summary file paths. That metadata is necessary for future stock-vs-modified firmware comparisons because the replay file alone does not explain what build or benchmark context produced it.

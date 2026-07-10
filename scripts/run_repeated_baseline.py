@@ -65,6 +65,33 @@ def parse_args() -> argparse.Namespace:
         help="Firmware or build label recorded in per-run replay/artifact metadata.",
     )
     parser.add_argument(
+        "--thread-device-type",
+        default=None,
+        help="Thread device type metadata passed through to run_baseline.py.",
+    )
+    parser.add_argument(
+        "--parent-search-config",
+        choices=("enabled", "disabled", "observed", "unknown"),
+        default="unknown",
+        help="Periodic Parent Search metadata passed through to run_baseline.py.",
+    )
+    parser.add_argument(
+        "--node-binary-path",
+        type=Path,
+        default=None,
+        help="Optional MTD node binary path passed through to run_baseline.py.",
+    )
+    parser.add_argument(
+        "--build-config-source",
+        default=None,
+        help="Build provenance metadata passed through to run_baseline.py.",
+    )
+    parser.add_argument(
+        "--equivalent-to",
+        default=None,
+        help="Optional default-build classification passed through to run_baseline.py.",
+    )
+    parser.add_argument(
         "--openthread-commit",
         default="unknown",
         help="Optional OpenThread commit or build label recorded in metadata.",
@@ -224,6 +251,8 @@ def main() -> int:
             [
                 "--firmware-variant",
                 args.firmware_variant,
+                "--parent-search-config",
+                args.parent_search_config,
                 "--openthread-commit",
                 args.openthread_commit,
                 "--otns-commit",
@@ -232,6 +261,14 @@ def main() -> int:
                 args.otns_watch_level,
             ]
         )
+        if args.thread_device_type is not None:
+            cmd.extend(["--thread-device-type", args.thread_device_type])
+        if args.node_binary_path is not None:
+            cmd.extend(["--node-binary-path", str(args.node_binary_path)])
+        if args.build_config_source is not None:
+            cmd.extend(["--build-config-source", args.build_config_source])
+        if args.equivalent_to is not None:
+            cmd.extend(["--equivalent-to", args.equivalent_to])
         if args.copy_results_to_artifact:
             run_tracked_dir = tracked_experiment_dir / run_id / run_id
             cmd.extend(
