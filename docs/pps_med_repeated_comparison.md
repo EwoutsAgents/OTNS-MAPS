@@ -1,5 +1,7 @@
 # Repeated Calibrated MED PPS Comparison
 
+This page describes archived 10-run results from the older wide-geometry calibrated MED scenario. The current active MED scenario is `scenarios/med_simple_parent_switch.yaml`; the current repeated simple-geometry PPS matrix is recorded in [`simple_pps_matrix.md`](simple_pps_matrix.md). Do not mix these metrics with simple-scenario metrics without labeling the geometry difference.
+
 This experiment repeats the calibrated MED Periodic Parent Search comparison from [`pps_med_comparison.md`](pps_med_comparison.md). It remains a stock OpenThread experiment: no MAPS policy or alternate parent-selection algorithm is implemented.
 
 ## Design

@@ -8,41 +8,17 @@ This benchmark is intentionally not a new parent-selection algorithm. It measure
 
 ## Scenario design
 
-The repository currently carries four closely related stock scenarios:
+The active benchmark matrix uses three simple parent-switch scenarios:
 
-- `baseline_mobile_parent_switch` is the original reference setup.
-- `calibrated_mobile_parent_switch` delays Router B introduction so the mobile node first has time to attach to Router A before movement begins.
-- `fed_mobile_parent_switch` applies the calibrated delayed-router idea to a mobile Full End Device and uses OTNS's FTD executable path.
-- `sed_mobile_parent_switch` applies the delayed-router idea to a mobile Sleepy End Device and shifts primary observability away from ping replies.
+- [`../scenarios/med_simple_parent_switch.yaml`](../scenarios/med_simple_parent_switch.yaml)
+- [`../scenarios/fed_simple_parent_switch.yaml`](../scenarios/fed_simple_parent_switch.yaml)
+- [`../scenarios/sed_simple_parent_switch.yaml`](../scenarios/sed_simple_parent_switch.yaml)
 
-All scenarios use three nodes:
+All three use two routers, one mobile end device, straight-line movement, delayed Router B activation, overlapping intended coverage, and no intentional dead zone. Router A is placed at `(250, 300)`, Router B at `(650, 300)`, and the mobile path runs from `(250, 360)` to `(650, 360)`. The moving end device should theoretically have at least one router in range throughout the path.
 
-- Router A
-- Router B
-- one mobile end device
+The scenario details, activation timing, device observability, and old-name compatibility notes are maintained in [`scenarios.md`](scenarios.md).
 
-The original baseline uses a direct two-router topology with the movement path defined in [`../scenarios/baseline_mobile_parent_switch.yaml`](../scenarios/baseline_mobile_parent_switch.yaml).
-
-The calibrated variant is defined in [`../scenarios/calibrated_mobile_parent_switch.yaml`](../scenarios/calibrated_mobile_parent_switch.yaml). It uses a pre-movement stabilization phase:
-
-1. Router A and the mobile MED are created first.
-2. The mobile MED is allowed to attach to Router A.
-3. Router B is introduced later.
-4. A further settle period runs before movement starts.
-
-This keeps the benchmark within stock OTNS/OpenThread behavior while making initial attachment to Router A much more likely.
-
-The initial baseline and calibrated switch-attempt scenarios use a MED instead of a regular SED. OTNS CLI documentation notes that a regular SED typically does not respond to ping traffic, which makes packet-delivery measurement less direct for a first benchmark.
-
-The FED variant is defined in [`../scenarios/fed_mobile_parent_switch.yaml`](../scenarios/fed_mobile_parent_switch.yaml). It keeps the calibrated delayed Router B introduction and changes the mobile node type to `fed`. OTNS maps `fed` and router nodes to the FTD executable family, so FED PPS experiments use `--ftd-node-binary-path` and document that the FTD binary is shared by the mobile FED and routers.
-
-The SED variant is defined in [`../scenarios/sed_mobile_parent_switch.yaml`](../scenarios/sed_mobile_parent_switch.yaml). It keeps the delayed Router B introduction, changes the mobile node type to `sed`, and records explicit observability metadata:
-
-- `device_profile: sleepy_end_device`
-- `packet_probe_reliable: false`
-- `primary_parent_observation: parent_command`
-
-This keeps the benchmark aligned with what a regular stock SED actually exposes in OTNS. Future work can add CSL or `ssed` experiments if reliable packet-response probing becomes necessary.
+Older committed artifacts may reference the previous scenario names `baseline_mobile_parent_switch`, `calibrated_mobile_parent_switch`, `fed_mobile_parent_switch`, and `sed_mobile_parent_switch`. The original baseline scenario was a historical smoke/reference scenario and is no longer part of the active benchmark matrix. Results generated under the old wider geometry are historical and should not be mixed with new simple-scenario results without labeling the geometry difference.
 
 ## Periodic Parent Search comparison
 
@@ -55,7 +31,9 @@ The clean comparison is:
 
 The current/default local MED build is classified separately as a discovery result. In the validated local checkout, the default MTD build is equivalent by configuration to `stock-med-pps-on` because `openthread/examples/platforms/simulation/openthread-core-simulation-config.h` defines `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE 1` when no explicit build flag overrides it.
 
-Build provenance and exact commands are recorded in [`pps_build_variants.md`](pps_build_variants.md). The single-run calibrated MED comparison is recorded in [`pps_med_comparison.md`](pps_med_comparison.md), the 10-run MED follow-up is recorded in [`pps_med_repeated_comparison.md`](pps_med_repeated_comparison.md), and the FED/SED profile extension is recorded in [`pps_fed_sed_comparison.md`](pps_fed_sed_comparison.md). The single-run MED tracked artifacts are:
+Build provenance and exact commands are recorded in [`pps_build_variants.md`](pps_build_variants.md). The archived single-run calibrated MED comparison is recorded in [`pps_med_comparison.md`](pps_med_comparison.md), the archived 10-run MED follow-up is recorded in [`pps_med_repeated_comparison.md`](pps_med_repeated_comparison.md), and the archived FED/SED profile extension is recorded in [`pps_fed_sed_comparison.md`](pps_fed_sed_comparison.md). These archived comparisons used the older wider geometry. The single-run MED tracked artifacts are:
+
+The active simple-geometry 10-run PPS matrix is recorded in [`simple_pps_matrix.md`](simple_pps_matrix.md).
 
 - `../results/.archive/calibrated_mobile_parent_switch_med-pps-off/20260710-020657-run01/20260710-020657-run01/`
 - `../results/.archive/calibrated_mobile_parent_switch_med-pps-on/20260710-020715-run01/20260710-020715-run01/`
@@ -67,7 +45,7 @@ The repeated MED PPS artifacts are:
 - `../results/.archive/calibrated_mobile_parent_switch_med-pps-off-repeated/20260710-023301-experiment/`
 - `../results/.archive/calibrated_mobile_parent_switch_med-pps-on-repeated/20260710-023336-experiment/`
 
-The repeated result shows earlier median switch timing and lower median outage for PPS-on, but similar mean switch timing and no oscillation in either variant.
+The archived repeated result shows earlier median switch timing and lower median outage for PPS-on, but similar mean switch timing and no oscillation in either variant.
 
 The FED/SED PPS extension artifacts are:
 
@@ -163,7 +141,7 @@ Calibrated stock-switch attempt:
 
 ```bash
 python3 scripts/run_baseline.py \
-  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --scenario scenarios/med_simple_parent_switch.yaml \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns
 ```
@@ -172,7 +150,7 @@ Calibrated stock-switch attempt with replay capture and tracked artifact export:
 
 ```bash
 python3 scripts/run_baseline.py \
-  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --scenario scenarios/med_simple_parent_switch.yaml \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns \
   --capture-replay \
@@ -187,7 +165,7 @@ SED stock benchmark:
 
 ```bash
 python3 scripts/run_baseline.py \
-  --scenario scenarios/sed_mobile_parent_switch.yaml \
+  --scenario scenarios/sed_simple_parent_switch.yaml \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns
 ```
@@ -208,7 +186,7 @@ Run repeated experiments:
 
 ```bash
 python3 scripts/run_repeated_baseline.py \
-  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --scenario scenarios/med_simple_parent_switch.yaml \
   --repeat-count 5 \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns
@@ -224,7 +202,7 @@ Run repeated experiments with replay capture and tracked artifact export:
 
 ```bash
 python3 scripts/run_repeated_baseline.py \
-  --scenario scenarios/calibrated_mobile_parent_switch.yaml \
+  --scenario scenarios/med_simple_parent_switch.yaml \
   --repeat-count 3 \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns \
@@ -256,8 +234,8 @@ python3 analysis/analyze_baseline.py examples/sed-baseline/baseline_run_sed_exam
 - `python3 analysis/analyze_baseline.py results/baseline_run_*.csv`
 - Real OTNS launch test with `otns`
 - Real baseline run with `python3 scripts/run_baseline.py`
-- Calibrated replay capture run with `python3 scripts/run_baseline.py --scenario scenarios/calibrated_mobile_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --capture-replay --copy-results-to-artifact --artifact-name switch-observed`
-- Watch-enabled raw node-log capture run with `python3 scripts/run_baseline.py --scenario scenarios/calibrated_mobile_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --otns-watch-level info`
+- Calibrated replay capture run with `python3 scripts/run_baseline.py --scenario scenarios/med_simple_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --capture-replay --copy-results-to-artifact --artifact-name switch-observed`
+- Watch-enabled raw node-log capture run with `python3 scripts/run_baseline.py --scenario scenarios/med_simple_parent_switch.yaml --otns-command '/path/to/otns -web=false -autogo=false -speed 1' --otns-workdir /path/to/ot-ns --otns-watch-level info`
 - Confirm a replay file and replay metadata JSON are created
 - Confirm tracked outputs are copied into `results/<scenario>_<variant>/<run-id>/<run-id>/`
 - Confirm CSV and JSON outputs are created

@@ -1,0 +1,75 @@
+name: fed_simple_parent_switch
+title: Simple stock OpenThread FED parent-switch benchmark
+description: >
+  Simple stock OTNS parent-switching benchmark for a mobile Full End Device.
+  The scenario uses two routers, one mobile end device, straight-line
+  movement, delayed Router B activation, overlapping intended coverage, and no
+  intentional dead zone.
+
+device_profile: full_end_device
+expected_initial_parent: router_a
+
+observability:
+  packet_probe_reliable: true
+  primary_parent_observation: packet_probe
+  notes:
+    - FEDs are full Thread devices, but this scenario keeps the mobile node as an end device by using OTNS add fed.
+    - OTNS maps fed and router nodes to the same FTD executable family.
+
+radio_model:
+  preferred: MutualInterference
+  fallbacks:
+    - MIDisc
+    - Ideal_Rssi
+    - Ideal
+
+timing:
+  settle_seconds: 120
+  step_seconds: 20
+  movement_steps: 40
+
+activation:
+  initial_nodes:
+    - router_a
+    - mobile
+  delayed_node_groups:
+    - delay_seconds: 300
+      nodes:
+        - router_b
+  post_activation_settle_seconds: 180
+
+nodes:
+  router_a:
+    type: router
+    x: 250
+    y: 300
+  router_b:
+    type: router
+    x: 650
+    y: 300
+  mobile:
+    type: fed
+    x: 250
+    y: 360
+
+movement:
+  node: mobile
+  start:
+    x: 250
+    y: 360
+  end:
+    x: 650
+    y: 360
+  hold_end_steps: 8
+
+traffic_probes:
+  - name: router_a_to_mobile
+    kind: ping
+    src: router_a
+    dst: mobile
+    count: 1
+  - name: router_b_to_mobile
+    kind: ping
+    src: router_b
+    dst: mobile
+    count: 1

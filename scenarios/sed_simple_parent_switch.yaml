@@ -1,0 +1,78 @@
+name: sed_simple_parent_switch
+title: Simple stock OpenThread SED parent-switch benchmark
+description: >
+  Simple stock OTNS parent-switching benchmark for a mobile Sleepy End Device.
+  The scenario uses two routers, one mobile end device, straight-line
+  movement, delayed Router B activation, overlapping intended coverage, and no
+  intentional dead zone. Parent-command output is the primary attachment
+  observation path because ping-based packet probing is not reliable for
+  regular SEDs.
+
+device_profile: sleepy_end_device
+expected_initial_parent: router_a
+
+observability:
+  packet_probe_reliable: false
+  primary_parent_observation: parent_command
+  notes:
+    - Regular SEDs typically do not respond to ping probes in OTNS.
+    - Parent attachment is inferred from the OT CLI parent command and child state.
+    - MLE and IP counters are collected, but packet loss alone is not treated as disconnection.
+
+radio_model:
+  preferred: MutualInterference
+  fallbacks:
+    - MIDisc
+    - Ideal_Rssi
+    - Ideal
+
+timing:
+  settle_seconds: 120
+  step_seconds: 30
+  movement_steps: 36
+
+activation:
+  initial_nodes:
+    - router_a
+    - mobile
+  delayed_node_groups:
+    - delay_seconds: 360
+      nodes:
+        - router_b
+  post_activation_settle_seconds: 240
+
+nodes:
+  router_a:
+    type: router
+    x: 250
+    y: 300
+  router_b:
+    type: router
+    x: 650
+    y: 300
+  mobile:
+    type: sed
+    x: 250
+    y: 360
+
+movement:
+  node: mobile
+  start:
+    x: 250
+    y: 360
+  end:
+    x: 650
+    y: 360
+  hold_end_steps: 8
+
+traffic_probes:
+  - name: router_a_to_mobile
+    kind: ping
+    src: router_a
+    dst: mobile
+    count: 1
+  - name: router_b_to_mobile
+    kind: ping
+    src: router_b
+    dst: mobile
+    count: 1

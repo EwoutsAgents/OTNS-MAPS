@@ -1,5 +1,7 @@
 # Calibrated MED PPS Comparison
 
+This page describes an archived wide-geometry scenario run. The current active MED scenario is `scenarios/med_simple_parent_switch.yaml`; the current repeated simple-geometry PPS matrix is recorded in [`simple_pps_matrix.md`](simple_pps_matrix.md). Do not mix the metrics on this page with simple-scenario metrics without labeling the geometry difference.
+
 ## Purpose
 
 This experiment isolates OpenThread Periodic Parent Search (PPS) in the calibrated MED mobility scenario before any MAPS policy is implemented.

@@ -15,7 +15,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SCENARIO = ROOT / "scenarios" / "baseline_mobile_parent_switch.yaml"
+DEFAULT_SCENARIO = ROOT / "scenarios" / "med_simple_parent_switch.yaml"
 DEFAULT_RESULTS_DIR = ROOT / "results" / "repeated"
 RUNNER = ROOT / "scripts" / "run_baseline.py"
 

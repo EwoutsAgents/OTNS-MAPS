@@ -1,5 +1,7 @@
 # FED and SED PPS Comparison
 
+This page describes archived FED/SED PPS results from the older wide-geometry scenarios. The current active scenarios are `scenarios/fed_simple_parent_switch.yaml` and `scenarios/sed_simple_parent_switch.yaml`; the current repeated simple-geometry PPS matrix is recorded in [`simple_pps_matrix.md`](simple_pps_matrix.md). Do not mix these metrics with simple-scenario metrics without labeling the geometry difference.
+
 This milestone extends the stock OpenThread PPS-off vs PPS-on comparison beyond MED to FED and SED profiles. It does not implement MAPS.
 
 ## Scope

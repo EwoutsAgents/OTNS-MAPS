@@ -1,0 +1,340 @@
+{
+  "aggregate": {
+    "classification_counts": {
+      "no_switch_observed": 9,
+      "switch_observed": 1
+    },
+    "iqr_first_switch_time_s": 0.0,
+    "iqr_packet_delivery_ratio": 0.017045,
+    "iqr_total_outage_s": 0.0,
+    "max_first_switch_time_s": 1560.0,
+    "max_packet_delivery_ratio": 0.022727,
+    "max_switch_count": 1,
+    "max_switch_position_x": 604.286,
+    "max_total_outage_s": 0,
+    "mean_first_switch_time_s": 1560.0,
+    "mean_oscillation_events": 0,
+    "mean_packet_delivery_ratio": 0.006818,
+    "mean_switch_count": 0.1,
+    "mean_switch_position_x": 604.286,
+    "mean_total_outage_s": 0,
+    "median_first_switch_time_s": 1560.0,
+    "median_packet_delivery_ratio": 0.0,
+    "median_switch_count": 0.0,
+    "median_switch_position_x": 604.286,
+    "median_total_outage_s": 0.0,
+    "min_first_switch_time_s": 1560.0,
+    "min_packet_delivery_ratio": 0.0,
+    "min_switch_count": 0,
+    "min_switch_position_x": 604.286,
+    "min_total_outage_s": 0,
+    "oscillation_rate": 0.0,
+    "oscillation_runs": 0,
+    "outage_sample_size": 10,
+    "pdr_sample_size": 10,
+    "run_count": 10,
+    "stddev_first_switch_time_s": 0.0,
+    "stddev_packet_delivery_ratio": 0.010978,
+    "stddev_switch_count": 0.316228,
+    "stddev_switch_position_x": 0.0,
+    "stddev_total_outage_s": 0.0,
+    "switch_observed_rate": 0.1,
+    "switch_observed_runs": 1,
+    "switch_position_sample_size": 1,
+    "switch_time_sample_size": 1
+  },
+  "runs": [
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_001/baseline_run_20260710T174639Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 1560.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.0,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "switch_observed",
+      "sample_count": 44,
+      "switch_count": 1,
+      "switch_position_x": 604.286,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    },
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_002/baseline_run_20260710T174642Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 1,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.0,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "no_switch_observed",
+      "sample_count": 44,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    },
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_003/baseline_run_20260710T174645Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 1,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.0,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "no_switch_observed",
+      "sample_count": 44,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    },
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_004/baseline_run_20260710T174648Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 2,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.022727,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "no_switch_observed",
+      "sample_count": 44,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    },
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_005/baseline_run_20260710T174651Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 1,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.0,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "no_switch_observed",
+      "sample_count": 44,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    },
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_006/baseline_run_20260710T174654Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 1,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.0,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "no_switch_observed",
+      "sample_count": 44,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    },
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_007/baseline_run_20260710T174656Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 1,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.0,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "no_switch_observed",
+      "sample_count": 44,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    },
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_008/baseline_run_20260710T174658Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 2,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.022727,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "no_switch_observed",
+      "sample_count": 44,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    },
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_009/baseline_run_20260710T174701Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 1,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.0,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "no_switch_observed",
+      "sample_count": 44,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    },
+    {
+      "device_profile": "sleepy_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260710T174639Z/run_010/baseline_run_20260710T174705Z.csv",
+      "final_observed_parent": "router_a",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 2,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "observability_note": "Packet probes are marked unreliable for this run; connectivity is derived from parent/state observation.",
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.022727,
+      "packet_probe_reliable": false,
+      "parent_ids_seen": [
+        "router_a"
+      ],
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "parent_command",
+      "result_classification": "no_switch_observed",
+      "sample_count": 44,
+      "switch_count": 0,
+      "switch_position_x": null,
+      "thread_device_type": "sed",
+      "total_outage_s": 0
+    }
+  ]
+}
