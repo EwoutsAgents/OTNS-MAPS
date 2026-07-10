@@ -101,8 +101,9 @@ Each directory contains CSV, summary JSON, replay, replay metadata JSON, MP4, no
 | Packet delivery ratio | 0.833333 | 0.5 | PPS-on had lower aggregate ping delivery despite no inferred outage |
 | Oscillation events | 0 | 0 | No A-B-A oscillation observed |
 | Parent sequence | router_a, router_b | router_a, router_b | Same compact parent sequence |
-| MLE Parent Changes | not parsed | not parsed | Raw counters are retained in CSV/logs |
-| MLE Attach Attempts | in CSV/logs | in CSV/logs | Analyze directly from `mle_counters_json` if needed |
+| MLE Parent Changes | 1 | 1 | Both MLE counters report one parent change |
+| MLE Attach Attempts | 3 | 1 | PPS-off needed more total attach attempts |
+| MLE Better Parent Attach Attempts | 0 | 1 | PPS-on records one better-parent attach attempt |
 | Result classification | switch_observed | switch_observed | Both runs observed one switch |
 
 ## Interpretation
@@ -115,7 +116,7 @@ The aggregate packet delivery ratio was lower for PPS-on because the run had few
 
 - This is a single-run comparison, not a repeated experiment.
 - The default build classification is based on compile-time configuration inspection, not a separate benchmark arm.
-- MLE Parent Changes are not yet promoted to first-class analysis metrics; raw MLE counters and trace logs are preserved.
+- MLE counters are now promoted from `mle_counters_json`, but the interpretation still depends on OpenThread CLI counter semantics.
 - Replay rendering worked, but the MP4 is visual evidence only. The CSV and JSON summaries are the metric sources.
 
 ## Next step

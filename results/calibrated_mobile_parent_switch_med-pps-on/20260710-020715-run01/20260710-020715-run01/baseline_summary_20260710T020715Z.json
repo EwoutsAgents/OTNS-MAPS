@@ -7,6 +7,9 @@
   "firmware_variant": "stock-med-pps-on",
   "first_switch_time_s": 1100.0,
   "initial_observed_parent": "router_a",
+  "mle_attach_attempts": 1,
+  "mle_better_parent_attach_attempts": 1,
+  "mle_parent_changes": 1,
   "mock": false,
   "node_binary_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim/build/stock-med-pps-on/bin/ot-cli-mtd",
   "node_log_files": [
@@ -49,6 +52,7 @@
       "to_parent": "router_b"
     }
   ],
+  "switch_position_x": 715.385,
   "thread_device_type": "med",
   "total_outage_s": 0.0
 }

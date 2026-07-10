@@ -67,6 +67,17 @@ def to_bool(value: str | None) -> bool:
     return str(value).lower() in {"1", "true", "yes"}
 
 
+def counter_value(row: dict[str, str], key: str) -> int | None:
+    try:
+        counters = json.loads(row.get("mle_counters_json") or "{}")
+    except json.JSONDecodeError:
+        return None
+    value = counters.get(key)
+    if value in (None, "", "None"):
+        return None
+    return int(value)
+
+
 def summarize_run(path: Path) -> dict[str, Any]:
     rows = load_rows(path)
     if not rows:
@@ -115,6 +126,9 @@ def summarize_run(path: Path) -> dict[str, Any]:
 
     initial_observed_parent = rows[0].get("parent_node_guess")
     final_observed_parent = rows[-1].get("parent_node_guess")
+    mle_parent_changes = counter_value(rows[-1], "Parent Changes")
+    mle_attach_attempts = counter_value(rows[-1], "Attach Attempts")
+    mle_better_parent_attach_attempts = counter_value(rows[-1], "Better Parent Attach Attempts")
     if switch_times:
         result_classification = "switch_observed"
     elif initial_observed_parent and final_observed_parent:
@@ -136,9 +150,16 @@ def summarize_run(path: Path) -> dict[str, Any]:
         "result_classification": result_classification,
         "switch_count": len(switch_times),
         "first_switch_time_s": switch_times[0] if switch_times else None,
+        "switch_position_x": next(
+            (to_float(row.get("mobile_x")) for row in rows if to_bool(row.get("parent_switch"))),
+            None,
+        ),
         "total_outage_s": total_outage_s,
         "packet_delivery_ratio": round(total_rx / total_tx, 6) if total_tx else None,
         "oscillation_events": oscillations,
+        "mle_parent_changes": mle_parent_changes,
+        "mle_attach_attempts": mle_attach_attempts,
+        "mle_better_parent_attach_attempts": mle_better_parent_attach_attempts,
         "parent_ids_seen": sorted({value for value in parent_sequence if value}),
         "plot_note": "Install matplotlib to add parent/time and position/time plots.",
         "observability_note": (

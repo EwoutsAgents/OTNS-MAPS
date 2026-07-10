@@ -39,6 +39,18 @@ For a plain MTD build that would resolve to disabled. The local simulation platf
 
 The existing `ot-rfsim/build/latest/compile_commands.json` does not pass an explicit `-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=...` for `ot-cli-mtd`, so the current/default MED build resolves through the simulation platform override to PPS enabled.
 
+Related PPS defaults in `openthread/src/core/config/parent_search.h`:
+
+```c
+#define OPENTHREAD_CONFIG_PARENT_SEARCH_CHECK_INTERVAL (9 * 60)
+#define OPENTHREAD_CONFIG_PARENT_SEARCH_BACKOFF_INTERVAL (10 * 60 * 60)
+#define OPENTHREAD_CONFIG_PARENT_SEARCH_RSS_THRESHOLD -65
+#define OPENTHREAD_CONFIG_PARENT_SEARCH_RESELECT_TIMEOUT (90 * 60)
+#define OPENTHREAD_CONFIG_PARENT_SEARCH_RSS_MARGIN 7
+```
+
+The PPS-off/on builds in this milestone change only `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE`; the interval, threshold, timeout, margin, and backoff values remain stock defaults.
+
 Default classification:
 
 ```json

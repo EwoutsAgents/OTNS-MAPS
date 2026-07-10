@@ -23,6 +23,10 @@ Stock OTNS parent-switching benchmark variant that stages Router B into the topo
 - Final observed parent: `router_b`
 - Switch count: `1`
 - First switch time (s): `1100.0`
+- Switch position x: `715.385`
+- MLE parent changes: `1`
+- MLE attach attempts: `1`
+- MLE better parent attach attempts: `1`
 - Packet delivery ratio: `0.5`
 - Total outage (s): `0.0`
 - Result classification: `switch_observed`

@@ -453,8 +453,14 @@ def tracked_results_manifest(
         "final_observed_parent": summary.get("final_observed_parent"),
         "switch_count": summary.get("switch_count"),
         "first_switch_time_s": summary.get("first_switch_time_s"),
+        "switch_position_x": summary.get("switch_position_x"),
         "packet_delivery_ratio": summary.get("packet_delivery_ratio"),
         "total_outage_s": summary.get("total_outage_s"),
+        "oscillation_events": summary.get("oscillation_events"),
+        "parent_sequence": summary.get("parent_sequence"),
+        "mle_parent_changes": summary.get("mle_parent_changes"),
+        "mle_attach_attempts": summary.get("mle_attach_attempts"),
+        "mle_better_parent_attach_attempts": summary.get("mle_better_parent_attach_attempts"),
         "result_classification": summary.get("result_classification"),
     }
 
@@ -496,8 +502,14 @@ def write_tracked_results_readme(
             f'- Final observed parent: `{manifest["final_observed_parent"]}`',
             f'- Switch count: `{manifest["switch_count"]}`',
             f'- First switch time (s): `{manifest["first_switch_time_s"]}`',
+            f'- Switch position x: `{manifest["switch_position_x"]}`',
             f'- Packet delivery ratio: `{manifest["packet_delivery_ratio"]}`',
             f'- Total outage (s): `{manifest["total_outage_s"]}`',
+            f'- Oscillation events: `{manifest["oscillation_events"]}`',
+            f'- Parent sequence: `{manifest["parent_sequence"]}`',
+            f'- MLE parent changes: `{manifest["mle_parent_changes"]}`',
+            f'- MLE attach attempts: `{manifest["mle_attach_attempts"]}`',
+            f'- MLE better parent attach attempts: `{manifest["mle_better_parent_attach_attempts"]}`',
             f'- Result classification: `{manifest["result_classification"]}`',
             "",
             "## Node Logs",
@@ -643,6 +655,13 @@ def parse_key_value_lines(lines: list[str]) -> dict[str, str]:
         key, value = line.split(":", 1)
         data[key.strip()] = value.strip()
     return data
+
+
+def counter_int(counters: dict[str, Any], key: str) -> int | None:
+    value = counters.get(key)
+    if value in (None, "", "None"):
+        return None
+    return int(value)
 
 
 def parse_ping_summary(lines: list[str]) -> dict[str, Any]:
@@ -1287,6 +1306,7 @@ def build_summary(
     compact_parent_sequence = [value for index, value in enumerate(parent_sequence) if index == 0 or value != parent_sequence[index - 1]]
     initial_observed_parent = samples[0].get("parent_node_guess") if samples else None
     final_observed_parent = samples[-1].get("parent_node_guess") if samples else None
+    final_mle_counters = samples[-1].get("mle_counters", {}) if samples else {}
     expected_initial_parent = scenario.get("expected_initial_parent")
     if expected_initial_parent and initial_observed_parent != expected_initial_parent:
         result_classification = "initial_parent_unexpected"
@@ -1319,10 +1339,14 @@ def build_summary(
         "result_classification": result_classification,
         "switch_count": len(switch_events),
         "first_switch_time_s": switch_events[0]["sim_time_s"] if switch_events else None,
+        "switch_position_x": samples[switch_events[0]["sample_index"]].get("mobile_x") if switch_events else None,
         "switch_events": switch_events,
         "total_outage_s": total_outage_s,
         "packet_delivery_ratio": round(pdr, 6) if pdr is not None else None,
         "oscillation_events": oscillations,
+        "mle_parent_changes": counter_int(final_mle_counters, "Parent Changes"),
+        "mle_attach_attempts": counter_int(final_mle_counters, "Attach Attempts"),
+        "mle_better_parent_attach_attempts": counter_int(final_mle_counters, "Better Parent Attach Attempts"),
         "notes": [*scenario.get("observability", {}).get("notes", []), *notes],
     }
 
