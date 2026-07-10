@@ -8,7 +8,7 @@ The active benchmark matrix uses three simple parent-switch scenarios:
 
 ## Simple Parent Switch
 
-A simple parent-switch scenario has two routers, one mobile end device, straight-line movement, delayed Router B activation, overlapping intended coverage, and no intentional dead zone.
+A simple parent-switch scenario has two routers, one mobile end device, straight-line movement, delayed Router B activation, overlapping intended coverage, and no intentional dead zone. The mobile starts before Router A, moves beyond Router B, and dwells at the end to give late or sticky parent switching behavior time to appear.
 
 Router A and the mobile end device are created first. The mobile device is allowed to attach to Router A, Router B is introduced after a delay, a post-activation settle period runs, and only then does movement toward Router B begin. All active scenarios keep `expected_initial_parent: router_a`.
 
@@ -20,20 +20,24 @@ All active simple scenarios use the same intended overlapping-coverage geometry:
 |---|---:|---:|
 | Router A | 250 | 300 |
 | Router B | 650 | 300 |
-| Mobile start | 250 | 360 |
-| Mobile end | 650 | 360 |
+| Mobile start | 150 | 360 |
+| Mobile end | 750 | 360 |
 
-This closer spacing replaces the older wider geometry. The moving end device should theoretically have at least one router in range throughout the path.
+The moving end device should theoretically have at least one router in range throughout the path while still traversing from before Router A to beyond Router B.
+
+OTNS uses the `MeterPerUnit` radio parameter for coordinate scaling. The scenarios assume the default `MeterPerUnit = 0.1`, so one coordinate unit is treated as 0.1 m unless the radio parameter is overridden. This default is recorded in the local OTNS source at `radiomodel/model_params.go` and listed by `cli/README.md`.
+
+The mobile path from x=150 to x=750 spans 600 coordinate units, which is 60 m at `MeterPerUnit = 0.1`. With 12 one-second movement steps, the target movement speed is 5 m/s.
 
 ## Timing
 
-| Scenario | Step seconds | Movement steps | Router B delay (s) | Post-activation settle (s) | Hold end steps |
-|---|---:|---:|---:|---:|---:|
-| MED simple | 20 | 40 | 300 | 180 | 8 |
-| FED simple | 20 | 40 | 300 | 180 | 8 |
-| SED simple | 30 | 36 | 360 | 240 | 8 |
+| Scenario | Step seconds | Movement steps | Router B delay (s) | Post-activation settle (s) | Hold end steps | End dwell (s) |
+|---|---:|---:|---:|---:|---:|---:|
+| MED simple | 1 | 12 | 300 | 180 | 320 | 320 |
+| FED simple | 1 | 12 | 300 | 180 | 320 | 320 |
+| SED simple | 1 | 12 | 300 | 180 | 320 | 320 |
 
-The SED scenario keeps a slower sampling cadence and longer delayed-router timing because regular SED parent observation is less direct than MED/FED packet probing.
+The SED scenario now uses the same activation timing as MED/FED so the repeated PPS matrix uses a consistent geometry and movement schedule across profiles. SED observability remains different because regular SED packet probing is unreliable.
 
 ## Observability
 
@@ -66,4 +70,4 @@ The original `baseline_mobile_parent_switch` scenario was a historical smoke/ref
 
 ## Geometry Compatibility
 
-The simple scenarios use closer router spacing and overlapping intended coverage. Results generated under the old wider scenario geometry are historical and should not be mixed with new simple-scenario results without clearly labeling the geometry difference.
+The active simple scenarios use the extended 5 m/s path described above. Results generated under previous wider or shorter simple geometry are historical and should not be mixed with current simple-scenario results without clearly labeling the geometry difference.

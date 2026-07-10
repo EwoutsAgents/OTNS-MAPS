@@ -631,11 +631,12 @@ def export_tracked_results(
 
 
 def linear_positions(start: dict[str, float], end: dict[str, float], steps: int) -> list[tuple[float, float]]:
-    if steps < 2:
+    if steps < 1:
         return [(float(start["x"]), float(start["y"]))]
+    sample_count = steps + 1
     positions = []
-    for index in range(steps):
-        fraction = index / (steps - 1)
+    for index in range(sample_count):
+        fraction = index / steps
         x = start["x"] + (end["x"] - start["x"]) * fraction
         y = start["y"] + (end["y"] - start["y"]) * fraction
         positions.append((round(float(x), 3), round(float(y), 3)))
