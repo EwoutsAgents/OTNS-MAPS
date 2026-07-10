@@ -894,13 +894,14 @@ class RealBenchmarkRunner:
             for index, (x, y) in enumerate(positions):
                 mobile_id = named_ids["mobile"]
                 session.command_output(f"move {mobile_id} {int(round(x))} {int(round(y))}")
+                parent_probe: dict[str, Any] = self._send_mobile_to_parent_probe(session, mobile_id)
                 for probe in self.scenario["traffic_probes"]:
                     src_id = self.node_refs[probe["src"]].node_id
                     dst_id = self.node_refs[probe["dst"]].node_id
                     # OTNS schedules ping results that become visible during the following go interval.
                     session.command_output(f'ping {src_id} {dst_id} count {probe["count"]}')
                 go_output_lines = session.command_output(f'go {timing["step_seconds"]}')
-                sample = self._collect_sample(session, index, x, y, go_output_lines)
+                sample = self._collect_sample(session, index, x, y, go_output_lines, parent_probe)
                 sample["selected_radio_model"] = radio_model
 
                 parent_identity = (
@@ -1023,6 +1024,7 @@ class RealBenchmarkRunner:
         x: float,
         y: float,
         go_output_lines: list[str],
+        parent_probe: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         mobile = self.node_refs["mobile"]
         sim_time_us = int(session.command_output("time")[0])
@@ -1071,6 +1073,10 @@ class RealBenchmarkRunner:
             "parent_age": parent_info.get("Age"),
             "parent_version": parent_info.get("Version"),
             "parent_node_guess": self._parent_name_from_identity(parent_info),
+            "mobile_to_parent_target": (parent_probe or {}).get("target"),
+            "mobile_to_parent_target_rloc16": (parent_probe or {}).get("target_rloc16"),
+            "mobile_to_parent_target_extaddr": (parent_probe or {}).get("target_extaddr"),
+            "mobile_to_parent_result": {},
             "ip_counters": ip_counters,
             "mle_counters": mle_counters,
             "probe_results": {},
@@ -1096,7 +1102,44 @@ class RealBenchmarkRunner:
                 },
             )
 
+        sample["mobile_to_parent_result"] = ping_results_by_source.get(
+            mobile.node_id,
+            {
+                "tx": None,
+                "rx": None,
+                "loss_pct": None,
+                "rtt_min_ms": None,
+                "rtt_avg_ms": None,
+                "rtt_max_ms": None,
+            },
+        )
+
         return sample
+
+    def _send_mobile_to_parent_probe(self, session: OtnsSession, mobile_id: int) -> dict[str, Any]:
+        try:
+            parent_lines = session.command_output(f'node {mobile_id} "parent"')
+        except OtnsSessionError as exc:
+            if "InvalidState" not in str(exc):
+                raise
+            return {"target": None, "target_rloc16": None, "target_extaddr": None}
+
+        parent_info = parse_key_value_lines(parent_lines)
+        parent_name = self._parent_name_from_identity(parent_info)
+        if not parent_name:
+            return {
+                "target": None,
+                "target_rloc16": parent_info.get("Rloc") or parent_info.get("RLOC16"),
+                "target_extaddr": parent_info.get("Ext Addr"),
+            }
+
+        target_ref = self.node_refs[parent_name]
+        session.command_output(f"ping {mobile_id} {target_ref.node_id} count 1")
+        return {
+            "target": parent_name,
+            "target_rloc16": target_ref.rloc16,
+            "target_extaddr": target_ref.extaddr,
+        }
 
     def _connectivity_ok(self, sample: dict[str, Any]) -> bool:
         packet_probe_reliable = self.observability.get("packet_probe_reliable", True)
@@ -1162,6 +1205,7 @@ class MockBenchmarkRunner:
                 mobile_state = "child"
                 ping_a_rx = 1 if dist_a < 330 else 0
                 ping_b_rx = 1 if dist_b < 330 else 0
+            parent_probe_rx = 1 if mobile_state == "child" else 0
 
             if previous_parent and parent != previous_parent:
                 switch_events.append(
@@ -1204,6 +1248,19 @@ class MockBenchmarkRunner:
                 "parent_age": 5,
                 "parent_version": 4,
                 "parent_node_guess": parent,
+                "mobile_to_parent_target": parent,
+                "mobile_to_parent_target_rloc16": "0x1000" if parent == "router_a" else "0x2000",
+                "mobile_to_parent_target_extaddr": (
+                    "aa00aa00aa00aa00" if parent == "router_a" else "bb00bb00bb00bb00"
+                ),
+                "mobile_to_parent_result": {
+                    "tx": 1,
+                    "rx": parent_probe_rx,
+                    "loss_pct": 0.0 if parent_probe_rx else 100.0,
+                    "rtt_min_ms": 8.0 if parent_probe_rx else None,
+                    "rtt_avg_ms": 10.0 if parent_probe_rx else None,
+                    "rtt_max_ms": 12.0 if parent_probe_rx else None,
+                },
                 "ip_counters": {
                     "TxSuccess": str(index + ping_a_rx + ping_b_rx),
                     "TxFailed": str(max(0, 2 - ping_a_rx - ping_b_rx)),
@@ -1277,6 +1334,15 @@ def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "parent_link_quality_out": sample["parent_link_quality_out"],
             "parent_age": sample["parent_age"],
             "parent_version": sample["parent_version"],
+            "mobile_to_parent_target": sample.get("mobile_to_parent_target"),
+            "mobile_to_parent_target_rloc16": sample.get("mobile_to_parent_target_rloc16"),
+            "mobile_to_parent_target_extaddr": sample.get("mobile_to_parent_target_extaddr"),
+            "mobile_to_parent_tx": sample.get("mobile_to_parent_result", {}).get("tx"),
+            "mobile_to_parent_rx": sample.get("mobile_to_parent_result", {}).get("rx"),
+            "mobile_to_parent_loss_pct": sample.get("mobile_to_parent_result", {}).get("loss_pct"),
+            "mobile_to_parent_rtt_min_ms": sample.get("mobile_to_parent_result", {}).get("rtt_min_ms"),
+            "mobile_to_parent_rtt_avg_ms": sample.get("mobile_to_parent_result", {}).get("rtt_avg_ms"),
+            "mobile_to_parent_rtt_max_ms": sample.get("mobile_to_parent_result", {}).get("rtt_max_ms"),
             "parent_switch": sample["parent_switch"],
             "connectivity_ok": sample["connectivity_ok"],
             "selected_radio_model": sample["selected_radio_model"],
@@ -1318,6 +1384,9 @@ def build_summary(
 ) -> dict[str, Any]:
     total_tx = 0
     total_rx = 0
+    parent_probe_total_tx = 0
+    parent_probe_total_rx = 0
+    parent_probe_rtt_values: list[float] = []
     parent_sequence = [sample.get("parent_node_guess") for sample in samples if sample.get("parent_node_guess")]
     oscillations = 0
     for left, middle, right in zip(parent_sequence, parent_sequence[1:], parent_sequence[2:]):
@@ -1328,8 +1397,14 @@ def build_summary(
         for probe in sample["probe_results"].values():
             total_tx += int(probe["tx"] or 0)
             total_rx += int(probe["rx"] or 0)
+        parent_probe = sample.get("mobile_to_parent_result", {})
+        parent_probe_total_tx += int(parent_probe.get("tx") or 0)
+        parent_probe_total_rx += int(parent_probe.get("rx") or 0)
+        if parent_probe.get("rtt_avg_ms") is not None:
+            parent_probe_rtt_values.append(float(parent_probe["rtt_avg_ms"]))
 
     pdr = (total_rx / total_tx) if total_tx else None
+    parent_probe_pdr = (parent_probe_total_rx / parent_probe_total_tx) if parent_probe_total_tx else None
     compact_parent_sequence = [value for index, value in enumerate(parent_sequence) if index == 0 or value != parent_sequence[index - 1]]
     initial_observed_parent = samples[0].get("parent_node_guess") if samples else None
     final_observed_parent = samples[-1].get("parent_node_guess") if samples else None
@@ -1370,6 +1445,16 @@ def build_summary(
         "switch_events": switch_events,
         "total_outage_s": total_outage_s,
         "packet_delivery_ratio": round(pdr, 6) if pdr is not None else None,
+        "parent_probe_enabled": True,
+        "parent_probe_interval_s": scenario.get("timing", {}).get("step_seconds"),
+        "parent_probe_total_tx": parent_probe_total_tx,
+        "parent_probe_total_rx": parent_probe_total_rx,
+        "parent_probe_delivery_ratio": round(parent_probe_pdr, 6) if parent_probe_pdr is not None else None,
+        "parent_probe_mean_rtt_avg_ms": (
+            round(sum(parent_probe_rtt_values) / len(parent_probe_rtt_values), 6)
+            if parent_probe_rtt_values
+            else None
+        ),
         "oscillation_events": oscillations,
         "mle_parent_changes": counter_int(final_mle_counters, "Parent Changes"),
         "mle_attach_attempts": counter_int(final_mle_counters, "Attach Attempts"),

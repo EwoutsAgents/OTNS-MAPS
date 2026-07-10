@@ -102,11 +102,11 @@ The active benchmark matrix uses three stock scenarios:
 - `scenarios/fed_simple_parent_switch.yaml` for a Full End Device variant that uses OTNS's FTD executable path
 - `scenarios/sed_simple_parent_switch.yaml` for a Sleepy End Device variant that treats the `parent` command as the primary attachment observation path
 
-The simple scenarios use closer router spacing and overlapping intended coverage: Router A at `(250, 300)`, Router B at `(650, 300)`, and a mobile path from `(150, 360)` to `(750, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 60 m path; 12 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The moving end device should theoretically have at least one router in range along the full path. See [`docs/scenarios.md`](docs/scenarios.md).
+The simple scenarios use closer router spacing and overlapping intended coverage and the runner records a 1 Hz mobile-to-current-parent ping as a reachability/RTT probe, not an RSSI measurement: Router A at `(250, 300)`, Router B at `(650, 300)`, and a mobile path from `(150, 360)` to `(750, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 60 m path; 12 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The moving end device should theoretically have at least one router in range along the full path. See [`docs/scenarios.md`](docs/scenarios.md).
 
 Older committed artifacts may reference previous scenario names: `baseline_mobile_parent_switch`, `calibrated_mobile_parent_switch`, `fed_mobile_parent_switch`, and `sed_mobile_parent_switch`. Those old wider-geometry results are historical and should not be mixed with new simple-scenario results without labeling the geometry difference.
 
-The repository also carries Periodic Parent Search comparisons. PPS is OpenThread's built-in periodic search for a better parent while a child remains attached. These comparisons are intentionally stock OpenThread only: the PPS-off and PPS-on variants differ only by the compile-time value of `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE`. The current/default local MED build is a discovery result, not a third benchmark arm; in this checkout it is classified as equivalent to `stock-med-pps-on`. See [`docs/pps_build_variants.md`](docs/pps_build_variants.md), [`docs/simple_pps_matrix.md`](docs/simple_pps_matrix.md), and the archived wide-geometry comparisons in [`docs/pps_med_comparison.md`](docs/pps_med_comparison.md), [`docs/pps_med_repeated_comparison.md`](docs/pps_med_repeated_comparison.md), and [`docs/pps_fed_sed_comparison.md`](docs/pps_fed_sed_comparison.md).
+The repository also carries Periodic Parent Search comparisons. PPS is OpenThread's built-in periodic search for a better parent while a child remains attached. These comparisons are intentionally stock OpenThread only: PPS-off disables `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE`, while active PPS-on enables it and sets `OPENTHREAD_CONFIG_PARENT_SEARCH_CHECK_INTERVAL=30`. The current/default local MED build is a discovery result, not a third benchmark arm; in this checkout it is PPS-enabled by default config but does not imply the tuned 30s interval unless built with the explicit PPS-on flags. See [`docs/pps_build_variants.md`](docs/pps_build_variants.md), [`docs/simple_pps_matrix.md`](docs/simple_pps_matrix.md), and the archived wide-geometry comparisons in [`docs/pps_med_comparison.md`](docs/pps_med_comparison.md), [`docs/pps_med_repeated_comparison.md`](docs/pps_med_repeated_comparison.md), and [`docs/pps_fed_sed_comparison.md`](docs/pps_fed_sed_comparison.md).
 
 ## Run
 
@@ -220,7 +220,7 @@ python3 scripts/run_baseline.py \
   --node-binary-path /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim/build/stock-med-pps-off/bin/ot-cli-mtd
 ```
 
-Repeat with `--artifact-name med-pps-on`, `--firmware-variant stock-med-pps-on`, `--parent-search-config enabled`, and the PPS-on MTD binary.
+Repeat with `--artifact-name med-pps-on`, `--firmware-variant stock-med-pps-on`, `--parent-search-config enabled`, and the PPS-on-30s MTD binary.
 
 Run the repeated simple MED PPS comparison with the same explicit binaries and metadata flags, using `--repeat-count 10` and artifact names `med-pps-off-repeated` and `med-pps-on-repeated`.
 

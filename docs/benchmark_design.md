@@ -16,7 +16,7 @@ The active benchmark matrix uses three simple parent-switch scenarios:
 
 All three use two routers, one mobile end device, straight-line movement, delayed Router B activation, overlapping intended coverage, and no intentional dead zone. Router A is placed at `(250, 300)`, Router B at `(650, 300)`, and the mobile path runs from `(150, 360)` to `(750, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 60 m path; 12 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The moving end device should theoretically have at least one router in range throughout the path.
 
-The scenario details, activation timing, device observability, and old-name compatibility notes are maintained in [`scenarios.md`](scenarios.md).
+The scenario details, activation timing, device observability, and old-name compatibility notes are maintained in [`scenarios.md`](scenarios.md). The runner also sends a 1 Hz mobile-to-current-parent ping when a parent resolves to a known router; this records parent-path reachability and RTT, not RSSI. For SED, parent-command output remains the primary attachment signal.
 
 Older committed artifacts may reference the previous scenario names `baseline_mobile_parent_switch`, `calibrated_mobile_parent_switch`, `fed_mobile_parent_switch`, and `sed_mobile_parent_switch`. The original baseline scenario was a historical smoke/reference scenario and is no longer part of the active benchmark matrix. Results generated under the old wider geometry are historical and should not be mixed with new simple-scenario results without labeling the geometry difference.
 
@@ -24,10 +24,10 @@ Older committed artifacts may reference the previous scenario names `baseline_mo
 
 Periodic Parent Search (PPS) is OpenThread's built-in mechanism that lets an attached child periodically search for a better parent. The MED PPS milestone isolates this stock behavior before any MAPS policy is implemented.
 
-The clean comparison is:
+The active comparison is:
 
-- `stock-med-pps-off`
-- `stock-med-pps-on`
+- PPS off: `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=0`
+- PPS on: `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1` and `OPENTHREAD_CONFIG_PARENT_SEARCH_CHECK_INTERVAL=30`
 
 The current/default local MED build is classified separately as a discovery result. In the validated local checkout, the default MTD build is equivalent by configuration to `stock-med-pps-on` because `openthread/examples/platforms/simulation/openthread-core-simulation-config.h` defines `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE 1` when no explicit build flag overrides it.
 

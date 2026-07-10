@@ -1,6 +1,6 @@
 # OpenThread PPS Build Variants
 
-This note records how the local OTNS/OpenThread checkout controls Periodic Parent Search (PPS) for the calibrated MED benchmark.
+This note records how the local OTNS/OpenThread checkout controls Periodic Parent Search (PPS) for the active parent-switch benchmarks.
 
 ## Purpose
 
@@ -52,7 +52,7 @@ Related PPS defaults in `openthread/src/core/config/parent_search.h`:
 #define OPENTHREAD_CONFIG_PARENT_SEARCH_RSS_MARGIN 7
 ```
 
-The PPS-off/on builds in this milestone change only `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE`; the interval, threshold, timeout, margin, and backoff values remain stock defaults.
+The active PPS-off builds keep PPS disabled. The active PPS-on builds are tuned stock OpenThread variants: they set `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1` and `OPENTHREAD_CONFIG_PARENT_SEARCH_CHECK_INTERVAL=30`. Older archived PPS-on artifacts used the stock/default 540 s check interval and should not be mixed with the active 30 s PPS-on results without labeling the build difference.
 
 Default classification:
 
@@ -134,6 +134,8 @@ COMMON_OPTS=(
 )
 ```
 
+### PPS disabled
+
 PPS disabled:
 
 ```bash
@@ -150,7 +152,9 @@ OTNS_NODE_TYPE=stock-med-pps-off cmake -G "Unix Makefiles" \
 make -j"$(getconf _NPROCESSORS_ONLN)" ot-cli-mtd
 ```
 
-PPS enabled:
+### PPS enabled 30s
+
+PPS enabled with 30 s check interval:
 
 ```bash
 cd /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim
@@ -160,11 +164,13 @@ cd build/stock-med-pps-on
 OTNS_NODE_TYPE=stock-med-pps-on cmake -G "Unix Makefiles" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
   "${COMMON_OPTS[@]}" \
-  -DCMAKE_C_FLAGS=-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 \
-  -DCMAKE_CXX_FLAGS=-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 \
+  -DCMAKE_C_FLAGS="-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 -DOPENTHREAD_CONFIG_PARENT_SEARCH_CHECK_INTERVAL=30" \
+  -DCMAKE_CXX_FLAGS="-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 -DOPENTHREAD_CONFIG_PARENT_SEARCH_CHECK_INTERVAL=30" \
   ../..
 make -j"$(getconf _NPROCESSORS_ONLN)" ot-cli-mtd
 ```
+
+### FED PPS disabled
 
 FED PPS disabled:
 
@@ -182,7 +188,9 @@ OTNS_NODE_TYPE=stock-fed-pps-off cmake -G "Unix Makefiles" \
 make -j"$(getconf _NPROCESSORS_ONLN)" ot-cli-ftd
 ```
 
-FED PPS enabled:
+### FED PPS enabled 30s
+
+FED PPS enabled with 30 s check interval:
 
 ```bash
 cd /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim
@@ -192,8 +200,8 @@ cd build/stock-fed-pps-on
 OTNS_NODE_TYPE=stock-fed-pps-on cmake -G "Unix Makefiles" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
   "${COMMON_OPTS[@]}" \
-  -DCMAKE_C_FLAGS=-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 \
-  -DCMAKE_CXX_FLAGS=-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 \
+  -DCMAKE_C_FLAGS="-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 -DOPENTHREAD_CONFIG_PARENT_SEARCH_CHECK_INTERVAL=30" \
+  -DCMAKE_CXX_FLAGS="-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 -DOPENTHREAD_CONFIG_PARENT_SEARCH_CHECK_INTERVAL=30" \
   ../..
 make -j"$(getconf _NPROCESSORS_ONLN)" ot-cli-ftd
 ```
@@ -204,9 +212,9 @@ Build hashes:
 
 ```text
 167df12b5aafd643d50e25f921d25fd7858b7b5476cc39ac26d71a735ced159b  ot-rfsim/build/stock-med-pps-off/bin/ot-cli-mtd
-cd816d5c84a0b98298dfa0e1599a8146949bb0148b5c642eff6b203049b6f075  ot-rfsim/build/stock-med-pps-on/bin/ot-cli-mtd
+d954e5375dd9e333e73b494af4bf9804d4df7a9faba692618a2e42901528b806  ot-rfsim/build/stock-med-pps-on/bin/ot-cli-mtd
 6349ed8af27f3b26e71e0e320a5cea609f904dc9dffebf14eeabfffc4366c850  ot-rfsim/build/stock-fed-pps-off/bin/ot-cli-ftd
-e93da597b29e00cf89913e8f633d63058938ea2212874ad9feba0bb695fca73b  ot-rfsim/build/stock-fed-pps-on/bin/ot-cli-ftd
+d112c92e35a76dab58824d4f936641333d24df1e7e1901a7b8c44ec00c83ee06  ot-rfsim/build/stock-fed-pps-on/bin/ot-cli-ftd
 3011a33cc285ad7959de4d410fe1e2f44ff7c74023b76148909d6a102a4e5174  ot-rfsim/ot-versions/ot-cli-mtd
 ```
 
@@ -216,7 +224,7 @@ Compile command verification:
 rg -n "OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=0" \
   /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim/build/stock-med-pps-off/compile_commands.json
 
-rg -n "OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1" \
+rg -n "OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1|OPENTHREAD_CONFIG_PARENT_SEARCH_CHECK_INTERVAL=30" \
   /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim/build/stock-med-pps-on/compile_commands.json
 ```
 

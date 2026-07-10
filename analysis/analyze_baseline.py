@@ -94,12 +94,24 @@ def summarize_run(path: Path) -> dict[str, Any]:
 
     total_tx = 0.0
     total_rx = 0.0
+    parent_probe_tx = 0.0
+    parent_probe_rx = 0.0
+    parent_probe_rtt_avg_values: list[float] = []
     for row in rows:
         for key, value in row.items():
             if key.endswith("_tx"):
-                total_tx += float(value or 0)
+                if key == "mobile_to_parent_tx":
+                    parent_probe_tx += float(value or 0)
+                else:
+                    total_tx += float(value or 0)
             elif key.endswith("_rx"):
-                total_rx += float(value or 0)
+                if key == "mobile_to_parent_rx":
+                    parent_probe_rx += float(value or 0)
+                else:
+                    total_rx += float(value or 0)
+        parent_probe_rtt_avg = to_float(row.get("mobile_to_parent_rtt_avg_ms"))
+        if parent_probe_rtt_avg is not None:
+            parent_probe_rtt_avg_values.append(parent_probe_rtt_avg)
 
     outages = []
     outage_start = None
@@ -156,6 +168,11 @@ def summarize_run(path: Path) -> dict[str, Any]:
         ),
         "total_outage_s": total_outage_s,
         "packet_delivery_ratio": round(total_rx / total_tx, 6) if total_tx else None,
+        "parent_probe_enabled": "mobile_to_parent_tx" in rows[0],
+        "parent_probe_total_tx": int(parent_probe_tx),
+        "parent_probe_total_rx": int(parent_probe_rx),
+        "parent_probe_delivery_ratio": round(parent_probe_rx / parent_probe_tx, 6) if parent_probe_tx else None,
+        "parent_probe_mean_rtt_avg_ms": _mean_or_none(parent_probe_rtt_avg_values),
         "oscillation_events": oscillations,
         "mle_parent_changes": mle_parent_changes,
         "mle_attach_attempts": mle_attach_attempts,
@@ -229,6 +246,8 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
     switch_positions = [summary.get("switch_position_x") for summary in summaries]
     outage_values = [summary.get("total_outage_s") for summary in summaries]
     pdr_values = [summary.get("packet_delivery_ratio") for summary in summaries]
+    parent_probe_pdr_values = [summary.get("parent_probe_delivery_ratio") for summary in summaries]
+    parent_probe_rtt_values = [summary.get("parent_probe_mean_rtt_avg_ms") for summary in summaries]
     switch_counts = [summary.get("switch_count") or 0 for summary in summaries]
     oscillation_values = [summary.get("oscillation_events") or 0 for summary in summaries]
     classification_counts: dict[str, int] = {}
@@ -275,6 +294,14 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
         "min_packet_delivery_ratio": _min_or_none(pdr_values),
         "max_packet_delivery_ratio": _max_or_none(pdr_values),
         "pdr_sample_size": _sample_size(pdr_values),
+        "mean_parent_probe_delivery_ratio": _mean_or_none(parent_probe_pdr_values),
+        "median_parent_probe_delivery_ratio": _median_or_none(parent_probe_pdr_values),
+        "stddev_parent_probe_delivery_ratio": _stddev_or_none(parent_probe_pdr_values),
+        "parent_probe_pdr_sample_size": _sample_size(parent_probe_pdr_values),
+        "mean_parent_probe_rtt_avg_ms": _mean_or_none(parent_probe_rtt_values),
+        "median_parent_probe_rtt_avg_ms": _median_or_none(parent_probe_rtt_values),
+        "stddev_parent_probe_rtt_avg_ms": _stddev_or_none(parent_probe_rtt_values),
+        "parent_probe_rtt_sample_size": _sample_size(parent_probe_rtt_values),
         "mean_oscillation_events": round(statistics.mean(oscillation_values), 6),
         "oscillation_runs": oscillation_runs,
         "oscillation_rate": round(oscillation_runs / len(summaries), 6),
