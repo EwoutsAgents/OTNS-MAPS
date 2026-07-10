@@ -54,6 +54,11 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--capture-replay", action="store_true", help="Pass through replay capture to each run.")
     parser.add_argument(
+        "--capture-sim-ping-rss",
+        action="store_true",
+        help="Pass through simulator-level per-ping RSS capture to each run.",
+    )
+    parser.add_argument(
         "--replay-dir",
         type=Path,
         default=None,
@@ -198,6 +203,7 @@ def write_results_readme(
         f"- Build config source: `{manifest['build_config_source'] or 'not recorded'}`",
         f"- OpenThread commit: `{manifest['openthread_commit']}`",
         f"- OTNS commit: `{manifest['otns_commit']}`",
+        f"- Simulator ping RSS capture: `{manifest.get('capture_sim_ping_rss', False)}`",
         f"- Aggregate summary: `{'aggregate_summary.json' if aggregate_summary_exists else 'not generated'}`",
         f"- Manifest: `manifest.json`",
     ]
@@ -269,6 +275,8 @@ def main() -> int:
             cmd.append("--capture-replay")
             run_replay_dir = args.replay_dir if args.replay_dir is not None else run_dir / "replay"
             cmd.extend(["--replay-dir", str(run_replay_dir)])
+        if args.capture_sim_ping_rss:
+            cmd.append("--capture-sim-ping-rss")
         cmd.extend(
             [
                 "--firmware-variant",
@@ -334,6 +342,7 @@ def main() -> int:
                         "otns_commit": args.otns_commit,
                         "otns_watch_level": args.otns_watch_level,
                         "capture_replay": args.capture_replay,
+                        "capture_sim_ping_rss": args.capture_sim_ping_rss,
                         "runs": runs,
                     },
                     handle,
@@ -360,6 +369,7 @@ def main() -> int:
         "otns_commit": args.otns_commit,
         "otns_watch_level": args.otns_watch_level,
         "capture_replay": args.capture_replay,
+        "capture_sim_ping_rss": args.capture_sim_ping_rss,
         "tracked_experiment_dir": str(tracked_experiment_dir) if tracked_experiment_dir is not None else None,
         "runs": runs,
     }

@@ -27,7 +27,7 @@ The moving end device should theoretically have at least one router in range thr
 
 OTNS uses the `MeterPerUnit` radio parameter for coordinate scaling. The scenarios assume the default `MeterPerUnit = 0.1`, so one coordinate unit is treated as 0.1 m unless the radio parameter is overridden. This default is recorded in the local OTNS source at `radiomodel/model_params.go` and listed by `cli/README.md`.
 
-The mobile path from x=150 to x=750 spans 600 coordinate units, which is 60 m at `MeterPerUnit = 0.1`. With 12 one-second movement steps, the target movement speed is 5 m/s. The runner sends a 1 Hz mobile-to-current-parent ping when the parent resolves to a known router; this is a connectivity/RTT probe, not an RSSI measurement.
+The mobile path from x=150 to x=750 spans 600 coordinate units, which is 60 m at `MeterPerUnit = 0.1`. With 12 one-second movement steps, the target movement speed is 5 m/s. The runner sends a 1 Hz mobile-to-current-parent ping when the parent resolves to a known router; this is a connectivity/RTT probe. When `--capture-sim-ping-rss` is enabled, the runner also attaches simulator-model RSS/LQI to each ping event using OTNS `MutualInterference` parameters at the ping source/destination positions.
 
 ## Timing
 

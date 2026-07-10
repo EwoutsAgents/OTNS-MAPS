@@ -102,7 +102,9 @@ The active benchmark matrix uses three stock scenarios:
 - `scenarios/fed_simple_parent_switch.yaml` for a Full End Device variant that uses OTNS's FTD executable path
 - `scenarios/sed_simple_parent_switch.yaml` for a Sleepy End Device variant that treats the `parent` command as the primary attachment observation path
 
-The simple scenarios use closer router spacing and overlapping intended coverage and the runner records a 1 Hz mobile-to-current-parent ping as a reachability/RTT probe, not an RSSI measurement: Router A at `(250, 300)`, Router B at `(650, 300)`, and a mobile path from `(150, 360)` to `(750, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 60 m path; 12 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The moving end device should theoretically have at least one router in range along the full path. See [`docs/scenarios.md`](docs/scenarios.md).
+The simple scenarios use closer router spacing and overlapping intended coverage and the runner records a 1 Hz mobile-to-current-parent ping as a reachability/RTT probe: Router A at `(250, 300)`, Router B at `(650, 300)`, and a mobile path from `(150, 360)` to `(750, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 60 m path; 12 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The moving end device should theoretically have at least one router in range along the full path. See [`docs/scenarios.md`](docs/scenarios.md).
+
+Runs can also include `--capture-sim-ping-rss`, which attaches simulator-model RSS/LQI to each ping probe row. The current method is `otns_model_derived_at_ping`: RSS is derived from OTNS `MutualInterference` radio-model parameters at the exact ping source/destination positions and sample time. It is not OpenThread neighbor-table RSS, parent-command link quality, scan RSS, or ping-output RSS.
 
 Older committed artifacts may reference previous scenario names: `baseline_mobile_parent_switch`, `calibrated_mobile_parent_switch`, `fed_mobile_parent_switch`, and `sed_mobile_parent_switch`. Those old wider-geometry results are historical and should not be mixed with new simple-scenario results without labeling the geometry difference.
 

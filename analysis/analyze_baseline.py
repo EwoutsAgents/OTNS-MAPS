@@ -78,6 +78,41 @@ def counter_value(row: dict[str, str], key: str) -> int | None:
     return int(value)
 
 
+def sim_rss_probe_prefixes(rows: list[dict[str, str]]) -> list[str]:
+    if not rows:
+        return []
+    prefixes = []
+    for key in rows[0]:
+        if key.endswith("_sim_rss_method"):
+            prefixes.append(key[: -len("_sim_rss_method")])
+    return sorted(prefixes)
+
+
+def sim_rss_probe_stats(rows: list[dict[str, str]], prefix: str) -> dict[str, Any]:
+    request_values = [to_float(row.get(f"{prefix}_request_rx_sim_rss_dbm")) for row in rows]
+    reply_values = [to_float(row.get(f"{prefix}_reply_rx_sim_rss_dbm")) for row in rows]
+    statuses = [row.get(f"{prefix}_sim_rss_match_status") for row in rows if row.get(f"{prefix}_sim_rss_match_status")]
+    matched = sum(1 for status in statuses if status == "model_derived")
+    ambiguous = sum(1 for status in statuses if status == "ambiguous")
+    return {
+        "request_rx_dbm_mean": _mean_or_none(request_values),
+        "request_rx_dbm_median": _median_or_none(request_values),
+        "reply_rx_dbm_mean": _mean_or_none(reply_values),
+        "reply_rx_dbm_median": _median_or_none(reply_values),
+        "match_rate": round(matched / len(statuses), 6) if statuses else None,
+        "ambiguous_events": ambiguous,
+    }
+
+
+def end_dwell_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    positions = [to_float(row.get("mobile_x")) for row in rows]
+    numeric_positions = [value for value in positions if value is not None]
+    if not numeric_positions:
+        return []
+    max_x = max(numeric_positions)
+    return [row for row in rows if to_float(row.get("mobile_x")) == max_x]
+
+
 def summarize_run(path: Path) -> dict[str, Any]:
     rows = load_rows(path)
     if not rows:
@@ -141,6 +176,47 @@ def summarize_run(path: Path) -> dict[str, Any]:
     mle_parent_changes = counter_value(rows[-1], "Parent Changes")
     mle_attach_attempts = counter_value(rows[-1], "Attach Attempts")
     mle_better_parent_attach_attempts = counter_value(rows[-1], "Better Parent Attach Attempts")
+    sim_prefixes = sim_rss_probe_prefixes(rows)
+    sim_total_events = 0
+    sim_matched_events = 0
+    sim_unmatched_events = 0
+    sim_ambiguous_events = 0
+    for row in rows:
+        for prefix in sim_prefixes:
+            method = row.get(f"{prefix}_sim_rss_method")
+            status = row.get(f"{prefix}_sim_rss_match_status")
+            if not method and not status:
+                continue
+            sim_total_events += 1
+            if status == "model_derived":
+                sim_matched_events += 1
+            elif status == "ambiguous":
+                sim_ambiguous_events += 1
+            else:
+                sim_unmatched_events += 1
+    sim_capture_enabled = sim_total_events > 0 and sim_matched_events > 0
+    sim_probe_stats = {
+        prefix: sim_rss_probe_stats(rows, prefix)
+        for prefix in sim_prefixes
+        if sim_capture_enabled
+    }
+    dwell_rows = end_dwell_rows(rows)
+    router_a_end_rssi = [
+        to_float(row.get("router_a_to_mobile_request_rx_sim_rss_dbm"))
+        for row in dwell_rows
+    ]
+    router_a_end_lqi = [
+        to_float(row.get("router_a_to_mobile_request_rx_sim_lqi"))
+        for row in dwell_rows
+    ]
+    mobile_parent_end_rssi = [
+        to_float(row.get("mobile_to_parent_request_rx_sim_rss_dbm"))
+        for row in dwell_rows
+    ]
+    mobile_parent_end_lqi = [
+        to_float(row.get("mobile_to_parent_request_rx_sim_lqi"))
+        for row in dwell_rows
+    ]
     if switch_times:
         result_classification = "switch_observed"
     elif initial_observed_parent and final_observed_parent:
@@ -173,6 +249,21 @@ def summarize_run(path: Path) -> dict[str, Any]:
         "parent_probe_total_rx": int(parent_probe_rx),
         "parent_probe_delivery_ratio": round(parent_probe_rx / parent_probe_tx, 6) if parent_probe_tx else None,
         "parent_probe_mean_rtt_avg_ms": _mean_or_none(parent_probe_rtt_avg_values),
+        "sim_ping_rss_capture_enabled": sim_capture_enabled,
+        "sim_ping_rss_capture_method": "otns_model_derived_at_ping" if sim_capture_enabled else None,
+        "sim_ping_rss_policy": "request_and_reply_when_available",
+        "sim_ping_rss_total_probe_events": sim_total_events,
+        "sim_ping_rss_matched_probe_events": sim_matched_events,
+        "sim_ping_rss_match_rate": round(sim_matched_events / sim_total_events, 6) if sim_total_events else None,
+        "sim_ping_rss_unmatched_probe_events": sim_unmatched_events,
+        "sim_ping_rss_ambiguous_probe_events": sim_ambiguous_events,
+        "sim_ping_rss_probe_stats": sim_probe_stats,
+        "router_a_to_mobile_end_dwell_sim_rss_dbm_mean": _mean_or_none(router_a_end_rssi),
+        "router_a_to_mobile_end_dwell_sim_rss_dbm_median": _median_or_none(router_a_end_rssi),
+        "router_a_to_mobile_end_dwell_sim_lqi_median": _median_or_none(router_a_end_lqi),
+        "mobile_to_parent_end_dwell_sim_rss_dbm_mean": _mean_or_none(mobile_parent_end_rssi),
+        "mobile_to_parent_end_dwell_sim_rss_dbm_median": _median_or_none(mobile_parent_end_rssi),
+        "mobile_to_parent_end_dwell_sim_lqi_median": _median_or_none(mobile_parent_end_lqi),
         "oscillation_events": oscillations,
         "mle_parent_changes": mle_parent_changes,
         "mle_attach_attempts": mle_attach_attempts,
@@ -248,6 +339,13 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
     pdr_values = [summary.get("packet_delivery_ratio") for summary in summaries]
     parent_probe_pdr_values = [summary.get("parent_probe_delivery_ratio") for summary in summaries]
     parent_probe_rtt_values = [summary.get("parent_probe_mean_rtt_avg_ms") for summary in summaries]
+    router_a_end_rssi_values = [
+        summary.get("router_a_to_mobile_end_dwell_sim_rss_dbm_mean") for summary in summaries
+    ]
+    mobile_parent_end_rssi_values = [
+        summary.get("mobile_to_parent_end_dwell_sim_rss_dbm_mean") for summary in summaries
+    ]
+    sim_match_rate_values = [summary.get("sim_ping_rss_match_rate") for summary in summaries]
     switch_counts = [summary.get("switch_count") or 0 for summary in summaries]
     oscillation_values = [summary.get("oscillation_events") or 0 for summary in summaries]
     classification_counts: dict[str, int] = {}
@@ -302,6 +400,16 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
         "median_parent_probe_rtt_avg_ms": _median_or_none(parent_probe_rtt_values),
         "stddev_parent_probe_rtt_avg_ms": _stddev_or_none(parent_probe_rtt_values),
         "parent_probe_rtt_sample_size": _sample_size(parent_probe_rtt_values),
+        "mean_router_a_to_mobile_end_dwell_sim_rss_dbm": _mean_or_none(router_a_end_rssi_values),
+        "median_router_a_to_mobile_end_dwell_sim_rss_dbm": _median_or_none(router_a_end_rssi_values),
+        "stddev_router_a_to_mobile_end_dwell_sim_rss_dbm": _stddev_or_none(router_a_end_rssi_values),
+        "router_a_to_mobile_end_dwell_sim_rss_sample_size": _sample_size(router_a_end_rssi_values),
+        "mean_mobile_to_parent_end_dwell_sim_rss_dbm": _mean_or_none(mobile_parent_end_rssi_values),
+        "median_mobile_to_parent_end_dwell_sim_rss_dbm": _median_or_none(mobile_parent_end_rssi_values),
+        "stddev_mobile_to_parent_end_dwell_sim_rss_dbm": _stddev_or_none(mobile_parent_end_rssi_values),
+        "mobile_to_parent_end_dwell_sim_rss_sample_size": _sample_size(mobile_parent_end_rssi_values),
+        "mean_sim_ping_rss_match_rate": _mean_or_none(sim_match_rate_values),
+        "median_sim_ping_rss_match_rate": _median_or_none(sim_match_rate_values),
         "mean_oscillation_events": round(statistics.mean(oscillation_values), 6),
         "oscillation_runs": oscillation_runs,
         "oscillation_rate": round(oscillation_runs / len(summaries), 6),

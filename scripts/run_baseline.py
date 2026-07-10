@@ -70,6 +70,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--capture-replay", action="store_true", help="Copy a replay file after a real OTNS run.")
     parser.add_argument(
+        "--capture-sim-ping-rss",
+        action="store_true",
+        help=(
+            "Attach simulator-level, OTNS MutualInterference model-derived RSS/LQI values "
+            "to each ping probe row."
+        ),
+    )
+    parser.add_argument(
         "--replay-source",
         type=Path,
         default=None,
@@ -209,6 +217,76 @@ def with_otns_watch_level(command: str, watch_level: str) -> str:
     if "-watch" in parts:
         return command
     return f"{command} -watch {watch_level}"
+
+
+def numeric_mean(values: list[float]) -> float | None:
+    if not values:
+        return None
+    return round(sum(values) / len(values), 6)
+
+
+def numeric_median(values: list[float]) -> float | None:
+    if not values:
+        return None
+    sorted_values = sorted(values)
+    midpoint = len(sorted_values) // 2
+    if len(sorted_values) % 2:
+        return round(sorted_values[midpoint], 6)
+    return round((sorted_values[midpoint - 1] + sorted_values[midpoint]) / 2, 6)
+
+
+def sim_lqi_from_rssi(rssi_dbm: float | None) -> int | None:
+    if rssi_dbm is None:
+        return None
+    if rssi_dbm >= -70:
+        return 3
+    if rssi_dbm >= -85:
+        return 2
+    if rssi_dbm >= -100:
+        return 1
+    return 0
+
+
+def derive_mutual_interference_rssi_dbm(
+    src_x: float | None,
+    src_y: float | None,
+    dst_x: float | None,
+    dst_y: float | None,
+    meter_per_unit: float = 0.1,
+    tx_power_dbm: float = 20.0,
+) -> float | None:
+    """Mirror OTNS MutualInterference 3GPP indoor RSS calculation at a ping event."""
+
+    if None in (src_x, src_y, dst_x, dst_y):
+        return None
+    distance_units = math.dist((float(src_x), float(src_y)), (float(dst_x), float(dst_y)))
+    distance_meters = distance_units * meter_per_unit
+    if distance_meters <= 0.0:
+        rssi = tx_power_dbm
+    else:
+        los_fixed_loss = 32.4 + 20.0 * math.log10(2.4)
+        nlos_fixed_loss = 17.3 + 24.9 * math.log10(2.4)
+        los_pathloss = 17.3 * math.log10(distance_meters) + los_fixed_loss
+        nlos_pathloss = 38.3 * math.log10(distance_meters) + nlos_fixed_loss
+        rssi = tx_power_dbm - max(los_pathloss, nlos_pathloss)
+    if rssi < -126.0:
+        return -127.0
+    if rssi > 126.0:
+        return 126.0
+    return round(rssi, 3)
+
+
+def unavailable_sim_rss(status: str = "unavailable") -> dict[str, Any]:
+    return {
+        "method": None,
+        "match_status": status,
+        "match_confidence": 0.0,
+        "request_rx_sim_rss_dbm": None,
+        "request_rx_sim_lqi": None,
+        "reply_rx_sim_rss_dbm": None,
+        "reply_rx_sim_lqi": None,
+        "event_time_s": None,
+    }
 
 
 def otns_runtime_cwd(otns_workdir: Path | None) -> Path:
@@ -848,6 +926,7 @@ class RealBenchmarkRunner:
         ftd_node_binary_path: Path | None = None,
         thread_device_type: str | None = None,
         parent_search_config: str = "unknown",
+        capture_sim_ping_rss: bool = False,
     ) -> None:
         self.scenario = scenario
         self.otns_command = with_otns_watch_level(otns_command, otns_watch_level)
@@ -857,6 +936,7 @@ class RealBenchmarkRunner:
         self.ftd_node_binary_path = ftd_node_binary_path
         self.thread_device_type = thread_device_type
         self.parent_search_config = parent_search_config
+        self.capture_sim_ping_rss = capture_sim_ping_rss
         self.otns_runtime_cwd = otns_runtime_cwd(otns_workdir)
         self.notes: list[str] = []
         self.node_refs: dict[str, NodeRef] = {}
@@ -894,6 +974,8 @@ class RealBenchmarkRunner:
             for index, (x, y) in enumerate(positions):
                 mobile_id = named_ids["mobile"]
                 session.command_output(f"move {mobile_id} {int(round(x))} {int(round(y))}")
+                self.node_refs["mobile"].x = x
+                self.node_refs["mobile"].y = y
                 parent_probe: dict[str, Any] = self._send_mobile_to_parent_probe(session, mobile_id)
                 for probe in self.scenario["traffic_probes"]:
                     src_id = self.node_refs[probe["src"]].node_id
@@ -944,8 +1026,39 @@ class RealBenchmarkRunner:
             parent_before_delayed_nodes=self.parent_before_delayed_nodes,
             thread_device_type=self.thread_device_type,
             parent_search_config=self.parent_search_config,
+            sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
         )
         return rows, summary
+
+    def _derive_ping_sim_rss(
+        self,
+        src_name: str | None,
+        dst_name: str | None,
+        sim_time_s: float,
+        ping_result: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        if not self.capture_sim_ping_rss:
+            return {}
+        if not src_name or not dst_name:
+            return unavailable_sim_rss("unavailable_no_endpoint")
+        src = self.node_refs.get(src_name)
+        dst = self.node_refs.get(dst_name)
+        if src is None or dst is None:
+            return unavailable_sim_rss("unavailable_no_endpoint")
+
+        request_rssi = derive_mutual_interference_rssi_dbm(src.x, src.y, dst.x, dst.y)
+        rx_count = int((ping_result or {}).get("rx") or 0)
+        reply_rssi = derive_mutual_interference_rssi_dbm(dst.x, dst.y, src.x, src.y) if rx_count > 0 else None
+        return {
+            "method": "otns_model_derived_at_ping",
+            "match_status": "model_derived",
+            "match_confidence": 1.0,
+            "request_rx_sim_rss_dbm": request_rssi,
+            "request_rx_sim_lqi": sim_lqi_from_rssi(request_rssi),
+            "reply_rx_sim_rss_dbm": reply_rssi,
+            "reply_rx_sim_lqi": sim_lqi_from_rssi(reply_rssi),
+            "event_time_s": sim_time_s,
+        }
 
     def _select_radio_model(self, session: OtnsSession) -> str:
         preferred = [self.scenario["radio_model"]["preferred"], *self.scenario["radio_model"]["fallbacks"]]
@@ -1101,6 +1214,12 @@ class RealBenchmarkRunner:
                     "rtt_max_ms": None,
                 },
             )
+            sample.setdefault("probe_sim_rss", {})[probe["name"]] = self._derive_ping_sim_rss(
+                probe["src"],
+                probe["dst"],
+                sample["sim_time_s"],
+                sample["probe_results"][probe["name"]],
+            )
 
         sample["mobile_to_parent_result"] = ping_results_by_source.get(
             mobile.node_id,
@@ -1112,6 +1231,12 @@ class RealBenchmarkRunner:
                 "rtt_avg_ms": None,
                 "rtt_max_ms": None,
             },
+        )
+        sample["mobile_to_parent_sim_rss"] = self._derive_ping_sim_rss(
+            "mobile",
+            sample.get("mobile_to_parent_target"),
+            sample["sim_time_s"],
+            sample["mobile_to_parent_result"],
         )
 
         return sample
@@ -1173,11 +1298,35 @@ class MockBenchmarkRunner:
         scenario: dict[str, Any],
         thread_device_type: str | None = None,
         parent_search_config: str = "unknown",
+        capture_sim_ping_rss: bool = False,
     ) -> None:
         self.scenario = scenario
         self.thread_device_type = thread_device_type
         self.parent_search_config = parent_search_config
+        self.capture_sim_ping_rss = capture_sim_ping_rss
         self.observability = scenario.get("observability", {})
+
+    def _mock_ping_sim_rss(
+        self,
+        src: tuple[float, float] | None,
+        dst: tuple[float, float] | None,
+        sim_time_s: float,
+        rx: int,
+    ) -> dict[str, Any]:
+        if not self.capture_sim_ping_rss or src is None or dst is None:
+            return {}
+        request_rssi = derive_mutual_interference_rssi_dbm(src[0], src[1], dst[0], dst[1])
+        reply_rssi = derive_mutual_interference_rssi_dbm(dst[0], dst[1], src[0], src[1]) if rx > 0 else None
+        return {
+            "method": "otns_model_derived_at_ping",
+            "match_status": "model_derived",
+            "match_confidence": 1.0,
+            "request_rx_sim_rss_dbm": request_rssi,
+            "request_rx_sim_lqi": sim_lqi_from_rssi(request_rssi),
+            "reply_rx_sim_rss_dbm": reply_rssi,
+            "reply_rx_sim_lqi": sim_lqi_from_rssi(reply_rssi),
+            "event_time_s": sim_time_s,
+        }
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         timing = self.scenario["timing"]
@@ -1283,7 +1432,7 @@ class MockBenchmarkRunner:
                         "rtt_min_ms": 10.0 + round(dist_a / 40, 3) if ping_a_rx else None,
                         "rtt_avg_ms": 12.0 + round(dist_a / 40, 3) if ping_a_rx else None,
                         "rtt_max_ms": 14.0 + round(dist_a / 40, 3) if ping_a_rx else None,
-                    },
+                },
                     "router_b_to_mobile": {
                         "tx": 1,
                         "rx": ping_b_rx,
@@ -1292,7 +1441,30 @@ class MockBenchmarkRunner:
                         "rtt_avg_ms": 12.0 + round(dist_b / 40, 3) if ping_b_rx else None,
                         "rtt_max_ms": 14.0 + round(dist_b / 40, 3) if ping_b_rx else None,
                     },
+	                },
+                "probe_sim_rss": {
+                    "router_a_to_mobile": self._mock_ping_sim_rss(
+                        (router_a["x"], router_a["y"]),
+                        (x, y),
+                        sim_time_s,
+                        ping_a_rx,
+                    ),
+                    "router_b_to_mobile": self._mock_ping_sim_rss(
+                        (router_b["x"], router_b["y"]),
+                        (x, y),
+                        sim_time_s,
+                        ping_b_rx,
+                    ),
                 },
+                "mobile_to_parent_sim_rss": self._mock_ping_sim_rss(
+                    (x, y),
+                    (
+                        router_a["x"] if parent == "router_a" else router_b["x"],
+                        router_a["y"] if parent == "router_a" else router_b["y"],
+                    ),
+                    sim_time_s,
+                    parent_probe_rx,
+                ),
                 "selected_radio_model": "mock",
                 "connectivity_ok": connectivity_ok,
                 "parent_switch": bool(switch_events and switch_events[-1]["sample_index"] == index),
@@ -1313,6 +1485,7 @@ class MockBenchmarkRunner:
             mock=True,
             thread_device_type=self.thread_device_type,
             parent_search_config=self.parent_search_config,
+            sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
         )
         return rows, summary
 
@@ -1320,6 +1493,7 @@ class MockBenchmarkRunner:
 def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for sample in samples:
+        mobile_parent_sim_rss = sample.get("mobile_to_parent_sim_rss", {})
         row = {
             "sample_index": sample["sample_index"],
             "sim_time_s": sample["sim_time_s"],
@@ -1343,6 +1517,14 @@ def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "mobile_to_parent_rtt_min_ms": sample.get("mobile_to_parent_result", {}).get("rtt_min_ms"),
             "mobile_to_parent_rtt_avg_ms": sample.get("mobile_to_parent_result", {}).get("rtt_avg_ms"),
             "mobile_to_parent_rtt_max_ms": sample.get("mobile_to_parent_result", {}).get("rtt_max_ms"),
+            "mobile_to_parent_sim_rss_method": mobile_parent_sim_rss.get("method"),
+            "mobile_to_parent_sim_rss_match_status": mobile_parent_sim_rss.get("match_status"),
+            "mobile_to_parent_sim_rss_match_confidence": mobile_parent_sim_rss.get("match_confidence"),
+            "mobile_to_parent_request_rx_sim_rss_dbm": mobile_parent_sim_rss.get("request_rx_sim_rss_dbm"),
+            "mobile_to_parent_request_rx_sim_lqi": mobile_parent_sim_rss.get("request_rx_sim_lqi"),
+            "mobile_to_parent_reply_rx_sim_rss_dbm": mobile_parent_sim_rss.get("reply_rx_sim_rss_dbm"),
+            "mobile_to_parent_reply_rx_sim_lqi": mobile_parent_sim_rss.get("reply_rx_sim_lqi"),
+            "mobile_to_parent_sim_rss_event_time_s": mobile_parent_sim_rss.get("event_time_s"),
             "parent_switch": sample["parent_switch"],
             "connectivity_ok": sample["connectivity_ok"],
             "selected_radio_model": sample["selected_radio_model"],
@@ -1360,14 +1542,75 @@ def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
         }
         for probe_name, probe in sample["probe_results"].items():
             prefix = probe_name
+            sim_rss = sample.get("probe_sim_rss", {}).get(probe_name, {})
             row[f"{prefix}_tx"] = probe["tx"]
             row[f"{prefix}_rx"] = probe["rx"]
             row[f"{prefix}_loss_pct"] = probe["loss_pct"]
             row[f"{prefix}_rtt_min_ms"] = probe["rtt_min_ms"]
             row[f"{prefix}_rtt_avg_ms"] = probe["rtt_avg_ms"]
             row[f"{prefix}_rtt_max_ms"] = probe["rtt_max_ms"]
+            row[f"{prefix}_sim_rss_method"] = sim_rss.get("method")
+            row[f"{prefix}_sim_rss_match_status"] = sim_rss.get("match_status")
+            row[f"{prefix}_sim_rss_match_confidence"] = sim_rss.get("match_confidence")
+            row[f"{prefix}_request_rx_sim_rss_dbm"] = sim_rss.get("request_rx_sim_rss_dbm")
+            row[f"{prefix}_request_rx_sim_lqi"] = sim_rss.get("request_rx_sim_lqi")
+            row[f"{prefix}_reply_rx_sim_rss_dbm"] = sim_rss.get("reply_rx_sim_rss_dbm")
+            row[f"{prefix}_reply_rx_sim_lqi"] = sim_rss.get("reply_rx_sim_lqi")
+            row[f"{prefix}_sim_rss_event_time_s"] = sim_rss.get("event_time_s")
         rows.append(row)
     return rows
+
+
+def collect_sim_rss_records(samples: list[dict[str, Any]]) -> list[tuple[str, dict[str, Any], dict[str, Any]]]:
+    records: list[tuple[str, dict[str, Any], dict[str, Any]]] = []
+    for sample in samples:
+        for probe_name, sim_rss in sample.get("probe_sim_rss", {}).items():
+            records.append((probe_name, sim_rss, sample))
+        if "mobile_to_parent_sim_rss" in sample:
+            records.append(("mobile_to_parent", sample["mobile_to_parent_sim_rss"], sample))
+    return records
+
+
+def sim_rss_summary_for_probe(records: list[tuple[str, dict[str, Any], dict[str, Any]]], probe_name: str) -> dict[str, Any]:
+    probe_records = [(sim_rss, sample) for name, sim_rss, sample in records if name == probe_name]
+    request_values = [
+        float(sim_rss["request_rx_sim_rss_dbm"])
+        for sim_rss, _ in probe_records
+        if sim_rss.get("request_rx_sim_rss_dbm") is not None
+    ]
+    reply_values = [
+        float(sim_rss["reply_rx_sim_rss_dbm"])
+        for sim_rss, _ in probe_records
+        if sim_rss.get("reply_rx_sim_rss_dbm") is not None
+    ]
+    matched = sum(1 for sim_rss, _ in probe_records if sim_rss.get("match_status") == "model_derived")
+    return {
+        "request_rx_dbm_mean": numeric_mean(request_values),
+        "request_rx_dbm_median": numeric_median(request_values),
+        "reply_rx_dbm_mean": numeric_mean(reply_values),
+        "reply_rx_dbm_median": numeric_median(reply_values),
+        "match_rate": round(matched / len(probe_records), 6) if probe_records else None,
+    }
+
+
+def end_dwell_sim_rss_values(
+    samples: list[dict[str, Any]],
+    movement_steps: int,
+    probe_name: str,
+    field: str = "request_rx_sim_rss_dbm",
+) -> list[float]:
+    values: list[float] = []
+    for sample in samples:
+        if int(sample.get("sample_index") or 0) < movement_steps:
+            continue
+        if probe_name == "mobile_to_parent":
+            sim_rss = sample.get("mobile_to_parent_sim_rss", {})
+        else:
+            sim_rss = sample.get("probe_sim_rss", {}).get(probe_name, {})
+        value = sim_rss.get(field)
+        if value is not None:
+            values.append(float(value))
+    return values
 
 
 def build_summary(
@@ -1381,6 +1624,7 @@ def build_summary(
     parent_before_delayed_nodes: str | None = None,
     thread_device_type: str | None = None,
     parent_search_config: str = "unknown",
+    sim_ping_rss_capture_enabled: bool = False,
 ) -> dict[str, Any]:
     total_tx = 0
     total_rx = 0
@@ -1409,6 +1653,49 @@ def build_summary(
     initial_observed_parent = samples[0].get("parent_node_guess") if samples else None
     final_observed_parent = samples[-1].get("parent_node_guess") if samples else None
     final_mle_counters = samples[-1].get("mle_counters", {}) if samples else {}
+    sim_rss_records = collect_sim_rss_records(samples)
+    sim_rss_total_probe_events = len(sim_rss_records) if sim_ping_rss_capture_enabled else 0
+    sim_rss_matched_probe_events = sum(
+        1 for _, sim_rss, _ in sim_rss_records if sim_rss.get("match_status") == "model_derived"
+    )
+    sim_rss_ambiguous_probe_events = sum(
+        1 for _, sim_rss, _ in sim_rss_records if sim_rss.get("match_status") == "ambiguous"
+    )
+    sim_rss_unmatched_probe_events = max(
+        0,
+        sim_rss_total_probe_events - sim_rss_matched_probe_events - sim_rss_ambiguous_probe_events,
+    )
+    sim_rss_probe_names = sorted({name for name, _, _ in sim_rss_records})
+    sim_rss_probe_stats = {
+        name: sim_rss_summary_for_probe(sim_rss_records, name)
+        for name in sim_rss_probe_names
+        if sim_ping_rss_capture_enabled
+    }
+    movement_steps = int(scenario.get("timing", {}).get("movement_steps", 0) or 0)
+    router_a_end_rssi = end_dwell_sim_rss_values(
+        samples,
+        movement_steps,
+        "router_a_to_mobile",
+        "request_rx_sim_rss_dbm",
+    )
+    router_a_end_lqi = end_dwell_sim_rss_values(
+        samples,
+        movement_steps,
+        "router_a_to_mobile",
+        "request_rx_sim_lqi",
+    )
+    mobile_parent_end_rssi = end_dwell_sim_rss_values(
+        samples,
+        movement_steps,
+        "mobile_to_parent",
+        "request_rx_sim_rss_dbm",
+    )
+    mobile_parent_end_lqi = end_dwell_sim_rss_values(
+        samples,
+        movement_steps,
+        "mobile_to_parent",
+        "request_rx_sim_lqi",
+    )
     expected_initial_parent = scenario.get("expected_initial_parent")
     if expected_initial_parent and initial_observed_parent != expected_initial_parent:
         result_classification = "initial_parent_unexpected"
@@ -1455,6 +1742,27 @@ def build_summary(
             if parent_probe_rtt_values
             else None
         ),
+        "sim_ping_rss_capture_enabled": sim_ping_rss_capture_enabled,
+        "sim_ping_rss_capture_method": (
+            "otns_model_derived_at_ping" if sim_ping_rss_capture_enabled else None
+        ),
+        "sim_ping_rss_policy": "request_and_reply_when_available",
+        "sim_ping_rss_total_probe_events": sim_rss_total_probe_events,
+        "sim_ping_rss_matched_probe_events": sim_rss_matched_probe_events,
+        "sim_ping_rss_match_rate": (
+            round(sim_rss_matched_probe_events / sim_rss_total_probe_events, 6)
+            if sim_rss_total_probe_events
+            else None
+        ),
+        "sim_ping_rss_unmatched_probe_events": sim_rss_unmatched_probe_events,
+        "sim_ping_rss_ambiguous_probe_events": sim_rss_ambiguous_probe_events,
+        "sim_ping_rss_probe_stats": sim_rss_probe_stats,
+        "router_a_to_mobile_end_dwell_sim_rss_dbm_mean": numeric_mean(router_a_end_rssi),
+        "router_a_to_mobile_end_dwell_sim_rss_dbm_median": numeric_median(router_a_end_rssi),
+        "router_a_to_mobile_end_dwell_sim_lqi_median": numeric_median(router_a_end_lqi),
+        "mobile_to_parent_end_dwell_sim_rss_dbm_mean": numeric_mean(mobile_parent_end_rssi),
+        "mobile_to_parent_end_dwell_sim_rss_dbm_median": numeric_median(mobile_parent_end_rssi),
+        "mobile_to_parent_end_dwell_sim_lqi_median": numeric_median(mobile_parent_end_lqi),
         "oscillation_events": oscillations,
         "mle_parent_changes": counter_int(final_mle_counters, "Parent Changes"),
         "mle_attach_attempts": counter_int(final_mle_counters, "Attach Attempts"),
@@ -1494,6 +1802,7 @@ def main() -> int:
             scenario,
             thread_device_type=args.thread_device_type,
             parent_search_config=args.parent_search_config,
+            capture_sim_ping_rss=args.capture_sim_ping_rss,
         )
         if args.mock
         else RealBenchmarkRunner(
@@ -1505,6 +1814,7 @@ def main() -> int:
             ftd_node_binary_path=args.ftd_node_binary_path,
             thread_device_type=args.thread_device_type,
             parent_search_config=args.parent_search_config,
+            capture_sim_ping_rss=args.capture_sim_ping_rss,
         )
     )
 
@@ -1577,6 +1887,7 @@ def main() -> int:
     summary["otns_watch_level"] = args.otns_watch_level
     summary["node_log_files"] = node_log_info.get("copied_files", [])
     summary["replay_capture_requested"] = args.capture_replay
+    summary["sim_ping_rss_capture_requested"] = args.capture_sim_ping_rss
     summary["replay_file"] = replay_info.get("copied_path")
     summary["replay_metadata_file"] = replay_info.get("metadata_path")
 
