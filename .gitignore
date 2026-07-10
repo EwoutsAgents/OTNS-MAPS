@@ -25,6 +25,8 @@ results/replays
 results/repeated/
 results/repeated
 !results/.gitkeep
+!results/.archive/
+!results/.archive/**
 !results/*/
 !results/*/*/
 !results/*/*/*/

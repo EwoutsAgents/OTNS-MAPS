@@ -83,8 +83,8 @@ python3 scripts/replay_to_mp4.py <artifact>/<replay>.replay \
 
 ## Artifact locations
 
-- PPS off: `results/calibrated_mobile_parent_switch_med-pps-off/20260710-020657-run01/20260710-020657-run01/`
-- PPS on: `results/calibrated_mobile_parent_switch_med-pps-on/20260710-020715-run01/20260710-020715-run01/`
+- PPS off: `results/.archive/calibrated_mobile_parent_switch_med-pps-off/20260710-020657-run01/20260710-020657-run01/`
+- PPS on: `results/.archive/calibrated_mobile_parent_switch_med-pps-on/20260710-020715-run01/20260710-020715-run01/`
 
 Each directory contains CSV, summary JSON, replay, replay metadata JSON, MP4, node logs, manifest, and README.
 
