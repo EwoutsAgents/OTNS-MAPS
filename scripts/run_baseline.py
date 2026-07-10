@@ -830,7 +830,7 @@ class OtnsSession:
             if OTNS_LOG_LINE_RE.match(text):
                 continue
             if text.startswith("Error: ") or text.startswith("Error "):
-                raise OtnsSessionError(text)
+                raise OtnsSessionError(f"{text} while running {command!r}")
             output.append(text)
             if text in {"Done", "Started"}:
                 return sanitize_command_output(output)
@@ -1027,7 +1027,15 @@ class RealBenchmarkRunner:
         sim_time_us = int(session.command_output("time")[0])
         state_lines = session.command_output(f'node {mobile.node_id} "state"')
         rloc_lines = session.command_output(f'node {mobile.node_id} "rloc16"')
-        parent_lines = session.command_output(f'node {mobile.node_id} "parent"')
+        try:
+            parent_lines = session.command_output(f'node {mobile.node_id} "parent"')
+        except OtnsSessionError as exc:
+            if "InvalidState" not in str(exc):
+                raise
+            parent_lines = []
+            note = "OTNS parent command returned InvalidState for at least one sample; parent fields are empty for that sample."
+            if note not in self.notes:
+                self.notes.append(note)
         ip_counter_lines = session.command_output(f'node {mobile.node_id} "counters ip"')
         mle_counter_lines = session.command_output(f'node {mobile.node_id} "counters mle"')
         scan_rows: list[dict[str, str]] = []

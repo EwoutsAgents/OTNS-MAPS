@@ -224,7 +224,7 @@ Repeat with `--artifact-name med-pps-on`, `--firmware-variant stock-med-pps-on`,
 
 Run the repeated calibrated MED PPS comparison with the same explicit binaries and metadata flags, using `--repeat-count 10` and artifact names `med-pps-off-repeated` and `med-pps-on-repeated`. The resulting aggregate comparison is documented in [`docs/pps_med_repeated_comparison.md`](docs/pps_med_repeated_comparison.md), with tracked artifacts under `results/calibrated_mobile_parent_switch_med-pps-off-repeated/` and `results/calibrated_mobile_parent_switch_med-pps-on-repeated/`.
 
-The FED/SED PPS profile extension is documented in [`docs/pps_fed_sed_comparison.md`](docs/pps_fed_sed_comparison.md). FED runs use `--ftd-node-binary-path` because OTNS maps `fed` to the FTD executable; SED runs use `--node-binary-path` because OTNS maps `sed` to the MTD executable.
+The FED/SED PPS profile extension is documented in [`docs/pps_fed_sed_comparison.md`](docs/pps_fed_sed_comparison.md). FED runs use `--ftd-node-binary-path` because OTNS maps `fed` to the FTD executable; SED runs use `--node-binary-path` because OTNS maps `sed` to the MTD executable. The FED/SED extension now includes 10-run repeated PPS-off/on artifacts in addition to the initial single-run profile checks.
 
 Generate plots when `matplotlib` is installed:
 

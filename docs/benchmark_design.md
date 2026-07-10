@@ -76,6 +76,13 @@ The FED/SED PPS extension artifacts are:
 - `../results/sed_mobile_parent_switch_sed-pps-off/20260710-104537-run01/20260710-104537-run01/`
 - `../results/sed_mobile_parent_switch_sed-pps-on/20260710-104550-run01/20260710-104550-run01/`
 
+The repeated FED/SED PPS extension artifacts are:
+
+- `../results/fed_mobile_parent_switch_fed-pps-off-repeated/20260710-163436-experiment/`
+- `../results/fed_mobile_parent_switch_fed-pps-on-repeated/20260710-163514-experiment/`
+- `../results/sed_mobile_parent_switch_sed-pps-off-repeated/20260710-163933-experiment/`
+- `../results/sed_mobile_parent_switch_sed-pps-on-repeated/20260710-164008-experiment/`
+
 ## RF propagation model
 
 The runner prefers OTNS `MutualInterference` because OTNS documents that it models decreasing RSSI with distance and includes CCA/interference behaviour. If unavailable, the runner falls back in this order:
