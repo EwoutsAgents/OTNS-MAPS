@@ -18,6 +18,9 @@ Periodic Parent Search is OpenThread's built-in mechanism that lets an attached 
 - Local MTD build outputs:
   - PPS off: `ot-rfsim/build/stock-med-pps-off/bin/ot-cli-mtd`
   - PPS on: `ot-rfsim/build/stock-med-pps-on/bin/ot-cli-mtd`
+- Local FTD build outputs:
+  - PPS off: `ot-rfsim/build/stock-fed-pps-off/bin/ot-cli-ftd`
+  - PPS on: `ot-rfsim/build/stock-fed-pps-on/bin/ot-cli-ftd`
 
 ## Configuration finding
 
@@ -61,9 +64,9 @@ Default classification:
 }
 ```
 
-## How OTNS chooses the MED binary
+## How OTNS chooses node binaries
 
-OTNS maps `add med`, `add sed`, and `add ssed` to its MTD executable. This is implemented in `cli/CmdRunner.go`, where `MED`, `SED`, `SSED`, and `MTD` select `ec.Mtd`.
+OTNS maps `add med`, `add sed`, and `add ssed` to its MTD executable. It maps `add fed`, `add router`, `add reed`, and generic `add ftd` to its FTD executable. This is implemented in `cli/CmdRunner.go`, where `MED`, `SED`, `SSED`, and `MTD` select `ec.Mtd`, while `FTD`, `ROUTER`, `REED`, and `FED` select `ec.Ftd`.
 
 The local default executable lookup was:
 
@@ -82,7 +85,9 @@ mtd: ot-cli-mtd
 Detected MTD path      : ./ot-rfsim/ot-versions/ot-cli-mtd
 ```
 
-For PPS experiments, `scripts/run_baseline.py --node-binary-path ...` sends `exe mtd "<path>"` to OTNS before any `add med` command. Routers still use the default FTD binary.
+For MTD PPS experiments, `scripts/run_baseline.py --node-binary-path ...` sends `exe mtd "<path>"` to OTNS before any `add med` or `add sed` command. Routers still use the default FTD binary.
+
+For FED PPS experiments, `scripts/run_baseline.py --ftd-node-binary-path ...` sends `exe ftd "<path>"` to OTNS before any `add fed` command. OTNS uses the FTD executable for both the mobile FED and the router nodes, so the FED comparison documents this shared-executable limitation. The PPS flag is child-side behavior, and the intended behavioral difference is still the mobile FED's Periodic Parent Search setting.
 
 ## Build commands
 
@@ -161,6 +166,38 @@ OTNS_NODE_TYPE=stock-med-pps-on cmake -G "Unix Makefiles" \
 make -j"$(getconf _NPROCESSORS_ONLN)" ot-cli-mtd
 ```
 
+FED PPS disabled:
+
+```bash
+cd /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim
+rm -rf build/stock-fed-pps-off ../openthread/build/ot-rfsim-stock-fed-pps-off
+mkdir -p build/stock-fed-pps-off
+cd build/stock-fed-pps-off
+OTNS_NODE_TYPE=stock-fed-pps-off cmake -G "Unix Makefiles" \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  "${COMMON_OPTS[@]}" \
+  -DCMAKE_C_FLAGS=-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=0 \
+  -DCMAKE_CXX_FLAGS=-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=0 \
+  ../..
+make -j"$(getconf _NPROCESSORS_ONLN)" ot-cli-ftd
+```
+
+FED PPS enabled:
+
+```bash
+cd /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim
+rm -rf build/stock-fed-pps-on ../openthread/build/ot-rfsim-stock-fed-pps-on
+mkdir -p build/stock-fed-pps-on
+cd build/stock-fed-pps-on
+OTNS_NODE_TYPE=stock-fed-pps-on cmake -G "Unix Makefiles" \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  "${COMMON_OPTS[@]}" \
+  -DCMAKE_C_FLAGS=-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 \
+  -DCMAKE_CXX_FLAGS=-DOPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE=1 \
+  ../..
+make -j"$(getconf _NPROCESSORS_ONLN)" ot-cli-ftd
+```
+
 ## Verification
 
 Build hashes:
@@ -168,6 +205,8 @@ Build hashes:
 ```text
 167df12b5aafd643d50e25f921d25fd7858b7b5476cc39ac26d71a735ced159b  ot-rfsim/build/stock-med-pps-off/bin/ot-cli-mtd
 cd816d5c84a0b98298dfa0e1599a8146949bb0148b5c642eff6b203049b6f075  ot-rfsim/build/stock-med-pps-on/bin/ot-cli-mtd
+6349ed8af27f3b26e71e0e320a5cea609f904dc9dffebf14eeabfffc4366c850  ot-rfsim/build/stock-fed-pps-off/bin/ot-cli-ftd
+e93da597b29e00cf89913e8f633d63058938ea2212874ad9feba0bb695fca73b  ot-rfsim/build/stock-fed-pps-on/bin/ot-cli-ftd
 3011a33cc285ad7959de4d410fe1e2f44ff7c74023b76148909d6a102a4e5174  ot-rfsim/ot-versions/ot-cli-mtd
 ```
 

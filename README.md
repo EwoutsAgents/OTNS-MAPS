@@ -31,6 +31,7 @@ OTNS-MAPS/
 ├── scenarios/
 │   ├── baseline_mobile_parent_switch.yaml
 │   ├── calibrated_mobile_parent_switch.yaml
+│   ├── fed_mobile_parent_switch.yaml
 │   └── sed_mobile_parent_switch.yaml
 └── scripts/
     ├── run_baseline.py
@@ -96,15 +97,16 @@ The benchmark prefers the `MutualInterference` OTNS radio model. If it is unavai
 2. `Ideal_Rssi`
 3. `Ideal`
 
-The repository now includes three stock benchmark scenarios:
+The repository now includes four stock benchmark scenarios:
 
 - `scenarios/baseline_mobile_parent_switch.yaml` for the original reference run
 - `scenarios/calibrated_mobile_parent_switch.yaml` for a delayed-router variant that tries to induce an observable stock parent change without modifying OpenThread logic
+- `scenarios/fed_mobile_parent_switch.yaml` for a Full End Device variant that uses OTNS's FTD executable path
 - `scenarios/sed_mobile_parent_switch.yaml` for a Sleepy End Device variant that treats the `parent` command as the primary attachment observation path
 
 The original baseline and calibrated switch-attempt scenario use a MED because OTNS documents that a regular SED typically does not respond to ping traffic. The SED benchmark is documented separately and marks packet probes as unreliable by design.
 
-The repository also carries a MED-only Periodic Parent Search comparison. PPS is OpenThread's built-in periodic search for a better parent while a child remains attached. This comparison is intentionally stock OpenThread only: `stock-med-pps-off` and `stock-med-pps-on` differ only by the compile-time value of `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE` for the MTD binary used by `add med`. The current/default local MED build is a discovery result, not a third benchmark arm; in this checkout it is classified as equivalent to `stock-med-pps-on`. See [`docs/pps_build_variants.md`](docs/pps_build_variants.md), [`docs/pps_med_comparison.md`](docs/pps_med_comparison.md), and [`docs/pps_med_repeated_comparison.md`](docs/pps_med_repeated_comparison.md).
+The repository also carries Periodic Parent Search comparisons. PPS is OpenThread's built-in periodic search for a better parent while a child remains attached. These comparisons are intentionally stock OpenThread only: the PPS-off and PPS-on variants differ only by the compile-time value of `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE`. The current/default local MED build is a discovery result, not a third benchmark arm; in this checkout it is classified as equivalent to `stock-med-pps-on`. See [`docs/pps_build_variants.md`](docs/pps_build_variants.md), [`docs/pps_med_comparison.md`](docs/pps_med_comparison.md), [`docs/pps_med_repeated_comparison.md`](docs/pps_med_repeated_comparison.md), and [`docs/pps_fed_sed_comparison.md`](docs/pps_fed_sed_comparison.md).
 
 ## Run
 
@@ -192,6 +194,15 @@ python3 scripts/run_baseline.py \
   --otns-workdir /path/to/ot-ns
 ```
 
+Run the FED scenario:
+
+```bash
+python3 scripts/run_baseline.py \
+  --scenario scenarios/fed_mobile_parent_switch.yaml \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns
+```
+
 Run the calibrated MED PPS comparison after building the two MTD binaries:
 
 ```bash
@@ -212,6 +223,8 @@ python3 scripts/run_baseline.py \
 Repeat with `--artifact-name med-pps-on`, `--firmware-variant stock-med-pps-on`, `--parent-search-config enabled`, and the PPS-on MTD binary. The tracked artifacts are stored under `results/calibrated_mobile_parent_switch_med-pps-off/` and `results/calibrated_mobile_parent_switch_med-pps-on/`.
 
 Run the repeated calibrated MED PPS comparison with the same explicit binaries and metadata flags, using `--repeat-count 10` and artifact names `med-pps-off-repeated` and `med-pps-on-repeated`. The resulting aggregate comparison is documented in [`docs/pps_med_repeated_comparison.md`](docs/pps_med_repeated_comparison.md), with tracked artifacts under `results/calibrated_mobile_parent_switch_med-pps-off-repeated/` and `results/calibrated_mobile_parent_switch_med-pps-on-repeated/`.
+
+The FED/SED PPS profile extension is documented in [`docs/pps_fed_sed_comparison.md`](docs/pps_fed_sed_comparison.md). FED runs use `--ftd-node-binary-path` because OTNS maps `fed` to the FTD executable; SED runs use `--node-binary-path` because OTNS maps `sed` to the MTD executable.
 
 Generate plots when `matplotlib` is installed:
 

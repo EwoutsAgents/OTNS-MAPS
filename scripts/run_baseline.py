@@ -104,6 +104,12 @@ def parse_args() -> argparse.Namespace:
         help="Optional MTD node binary path. When provided, OTNS is told to use it for med/sed/ssed nodes.",
     )
     parser.add_argument(
+        "--ftd-node-binary-path",
+        type=Path,
+        default=None,
+        help="Optional FTD node binary path. When provided, OTNS is told to use it for router/reed/fed nodes.",
+    )
+    parser.add_argument(
         "--build-config-source",
         default=None,
         help="Path or command that documents how the node binary was built.",
@@ -267,6 +273,7 @@ def maybe_capture_replay(
     thread_device_type: str | None,
     parent_search_config: str,
     node_binary_path: Path | None,
+    ftd_node_binary_path: Path | None,
     build_config_source: str | None,
     equivalent_to: str | None,
     openthread_commit: str,
@@ -314,6 +321,7 @@ def maybe_capture_replay(
         "thread_device_type": thread_device_type,
         "parent_search_config": parent_search_config,
         "node_binary_path": str(node_binary_path) if node_binary_path is not None else None,
+        "ftd_node_binary_path": str(ftd_node_binary_path) if ftd_node_binary_path is not None else None,
         "build_config_source": build_config_source,
         "equivalent_to": equivalent_to,
         "openthread_commit": openthread_commit,
@@ -411,6 +419,7 @@ def tracked_results_manifest(
     thread_device_type: str | None,
     parent_search_config: str,
     node_binary_path: Path | None,
+    ftd_node_binary_path: Path | None,
     build_config_source: str | None,
     equivalent_to: str | None,
     openthread_commit: str,
@@ -435,6 +444,7 @@ def tracked_results_manifest(
         "thread_device_type": thread_device_type,
         "parent_search_config": parent_search_config,
         "node_binary_path": str(node_binary_path) if node_binary_path is not None else None,
+        "ftd_node_binary_path": str(ftd_node_binary_path) if ftd_node_binary_path is not None else None,
         "build_config_source": build_config_source,
         "equivalent_to": equivalent_to,
         "openthread_commit": openthread_commit,
@@ -490,6 +500,7 @@ def write_tracked_results_readme(
             f'- Thread device type: `{manifest["thread_device_type"]}`',
             f'- Parent search config: `{manifest["parent_search_config"]}`',
             f'- Node binary path: `{manifest["node_binary_path"]}`',
+            f'- FTD node binary path: `{manifest["ftd_node_binary_path"]}`',
             f'- Build config source: `{manifest["build_config_source"]}`',
             f'- Equivalent to: `{manifest["equivalent_to"]}`',
             f'- OpenThread commit: `{manifest["openthread_commit"]}`',
@@ -539,6 +550,7 @@ def export_tracked_results(
     thread_device_type: str | None,
     parent_search_config: str,
     node_binary_path: Path | None,
+    ftd_node_binary_path: Path | None,
     build_config_source: str | None,
     equivalent_to: str | None,
     openthread_commit: str,
@@ -589,6 +601,7 @@ def export_tracked_results(
         thread_device_type=thread_device_type,
         parent_search_config=parent_search_config,
         node_binary_path=node_binary_path,
+        ftd_node_binary_path=ftd_node_binary_path,
         build_config_source=build_config_source,
         equivalent_to=equivalent_to,
         openthread_commit=openthread_commit,
@@ -831,6 +844,7 @@ class RealBenchmarkRunner:
         otns_workdir: Path | None = None,
         otns_watch_level: str = "off",
         node_binary_path: Path | None = None,
+        ftd_node_binary_path: Path | None = None,
         thread_device_type: str | None = None,
         parent_search_config: str = "unknown",
     ) -> None:
@@ -839,6 +853,7 @@ class RealBenchmarkRunner:
         self.otns_workdir = otns_workdir
         self.otns_watch_level = otns_watch_level
         self.node_binary_path = node_binary_path
+        self.ftd_node_binary_path = ftd_node_binary_path
         self.thread_device_type = thread_device_type
         self.parent_search_config = parent_search_config
         self.otns_runtime_cwd = otns_runtime_cwd(otns_workdir)
@@ -859,6 +874,9 @@ class RealBenchmarkRunner:
         with OtnsSession(self.otns_command, cwd=self.otns_runtime_cwd) as session:
             session.command_output("speed 0")
             session.command_output(f'title "{self.scenario["title"]}"')
+            if self.ftd_node_binary_path is not None:
+                session.command_output(f'exe ftd "{self.ftd_node_binary_path}"')
+                self.notes.append(f"OTNS FTD executable set to {self.ftd_node_binary_path}.")
             if self.node_binary_path is not None:
                 session.command_output(f'exe mtd "{self.node_binary_path}"')
                 self.notes.append(f"OTNS MTD executable set to {self.node_binary_path}.")
@@ -1390,6 +1408,7 @@ def main() -> int:
             args.otns_workdir,
             args.otns_watch_level,
             node_binary_path=args.node_binary_path,
+            ftd_node_binary_path=args.ftd_node_binary_path,
             thread_device_type=args.thread_device_type,
             parent_search_config=args.parent_search_config,
         )
@@ -1418,6 +1437,7 @@ def main() -> int:
         thread_device_type=args.thread_device_type,
         parent_search_config=args.parent_search_config,
         node_binary_path=args.node_binary_path,
+        ftd_node_binary_path=args.ftd_node_binary_path,
         build_config_source=args.build_config_source,
         equivalent_to=args.equivalent_to,
         openthread_commit=args.openthread_commit,
@@ -1453,6 +1473,9 @@ def main() -> int:
     summary["thread_device_type"] = args.thread_device_type
     summary["parent_search_config"] = args.parent_search_config
     summary["node_binary_path"] = str(args.node_binary_path) if args.node_binary_path is not None else None
+    summary["ftd_node_binary_path"] = (
+        str(args.ftd_node_binary_path) if args.ftd_node_binary_path is not None else None
+    )
     summary["build_config_source"] = args.build_config_source
     summary["equivalent_to"] = args.equivalent_to
     summary["openthread_commit"] = args.openthread_commit
@@ -1486,6 +1509,7 @@ def main() -> int:
                 thread_device_type=args.thread_device_type,
                 parent_search_config=args.parent_search_config,
                 node_binary_path=args.node_binary_path,
+                ftd_node_binary_path=args.ftd_node_binary_path,
                 build_config_source=args.build_config_source,
                 equivalent_to=args.equivalent_to,
                 openthread_commit=args.openthread_commit,

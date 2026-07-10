@@ -8,10 +8,11 @@ This benchmark is intentionally not a new parent-selection algorithm. It measure
 
 ## Scenario design
 
-The repository currently carries three closely related stock scenarios:
+The repository currently carries four closely related stock scenarios:
 
 - `baseline_mobile_parent_switch` is the original reference setup.
 - `calibrated_mobile_parent_switch` delays Router B introduction so the mobile node first has time to attach to Router A before movement begins.
+- `fed_mobile_parent_switch` applies the calibrated delayed-router idea to a mobile Full End Device and uses OTNS's FTD executable path.
 - `sed_mobile_parent_switch` applies the delayed-router idea to a mobile Sleepy End Device and shifts primary observability away from ping replies.
 
 All scenarios use three nodes:
@@ -33,6 +34,8 @@ This keeps the benchmark within stock OTNS/OpenThread behavior while making init
 
 The initial baseline and calibrated switch-attempt scenarios use a MED instead of a regular SED. OTNS CLI documentation notes that a regular SED typically does not respond to ping traffic, which makes packet-delivery measurement less direct for a first benchmark.
 
+The FED variant is defined in [`../scenarios/fed_mobile_parent_switch.yaml`](../scenarios/fed_mobile_parent_switch.yaml). It keeps the calibrated delayed Router B introduction and changes the mobile node type to `fed`. OTNS maps `fed` and router nodes to the FTD executable family, so FED PPS experiments use `--ftd-node-binary-path` and document that the FTD binary is shared by the mobile FED and routers.
+
 The SED variant is defined in [`../scenarios/sed_mobile_parent_switch.yaml`](../scenarios/sed_mobile_parent_switch.yaml). It keeps the delayed Router B introduction, changes the mobile node type to `sed`, and records explicit observability metadata:
 
 - `device_profile: sleepy_end_device`
@@ -52,7 +55,7 @@ The clean comparison is:
 
 The current/default local MED build is classified separately as a discovery result. In the validated local checkout, the default MTD build is equivalent by configuration to `stock-med-pps-on` because `openthread/examples/platforms/simulation/openthread-core-simulation-config.h` defines `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE 1` when no explicit build flag overrides it.
 
-Build provenance and exact commands are recorded in [`pps_build_variants.md`](pps_build_variants.md). The single-run calibrated MED comparison is recorded in [`pps_med_comparison.md`](pps_med_comparison.md), and the 10-run follow-up is recorded in [`pps_med_repeated_comparison.md`](pps_med_repeated_comparison.md). The single-run tracked artifacts are:
+Build provenance and exact commands are recorded in [`pps_build_variants.md`](pps_build_variants.md). The single-run calibrated MED comparison is recorded in [`pps_med_comparison.md`](pps_med_comparison.md), the 10-run MED follow-up is recorded in [`pps_med_repeated_comparison.md`](pps_med_repeated_comparison.md), and the FED/SED profile extension is recorded in [`pps_fed_sed_comparison.md`](pps_fed_sed_comparison.md). The single-run MED tracked artifacts are:
 
 - `../results/calibrated_mobile_parent_switch_med-pps-off/20260710-020657-run01/20260710-020657-run01/`
 - `../results/calibrated_mobile_parent_switch_med-pps-on/20260710-020715-run01/20260710-020715-run01/`
@@ -65,6 +68,13 @@ The repeated MED PPS artifacts are:
 - `../results/calibrated_mobile_parent_switch_med-pps-on-repeated/20260710-023336-experiment/`
 
 The repeated result shows earlier median switch timing and lower median outage for PPS-on, but similar mean switch timing and no oscillation in either variant.
+
+The FED/SED PPS extension artifacts are:
+
+- `../results/fed_mobile_parent_switch_fed-pps-off/20260710-104510-run01/20260710-104510-run01/`
+- `../results/fed_mobile_parent_switch_fed-pps-on/20260710-104523-run01/20260710-104523-run01/`
+- `../results/sed_mobile_parent_switch_sed-pps-off/20260710-104537-run01/20260710-104537-run01/`
+- `../results/sed_mobile_parent_switch_sed-pps-on/20260710-104550-run01/20260710-104550-run01/`
 
 ## RF propagation model
 
