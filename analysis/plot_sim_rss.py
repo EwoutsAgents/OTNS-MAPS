@@ -46,14 +46,6 @@ def load_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
-def points_to_path(points: list[tuple[float, float]], x_scale, y_scale) -> str:
-    parts = []
-    for index, (x_value, y_value) in enumerate(points):
-        command = "M" if index == 0 else "L"
-        parts.append(f"{command}{x_scale(x_value):.2f},{y_scale(y_value):.2f}")
-    return " ".join(parts)
-
-
 def write_svg(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
@@ -135,10 +127,12 @@ def plot_run(csv_file: Path, output: Path, title: str | None) -> None:
     legend_y = top + 18
     for index, (name, values) in enumerate(series.items()):
         color = COLORS[name]
-        path_data = points_to_path(values, x_scale, y_scale)
-        elements.append(f'<path d="{path_data}" fill="none" stroke="{color}" stroke-width="2"/>')
+        for x_value, y_value in values:
+            elements.append(
+                f'<circle cx="{x_scale(x_value):.2f}" cy="{y_scale(y_value):.2f}" r="2.1" fill="{color}" fill-opacity="0.76"/>'
+            )
         y = legend_y + index * 20
-        elements.append(f'<line x1="{legend_x}" x2="{legend_x+24}" y1="{y}" y2="{y}" stroke="{color}" stroke-width="3"/>')
+        elements.append(f'<circle cx="{legend_x+12}" cy="{y}" r="4" fill="{color}"/>')
         elements.append(
             f'<text x="{legend_x+32}" y="{y+4}" font-family="Arial, sans-serif" font-size="12" fill="#222">{html.escape(name)}</text>'
         )
