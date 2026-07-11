@@ -36,6 +36,8 @@ Each repeated artifact contains 10 CSV files, 10 summary JSON files, 10 replay f
 
 ## Parent Probe and Simulator RSS Metrics
 
+![End-dwell simulator RSS comparison](simple_pps_matrix_rss_end_dwell.svg)
+
 | Profile | PPS | Mean parent-probe PDR | Router A end-dwell RSS mean (dBm) | Router A end-dwell RSS SD | Mobile-to-parent end-dwell RSS mean (dBm) | Mobile-to-parent end-dwell RSS SD | Mean sim-RSS match rate |
 |---|---|---:|---:|---:|---:|---:|---:|
 | MED | off | 0.996318 | -71.957 | 0.0 | -67.242675 | 9.93867 | 0.9998 |
@@ -44,6 +46,15 @@ Each repeated artifact contains 10 CSV files, 10 summary JSON files, 10 replay f
 | FED | on-30s | 0.996315 | -71.957 | 0.0 | -52.582906 | 7.115965 | 0.9998 |
 | SED | off | 0.992909 | -71.957 | 0.0 | -60.171666 | 12.422833 | 0.999299 |
 | SED | on-30s | 0.997246 | -71.957 | 0.0 | -67.242913 | 9.938167 | 0.9997 |
+
+Representative per-run RSS-over-time plots are stored with each repeated artifact:
+
+- MED PPS off: `results/med_simple_parent_switch_med-pps-off-repeated/20260710-225151-experiment/rss_over_time_run01.svg`
+- MED PPS on-30s: `results/med_simple_parent_switch_med-pps-on-repeated/20260710-225424-experiment/rss_over_time_run01.svg`
+- FED PPS off: `results/fed_simple_parent_switch_fed-pps-off-repeated/20260710-225642-experiment/rss_over_time_run01.svg`
+- FED PPS on-30s: `results/fed_simple_parent_switch_fed-pps-on-repeated/20260710-225921-experiment/rss_over_time_run01.svg`
+- SED PPS off: `results/sed_simple_parent_switch_sed-pps-off-repeated/20260710-230147-experiment/rss_over_time_run01.svg`
+- SED PPS on-30s: `results/sed_simple_parent_switch_sed-pps-on-repeated/20260710-230439-experiment/rss_over_time_run01.svg`
 
 ## Interpretation
 
