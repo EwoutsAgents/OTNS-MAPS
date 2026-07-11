@@ -12,8 +12,6 @@ from typing import Any
 
 
 COLORS = {
-    "router_a_to_mobile": "#1f77b4",
-    "router_b_to_mobile": "#2ca02c",
     "mobile_to_parent": "#d62728",
     "parent": "#555555",
 }
@@ -64,8 +62,8 @@ def plot_run(csv_file: Path, output: Path, title: str | None) -> None:
         raise ValueError(f"No rows in {csv_file}")
 
     series: dict[str, list[tuple[float, float]]] = {}
-    for prefix in ("router_a_to_mobile", "router_b_to_mobile", "mobile_to_parent"):
-        column = f"{prefix}_request_rx_sim_rss_dbm"
+    for prefix in ("mobile_to_parent",):
+        column = f"{prefix}_reply_rx_sim_rss_dbm"
         values = []
         for row in rows:
             x_value = to_float(row.get("sim_time_s"))
@@ -99,7 +97,7 @@ def plot_run(csv_file: Path, output: Path, title: str | None) -> None:
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
         '<rect width="100%" height="100%" fill="#ffffff"/>',
         f'<text x="{left}" y="28" font-family="Arial, sans-serif" font-size="20" font-weight="700">{html.escape(title_text)}</text>',
-        f'<text x="{left}" y="48" font-family="Arial, sans-serif" font-size="12" fill="#555">Request-side simulator RSS, model-derived at ping event positions</text>',
+        f'<text x="{left}" y="48" font-family="Arial, sans-serif" font-size="12" fill="#555">ED-to-parent ping reply RSS at ED, model-derived at ping event positions</text>',
     ]
 
     for tick in axis_ticks(min_y, max_y):
@@ -196,7 +194,6 @@ def plot_matrix(artifacts: list[Path], output: Path, title: str) -> None:
         rows.append(
             {
                 "label": label_for_artifact(artifact),
-                "router_a": aggregate.get("mean_router_a_to_mobile_end_dwell_sim_rss_dbm"),
                 "mobile_parent": aggregate.get("mean_mobile_to_parent_end_dwell_sim_rss_dbm"),
             }
         )
@@ -205,7 +202,7 @@ def plot_matrix(artifacts: list[Path], output: Path, title: str) -> None:
     left, right, top, bottom = 84, 30, 58, 128
     plot_width = width - left - right
     plot_height = height - top - bottom
-    values = [value for row in rows for value in (row["router_a"], row["mobile_parent"]) if value is not None]
+    values = [row["mobile_parent"] for row in rows if row["mobile_parent"] is not None]
     min_y = min(-90.0, min(values) - 4)
     max_y = max(-40.0, max(values) + 4)
 
@@ -219,7 +216,7 @@ def plot_matrix(artifacts: list[Path], output: Path, title: str) -> None:
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
         '<rect width="100%" height="100%" fill="#ffffff"/>',
         f'<text x="{left}" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="700">{html.escape(title)}</text>',
-        f'<text x="{left}" y="50" font-family="Arial, sans-serif" font-size="12" fill="#555">Mean request-side RSS during end dwell, model-derived at ping event positions</text>',
+        f'<text x="{left}" y="50" font-family="Arial, sans-serif" font-size="12" fill="#555">Mean ED-to-parent reply RSS at ED during end dwell, model-derived at ping event positions</text>',
     ]
     for tick in axis_ticks(min_y, max_y):
         y = y_scale(tick)
@@ -235,7 +232,7 @@ def plot_matrix(artifacts: list[Path], output: Path, title: str) -> None:
     baseline = y_scale(min_y)
     for index, row in enumerate(rows):
         cx = left + group_width * index + group_width / 2
-        for offset, key, color in ((-bar_width / 1.8, "router_a", COLORS["router_a_to_mobile"]), (bar_width / 1.8, "mobile_parent", COLORS["mobile_to_parent"])):
+        for offset, key, color in ((0, "mobile_parent", COLORS["mobile_to_parent"]),):
             value = row[key]
             if value is None:
                 continue
@@ -252,9 +249,7 @@ def plot_matrix(artifacts: list[Path], output: Path, title: str) -> None:
 
     legend_x = left + 12
     legend_y = top + 18
-    for index, (label, color) in enumerate(
-        (("Router A -> mobile", COLORS["router_a_to_mobile"]), ("mobile -> current parent", COLORS["mobile_to_parent"]))
-    ):
+    for index, (label, color) in enumerate((("mobile -> current parent reply at ED", COLORS["mobile_to_parent"]),)):
         y = legend_y + index * 20
         elements.append(f'<rect x="{legend_x}" y="{y-10}" width="18" height="12" fill="{color}"/>')
         elements.append(f'<text x="{legend_x+26}" y="{y}" font-family="Arial, sans-serif" font-size="12">{label}</text>')

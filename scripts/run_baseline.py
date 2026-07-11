@@ -976,12 +976,8 @@ class RealBenchmarkRunner:
                 session.command_output(f"move {mobile_id} {int(round(x))} {int(round(y))}")
                 self.node_refs["mobile"].x = x
                 self.node_refs["mobile"].y = y
+                # The active benchmark sends exactly one probe per sample: mobile ED -> current parent.
                 parent_probe: dict[str, Any] = self._send_mobile_to_parent_probe(session, mobile_id)
-                for probe in self.scenario["traffic_probes"]:
-                    src_id = self.node_refs[probe["src"]].node_id
-                    dst_id = self.node_refs[probe["dst"]].node_id
-                    # OTNS schedules ping results that become visible during the following go interval.
-                    session.command_output(f'ping {src_id} {dst_id} count {probe["count"]}')
                 go_output_lines = session.command_output(f'go {timing["step_seconds"]}')
                 sample = self._collect_sample(session, index, x, y, go_output_lines, parent_probe)
                 sample["selected_radio_model"] = radio_model
@@ -1040,11 +1036,11 @@ class RealBenchmarkRunner:
         if not self.capture_sim_ping_rss:
             return {}
         if not src_name or not dst_name:
-            return unavailable_sim_rss("unavailable_no_endpoint")
+            return {}
         src = self.node_refs.get(src_name)
         dst = self.node_refs.get(dst_name)
         if src is None or dst is None:
-            return unavailable_sim_rss("unavailable_no_endpoint")
+            return {}
 
         request_rssi = derive_mutual_interference_rssi_dbm(src.x, src.y, dst.x, dst.y)
         rx_count = int((ping_result or {}).get("rx") or 0)
@@ -1201,7 +1197,7 @@ class RealBenchmarkRunner:
             sample[f"{router_name}_scan_dbm"] = scan_match["dbm"] if scan_match else None
             sample[f"{router_name}_scan_lqi"] = scan_match["lqi"] if scan_match else None
 
-        for probe in self.scenario["traffic_probes"]:
+        for probe in self.scenario.get("traffic_probes", []):
             src_id = self.node_refs[probe["src"]].node_id
             sample["probe_results"][probe["name"]] = ping_results_by_source.get(
                 src_id,
@@ -1269,7 +1265,8 @@ class RealBenchmarkRunner:
     def _connectivity_ok(self, sample: dict[str, Any]) -> bool:
         packet_probe_reliable = self.observability.get("packet_probe_reliable", True)
         if packet_probe_reliable:
-            return any(probe["rx"] and probe["rx"] > 0 for probe in sample["probe_results"].values())
+            parent_probe = sample.get("mobile_to_parent_result", {})
+            return bool(parent_probe.get("rx") and parent_probe["rx"] > 0)
 
         mobile_state = str(sample.get("mobile_state") or "").lower()
         parent_observed = bool(
@@ -1348,12 +1345,8 @@ class MockBenchmarkRunner:
             parent = "router_a" if dist_a <= dist_b + 20 else "router_b"
             if index in (10, 11):
                 mobile_state = "detached"
-                ping_a_rx = 0
-                ping_b_rx = 0
             else:
                 mobile_state = "child"
-                ping_a_rx = 1 if dist_a < 330 else 0
-                ping_b_rx = 1 if dist_b < 330 else 0
             parent_probe_rx = 1 if mobile_state == "child" else 0
 
             if previous_parent and parent != previous_parent:
@@ -1368,7 +1361,7 @@ class MockBenchmarkRunner:
             previous_parent = parent
 
             if self.observability.get("packet_probe_reliable", True):
-                connectivity_ok = bool(ping_a_rx or ping_b_rx)
+                connectivity_ok = bool(parent_probe_rx)
             else:
                 connectivity_ok = mobile_state == "child"
             if not connectivity_ok and not outage_active:
@@ -1411,9 +1404,9 @@ class MockBenchmarkRunner:
                     "rtt_max_ms": 12.0 if parent_probe_rx else None,
                 },
                 "ip_counters": {
-                    "TxSuccess": str(index + ping_a_rx + ping_b_rx),
-                    "TxFailed": str(max(0, 2 - ping_a_rx - ping_b_rx)),
-                    "RxSuccess": str(index + ping_a_rx + ping_b_rx),
+                    "TxSuccess": str(index + parent_probe_rx),
+                    "TxFailed": str(max(0, 1 - parent_probe_rx)),
+                    "RxSuccess": str(index + parent_probe_rx),
                     "RxFailed": "0",
                 },
                 "mle_counters": {
@@ -1424,38 +1417,8 @@ class MockBenchmarkRunner:
                 "router_a_scan_lqi": "3" if dist_a < 250 else "2",
                 "router_b_scan_dbm": str(round(-25 - dist_b / 8, 1)),
                 "router_b_scan_lqi": "3" if dist_b < 250 else "2",
-                "probe_results": {
-                    "router_a_to_mobile": {
-                        "tx": 1,
-                        "rx": ping_a_rx,
-                        "loss_pct": 0.0 if ping_a_rx else 100.0,
-                        "rtt_min_ms": 10.0 + round(dist_a / 40, 3) if ping_a_rx else None,
-                        "rtt_avg_ms": 12.0 + round(dist_a / 40, 3) if ping_a_rx else None,
-                        "rtt_max_ms": 14.0 + round(dist_a / 40, 3) if ping_a_rx else None,
-                },
-                    "router_b_to_mobile": {
-                        "tx": 1,
-                        "rx": ping_b_rx,
-                        "loss_pct": 0.0 if ping_b_rx else 100.0,
-                        "rtt_min_ms": 10.0 + round(dist_b / 40, 3) if ping_b_rx else None,
-                        "rtt_avg_ms": 12.0 + round(dist_b / 40, 3) if ping_b_rx else None,
-                        "rtt_max_ms": 14.0 + round(dist_b / 40, 3) if ping_b_rx else None,
-                    },
-	                },
-                "probe_sim_rss": {
-                    "router_a_to_mobile": self._mock_ping_sim_rss(
-                        (router_a["x"], router_a["y"]),
-                        (x, y),
-                        sim_time_s,
-                        ping_a_rx,
-                    ),
-                    "router_b_to_mobile": self._mock_ping_sim_rss(
-                        (router_b["x"], router_b["y"]),
-                        (x, y),
-                        sim_time_s,
-                        ping_b_rx,
-                    ),
-                },
+                "probe_results": {},
+                "probe_sim_rss": {},
                 "mobile_to_parent_sim_rss": self._mock_ping_sim_rss(
                     (x, y),
                     (
@@ -1565,8 +1528,9 @@ def collect_sim_rss_records(samples: list[dict[str, Any]]) -> list[tuple[str, di
     records: list[tuple[str, dict[str, Any], dict[str, Any]]] = []
     for sample in samples:
         for probe_name, sim_rss in sample.get("probe_sim_rss", {}).items():
-            records.append((probe_name, sim_rss, sample))
-        if "mobile_to_parent_sim_rss" in sample:
+            if sim_rss:
+                records.append((probe_name, sim_rss, sample))
+        if sample.get("mobile_to_parent_sim_rss"):
             records.append(("mobile_to_parent", sample["mobile_to_parent_sim_rss"], sample))
     return records
 
@@ -1647,8 +1611,8 @@ def build_summary(
         if parent_probe.get("rtt_avg_ms") is not None:
             parent_probe_rtt_values.append(float(parent_probe["rtt_avg_ms"]))
 
-    pdr = (total_rx / total_tx) if total_tx else None
     parent_probe_pdr = (parent_probe_total_rx / parent_probe_total_tx) if parent_probe_total_tx else None
+    pdr = (total_rx / total_tx) if total_tx else parent_probe_pdr
     compact_parent_sequence = [value for index, value in enumerate(parent_sequence) if index == 0 or value != parent_sequence[index - 1]]
     initial_observed_parent = samples[0].get("parent_node_guess") if samples else None
     final_observed_parent = samples[-1].get("parent_node_guess") if samples else None
@@ -1672,29 +1636,17 @@ def build_summary(
         if sim_ping_rss_capture_enabled
     }
     movement_steps = int(scenario.get("timing", {}).get("movement_steps", 0) or 0)
-    router_a_end_rssi = end_dwell_sim_rss_values(
-        samples,
-        movement_steps,
-        "router_a_to_mobile",
-        "request_rx_sim_rss_dbm",
-    )
-    router_a_end_lqi = end_dwell_sim_rss_values(
-        samples,
-        movement_steps,
-        "router_a_to_mobile",
-        "request_rx_sim_lqi",
-    )
     mobile_parent_end_rssi = end_dwell_sim_rss_values(
         samples,
         movement_steps,
         "mobile_to_parent",
-        "request_rx_sim_rss_dbm",
+        "reply_rx_sim_rss_dbm",
     )
     mobile_parent_end_lqi = end_dwell_sim_rss_values(
         samples,
         movement_steps,
         "mobile_to_parent",
-        "request_rx_sim_lqi",
+        "reply_rx_sim_lqi",
     )
     expected_initial_parent = scenario.get("expected_initial_parent")
     if expected_initial_parent and initial_observed_parent != expected_initial_parent:
@@ -1757,9 +1709,6 @@ def build_summary(
         "sim_ping_rss_unmatched_probe_events": sim_rss_unmatched_probe_events,
         "sim_ping_rss_ambiguous_probe_events": sim_rss_ambiguous_probe_events,
         "sim_ping_rss_probe_stats": sim_rss_probe_stats,
-        "router_a_to_mobile_end_dwell_sim_rss_dbm_mean": numeric_mean(router_a_end_rssi),
-        "router_a_to_mobile_end_dwell_sim_rss_dbm_median": numeric_median(router_a_end_rssi),
-        "router_a_to_mobile_end_dwell_sim_lqi_median": numeric_median(router_a_end_lqi),
         "mobile_to_parent_end_dwell_sim_rss_dbm_mean": numeric_mean(mobile_parent_end_rssi),
         "mobile_to_parent_end_dwell_sim_rss_dbm_median": numeric_median(mobile_parent_end_rssi),
         "mobile_to_parent_end_dwell_sim_lqi_median": numeric_median(mobile_parent_end_lqi),

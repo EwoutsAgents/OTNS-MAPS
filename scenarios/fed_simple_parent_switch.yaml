@@ -67,15 +67,3 @@ movement:
     y: 360
   speed_mps: 5
   hold_end_steps: 320
-
-traffic_probes:
-  - name: router_a_to_mobile
-    kind: ping
-    src: router_a
-    dst: mobile
-    count: 1
-  - name: router_b_to_mobile
-    kind: ping
-    src: router_b
-    dst: mobile
-    count: 1

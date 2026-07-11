@@ -8,9 +8,11 @@ No MAPS policy or OpenThread parent-selection logic is implemented here. PPS-off
 
 All three active scenarios place Router A at `(250, 300)`, Router B at `(650, 300)`, and move the end device from `(150, 360)` to `(750, 360)`. Router B is still introduced after initial attachment to Router A.
 
-The scenarios assume OTNS `MeterPerUnit = 0.1`, so one coordinate unit is treated as 0.1 m unless the radio parameter is overridden. The 600-coordinate-unit path is 60 m; with 12 seconds of movement, the target speed is 5 m/s. The mobile then dwells at the end for 320 seconds. Each 1-second sample also sends a mobile-to-current-parent ping when the parent resolves to a known router.
+The scenarios assume OTNS `MeterPerUnit = 0.1`, so one coordinate unit is treated as 0.1 m unless the radio parameter is overridden. The 600-coordinate-unit path is 60 m; with 12 seconds of movement, the target speed is 5 m/s. The mobile then dwells at the end for 320 seconds. The active runner sends exactly one 1 Hz ICMP ping from the mobile end device to its currently observed parent when that parent resolves to a known router.
 
-The runner records parent-probe reachability/RTT and, when `--capture-sim-ping-rss` is enabled, attaches simulator-level RSS/LQI to each ping probe. In this pass the RSS source is `otns_model_derived_at_ping`: a fallback derived from the OTNS `MutualInterference` 3GPP indoor radio model at the exact ping source/destination positions and sample time. It is simulator-model RSS tied to ping events, not OpenThread neighbor/parent-table RSS and not scan RSS.
+The runner records parent-probe reachability/RTT and, when `--capture-sim-ping-rss` is enabled, attaches simulator-level RSS/LQI to each parent ping. The primary RSS field is `mobile_to_parent_reply_rx_sim_rss_dbm`, the parent reply received at the mobile ED. The RSS source is `otns_model_derived_at_ping`: a fallback derived from the OTNS `MutualInterference` 3GPP indoor radio model at the exact ping source/destination positions and sample time. It is simulator-model RSS tied to ping events, not OpenThread neighbor/parent-table RSS and not scan RSS.
+
+The artifact paths below are from the last full six-arm matrix before the fixed router-originated probes were removed from the active scenarios. New runs generated after this cleanup contain only `mobile_to_parent` probe fields.
 
 ## Artifacts
 
@@ -38,14 +40,14 @@ Each repeated artifact contains 10 CSV files, 10 summary JSON files, 10 replay f
 
 ![End-dwell simulator RSS comparison](simple_pps_matrix_rss_end_dwell.svg)
 
-| Profile | PPS | Mean parent-probe PDR | Router A end-dwell RSS mean (dBm) | Router A end-dwell RSS SD | Mobile-to-parent end-dwell RSS mean (dBm) | Mobile-to-parent end-dwell RSS SD | Mean sim-RSS match rate |
-|---|---|---:|---:|---:|---:|---:|---:|
-| MED | off | 0.996318 | -71.957 | 0.0 | -67.242675 | 9.93867 | 0.9998 |
-| MED | on-30s | 0.997557 | -71.957 | 0.0 | -62.596338 | 12.090487 | 0.9997 |
-| FED | off | 0.997823 | -71.957 | 0.0 | -67.164007 | 8.638489 | 0.999299 |
-| FED | on-30s | 0.996315 | -71.957 | 0.0 | -52.582906 | 7.115965 | 0.9998 |
-| SED | off | 0.992909 | -71.957 | 0.0 | -60.171666 | 12.422833 | 0.999299 |
-| SED | on-30s | 0.997246 | -71.957 | 0.0 | -67.242913 | 9.938167 | 0.9997 |
+| Profile | PPS | Mean parent-probe PDR | Mobile-to-parent end-dwell RSS mean (dBm) | Mobile-to-parent end-dwell RSS SD | Mean sim-RSS match rate |
+|---|---|---:|---:|---:|---:|
+| MED | off | 0.996318 | -67.242675 | 9.93867 | 0.9998 |
+| MED | on-30s | 0.997557 | -62.596338 | 12.090487 | 0.9997 |
+| FED | off | 0.997823 | -67.164007 | 8.638489 | 0.999299 |
+| FED | on-30s | 0.996315 | -52.582906 | 7.115965 | 0.9998 |
+| SED | off | 0.992909 | -60.171666 | 12.422833 | 0.999299 |
+| SED | on-30s | 0.997246 | -67.242913 | 9.938167 | 0.9997 |
 
 Representative per-run RSS-over-time plots are stored with each repeated artifact:
 
@@ -66,7 +68,7 @@ FED PPS-on-30s switched in 8 of 10 runs while PPS-off switched in 3 of 10. This 
 
 SED PPS-on-30s switched in 2 of 10 runs while PPS-off switched in 5 of 10. SED packet delivery and parent-probe metrics remain secondary evidence because regular SED ping behavior is not the primary attachment signal; parent-command observation remains primary.
 
-The parent probe generally showed high delivery to the currently observed parent, including during end dwell. The model-derived Router A end-dwell RSS is about `-71.957 dBm` for all profiles because it is determined by the fixed end position `(750, 360)` relative to Router A. This indicates Router A remains physically viable in the simulator model at the dwell position, which helps explain sticky-parent behavior.
+The parent probe generally showed high delivery to the currently observed parent, including during end dwell. Where the ED remains parented to Router A at the dwell position, the model-derived reply RSS at the ED is around `-71.957 dBm`, indicating Router A remains physically viable in the simulator model at the dwell position. This helps explain sticky-parent behavior.
 
 No oscillation was observed in any of the six PPS-on-30s repeated arms.
 
@@ -88,4 +90,4 @@ FED runs used `--ftd-node-binary-path`; MED and SED runs used `--node-binary-pat
 - FED uses OTNS's FTD executable family for both routers and the mobile FED.
 - Replay MP4s are visual evidence; CSV and JSON summaries are the metric sources.
 - Simulator RSS is model-derived from OTNS `MutualInterference` at ping event positions because the exported replay/log artifacts do not expose receive RSS/LQI events for direct matching.
-- Failed pings still have request-side model-derived RSS; reply-side RSS is recorded only when the ping reply is observed.
+- The active RSS signal for comparison is reply-side RSS at the ED; it is recorded only when the parent ping reply is observed.

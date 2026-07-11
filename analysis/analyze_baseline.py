@@ -201,22 +201,21 @@ def summarize_run(path: Path) -> dict[str, Any]:
         if sim_capture_enabled
     }
     dwell_rows = end_dwell_rows(rows)
-    router_a_end_rssi = [
-        to_float(row.get("router_a_to_mobile_request_rx_sim_rss_dbm"))
-        for row in dwell_rows
-    ]
-    router_a_end_lqi = [
-        to_float(row.get("router_a_to_mobile_request_rx_sim_lqi"))
-        for row in dwell_rows
-    ]
     mobile_parent_end_rssi = [
-        to_float(row.get("mobile_to_parent_request_rx_sim_rss_dbm"))
+        to_float(row.get("mobile_to_parent_reply_rx_sim_rss_dbm"))
         for row in dwell_rows
     ]
     mobile_parent_end_lqi = [
-        to_float(row.get("mobile_to_parent_request_rx_sim_lqi"))
+        to_float(row.get("mobile_to_parent_reply_rx_sim_lqi"))
         for row in dwell_rows
     ]
+    packet_delivery_ratio = (
+        round(total_rx / total_tx, 6)
+        if total_tx
+        else round(parent_probe_rx / parent_probe_tx, 6)
+        if parent_probe_tx
+        else None
+    )
     if switch_times:
         result_classification = "switch_observed"
     elif initial_observed_parent and final_observed_parent:
@@ -243,7 +242,7 @@ def summarize_run(path: Path) -> dict[str, Any]:
             None,
         ),
         "total_outage_s": total_outage_s,
-        "packet_delivery_ratio": round(total_rx / total_tx, 6) if total_tx else None,
+        "packet_delivery_ratio": packet_delivery_ratio,
         "parent_probe_enabled": "mobile_to_parent_tx" in rows[0],
         "parent_probe_total_tx": int(parent_probe_tx),
         "parent_probe_total_rx": int(parent_probe_rx),
@@ -258,9 +257,6 @@ def summarize_run(path: Path) -> dict[str, Any]:
         "sim_ping_rss_unmatched_probe_events": sim_unmatched_events,
         "sim_ping_rss_ambiguous_probe_events": sim_ambiguous_events,
         "sim_ping_rss_probe_stats": sim_probe_stats,
-        "router_a_to_mobile_end_dwell_sim_rss_dbm_mean": _mean_or_none(router_a_end_rssi),
-        "router_a_to_mobile_end_dwell_sim_rss_dbm_median": _median_or_none(router_a_end_rssi),
-        "router_a_to_mobile_end_dwell_sim_lqi_median": _median_or_none(router_a_end_lqi),
         "mobile_to_parent_end_dwell_sim_rss_dbm_mean": _mean_or_none(mobile_parent_end_rssi),
         "mobile_to_parent_end_dwell_sim_rss_dbm_median": _median_or_none(mobile_parent_end_rssi),
         "mobile_to_parent_end_dwell_sim_lqi_median": _median_or_none(mobile_parent_end_lqi),
@@ -339,9 +335,6 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
     pdr_values = [summary.get("packet_delivery_ratio") for summary in summaries]
     parent_probe_pdr_values = [summary.get("parent_probe_delivery_ratio") for summary in summaries]
     parent_probe_rtt_values = [summary.get("parent_probe_mean_rtt_avg_ms") for summary in summaries]
-    router_a_end_rssi_values = [
-        summary.get("router_a_to_mobile_end_dwell_sim_rss_dbm_mean") for summary in summaries
-    ]
     mobile_parent_end_rssi_values = [
         summary.get("mobile_to_parent_end_dwell_sim_rss_dbm_mean") for summary in summaries
     ]
@@ -400,10 +393,6 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
         "median_parent_probe_rtt_avg_ms": _median_or_none(parent_probe_rtt_values),
         "stddev_parent_probe_rtt_avg_ms": _stddev_or_none(parent_probe_rtt_values),
         "parent_probe_rtt_sample_size": _sample_size(parent_probe_rtt_values),
-        "mean_router_a_to_mobile_end_dwell_sim_rss_dbm": _mean_or_none(router_a_end_rssi_values),
-        "median_router_a_to_mobile_end_dwell_sim_rss_dbm": _median_or_none(router_a_end_rssi_values),
-        "stddev_router_a_to_mobile_end_dwell_sim_rss_dbm": _stddev_or_none(router_a_end_rssi_values),
-        "router_a_to_mobile_end_dwell_sim_rss_sample_size": _sample_size(router_a_end_rssi_values),
         "mean_mobile_to_parent_end_dwell_sim_rss_dbm": _mean_or_none(mobile_parent_end_rssi_values),
         "median_mobile_to_parent_end_dwell_sim_rss_dbm": _median_or_none(mobile_parent_end_rssi_values),
         "stddev_mobile_to_parent_end_dwell_sim_rss_dbm": _stddev_or_none(mobile_parent_end_rssi_values),
