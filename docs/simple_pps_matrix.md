@@ -12,29 +12,27 @@ The scenarios assume OTNS `MeterPerUnit = 0.1`, so one coordinate unit is treate
 
 The runner records parent-probe reachability/RTT and, when `--capture-sim-ping-rss` is enabled, attaches simulator-level RSS/LQI to each parent ping. The primary RSS field is `mobile_to_parent_reply_rx_sim_rss_dbm`, the parent reply received at the mobile ED. The RSS source is `otns_model_derived_at_ping`: a fallback derived from the OTNS `MutualInterference` 3GPP indoor radio model at the exact ping source/destination positions and sample time. It is simulator-model RSS tied to ping events, not OpenThread neighbor/parent-table RSS and not scan RSS.
 
-The artifact paths below are from the last full six-arm matrix before the fixed router-originated probes were removed from the active scenarios. New runs generated after this cleanup contain only `mobile_to_parent` probe fields.
-
 ## Artifacts
 
-- MED PPS off: `results/med_simple_parent_switch_med-pps-off-repeated/20260710-225151-experiment/`
-- MED PPS on: `results/med_simple_parent_switch_med-pps-on-repeated/20260710-225424-experiment/`
-- FED PPS off: `results/fed_simple_parent_switch_fed-pps-off-repeated/20260710-225642-experiment/`
-- FED PPS on: `results/fed_simple_parent_switch_fed-pps-on-repeated/20260710-225921-experiment/`
-- SED PPS off: `results/sed_simple_parent_switch_sed-pps-off-repeated/20260710-230147-experiment/`
-- SED PPS on: `results/sed_simple_parent_switch_sed-pps-on-repeated/20260710-230439-experiment/`
+- MED PPS off: `results/med_simple_parent_switch_med-pps-off-repeated/20260711-131259-experiment/`
+- MED PPS on: `results/med_simple_parent_switch_med-pps-on-repeated/20260711-131359-experiment/`
+- FED PPS off: `results/fed_simple_parent_switch_fed-pps-off-repeated/20260711-131501-experiment/`
+- FED PPS on: `results/fed_simple_parent_switch_fed-pps-on-repeated/20260711-131605-experiment/`
+- SED PPS off: `results/sed_simple_parent_switch_sed-pps-off-repeated/20260711-131707-experiment/`
+- SED PPS on: `results/sed_simple_parent_switch_sed-pps-on-repeated/20260711-131818-experiment/`
 
-Each repeated artifact contains 10 CSV files, 10 summary JSON files, 10 replay files, 10 replay metadata JSON files, 30 node logs, `aggregate_summary.json`, `repeated_run_manifest.json`, `manifest.json`, `README.md`, and one representative MP4.
+Each repeated artifact contains 10 CSV files, 10 summary JSON files, 10 replay files, 10 replay metadata JSON files, 30 node logs, `aggregate_summary.json`, `repeated_run_manifest.json`, `manifest.json`, `README.md`, and one representative RSS-over-time SVG.
 
 ## Aggregate Metrics
 
 | Profile | PPS | Switch rate | Mean switch time (s) | Median switch time (s) | SD switch time (s) | Mean switch x | Mean outage (s) | Median outage (s) | SD outage (s) | Mean PDR | SD PDR | Mean switches | SD switches | Oscillation rate |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| MED | off | 0.2 | 503.0 | 503.0 | 0.0 | 750 | 3.9 | 3.0 | 5.300943 | 0.996025 | 0.004601 | 0.2 | 0.421637 | 0 |
-| MED | on-30s | 0.4 | 505.0 | 507.5 | 8.524475 | 750 | 2.7 | 1.5 | 4.571652 | 0.997135 | 0.003741 | 0.4 | 0.516398 | 0 |
-| FED | off | 0.3 | 604.0 | 589.0 | 107.289328 | 750 | 4.3 | 1.5 | 6.074537 | 0.997833 | 0.003298 | 0.3 | 0.483046 | 0 |
-| FED | on-30s | 0.8 | 533.875 | 529.5 | 26.925492 | 750 | 3.6 | 1.5 | 5.440588 | 0.996619 | 0.004932 | 0.8 | 0.421637 | 0 |
-| SED | off | 0.5 | 503.4 | 503.0 | 0.894427 | 750 | 0.7 | 0.5 | 0.948683 | 0.994309 | 0.005973 | 0.5 | 0.527046 | 0 |
-| SED | on-30s | 0.2 | 503.5 | 503.5 | 0.707107 | 750 | 0.3 | 0.0 | 0.674949 | 0.998165 | 0.002045 | 0.2 | 0.421637 | 0 |
+| MED | off | 0.4 | 538.5 | 503.0 | 71.0 | 750 | 4.8 | 0.0 | 6.196773 | 0.995687 | 0.005661 | 0.4 | 0.516398 | 0 |
+| MED | on-30s | 0.2 | 511.5 | 511.5 | 10.606602 | 750 | 2.7 | 3.0 | 3.591657 | 0.997866 | 0.002919 | 0.2 | 0.421637 | 0 |
+| FED | off | 0.2 | 515.0 | 515.0 | 14.142136 | 750 | 5.7 | 0.0 | 9.031427 | 0.995608 | 0.006863 | 0.2 | 0.421637 | 0 |
+| FED | on-30s | 0.9 | 533.111111 | 528.0 | 28.802971 | 750 | 2.6 | 0.0 | 4.788876 | 0.998158 | 0.003891 | 0.9 | 0.316228 | 0 |
+| SED | off | 0.2 | 554.0 | 554.0 | 72.124892 | 750 | 0.2 | 0.0 | 0.421637 | 0.994009 | 0.011348 | 0.2 | 0.421637 | 0 |
+| SED | on-30s | 0.1 | 503.0 | 503.0 | 0.0 | 750 | 0.1 | 0.0 | 0.316228 | 0.985968 | 0.033851 | 0.1 | 0.316228 | 0 |
 
 ## Parent Probe and Simulator RSS Metrics
 
@@ -42,31 +40,31 @@ Each repeated artifact contains 10 CSV files, 10 summary JSON files, 10 replay f
 
 | Profile | PPS | Mean parent-probe PDR | Mobile-to-parent end-dwell RSS mean (dBm) | Mobile-to-parent end-dwell RSS SD | Mean sim-RSS match rate |
 |---|---|---:|---:|---:|---:|
-| MED | off | 0.996318 | -67.242675 | 9.93867 | 0.9998 |
-| MED | on-30s | 0.997557 | -62.596338 | 12.090487 | 0.9997 |
-| FED | off | 0.997823 | -67.164007 | 8.638489 | 0.999299 |
-| FED | on-30s | 0.996315 | -52.582906 | 7.115965 | 0.9998 |
-| SED | off | 0.992909 | -60.171666 | 12.422833 | 0.999299 |
-| SED | on-30s | 0.997246 | -67.242913 | 9.938167 | 0.9997 |
+| MED | off | 0.995687 | -63.34237 | 11.580398 | 1.0 |
+| MED | on-30s | 0.997866 | -67.28129 | 9.867504 | 1.0 |
+| FED | off | 0.995608 | -67.156362 | 10.12182 | 1.0 |
+| FED | on-30s | 0.998158 | -52.696062 | 7.141677 | 1.0 |
+| SED | off | 0.994009 | -67.774937 | 8.962897 | 1.0 |
+| SED | on-30s | 0.985968 | -69.5238 | 7.694454 | 1.0 |
 
 Representative per-run RSS-over-time plots are stored with each repeated artifact:
 
-- MED PPS off: `results/med_simple_parent_switch_med-pps-off-repeated/20260710-225151-experiment/rss_over_time_run01.svg`
-- MED PPS on-30s: `results/med_simple_parent_switch_med-pps-on-repeated/20260710-225424-experiment/rss_over_time_run01.svg`
-- FED PPS off: `results/fed_simple_parent_switch_fed-pps-off-repeated/20260710-225642-experiment/rss_over_time_run01.svg`
-- FED PPS on-30s: `results/fed_simple_parent_switch_fed-pps-on-repeated/20260710-225921-experiment/rss_over_time_run01.svg`
-- SED PPS off: `results/sed_simple_parent_switch_sed-pps-off-repeated/20260710-230147-experiment/rss_over_time_run01.svg`
-- SED PPS on-30s: `results/sed_simple_parent_switch_sed-pps-on-repeated/20260710-230439-experiment/rss_over_time_run01.svg`
+- MED PPS off: `results/med_simple_parent_switch_med-pps-off-repeated/20260711-131259-experiment/rss_over_time_run01.svg`
+- MED PPS on-30s: `results/med_simple_parent_switch_med-pps-on-repeated/20260711-131359-experiment/rss_over_time_run01.svg`
+- FED PPS off: `results/fed_simple_parent_switch_fed-pps-off-repeated/20260711-131501-experiment/rss_over_time_run01.svg`
+- FED PPS on-30s: `results/fed_simple_parent_switch_fed-pps-on-repeated/20260711-131605-experiment/rss_over_time_run01.svg`
+- SED PPS off: `results/sed_simple_parent_switch_sed-pps-off-repeated/20260711-131707-experiment/rss_over_time_run01.svg`
+- SED PPS on-30s: `results/sed_simple_parent_switch_sed-pps-on-repeated/20260711-131818-experiment/rss_over_time_run01.svg`
 
 ## Interpretation
 
 With the extended 5 m/s path and the 1 Hz parent probe, all observed switches still happened at x=750 during the end dwell rather than during the 12-second transit. The scenario currently tests eventual sticky-parent release after arrival more than in-transit switching.
 
-MED PPS-on-30s switched in 4 of 10 runs while PPS-off switched in 2 of 10. PPS-on-30s had lower mean outage and slightly higher packet delivery, but the observed switches still occurred at the end dwell.
+MED PPS-on-30s switched in 2 of 10 runs while PPS-off switched in 4 of 10. PPS-on-30s had lower mean outage and slightly higher packet delivery, but the observed switches still occurred at the end dwell.
 
-FED PPS-on-30s switched in 8 of 10 runs while PPS-off switched in 3 of 10. This is the strongest profile-level PPS effect in the current matrix; PPS-on-30s also reduced mean switch time and mean outage.
+FED PPS-on-30s switched in 9 of 10 runs while PPS-off switched in 2 of 10. This is the strongest profile-level PPS effect in the current matrix; PPS-on-30s also reduced mean outage and improved parent-probe delivery.
 
-SED PPS-on-30s switched in 2 of 10 runs while PPS-off switched in 5 of 10. SED packet delivery and parent-probe metrics remain secondary evidence because regular SED ping behavior is not the primary attachment signal; parent-command observation remains primary.
+SED PPS-on-30s switched in 1 of 10 runs while PPS-off switched in 2 of 10. SED packet delivery and parent-probe metrics remain secondary evidence because regular SED ping behavior is not the primary attachment signal; parent-command observation remains primary.
 
 The parent probe generally showed high delivery to the currently observed parent, including during end dwell. Where the ED remains parented to Router A at the dwell position, the model-derived reply RSS at the ED is around `-71.957 dBm`, indicating Router A remains physically viable in the simulator model at the dwell position. This helps explain sticky-parent behavior.
 
