@@ -31,7 +31,7 @@ radio_model:
 timing:
   settle_seconds: 120
   step_seconds: 1
-  movement_steps: 12
+  movement_steps: 15
 
 activation:
   initial_nodes:
@@ -50,7 +50,7 @@ nodes:
     y: 300
   router_b:
     type: router
-    x: 650
+    x: 800
     y: 300
   mobile:
     type: fed
@@ -63,7 +63,7 @@ movement:
     x: 150
     y: 360
   end:
-    x: 750
+    x: 900
     y: 360
   speed_mps: 5
   hold_end_steps: 320

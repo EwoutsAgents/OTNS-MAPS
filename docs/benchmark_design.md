@@ -14,7 +14,7 @@ The active benchmark matrix uses three simple parent-switch scenarios:
 - [`../scenarios/fed_simple_parent_switch.yaml`](../scenarios/fed_simple_parent_switch.yaml)
 - [`../scenarios/sed_simple_parent_switch.yaml`](../scenarios/sed_simple_parent_switch.yaml)
 
-All three use two routers, one mobile end device, straight-line movement, delayed Router B activation, overlapping intended coverage, and no intentional dead zone. Router A is placed at `(250, 300)`, Router B at `(650, 300)`, and the mobile path runs from `(150, 360)` to `(750, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 60 m path; 12 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The moving end device should theoretically have at least one router in range throughout the path.
+All three use two routers, one mobile end device, straight-line movement, delayed Router B activation, and an offset path. Router A is placed at `(250, 300)`, Router B at `(800, 300)`, and the mobile path runs from `(150, 360)` to `(900, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 75 m path; 15 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The geometry increases parent-switch pressure while keeping the routers connected in pilot runs.
 
 The scenario details, activation timing, device observability, and old-name compatibility notes are maintained in [`scenarios.md`](scenarios.md). The runner sends exactly one 1 Hz ICMP ping from the mobile end device to its currently observed parent when that parent resolves to a known router; this records parent-path reachability and RTT. For SED, parent-command output remains the primary attachment signal.
 

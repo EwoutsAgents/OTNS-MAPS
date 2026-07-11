@@ -19,23 +19,23 @@ All active simple scenarios use the same intended overlapping-coverage geometry:
 | Node | x | y |
 |---|---:|---:|
 | Router A | 250 | 300 |
-| Router B | 650 | 300 |
+| Router B | 800 | 300 |
 | Mobile start | 150 | 360 |
-| Mobile end | 750 | 360 |
+| Mobile end | 900 | 360 |
 
-The moving end device should theoretically have at least one router in range throughout the path while still traversing from before Router A to beyond Router B.
+The moving end device stays horizontally offset from the router line and traverses from before Router A to beyond Router B. The active geometry increases router spacing while keeping the routers connected in pilot runs.
 
 OTNS uses the `MeterPerUnit` radio parameter for coordinate scaling. The scenarios assume the default `MeterPerUnit = 0.1`, so one coordinate unit is treated as 0.1 m unless the radio parameter is overridden. This default is recorded in the local OTNS source at `radiomodel/model_params.go` and listed by `cli/README.md`.
 
-The mobile path from x=150 to x=750 spans 600 coordinate units, which is 60 m at `MeterPerUnit = 0.1`. With 12 one-second movement steps, the target movement speed is 5 m/s. The runner sends exactly one 1 Hz ICMP ping from the mobile end device to its currently observed parent when that parent resolves to a known router. When `--capture-sim-ping-rss` is enabled, the runner also attaches simulator-model RSS/LQI to that ping event using OTNS `MutualInterference` parameters at the ping source/destination positions.
+The mobile path from x=150 to x=900 spans 750 coordinate units, which is 75 m at `MeterPerUnit = 0.1`. With 15 one-second movement steps, the target movement speed is 5 m/s. The runner sends exactly one 1 Hz ICMP ping from the mobile end device to its currently observed parent when that parent resolves to a known router. When `--capture-sim-ping-rss` is enabled, the runner also attaches simulator-model RSS/LQI to that ping event using OTNS `MutualInterference` parameters at the ping source/destination positions.
 
 ## Timing
 
 | Scenario | Step seconds | Movement steps | Router B delay (s) | Post-activation settle (s) | Hold end steps | End dwell (s) |
 |---|---:|---:|---:|---:|---:|---:|
-| MED simple | 1 | 12 | 300 | 180 | 320 | 320 |
-| FED simple | 1 | 12 | 300 | 180 | 320 | 320 |
-| SED simple | 1 | 12 | 300 | 180 | 320 | 320 |
+| MED simple | 1 | 15 | 300 | 180 | 320 | 320 |
+| FED simple | 1 | 15 | 300 | 180 | 320 | 320 |
+| SED simple | 1 | 15 | 300 | 180 | 320 | 320 |
 
 The SED scenario now uses the same activation timing as MED/FED so the repeated PPS matrix uses a consistent geometry and movement schedule across profiles. SED observability remains different because regular SED packet probing is unreliable.
 
