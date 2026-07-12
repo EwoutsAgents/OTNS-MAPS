@@ -1,0 +1,57 @@
+# Result: fed_simple_parent_switch / 20260712-165645-run01
+
+Simple stock OTNS parent-switching benchmark for a mobile Full End Device. The scenario uses three routers, one mobile end device, straight-line movement, delayed Router B/Router C activation, static 0 dBm transmit power, and no intentional dead zone. The mobile starts before Router A, moves beyond Router C at a target 5 m/s, then dwells at the end to expose late parent switching.
+
+## Metadata
+
+- Scenario: `fed_simple_parent_switch`
+- Scenario file: `scenarios/fed_simple_parent_switch.yaml`
+- Firmware variant: `stock-fed-pps-off`
+- Device profile: `full_end_device`
+- Thread device type: `fed`
+- Parent search config: `disabled`
+- Node binary path: `None`
+- FTD node binary path: `/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim/build/stock-fed-pps-off/bin/ot-cli-ftd`
+- Build config source: `docs/pps_build_variants.md#pps-disabled`
+- Equivalent to: `None`
+- OpenThread commit: `7874555efb1772bad66049ab06a78a2ce0c925f3`
+- OTNS commit: `099a6c26cb1d2b8749d3171d5cdd8597fc71049c`
+- OTNS command: `/home/ewout/go/bin/otns -web=false -autogo=false -speed 1 -listen localhost:11300`
+- OTNS workdir: `/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns`
+- OTNS watch level: `trace`
+- Selected radio model: `MutualInterference`
+- Initial observed parent: `router_b`
+- Final observed parent: `router_c`
+- Switch count: `1`
+- First switch time (s): `515.0`
+- Second switch time (s): `None`
+- Switch position x: `1350.0`
+- Second switch position x: `None`
+- Packet delivery ratio: `0.988024`
+- Total outage (s): `15.0`
+- Oscillation events: `0`
+- Parent sequence: `['router_b', 'router_c']`
+- Time spent by parent (s): `{'router_b': 33.0, 'router_c': 311.0}`
+- Configured node TX power (dBm): `{'router_a': 0.0, 'mobile': 0.0, 'router_b': 0.0, 'router_c': 0.0}`
+- Verified node TX power (dBm): `{'router_a': 0.0, 'mobile': 0.0, 'router_b': 0.0, 'router_c': 0.0}`
+- MLE parent changes: `2`
+- MLE attach attempts: `3`
+- MLE better parent attach attempts: `0`
+- Result classification: `initial_parent_unexpected`
+
+## Node Logs
+
+- `node_log_mobile_2.log`
+- `node_log_router_a_1.log`
+- `node_log_router_b_3.log`
+- `node_log_router_c_4.log`
+
+## Replay
+
+Replay command:
+
+```bash
+otns-replay fed_simple_parent_switch_20260712T165645Z.replay
+```
+
+- Rendered from the replay with `python3 scripts/replay_to_mp4.py fed_simple_parent_switch_20260712T165645Z.replay --frame-count 24 --replay-speed 4 --cover-full-replay --end-device-y-offset 80 --video-fps 8 --show-log-panel --log-lines 10`

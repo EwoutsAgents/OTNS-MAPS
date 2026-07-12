@@ -1765,6 +1765,45 @@ def scenario_tx_power_summary(scenario: dict[str, Any]) -> tuple[dict[str, float
     return configured, dict(configured)
 
 
+def scenario_model_rss_summary(scenario: dict[str, Any]) -> dict[str, Any]:
+    nodes = scenario.get("nodes", {})
+    movement = scenario.get("movement", {})
+    endpoint = movement.get("end", {})
+    mobile = nodes.get("mobile", {})
+    mobile_endpoint = {
+        "x": endpoint.get("x", mobile.get("x")),
+        "y": endpoint.get("y", mobile.get("y")),
+    }
+    endpoint_rss: dict[str, float | None] = {}
+    router_link_rss: dict[str, float | None] = {}
+    routers = router_names(scenario)
+    for name in routers:
+        router = nodes[name]
+        endpoint_rss[name] = derive_mutual_interference_rssi_dbm(
+            router.get("x"),
+            router.get("y"),
+            mobile_endpoint.get("x"),
+            mobile_endpoint.get("y"),
+            tx_power_dbm=node_tx_power_dbm(router),
+        )
+    for left, right in zip(routers, routers[1:]):
+        left_node = nodes[left]
+        right_node = nodes[right]
+        router_link_rss[f"{left}_to_{right}"] = derive_mutual_interference_rssi_dbm(
+            left_node.get("x"),
+            left_node.get("y"),
+            right_node.get("x"),
+            right_node.get("y"),
+            tx_power_dbm=node_tx_power_dbm(left_node),
+        )
+    return {
+        "mobile_endpoint": mobile_endpoint,
+        "endpoint_router_to_mobile_rss_dbm": endpoint_rss,
+        "router_to_router_rss_dbm": router_link_rss,
+        "method": "otns_model_derived_at_ping",
+    }
+
+
 def build_summary(
     scenario: dict[str, Any],
     samples: list[dict[str, Any]],
@@ -1917,6 +1956,7 @@ def build_summary(
         "configured_node_tx_power_dbm": configured_tx_power,
         "verified_node_tx_power_dbm": verified_tx_power,
         "tx_power_command": "txpower",
+        "scenario_model_rss": scenario_model_rss_summary(scenario),
         "oscillation_events": oscillations,
         "mle_parent_changes": counter_int(final_mle_counters, "Parent Changes"),
         "mle_attach_attempts": counter_int(final_mle_counters, "Attach Attempts"),

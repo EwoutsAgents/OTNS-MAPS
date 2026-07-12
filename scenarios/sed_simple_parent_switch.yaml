@@ -35,7 +35,7 @@ radio_model:
 timing:
   settle_seconds: 120
   step_seconds: 1
-  movement_steps: 15
+  movement_steps: 24
 
 activation:
   initial_nodes:
@@ -56,12 +56,12 @@ nodes:
     tx_power_dbm: 0
   router_b:
     type: router
-    x: 525
+    x: 650
     y: 300
     tx_power_dbm: 0
   router_c:
     type: router
-    x: 800
+    x: 1050
     y: 300
     tx_power_dbm: 0
   mobile:
@@ -76,7 +76,7 @@ movement:
     x: 150
     y: 360
   end:
-    x: 900
+    x: 1350
     y: 360
   speed_mps: 5
   hold_end_steps: 320
