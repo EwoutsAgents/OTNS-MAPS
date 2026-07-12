@@ -12,6 +12,8 @@ A simple parent-switch scenario has three routers, one mobile end device, straig
 
 Router A and the mobile end device are created first. The runner waits until the mobile is observed parented to Router A, Router B and Router C are introduced after that attachment gate, a post-activation settle period runs, and only then does movement toward Router C begin. All active scenarios keep `expected_initial_parent: router_a`.
 
+The post-activation settle period is monitored, not treated as invisible time. The runner polls the mobile parent during this phase and records `pre_movement_parent_sequence`, `pre_movement_parent_final`, `pre_movement_switch_count`, and `pre_movement_parent_events` in the summary JSON. If the mobile leaves Router A before movement sampling starts, the run is classified as `pre_movement_switch_observed` instead of being folded into `initial_parent_unexpected`.
+
 ## Geometry
 
 All active simple scenarios use the same intended overlapping-coverage geometry:

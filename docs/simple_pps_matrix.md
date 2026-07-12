@@ -163,8 +163,9 @@ Representative MP4s were rendered from run 01 of each arm with
 - Switch timing is still dominated by endpoint dwell in most arms; the first
   switch normally appears after movement reaches the endpoint.
 - Router B does not consistently appear as an intermediate parent.
-- FED has two runs where the first movement sample was not Router A despite a
-  successful attachment gate before B/C activation.
+- This matrix was generated before post-activation settle parent changes were
+  promoted into explicit `pre_movement_*` summary fields. Current runs now
+  distinguish switches before movement sampling from unexpected first samples.
 - MED PPS off and FED/SED PPS on each include one unresolved final parent.
 - SED packet delivery ratio is not primary evidence.
 - FED uses OTNS's FTD executable family for both routers and the mobile FED.

@@ -16,6 +16,8 @@ The active benchmark matrix uses three simple parent-switch scenarios:
 
 All three use three routers, one mobile end device, straight-line movement, delayed Router B/Router C activation, static 0 dBm transmit power, and an asymmetric attachment-gated path. Router A is placed at `(350, 300)`, Router B at `(750, 300)`, Router C at `(1150, 300)`, and the mobile path runs from `(350, 360)` to `(1600, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 125 m movement path; 25 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The mobile is created near Router A, the runner waits until Router A is observed as parent, then Router B and Router C are introduced before movement begins.
 
+The post-activation settle phase is monitored for parent changes. If the mobile changes parent after Router B/C activation but before movement sampling begins, the summary records `pre_movement_parent_events` and classifies the run as `pre_movement_switch_observed` when no later in-window switch is present. This keeps early PPS or attach behavior visible instead of mislabeling the first movement sample as merely unexpected.
+
 The scenario details, activation timing, device observability, and old-name compatibility notes are maintained in [`scenarios.md`](scenarios.md). The runner sets each node to `txpower 0` during initialization and verifies the value with `txpower` when possible. It sends exactly one 1 Hz ICMP ping from the mobile end device to its currently observed parent when that parent resolves to a known router; this records parent-path reachability and RTT. For SED, parent-command output remains the primary attachment signal.
 
 Older committed artifacts may reference the previous scenario names `baseline_mobile_parent_switch`, `calibrated_mobile_parent_switch`, `fed_mobile_parent_switch`, and `sed_mobile_parent_switch`. The original baseline scenario was a historical smoke/reference scenario and is no longer part of the active benchmark matrix. Results generated under the old wider geometry are historical and should not be mixed with new simple-scenario results without labeling the geometry difference.
@@ -86,10 +88,11 @@ Per sample, the benchmark attempts to capture:
 3. Mobile node role/state
 4. Current parent information, when OT CLI exposes it
 5. Parent switch events inferred from a change in observed parent identity
-6. Packet-delivery success and RTT from the mobile-to-current-parent ping probe
-7. Optional simulator-model RSS/LQI attached to each ping event when `--capture-sim-ping-rss` is enabled
-8. Visible candidate-parent RSSI/LQI from scan output, when available
-9. IPv6 and MLE counter snapshots, when exposed by the node CLI
+6. Pre-movement parent changes during post-activation settle
+7. Packet-delivery success and RTT from the mobile-to-current-parent ping probe
+8. Optional simulator-model RSS/LQI attached to each ping event when `--capture-sim-ping-rss` is enabled
+9. Visible candidate-parent RSSI/LQI from scan output, when available
+10. IPv6 and MLE counter snapshots, when exposed by the node CLI
 
 The runner writes:
 

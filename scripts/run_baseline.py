@@ -443,6 +443,9 @@ def maybe_capture_replay(
         "mock": False,
         "selected_radio_model": summary.get("selected_radio_model"),
         "initial_observed_parent": summary.get("initial_observed_parent"),
+        "pre_movement_parent_final": summary.get("pre_movement_parent_final"),
+        "pre_movement_switch_count": summary.get("pre_movement_switch_count"),
+        "pre_movement_parent_events": summary.get("pre_movement_parent_events"),
         "final_observed_parent": summary.get("final_observed_parent"),
         "switch_count": summary.get("switch_count"),
         "first_switch_time_s": summary.get("first_switch_time_s"),
@@ -570,6 +573,9 @@ def tracked_results_manifest(
         "selected_radio_model": summary.get("selected_radio_model"),
         "otns_watch_level": summary.get("otns_watch_level"),
         "initial_observed_parent": summary.get("initial_observed_parent"),
+        "pre_movement_parent_final": summary.get("pre_movement_parent_final"),
+        "pre_movement_switch_count": summary.get("pre_movement_switch_count"),
+        "pre_movement_parent_events": summary.get("pre_movement_parent_events"),
         "final_observed_parent": summary.get("final_observed_parent"),
         "switch_count": summary.get("switch_count"),
         "first_switch_time_s": summary.get("first_switch_time_s"),
@@ -625,6 +631,9 @@ def write_tracked_results_readme(
             f'- OTNS watch level: `{manifest["otns_watch_level"]}`',
             f'- Selected radio model: `{manifest["selected_radio_model"]}`',
             f'- Initial observed parent: `{manifest["initial_observed_parent"]}`',
+            f'- Pre-movement final parent: `{manifest["pre_movement_parent_final"]}`',
+            f'- Pre-movement switch count: `{manifest["pre_movement_switch_count"]}`',
+            f'- Pre-movement parent events: `{manifest["pre_movement_parent_events"]}`',
             f'- Final observed parent: `{manifest["final_observed_parent"]}`',
             f'- Switch count: `{manifest["switch_count"]}`',
             f'- First switch time (s): `{manifest["first_switch_time_s"]}`',
@@ -987,6 +996,10 @@ class RealBenchmarkRunner:
         self.initial_attachment_observed_parent: str | None = None
         self.initial_attachment_wait_s: int | None = None
         self.initial_attachment_timed_out = False
+        self.pre_movement_parent_sequence: list[str] = []
+        self.pre_movement_parent_events: list[dict[str, Any]] = []
+        self.pre_movement_parent_final: str | None = None
+        self.pre_movement_parent_observation_count = 0
         self.observability = scenario.get("observability", {})
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -1070,6 +1083,10 @@ class RealBenchmarkRunner:
             initial_attachment_observed_parent=self.initial_attachment_observed_parent,
             initial_attachment_wait_s=self.initial_attachment_wait_s,
             initial_attachment_timed_out=self.initial_attachment_timed_out,
+            pre_movement_parent_sequence=self.pre_movement_parent_sequence,
+            pre_movement_parent_events=self.pre_movement_parent_events,
+            pre_movement_parent_final=self.pre_movement_parent_final,
+            pre_movement_parent_observation_count=self.pre_movement_parent_observation_count,
             thread_device_type=self.thread_device_type,
             parent_search_config=self.parent_search_config,
             sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
@@ -1206,7 +1223,7 @@ class RealBenchmarkRunner:
 
         post_activation_settle_seconds = int(activation.get("post_activation_settle_seconds", 0))
         if post_activation_settle_seconds:
-            session.command_output(f"go {post_activation_settle_seconds}")
+            self._monitor_pre_movement_parent(session, post_activation_settle_seconds)
         return named_ids
 
     def _await_initial_parent(self, session: OtnsSession, activation: dict[str, Any]) -> None:
@@ -1268,6 +1285,88 @@ class RealBenchmarkRunner:
                 else "."
             )
         )
+
+    def _current_mobile_parent_name(self, session: OtnsSession) -> str | None:
+        self._refresh_node_identity(session)
+        mobile_ref = self.node_refs.get("mobile")
+        if mobile_ref is None:
+            return None
+        try:
+            parent_info = parse_key_value_lines(session.command_output(f'node {mobile_ref.node_id} "parent"'))
+        except OtnsSessionError as exc:
+            if "InvalidState" not in str(exc):
+                raise
+            return None
+        return self._parent_name_from_identity(parent_info)
+
+    def _record_pre_movement_parent_observation(
+        self,
+        *,
+        parent_name: str | None,
+        sim_time_s: float,
+        elapsed_s: int,
+        previous_parent: str | None,
+    ) -> str | None:
+        self.pre_movement_parent_observation_count += 1
+        if parent_name:
+            self.pre_movement_parent_final = parent_name
+            if not self.pre_movement_parent_sequence or self.pre_movement_parent_sequence[-1] != parent_name:
+                self.pre_movement_parent_sequence.append(parent_name)
+            if previous_parent and parent_name != previous_parent:
+                self.pre_movement_parent_events.append(
+                    {
+                        "phase": "post_activation_settle",
+                        "sim_time_s": round(sim_time_s, 6),
+                        "elapsed_s": elapsed_s,
+                        "from_parent": previous_parent,
+                        "to_parent": parent_name,
+                    }
+                )
+            return parent_name
+        return previous_parent
+
+    def _monitor_pre_movement_parent(self, session: OtnsSession, settle_seconds: int) -> None:
+        activation = self.scenario.get("activation", {})
+        poll_interval = max(
+            1,
+            int(
+                activation.get(
+                    "pre_movement_parent_poll_interval_seconds",
+                    self.scenario.get("timing", {}).get("step_seconds", 1),
+                )
+            ),
+        )
+        previous_parent = (
+            self.parent_before_delayed_nodes
+            if self.parent_before_delayed_nodes not in (None, "", "unknown")
+            else None
+        )
+        if previous_parent:
+            self.pre_movement_parent_sequence = [previous_parent]
+            self.pre_movement_parent_final = previous_parent
+
+        elapsed = 0
+        while elapsed < settle_seconds:
+            step = min(poll_interval, settle_seconds - elapsed)
+            session.command_output(f"go {step}")
+            elapsed += step
+            sim_time_us = int(session.command_output("time")[0])
+            parent_name = self._current_mobile_parent_name(session)
+            previous_parent = self._record_pre_movement_parent_observation(
+                parent_name=parent_name,
+                sim_time_s=sim_time_us / 1_000_000.0,
+                elapsed_s=elapsed,
+                previous_parent=previous_parent,
+            )
+
+        if self.pre_movement_parent_events:
+            self.notes.append(
+                "Parent changed during post-activation settle before movement sampling: "
+                + ", ".join(
+                    f"{event['from_parent']}->{event['to_parent']} at {event['sim_time_s']}s"
+                    for event in self.pre_movement_parent_events
+                )
+            )
 
     def _refresh_node_identity(self, session: OtnsSession) -> None:
         parsed = parse_nodes(session.command_output("nodes"))
@@ -1897,6 +1996,10 @@ def build_summary(
     initial_attachment_observed_parent: str | None = None,
     initial_attachment_wait_s: int | None = None,
     initial_attachment_timed_out: bool = False,
+    pre_movement_parent_sequence: list[str] | None = None,
+    pre_movement_parent_events: list[dict[str, Any]] | None = None,
+    pre_movement_parent_final: str | None = None,
+    pre_movement_parent_observation_count: int = 0,
     thread_device_type: str | None = None,
     parent_search_config: str = "unknown",
     sim_ping_rss_capture_enabled: bool = False,
@@ -1970,9 +2073,15 @@ def build_summary(
     )
     expected_initial_parent = scenario.get("expected_initial_parent")
     if expected_initial_parent and initial_observed_parent != expected_initial_parent:
-        result_classification = "initial_parent_unexpected"
+        result_classification = (
+            "pre_movement_switch_observed"
+            if pre_movement_parent_events
+            else "initial_parent_unexpected"
+        )
     elif switch_events:
         result_classification = "switch_observed"
+    elif pre_movement_parent_events:
+        result_classification = "pre_movement_switch_observed"
     elif initial_observed_parent and final_observed_parent:
         result_classification = "no_switch_observed"
     else:
@@ -1998,6 +2107,11 @@ def build_summary(
         "initial_attachment_observed_parent": initial_attachment_observed_parent,
         "initial_attachment_wait_s": initial_attachment_wait_s,
         "initial_attachment_timed_out": initial_attachment_timed_out,
+        "pre_movement_parent_observation_count": pre_movement_parent_observation_count,
+        "pre_movement_parent_sequence": pre_movement_parent_sequence or [],
+        "pre_movement_parent_final": pre_movement_parent_final,
+        "pre_movement_switch_count": len(pre_movement_parent_events or []),
+        "pre_movement_parent_events": pre_movement_parent_events or [],
         "initial_observed_parent": initial_observed_parent,
         "final_observed_parent": final_observed_parent,
         "parent_sequence": compact_parent_sequence,

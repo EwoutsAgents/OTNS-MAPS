@@ -242,8 +242,18 @@ def summarize_run(path: Path) -> dict[str, Any]:
         if parent_probe_tx
         else None
     )
-    if switch_times:
+    pre_movement_switch_count = int(sibling_summary.get("pre_movement_switch_count") or 0)
+    expected_initial_parent = sibling_summary.get("expected_initial_parent")
+    if expected_initial_parent and initial_observed_parent != expected_initial_parent:
+        result_classification = (
+            "pre_movement_switch_observed"
+            if pre_movement_switch_count
+            else "initial_parent_unexpected"
+        )
+    elif switch_times:
         result_classification = "switch_observed"
+    elif pre_movement_switch_count:
+        result_classification = "pre_movement_switch_observed"
     elif initial_observed_parent and final_observed_parent:
         result_classification = "no_switch_observed"
     else:
@@ -257,7 +267,7 @@ def summarize_run(path: Path) -> dict[str, Any]:
         "packet_probe_reliable": packet_probe_reliable,
         "primary_parent_observation": primary_parent_observation,
         "sample_count": len(rows),
-        "expected_initial_parent": sibling_summary.get("expected_initial_parent"),
+        "expected_initial_parent": expected_initial_parent,
         "pre_movement_parent_before_delayed_nodes": sibling_summary.get(
             "pre_movement_parent_before_delayed_nodes"
         ),
@@ -265,6 +275,11 @@ def summarize_run(path: Path) -> dict[str, Any]:
         "initial_attachment_observed_parent": sibling_summary.get("initial_attachment_observed_parent"),
         "initial_attachment_wait_s": sibling_summary.get("initial_attachment_wait_s"),
         "initial_attachment_timed_out": sibling_summary.get("initial_attachment_timed_out"),
+        "pre_movement_parent_observation_count": sibling_summary.get("pre_movement_parent_observation_count"),
+        "pre_movement_parent_sequence": sibling_summary.get("pre_movement_parent_sequence") or [],
+        "pre_movement_parent_final": sibling_summary.get("pre_movement_parent_final"),
+        "pre_movement_switch_count": pre_movement_switch_count,
+        "pre_movement_parent_events": sibling_summary.get("pre_movement_parent_events") or [],
         "initial_observed_parent": initial_observed_parent,
         "final_observed_parent": final_observed_parent,
         "parent_sequence": compact_parent_sequence,
@@ -422,6 +437,9 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
         if summary.get("expected_initial_parent")
         and summary.get("initial_observed_parent") == summary.get("expected_initial_parent")
     )
+    pre_movement_switch_runs = sum(1 for summary in summaries if summary.get("pre_movement_switch_count"))
+    pre_movement_switch_counts = [summary.get("pre_movement_switch_count") or 0 for summary in summaries]
+    pre_movement_final_parent_counts: dict[str, int] = {}
     final_parent_counts: dict[str, int] = {}
     parent_sequence_counts: dict[str, int] = {}
     classification_counts: dict[str, int] = {}
@@ -430,6 +448,10 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
         classification_counts[classification] = classification_counts.get(classification, 0) + 1
         final_parent = summary.get("final_observed_parent") or "None"
         final_parent_counts[final_parent] = final_parent_counts.get(final_parent, 0) + 1
+        pre_movement_final = summary.get("pre_movement_parent_final") or "None"
+        pre_movement_final_parent_counts[pre_movement_final] = (
+            pre_movement_final_parent_counts.get(pre_movement_final, 0) + 1
+        )
         sequence = ">".join(summary.get("parent_sequence") or []) or "None"
         parent_sequence_counts[sequence] = parent_sequence_counts.get(sequence, 0) + 1
 
@@ -442,6 +464,10 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
         "initial_attachment_timeout_runs": attachment_timeout_runs,
         "initial_parent_expected_runs": initial_parent_expected_runs,
         "initial_parent_expected_rate": round(initial_parent_expected_runs / len(summaries), 6),
+        "pre_movement_switch_runs": pre_movement_switch_runs,
+        "pre_movement_switch_rate": round(pre_movement_switch_runs / len(summaries), 6),
+        "mean_pre_movement_switch_count": round(statistics.mean(pre_movement_switch_counts), 6),
+        "pre_movement_final_parent_counts": pre_movement_final_parent_counts,
         "final_parent_counts": final_parent_counts,
         "parent_sequence_counts": parent_sequence_counts,
         "switch_observed_runs": switch_observed_runs,
