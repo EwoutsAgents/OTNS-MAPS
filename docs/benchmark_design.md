@@ -14,7 +14,7 @@ The active benchmark matrix uses three simple parent-switch scenarios:
 - [`../scenarios/fed_simple_parent_switch.yaml`](../scenarios/fed_simple_parent_switch.yaml)
 - [`../scenarios/sed_simple_parent_switch.yaml`](../scenarios/sed_simple_parent_switch.yaml)
 
-All three use three routers, one mobile end device, straight-line movement, delayed Router B/Router C activation, static 0 dBm transmit power, and an offset path. Router A is placed at `(250, 300)`, Router B at `(650, 300)`, Router C at `(1050, 300)`, and the mobile path runs from `(150, 360)` to `(1350, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 120 m path; 24 one-second movement steps target 5 m/s, followed by a 320 s end dwell.
+All three use three routers, one mobile end device, straight-line movement, delayed Router B/Router C activation, static 0 dBm transmit power, and an offset path. Router A is placed at `(350, 300)`, Router B at `(750, 300)`, Router C at `(1150, 300)`, and the mobile path runs from `(0, 360)` to `(1500, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 150 m path; 30 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The start/end offsets are symmetric and all coordinates are non-negative.
 
 The scenario details, activation timing, device observability, and old-name compatibility notes are maintained in [`scenarios.md`](scenarios.md). The runner sets each node to `txpower 0` during initialization and verifies the value with `txpower` when possible. It sends exactly one 1 Hz ICMP ping from the mobile end device to its currently observed parent when that parent resolves to a known router; this records parent-path reachability and RTT. For SED, parent-command output remains the primary attachment signal.
 

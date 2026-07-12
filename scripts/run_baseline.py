@@ -1172,8 +1172,19 @@ class RealBenchmarkRunner:
             self._refresh_node_identity(session)
             mobile_ref = self.node_refs.get("mobile")
             if mobile_ref is not None and self.parent_before_delayed_nodes is None:
-                parent_info = parse_key_value_lines(session.command_output(f'node {mobile_ref.node_id} "parent"'))
-                self.parent_before_delayed_nodes = self._parent_name_from_identity(parent_info)
+                try:
+                    parent_info = parse_key_value_lines(session.command_output(f'node {mobile_ref.node_id} "parent"'))
+                    self.parent_before_delayed_nodes = self._parent_name_from_identity(parent_info)
+                except OtnsSessionError as exc:
+                    if "InvalidState" not in str(exc):
+                        raise
+                    self.parent_before_delayed_nodes = "unknown"
+                    note = (
+                        "OTNS parent command returned InvalidState before delayed node activation; "
+                        "initial parent before delayed activation is recorded as unknown."
+                    )
+                    if note not in self.notes:
+                        self.notes.append(note)
 
             group_names = list(group["nodes"])
             for name in group_names:
