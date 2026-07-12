@@ -1,0 +1,857 @@
+{
+  "aggregate": {
+    "classification_counts": {
+      "inconclusive": 1,
+      "switch_observed": 9
+    },
+    "iqr_first_switch_time_s": 2.0,
+    "iqr_packet_delivery_ratio": 0.005159,
+    "iqr_total_outage_s": 3.0,
+    "max_first_switch_time_s": 571.0,
+    "max_packet_delivery_ratio": 0.997101,
+    "max_switch_count": 2,
+    "max_switch_position_x": 1800.0,
+    "max_total_outage_s": 350.0,
+    "mean_first_switch_time_s": 527.555556,
+    "mean_mobile_to_parent_end_dwell_sim_rss_dbm": -97.533059,
+    "mean_oscillation_events": 0,
+    "mean_packet_delivery_ratio": 0.947081,
+    "mean_parent_probe_delivery_ratio": 0.947081,
+    "mean_parent_probe_rtt_avg_ms": 8.43647,
+    "mean_second_switch_position_x": 1800.0,
+    "mean_second_switch_time_s": 795.0,
+    "mean_sim_ping_rss_match_rate": 1.0,
+    "mean_switch_count": 1,
+    "mean_switch_position_x": 1800.0,
+    "mean_total_outage_s": 67.3,
+    "median_first_switch_time_s": 523.0,
+    "median_mobile_to_parent_end_dwell_sim_rss_dbm": -100.447296,
+    "median_packet_delivery_ratio": 0.986812,
+    "median_parent_probe_delivery_ratio": 0.986812,
+    "median_parent_probe_rtt_avg_ms": 7.243251,
+    "median_second_switch_position_x": 1800.0,
+    "median_second_switch_time_s": 795.0,
+    "median_sim_ping_rss_match_rate": 1.0,
+    "median_switch_count": 1.0,
+    "median_switch_position_x": 1800.0,
+    "median_total_outage_s": 21.5,
+    "min_first_switch_time_s": 518.0,
+    "min_packet_delivery_ratio": 0.6,
+    "min_switch_count": 0,
+    "min_switch_position_x": 1800.0,
+    "min_total_outage_s": 13.0,
+    "mobile_to_parent_end_dwell_sim_rss_sample_size": 10,
+    "oscillation_rate": 0.0,
+    "oscillation_runs": 0,
+    "outage_sample_size": 10,
+    "parent_probe_pdr_sample_size": 10,
+    "parent_probe_rtt_sample_size": 10,
+    "pdr_sample_size": 10,
+    "run_count": 10,
+    "second_switch_position_sample_size": 1,
+    "second_switch_time_sample_size": 1,
+    "stddev_first_switch_time_s": 16.394444,
+    "stddev_mobile_to_parent_end_dwell_sim_rss_dbm": 4.854787,
+    "stddev_packet_delivery_ratio": 0.12224,
+    "stddev_parent_probe_delivery_ratio": 0.12224,
+    "stddev_parent_probe_rtt_avg_ms": 2.89299,
+    "stddev_second_switch_position_x": 0.0,
+    "stddev_second_switch_time_s": 0.0,
+    "stddev_switch_count": 0.471405,
+    "stddev_switch_position_x": 0.0,
+    "stddev_total_outage_s": 109.497894,
+    "switch_observed_rate": 0.9,
+    "switch_observed_runs": 9,
+    "switch_position_sample_size": 9,
+    "switch_time_sample_size": 9
+  },
+  "runs": [
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_001/baseline_run_20260712T202435Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 521.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 0.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -101.652,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -101.652,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.985294,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_probe_delivery_ratio": 0.985294,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 10.250746,
+      "parent_probe_total_rx": 335,
+      "parent_probe_total_tx": 340,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 357,
+      "second_switch_position_x": null,
+      "second_switch_time_s": null,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 354,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -100.374782,
+          "reply_rx_dbm_median": -101.652,
+          "request_rx_dbm_mean": -100.314833,
+          "request_rx_dbm_median": -101.652
+        }
+      },
+      "sim_ping_rss_total_probe_events": 354,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 1,
+      "switch_events": [
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 40,
+          "sim_time_s": 521.0,
+          "to_parent": "router_b"
+        }
+      ],
+      "switch_position_x": 1800.0,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_a": 37.0,
+        "router_b": 317.0
+      },
+      "total_outage_s": 22.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      }
+    },
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_c": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_002/baseline_run_20260712T202442Z.csv",
+      "final_observed_parent": "router_c",
+      "first_switch_time_s": 524.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 1.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -91.957,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -91.957,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.991202,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_c"
+      ],
+      "parent_probe_delivery_ratio": 0.991202,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 7.352071,
+      "parent_probe_total_rx": 338,
+      "parent_probe_total_tx": 341,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_c"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 357,
+      "second_switch_position_x": null,
+      "second_switch_time_s": null,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 354,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -91.215204,
+          "reply_rx_dbm_median": -91.957,
+          "request_rx_dbm_mean": -91.79437,
+          "request_rx_dbm_median": -91.957
+        }
+      },
+      "sim_ping_rss_total_probe_events": 354,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 1,
+      "switch_events": [
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 43,
+          "sim_time_s": 524.0,
+          "to_parent": "router_c"
+        }
+      ],
+      "switch_position_x": 1800.0,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_a": 40.0,
+        "router_c": 314.0
+      },
+      "total_outage_s": 19.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_c": 0.0
+      }
+    },
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_c": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_003/baseline_run_20260712T202449Z.csv",
+      "final_observed_parent": "router_c",
+      "first_switch_time_s": 571.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 19,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 2,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 0.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -99.242592,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -101.652,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.964646,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b",
+        "router_c"
+      ],
+      "parent_probe_delivery_ratio": 0.964646,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 9.0,
+      "parent_probe_total_rx": 191,
+      "parent_probe_total_tx": 198,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b",
+        "router_c"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 357,
+      "second_switch_position_x": 1800.0,
+      "second_switch_time_s": 795.0,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 217,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -97.034775,
+          "reply_rx_dbm_median": -101.652,
+          "request_rx_dbm_mean": -97.59418,
+          "request_rx_dbm_median": -101.652
+        }
+      },
+      "sim_ping_rss_total_probe_events": 217,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 2,
+      "switch_events": [
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 90,
+          "sim_time_s": 571.0,
+          "to_parent": "router_b"
+        },
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 314,
+          "sim_time_s": 795.0,
+          "to_parent": "router_c"
+        }
+      ],
+      "switch_position_x": 1800.0,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_a": 37.0,
+        "router_b": 137.0,
+        "router_c": 43.0
+      },
+      "total_outage_s": 166.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_c": 0.0
+      }
+    },
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_004/baseline_run_20260712T202455Z.csv",
+      "final_observed_parent": "",
+      "first_switch_time_s": null,
+      "initial_observed_parent": "",
+      "mle_attach_attempts": 13,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 0,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 1.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -91.957,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -91.957,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.6,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_c"
+      ],
+      "parent_probe_delivery_ratio": 0.6,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 16.0,
+      "parent_probe_total_rx": 6,
+      "parent_probe_total_tx": 10,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_c"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "inconclusive",
+      "sample_count": 357,
+      "second_switch_position_x": null,
+      "second_switch_time_s": null,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 16,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -91.957,
+          "reply_rx_dbm_median": -91.957,
+          "request_rx_dbm_mean": -91.957,
+          "request_rx_dbm_median": -91.957
+        }
+      },
+      "sim_ping_rss_total_probe_events": 16,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 0,
+      "switch_events": [],
+      "switch_position_x": null,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_c": 16.0
+      },
+      "total_outage_s": 350.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0
+      }
+    },
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_005/baseline_run_20260712T202459Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 523.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 0.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -101.652,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -101.652,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.988304,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_probe_delivery_ratio": 0.988304,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 6.721893,
+      "parent_probe_total_rx": 338,
+      "parent_probe_total_tx": 342,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 357,
+      "second_switch_position_x": null,
+      "second_switch_time_s": null,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 354,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -100.219021,
+          "reply_rx_dbm_median": -101.652,
+          "request_rx_dbm_mean": -100.34928,
+          "request_rx_dbm_median": -101.652
+        }
+      },
+      "sim_ping_rss_total_probe_events": 354,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 1,
+      "switch_events": [
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 42,
+          "sim_time_s": 523.0,
+          "to_parent": "router_b"
+        }
+      ],
+      "switch_position_x": 1800.0,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_a": 39.0,
+        "router_b": 315.0
+      },
+      "total_outage_s": 19.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      }
+    },
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_c": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_006/baseline_run_20260712T202506Z.csv",
+      "final_observed_parent": "router_c",
+      "first_switch_time_s": 523.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 1.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -91.957,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -91.957,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.988201,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_c"
+      ],
+      "parent_probe_delivery_ratio": 0.988201,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 6.853731,
+      "parent_probe_total_rx": 335,
+      "parent_probe_total_tx": 339,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_c"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 357,
+      "second_switch_position_x": null,
+      "second_switch_time_s": null,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 354,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -91.209928,
+          "reply_rx_dbm_median": -91.957,
+          "request_rx_dbm_mean": -91.74976,
+          "request_rx_dbm_median": -91.957
+        }
+      },
+      "sim_ping_rss_total_probe_events": 354,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 1,
+      "switch_events": [
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 42,
+          "sim_time_s": 523.0,
+          "to_parent": "router_c"
+        }
+      ],
+      "switch_position_x": 1800.0,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_a": 39.0,
+        "router_c": 315.0
+      },
+      "total_outage_s": 22.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_c": 0.0
+      }
+    },
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_007/baseline_run_20260712T202513Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 522.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 0.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -101.652,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -101.652,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.988235,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_probe_delivery_ratio": 0.988235,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 7.294643,
+      "parent_probe_total_rx": 336,
+      "parent_probe_total_tx": 340,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 357,
+      "second_switch_position_x": null,
+      "second_switch_time_s": null,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 355,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -100.330333,
+          "reply_rx_dbm_median": -101.652,
+          "request_rx_dbm_mean": -100.352949,
+          "request_rx_dbm_median": -101.652
+        }
+      },
+      "sim_ping_rss_total_probe_events": 355,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 1,
+      "switch_events": [
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 41,
+          "sim_time_s": 522.0,
+          "to_parent": "router_b"
+        }
+      ],
+      "switch_position_x": 1800.0,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_a": 39.0,
+        "router_b": 316.0
+      },
+      "total_outage_s": 21.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      }
+    },
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_008/baseline_run_20260712T202520Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 518.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 0.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -101.652,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -101.652,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.997101,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_probe_delivery_ratio": 0.997101,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 7.19186,
+      "parent_probe_total_rx": 344,
+      "parent_probe_total_tx": 345,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 357,
+      "second_switch_position_x": null,
+      "second_switch_time_s": null,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 354,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -100.191436,
+          "reply_rx_dbm_median": -101.652,
+          "request_rx_dbm_mean": -100.265003,
+          "request_rx_dbm_median": -101.652
+        }
+      },
+      "sim_ping_rss_total_probe_events": 354,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 1,
+      "switch_events": [
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 37,
+          "sim_time_s": 518.0,
+          "to_parent": "router_b"
+        }
+      ],
+      "switch_position_x": 1800.0,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_a": 34.0,
+        "router_b": 320.0
+      },
+      "total_outage_s": 13.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      }
+    },
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_c": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_009/baseline_run_20260712T202527Z.csv",
+      "final_observed_parent": "router_c",
+      "first_switch_time_s": 524.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 1.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -91.957,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -91.957,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.985423,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_c"
+      ],
+      "parent_probe_delivery_ratio": 0.985423,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 6.860947,
+      "parent_probe_total_rx": 338,
+      "parent_probe_total_tx": 343,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_c"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 357,
+      "second_switch_position_x": null,
+      "second_switch_time_s": null,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 354,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -91.234515,
+          "reply_rx_dbm_median": -91.957,
+          "request_rx_dbm_mean": -91.79437,
+          "request_rx_dbm_median": -91.957
+        }
+      },
+      "sim_ping_rss_total_probe_events": 354,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 1,
+      "switch_events": [
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 43,
+          "sim_time_s": 524.0,
+          "to_parent": "router_c"
+        }
+      ],
+      "switch_position_x": 1800.0,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_a": 40.0,
+        "router_c": 314.0
+      },
+      "total_outage_s": 19.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_c": 0.0
+      }
+    },
+    {
+      "configured_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      },
+      "device_profile": "full_end_device",
+      "file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260712T202435Z/run_010/baseline_run_20260712T202534Z.csv",
+      "final_observed_parent": "router_b",
+      "first_switch_time_s": 522.0,
+      "initial_observed_parent": "router_a",
+      "mle_attach_attempts": 3,
+      "mle_better_parent_attach_attempts": 0,
+      "mle_parent_changes": 1,
+      "mobile_to_parent_end_dwell_sim_lqi_median": 0.0,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -101.652,
+      "mobile_to_parent_end_dwell_sim_rss_dbm_median": -101.652,
+      "observability_note": null,
+      "oscillation_events": 0,
+      "packet_delivery_ratio": 0.982405,
+      "packet_probe_reliable": true,
+      "parent_ids_seen": [
+        "router_a",
+        "router_b"
+      ],
+      "parent_probe_delivery_ratio": 0.982405,
+      "parent_probe_enabled": true,
+      "parent_probe_mean_rtt_avg_ms": 6.838806,
+      "parent_probe_total_rx": 335,
+      "parent_probe_total_tx": 341,
+      "parent_search_config": "disabled",
+      "parent_sequence": [
+        "router_a",
+        "router_b"
+      ],
+      "plot_note": "Install matplotlib to add parent/time and position/time plots.",
+      "primary_parent_observation": "packet_probe",
+      "result_classification": "switch_observed",
+      "sample_count": 357,
+      "second_switch_position_x": null,
+      "second_switch_time_s": null,
+      "sim_ping_rss_ambiguous_probe_events": 0,
+      "sim_ping_rss_capture_enabled": true,
+      "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+      "sim_ping_rss_match_rate": 1.0,
+      "sim_ping_rss_matched_probe_events": 354,
+      "sim_ping_rss_policy": "request_and_reply_when_available",
+      "sim_ping_rss_probe_stats": {
+        "mobile_to_parent": {
+          "ambiguous_events": 0,
+          "match_rate": 1.0,
+          "reply_rx_dbm_mean": -100.352319,
+          "reply_rx_dbm_median": -101.652,
+          "request_rx_dbm_mean": -100.332056,
+          "request_rx_dbm_median": -101.652
+        }
+      },
+      "sim_ping_rss_total_probe_events": 354,
+      "sim_ping_rss_unmatched_probe_events": 0,
+      "switch_count": 1,
+      "switch_events": [
+        {
+          "mobile_x": 1800.0,
+          "sample_index": 41,
+          "sim_time_s": 522.0,
+          "to_parent": "router_b"
+        }
+      ],
+      "switch_position_x": 1800.0,
+      "thread_device_type": "fed",
+      "time_spent_by_parent_s": {
+        "router_a": 38.0,
+        "router_b": 316.0
+      },
+      "total_outage_s": 22.0,
+      "verified_node_tx_power_dbm": {
+        "mobile": 0.0,
+        "router_b": 0.0
+      }
+    }
+  ]
+}
