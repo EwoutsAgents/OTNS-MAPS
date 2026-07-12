@@ -983,6 +983,10 @@ class RealBenchmarkRunner:
         self.notes: list[str] = []
         self.node_refs: dict[str, NodeRef] = {}
         self.parent_before_delayed_nodes: str | None = None
+        self.initial_attachment_expected_parent: str | None = None
+        self.initial_attachment_observed_parent: str | None = None
+        self.initial_attachment_wait_s: int | None = None
+        self.initial_attachment_timed_out = False
         self.observability = scenario.get("observability", {})
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
@@ -1062,6 +1066,10 @@ class RealBenchmarkRunner:
             total_outage_s=round(total_outage, 3),
             mock=False,
             parent_before_delayed_nodes=self.parent_before_delayed_nodes,
+            initial_attachment_expected_parent=self.initial_attachment_expected_parent,
+            initial_attachment_observed_parent=self.initial_attachment_observed_parent,
+            initial_attachment_wait_s=self.initial_attachment_wait_s,
+            initial_attachment_timed_out=self.initial_attachment_timed_out,
             thread_device_type=self.thread_device_type,
             parent_search_config=self.parent_search_config,
             sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
@@ -1159,6 +1167,7 @@ class RealBenchmarkRunner:
         configured_names = list(self.scenario["nodes"].keys())
         initial_node_names = activation.get("initial_nodes") or configured_names
         named_ids = self._create_nodes(session, list(initial_node_names))
+        self._await_initial_parent(session, activation)
 
         delayed_groups = activation.get("delayed_node_groups", [])
         if not delayed_groups:
@@ -1199,6 +1208,66 @@ class RealBenchmarkRunner:
         if post_activation_settle_seconds:
             session.command_output(f"go {post_activation_settle_seconds}")
         return named_ids
+
+    def _await_initial_parent(self, session: OtnsSession, activation: dict[str, Any]) -> None:
+        wait_config = activation.get("await_initial_parent")
+        if not wait_config:
+            return
+
+        expected_parent = wait_config.get("expected_parent") or self.scenario.get("expected_initial_parent")
+        timeout_seconds = int(wait_config.get("timeout_seconds", 0))
+        poll_interval_seconds = max(1, int(wait_config.get("poll_interval_seconds", 5)))
+        self.initial_attachment_expected_parent = expected_parent
+
+        mobile_ref = self.node_refs.get("mobile")
+        if mobile_ref is None:
+            return
+
+        elapsed = 0
+        last_parent: str | None = None
+        while True:
+            self._refresh_node_identity(session)
+            try:
+                parent_info = parse_key_value_lines(session.command_output(f'node {mobile_ref.node_id} "parent"'))
+                last_parent = self._parent_name_from_identity(parent_info)
+            except OtnsSessionError as exc:
+                if "InvalidState" not in str(exc):
+                    raise
+                last_parent = None
+
+            if last_parent:
+                self.initial_attachment_observed_parent = last_parent
+                self.parent_before_delayed_nodes = last_parent
+            if expected_parent and last_parent == expected_parent:
+                self.initial_attachment_wait_s = elapsed
+                self.notes.append(
+                    f"Initial parent `{expected_parent}` observed after {elapsed} simulated seconds; "
+                    "delayed nodes are activated after this attachment gate."
+                )
+                return
+
+            if elapsed >= timeout_seconds:
+                break
+
+            step = min(poll_interval_seconds, timeout_seconds - elapsed)
+            if step <= 0:
+                break
+            session.command_output(f"go {step}")
+            elapsed += step
+
+        self.initial_attachment_wait_s = elapsed
+        self.initial_attachment_timed_out = True
+        if self.initial_attachment_observed_parent is None:
+            self.parent_before_delayed_nodes = "unknown"
+        self.notes.append(
+            "Initial parent attachment gate timed out"
+            + (f" after {elapsed} simulated seconds" if elapsed else "")
+            + (
+                f"; expected `{expected_parent}`, observed `{self.initial_attachment_observed_parent or 'unknown'}`."
+                if expected_parent
+                else "."
+            )
+        )
 
     def _refresh_node_identity(self, session: OtnsSession) -> None:
         parsed = parse_nodes(session.command_output("nodes"))
@@ -1824,6 +1893,10 @@ def build_summary(
     total_outage_s: float,
     mock: bool,
     parent_before_delayed_nodes: str | None = None,
+    initial_attachment_expected_parent: str | None = None,
+    initial_attachment_observed_parent: str | None = None,
+    initial_attachment_wait_s: int | None = None,
+    initial_attachment_timed_out: bool = False,
     thread_device_type: str | None = None,
     parent_search_config: str = "unknown",
     sim_ping_rss_capture_enabled: bool = False,
@@ -1921,6 +1994,10 @@ def build_summary(
         "sample_count": len(samples),
         "expected_initial_parent": expected_initial_parent,
         "pre_movement_parent_before_delayed_nodes": parent_before_delayed_nodes,
+        "initial_attachment_expected_parent": initial_attachment_expected_parent,
+        "initial_attachment_observed_parent": initial_attachment_observed_parent,
+        "initial_attachment_wait_s": initial_attachment_wait_s,
+        "initial_attachment_timed_out": initial_attachment_timed_out,
         "initial_observed_parent": initial_observed_parent,
         "final_observed_parent": final_observed_parent,
         "parent_sequence": compact_parent_sequence,

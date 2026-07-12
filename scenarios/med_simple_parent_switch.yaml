@@ -4,9 +4,9 @@ description: >
   Simple stock OTNS parent-switching benchmark for a mobile Minimal End
   Device. The scenario uses three routers, one mobile end device, straight-line
   movement, delayed Router B/Router C activation, static 0 dBm transmit power,
-  and no intentional dead zone. The mobile starts before Router A, moves beyond
-  Router C at a target 5 m/s, then dwells at the end to expose late parent
-  switching.
+  and no intentional dead zone. The mobile is created near Router A so initial
+  attachment is controlled, then moves beyond Router C at a target 5 m/s and
+  dwells at the end to expose late parent switching.
 
 device_profile: minimal_end_device
 expected_initial_parent: router_a
@@ -29,14 +29,18 @@ radio_model:
 timing:
   settle_seconds: 120
   step_seconds: 1
-  movement_steps: 30
+  movement_steps: 25
 
 activation:
   initial_nodes:
     - router_a
     - mobile
+  await_initial_parent:
+    expected_parent: router_a
+    timeout_seconds: 300
+    poll_interval_seconds: 5
   delayed_node_groups:
-    - delay_seconds: 300
+    - delay_seconds: 0
       nodes:
         - router_b
         - router_c
@@ -60,17 +64,17 @@ nodes:
     tx_power_dbm: 0
   mobile:
     type: med
-    x: 0
+    x: 350
     y: 360
     tx_power_dbm: 0
 
 movement:
   node: mobile
   start:
-    x: 0
+    x: 350
     y: 360
   end:
-    x: 1500
+    x: 1600
     y: 360
   speed_mps: 5
   hold_end_steps: 320

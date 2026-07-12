@@ -57,6 +57,14 @@ def load_rows(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle))
 
 
+def load_sibling_summary(path: Path) -> dict[str, Any]:
+    summaries = sorted(path.parent.glob("baseline_summary_*.json"))
+    if not summaries:
+        return {}
+    with summaries[0].open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
 def to_float(value: str | None) -> float | None:
     if value in (None, "", "None"):
         return None
@@ -117,6 +125,7 @@ def summarize_run(path: Path) -> dict[str, Any]:
     rows = load_rows(path)
     if not rows:
         raise ValueError(f"No rows in {path}")
+    sibling_summary = load_sibling_summary(path)
 
     device_profile = rows[0].get("device_profile") or "mobile_end_device"
     thread_device_type = rows[0].get("thread_device_type") or None
@@ -248,6 +257,14 @@ def summarize_run(path: Path) -> dict[str, Any]:
         "packet_probe_reliable": packet_probe_reliable,
         "primary_parent_observation": primary_parent_observation,
         "sample_count": len(rows),
+        "expected_initial_parent": sibling_summary.get("expected_initial_parent"),
+        "pre_movement_parent_before_delayed_nodes": sibling_summary.get(
+            "pre_movement_parent_before_delayed_nodes"
+        ),
+        "initial_attachment_expected_parent": sibling_summary.get("initial_attachment_expected_parent"),
+        "initial_attachment_observed_parent": sibling_summary.get("initial_attachment_observed_parent"),
+        "initial_attachment_wait_s": sibling_summary.get("initial_attachment_wait_s"),
+        "initial_attachment_timed_out": sibling_summary.get("initial_attachment_timed_out"),
         "initial_observed_parent": initial_observed_parent,
         "final_observed_parent": final_observed_parent,
         "parent_sequence": compact_parent_sequence,
@@ -392,15 +409,41 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
     sim_match_rate_values = [summary.get("sim_ping_rss_match_rate") for summary in summaries]
     switch_counts = [summary.get("switch_count") or 0 for summary in summaries]
     oscillation_values = [summary.get("oscillation_events") or 0 for summary in summaries]
+    attachment_success_runs = sum(
+        1
+        for summary in summaries
+        if summary.get("initial_attachment_expected_parent")
+        and summary.get("initial_attachment_observed_parent") == summary.get("initial_attachment_expected_parent")
+    )
+    attachment_timeout_runs = sum(1 for summary in summaries if summary.get("initial_attachment_timed_out"))
+    initial_parent_expected_runs = sum(
+        1
+        for summary in summaries
+        if summary.get("expected_initial_parent")
+        and summary.get("initial_observed_parent") == summary.get("expected_initial_parent")
+    )
+    final_parent_counts: dict[str, int] = {}
+    parent_sequence_counts: dict[str, int] = {}
     classification_counts: dict[str, int] = {}
     for summary in summaries:
         classification = summary.get("result_classification") or "unknown"
         classification_counts[classification] = classification_counts.get(classification, 0) + 1
+        final_parent = summary.get("final_observed_parent") or "None"
+        final_parent_counts[final_parent] = final_parent_counts.get(final_parent, 0) + 1
+        sequence = ">".join(summary.get("parent_sequence") or []) or "None"
+        parent_sequence_counts[sequence] = parent_sequence_counts.get(sequence, 0) + 1
 
     switch_observed_runs = sum(1 for summary in summaries if summary.get("switch_count"))
     oscillation_runs = sum(1 for value in oscillation_values if value > 0)
     return {
         "run_count": len(summaries),
+        "initial_attachment_success_runs": attachment_success_runs,
+        "initial_attachment_success_rate": round(attachment_success_runs / len(summaries), 6),
+        "initial_attachment_timeout_runs": attachment_timeout_runs,
+        "initial_parent_expected_runs": initial_parent_expected_runs,
+        "initial_parent_expected_rate": round(initial_parent_expected_runs / len(summaries), 6),
+        "final_parent_counts": final_parent_counts,
+        "parent_sequence_counts": parent_sequence_counts,
         "switch_observed_runs": switch_observed_runs,
         "switch_observed_rate": round(switch_observed_runs / len(summaries), 6),
         "classification_counts": classification_counts,
