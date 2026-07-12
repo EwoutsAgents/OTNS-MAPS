@@ -210,8 +210,6 @@ def plot_matrix(artifacts: list[Path], output: Path, title: str) -> None:
         return top + ((max_y - value) / (max_y - min_y or 1)) * plot_height
 
     group_width = plot_width / max(1, len(rows))
-    bar_width = min(54, group_width * 0.28)
-
     elements = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
         '<rect width="100%" height="100%" fill="#ffffff"/>',
@@ -229,18 +227,17 @@ def plot_matrix(artifacts: list[Path], output: Path, title: str) -> None:
         f'<text x="22" y="{top+plot_height/2:.2f}" transform="rotate(-90 22,{top+plot_height/2:.2f})" text-anchor="middle" font-family="Arial, sans-serif" font-size="13">RSS (dBm)</text>'
     )
 
-    baseline = y_scale(min_y)
     for index, row in enumerate(rows):
         cx = left + group_width * index + group_width / 2
         for offset, key, color in ((0, "mobile_parent", COLORS["mobile_to_parent"]),):
             value = row[key]
             if value is None:
                 continue
-            x = cx + offset - bar_width / 2
+            x = cx + offset
             y = y_scale(float(value))
-            elements.append(f'<rect x="{x:.2f}" y="{y:.2f}" width="{bar_width:.2f}" height="{baseline-y:.2f}" fill="{color}"/>')
+            elements.append(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="6.2" fill="{color}" fill-opacity="0.86"/>')
             elements.append(
-                f'<text x="{x+bar_width/2:.2f}" y="{y-5:.2f}" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#222">{float(value):.1f}</text>'
+                f'<text x="{x:.2f}" y="{y-9:.2f}" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#222">{float(value):.1f}</text>'
             )
         label = html.escape(row["label"])
         elements.append(
@@ -251,7 +248,7 @@ def plot_matrix(artifacts: list[Path], output: Path, title: str) -> None:
     legend_y = top + 18
     for index, (label, color) in enumerate((("mobile -> current parent reply at ED", COLORS["mobile_to_parent"]),)):
         y = legend_y + index * 20
-        elements.append(f'<rect x="{legend_x}" y="{y-10}" width="18" height="12" fill="{color}"/>')
+        elements.append(f'<circle cx="{legend_x+9}" cy="{y-4}" r="5.5" fill="{color}"/>')
         elements.append(f'<text x="{legend_x+26}" y="{y}" font-family="Arial, sans-serif" font-size="12">{label}</text>')
 
     elements.append("</svg>")

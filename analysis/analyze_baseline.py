@@ -124,6 +124,7 @@ def summarize_run(path: Path) -> dict[str, Any]:
     packet_probe_reliable = to_bool(rows[0].get("packet_probe_reliable"))
     primary_parent_observation = rows[0].get("primary_parent_observation") or "packet_probe"
     switch_times = [to_float(row["sim_time_s"]) for row in rows if to_bool(row.get("parent_switch"))]
+    switch_rows = [row for row in rows if to_bool(row.get("parent_switch"))]
     connectivity = [to_bool(row.get("connectivity_ok")) for row in rows]
     times = [to_float(row["sim_time_s"]) or 0.0 for row in rows]
 
@@ -167,9 +168,25 @@ def summarize_run(path: Path) -> dict[str, Any]:
         value for index, value in enumerate(parent_sequence) if index == 0 or value != parent_sequence[index - 1]
     ]
     oscillations = 0
-    for left, middle, right in zip(parent_sequence, parent_sequence[1:], parent_sequence[2:]):
+    for left, middle, right in zip(
+        compact_parent_sequence,
+        compact_parent_sequence[1:],
+        compact_parent_sequence[2:],
+    ):
         if left == right and left != middle:
             oscillations += 1
+    time_spent_by_parent_s: dict[str, float] = {}
+    if len(times) > 1:
+        step_seconds = times[1] - times[0]
+    else:
+        step_seconds = 0.0
+    for row in rows:
+        parent = row.get("parent_node_guess")
+        if parent:
+            time_spent_by_parent_s[parent] = round(
+                time_spent_by_parent_s.get(parent, 0.0) + step_seconds,
+                6,
+            )
 
     initial_observed_parent = rows[0].get("parent_node_guess")
     final_observed_parent = rows[-1].get("parent_node_guess")
@@ -241,6 +258,20 @@ def summarize_run(path: Path) -> dict[str, Any]:
             (to_float(row.get("mobile_x")) for row in rows if to_bool(row.get("parent_switch"))),
             None,
         ),
+        "second_switch_time_s": switch_times[1] if len(switch_times) > 1 else None,
+        "second_switch_position_x": (
+            to_float(switch_rows[1].get("mobile_x")) if len(switch_rows) > 1 else None
+        ),
+        "switch_events": [
+            {
+                "sample_index": int(float(row.get("sample_index") or 0)),
+                "sim_time_s": to_float(row.get("sim_time_s")),
+                "to_parent": row.get("parent_node_guess"),
+                "mobile_x": to_float(row.get("mobile_x")),
+            }
+            for row in switch_rows
+        ],
+        "time_spent_by_parent_s": time_spent_by_parent_s,
         "total_outage_s": total_outage_s,
         "packet_delivery_ratio": packet_delivery_ratio,
         "parent_probe_enabled": "mobile_to_parent_tx" in rows[0],
@@ -260,6 +291,24 @@ def summarize_run(path: Path) -> dict[str, Any]:
         "mobile_to_parent_end_dwell_sim_rss_dbm_mean": _mean_or_none(mobile_parent_end_rssi),
         "mobile_to_parent_end_dwell_sim_rss_dbm_median": _median_or_none(mobile_parent_end_rssi),
         "mobile_to_parent_end_dwell_sim_lqi_median": _median_or_none(mobile_parent_end_lqi),
+        "configured_node_tx_power_dbm": {
+            key: value
+            for key, value in {
+                "mobile": to_float(rows[0].get("mobile_tx_power_dbm")),
+                final_observed_parent or "parent": to_float(rows[-1].get("mobile_to_parent_target_tx_power_dbm")),
+            }.items()
+            if value is not None
+        },
+        "verified_node_tx_power_dbm": {
+            key: value
+            for key, value in {
+                "mobile": to_float(rows[0].get("mobile_verified_tx_power_dbm")),
+                final_observed_parent or "parent": to_float(
+                    rows[-1].get("mobile_to_parent_target_verified_tx_power_dbm")
+                ),
+            }.items()
+            if value is not None
+        },
         "oscillation_events": oscillations,
         "mle_parent_changes": mle_parent_changes,
         "mle_attach_attempts": mle_attach_attempts,
@@ -330,7 +379,9 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
         return None
 
     switch_times = [summary.get("first_switch_time_s") for summary in summaries]
+    second_switch_times = [summary.get("second_switch_time_s") for summary in summaries]
     switch_positions = [summary.get("switch_position_x") for summary in summaries]
+    second_switch_positions = [summary.get("second_switch_position_x") for summary in summaries]
     outage_values = [summary.get("total_outage_s") for summary in summaries]
     pdr_values = [summary.get("packet_delivery_ratio") for summary in summaries]
     parent_probe_pdr_values = [summary.get("parent_probe_delivery_ratio") for summary in summaries]
@@ -365,12 +416,20 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
         "min_first_switch_time_s": _min_or_none(switch_times),
         "max_first_switch_time_s": _max_or_none(switch_times),
         "switch_time_sample_size": _sample_size(switch_times),
+        "mean_second_switch_time_s": _mean_or_none(second_switch_times),
+        "median_second_switch_time_s": _median_or_none(second_switch_times),
+        "stddev_second_switch_time_s": _stddev_or_none(second_switch_times),
+        "second_switch_time_sample_size": _sample_size(second_switch_times),
         "mean_switch_position_x": _mean_or_none(switch_positions),
         "median_switch_position_x": _median_or_none(switch_positions),
         "stddev_switch_position_x": _stddev_or_none(switch_positions),
         "min_switch_position_x": _min_or_none(switch_positions),
         "max_switch_position_x": _max_or_none(switch_positions),
         "switch_position_sample_size": _sample_size(switch_positions),
+        "mean_second_switch_position_x": _mean_or_none(second_switch_positions),
+        "median_second_switch_position_x": _median_or_none(second_switch_positions),
+        "stddev_second_switch_position_x": _stddev_or_none(second_switch_positions),
+        "second_switch_position_sample_size": _sample_size(second_switch_positions),
         "mean_total_outage_s": _mean_or_none(outage_values),
         "median_total_outage_s": _median_or_none(outage_values),
         "stddev_total_outage_s": _stddev_or_none(outage_values),

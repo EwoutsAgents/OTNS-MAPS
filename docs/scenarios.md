@@ -8,9 +8,9 @@ The active benchmark matrix uses three simple parent-switch scenarios:
 
 ## Simple Parent Switch
 
-A simple parent-switch scenario has two routers, one mobile end device, straight-line movement, delayed Router B activation, overlapping intended coverage, and no intentional dead zone. The mobile starts before Router A, moves beyond Router B, and dwells at the end to give late or sticky parent switching behavior time to appear.
+A simple parent-switch scenario has three routers, one mobile end device, straight-line movement, delayed Router B/Router C activation, static 0 dBm transmit power, and no intentional dead zone. The mobile starts before Router A, moves beyond Router C, and dwells at the end to give late or sticky parent switching behavior time to appear.
 
-Router A and the mobile end device are created first. The mobile device is allowed to attach to Router A, Router B is introduced after a delay, a post-activation settle period runs, and only then does movement toward Router B begin. All active scenarios keep `expected_initial_parent: router_a`.
+Router A and the mobile end device are created first. The mobile device is allowed to attach to Router A, Router B and Router C are introduced after a delay, a post-activation settle period runs, and only then does movement toward Router C begin. All active scenarios keep `expected_initial_parent: router_a`.
 
 ## Geometry
 
@@ -19,11 +19,14 @@ All active simple scenarios use the same intended overlapping-coverage geometry:
 | Node | x | y |
 |---|---:|---:|
 | Router A | 250 | 300 |
-| Router B | 800 | 300 |
+| Router B | 525 | 300 |
+| Router C | 800 | 300 |
 | Mobile start | 150 | 360 |
 | Mobile end | 900 | 360 |
 
-The moving end device stays horizontally offset from the router line and traverses from before Router A to beyond Router B. The active geometry increases router spacing while keeping the routers connected in pilot runs.
+The moving end device stays horizontally offset from the router line and traverses from before Router A to beyond Router C. The active geometry keeps Router B between Router A and Router C so Router B can preserve mesh connectivity while also acting as a possible intermediate parent.
+
+All nodes set OpenThread transmit power to `0 dBm` once during initialization using `txpower 0`; the runner verifies the configured value with `txpower` when possible.
 
 OTNS uses the `MeterPerUnit` radio parameter for coordinate scaling. The scenarios assume the default `MeterPerUnit = 0.1`, so one coordinate unit is treated as 0.1 m unless the radio parameter is overridden. This default is recorded in the local OTNS source at `radiomodel/model_params.go` and listed by `cli/README.md`.
 
@@ -31,7 +34,7 @@ The mobile path from x=150 to x=900 spans 750 coordinate units, which is 75 m at
 
 ## Timing
 
-| Scenario | Step seconds | Movement steps | Router B delay (s) | Post-activation settle (s) | Hold end steps | End dwell (s) |
+| Scenario | Step seconds | Movement steps | Router B/C delay (s) | Post-activation settle (s) | Hold end steps | End dwell (s) |
 |---|---:|---:|---:|---:|---:|---:|
 | MED simple | 1 | 15 | 300 | 180 | 320 | 320 |
 | FED simple | 1 | 15 | 300 | 180 | 320 | 320 |

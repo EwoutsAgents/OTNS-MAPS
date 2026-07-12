@@ -41,6 +41,8 @@ class NodeRef:
     rloc16: str | None = None
     x: float | None = None
     y: float | None = None
+    tx_power_dbm: float | None = None
+    verified_tx_power_dbm: float | None = None
 
 
 def parse_args() -> argparse.Namespace:
@@ -235,6 +237,33 @@ def numeric_median(values: list[float]) -> float | None:
     return round((sorted_values[midpoint - 1] + sorted_values[midpoint]) / 2, 6)
 
 
+def router_names(scenario: dict[str, Any]) -> list[str]:
+    return [
+        name
+        for name, config in scenario.get("nodes", {}).items()
+        if config.get("type") == "router" or name.startswith("router_")
+    ]
+
+
+def node_tx_power_dbm(config: dict[str, Any]) -> float | None:
+    value = config.get("tx_power_dbm")
+    if value in (None, "", "None"):
+        return None
+    return float(value)
+
+
+def format_cli_number(value: float) -> str:
+    return str(int(value)) if float(value).is_integer() else str(value)
+
+
+def parse_tx_power_output(lines: list[str]) -> float | None:
+    for line in lines:
+        match = re.search(r"-?\d+(?:\.\d+)?", line)
+        if match:
+            return float(match.group(0))
+    return None
+
+
 def sim_lqi_from_rssi(rssi_dbm: float | None) -> int | None:
     if rssi_dbm is None:
         return None
@@ -253,11 +282,11 @@ def derive_mutual_interference_rssi_dbm(
     dst_x: float | None,
     dst_y: float | None,
     meter_per_unit: float = 0.1,
-    tx_power_dbm: float = 20.0,
+    tx_power_dbm: float | None = None,
 ) -> float | None:
     """Mirror OTNS MutualInterference 3GPP indoor RSS calculation at a ping event."""
 
-    if None in (src_x, src_y, dst_x, dst_y):
+    if None in (src_x, src_y, dst_x, dst_y, tx_power_dbm):
         return None
     distance_units = math.dist((float(src_x), float(src_y)), (float(dst_x), float(dst_y)))
     distance_meters = distance_units * meter_per_unit
@@ -417,7 +446,10 @@ def maybe_capture_replay(
         "final_observed_parent": summary.get("final_observed_parent"),
         "switch_count": summary.get("switch_count"),
         "first_switch_time_s": summary.get("first_switch_time_s"),
+        "second_switch_time_s": summary.get("second_switch_time_s"),
         "result_classification": summary.get("result_classification"),
+        "configured_node_tx_power_dbm": summary.get("configured_node_tx_power_dbm"),
+        "verified_node_tx_power_dbm": summary.get("verified_node_tx_power_dbm"),
     }
     write_json(metadata, metadata_path)
 
@@ -541,11 +573,16 @@ def tracked_results_manifest(
         "final_observed_parent": summary.get("final_observed_parent"),
         "switch_count": summary.get("switch_count"),
         "first_switch_time_s": summary.get("first_switch_time_s"),
+        "second_switch_time_s": summary.get("second_switch_time_s"),
         "switch_position_x": summary.get("switch_position_x"),
+        "second_switch_position_x": summary.get("second_switch_position_x"),
         "packet_delivery_ratio": summary.get("packet_delivery_ratio"),
         "total_outage_s": summary.get("total_outage_s"),
         "oscillation_events": summary.get("oscillation_events"),
         "parent_sequence": summary.get("parent_sequence"),
+        "time_spent_by_parent_s": summary.get("time_spent_by_parent_s"),
+        "configured_node_tx_power_dbm": summary.get("configured_node_tx_power_dbm"),
+        "verified_node_tx_power_dbm": summary.get("verified_node_tx_power_dbm"),
         "mle_parent_changes": summary.get("mle_parent_changes"),
         "mle_attach_attempts": summary.get("mle_attach_attempts"),
         "mle_better_parent_attach_attempts": summary.get("mle_better_parent_attach_attempts"),
@@ -591,11 +628,16 @@ def write_tracked_results_readme(
             f'- Final observed parent: `{manifest["final_observed_parent"]}`',
             f'- Switch count: `{manifest["switch_count"]}`',
             f'- First switch time (s): `{manifest["first_switch_time_s"]}`',
+            f'- Second switch time (s): `{manifest["second_switch_time_s"]}`',
             f'- Switch position x: `{manifest["switch_position_x"]}`',
+            f'- Second switch position x: `{manifest["second_switch_position_x"]}`',
             f'- Packet delivery ratio: `{manifest["packet_delivery_ratio"]}`',
             f'- Total outage (s): `{manifest["total_outage_s"]}`',
             f'- Oscillation events: `{manifest["oscillation_events"]}`',
             f'- Parent sequence: `{manifest["parent_sequence"]}`',
+            f'- Time spent by parent (s): `{manifest["time_spent_by_parent_s"]}`',
+            f'- Configured node TX power (dBm): `{manifest["configured_node_tx_power_dbm"]}`',
+            f'- Verified node TX power (dBm): `{manifest["verified_node_tx_power_dbm"]}`',
             f'- MLE parent changes: `{manifest["mle_parent_changes"]}`',
             f'- MLE attach attempts: `{manifest["mle_attach_attempts"]}`',
             f'- MLE better parent attach attempts: `{manifest["mle_better_parent_attach_attempts"]}`',
@@ -1023,6 +1065,7 @@ class RealBenchmarkRunner:
             thread_device_type=self.thread_device_type,
             parent_search_config=self.parent_search_config,
             sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
+            node_refs=self.node_refs,
         )
         return rows, summary
 
@@ -1042,9 +1085,25 @@ class RealBenchmarkRunner:
         if src is None or dst is None:
             return {}
 
-        request_rssi = derive_mutual_interference_rssi_dbm(src.x, src.y, dst.x, dst.y)
+        request_rssi = derive_mutual_interference_rssi_dbm(
+            src.x,
+            src.y,
+            dst.x,
+            dst.y,
+            tx_power_dbm=src.tx_power_dbm,
+        )
         rx_count = int((ping_result or {}).get("rx") or 0)
-        reply_rssi = derive_mutual_interference_rssi_dbm(dst.x, dst.y, src.x, src.y) if rx_count > 0 else None
+        reply_rssi = (
+            derive_mutual_interference_rssi_dbm(
+                dst.x,
+                dst.y,
+                src.x,
+                src.y,
+                tx_power_dbm=dst.tx_power_dbm,
+            )
+            if rx_count > 0
+            else None
+        )
         return {
             "method": "otns_model_derived_at_ping",
             "match_status": "model_derived",
@@ -1072,12 +1131,27 @@ class RealBenchmarkRunner:
         named_ids: dict[str, int] = {}
         for name in node_names:
             config = self.scenario["nodes"][name]
+            tx_power = node_tx_power_dbm(config)
             # OTNS-specific command: create a stock node type in the simulator.
             output = session.command_output(f'add {config["type"]}')
             node_id = int(output[0])
             named_ids[name] = node_id
             session.command_output(f'move {node_id} {config["x"]} {config["y"]}')
-            self.node_refs[name] = NodeRef(name=name, node_id=node_id, x=config["x"], y=config["y"])
+            verified_tx_power = None
+            if tx_power is not None:
+                session.command_output(f'node {node_id} "txpower {format_cli_number(tx_power)}"')
+                try:
+                    verified_tx_power = parse_tx_power_output(session.command_output(f'node {node_id} "txpower"'))
+                except OtnsSessionError as exc:
+                    self.notes.append(f"Unable to verify TX power for {name}: {exc}")
+            self.node_refs[name] = NodeRef(
+                name=name,
+                node_id=node_id,
+                x=config["x"],
+                y=config["y"],
+                tx_power_dbm=tx_power,
+                verified_tx_power_dbm=verified_tx_power,
+            )
         return named_ids
 
     def _activate_nodes(self, session: OtnsSession, timing: dict[str, Any]) -> dict[str, int]:
@@ -1185,13 +1259,25 @@ class RealBenchmarkRunner:
             "mobile_to_parent_target": (parent_probe or {}).get("target"),
             "mobile_to_parent_target_rloc16": (parent_probe or {}).get("target_rloc16"),
             "mobile_to_parent_target_extaddr": (parent_probe or {}).get("target_extaddr"),
+            "mobile_tx_power_dbm": mobile.tx_power_dbm,
+            "mobile_verified_tx_power_dbm": mobile.verified_tx_power_dbm,
+            "mobile_to_parent_target_tx_power_dbm": (
+                self.node_refs[(parent_probe or {}).get("target")].tx_power_dbm
+                if (parent_probe or {}).get("target") in self.node_refs
+                else None
+            ),
+            "mobile_to_parent_target_verified_tx_power_dbm": (
+                self.node_refs[(parent_probe or {}).get("target")].verified_tx_power_dbm
+                if (parent_probe or {}).get("target") in self.node_refs
+                else None
+            ),
             "mobile_to_parent_result": {},
             "ip_counters": ip_counters,
             "mle_counters": mle_counters,
             "probe_results": {},
         }
 
-        for router_name in ("router_a", "router_b"):
+        for router_name in router_names(self.scenario):
             router = self.node_refs[router_name]
             scan_match = next((row for row in scan_rows if row["mac_address"] == (router.extaddr or "").lower()), None)
             sample[f"{router_name}_scan_dbm"] = scan_match["dbm"] if scan_match else None
@@ -1309,11 +1395,29 @@ class MockBenchmarkRunner:
         dst: tuple[float, float] | None,
         sim_time_s: float,
         rx: int,
+        src_tx_power_dbm: float | None,
+        dst_tx_power_dbm: float | None,
     ) -> dict[str, Any]:
         if not self.capture_sim_ping_rss or src is None or dst is None:
             return {}
-        request_rssi = derive_mutual_interference_rssi_dbm(src[0], src[1], dst[0], dst[1])
-        reply_rssi = derive_mutual_interference_rssi_dbm(dst[0], dst[1], src[0], src[1]) if rx > 0 else None
+        request_rssi = derive_mutual_interference_rssi_dbm(
+            src[0],
+            src[1],
+            dst[0],
+            dst[1],
+            tx_power_dbm=src_tx_power_dbm,
+        )
+        reply_rssi = (
+            derive_mutual_interference_rssi_dbm(
+                dst[0],
+                dst[1],
+                src[0],
+                src[1],
+                tx_power_dbm=dst_tx_power_dbm,
+            )
+            if rx > 0
+            else None
+        )
         return {
             "method": "otns_model_derived_at_ping",
             "match_status": "model_derived",
@@ -1328,8 +1432,15 @@ class MockBenchmarkRunner:
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         timing = self.scenario["timing"]
         positions = movement_positions(self.scenario)
-        router_a = self.scenario["nodes"]["router_a"]
-        router_b = self.scenario["nodes"]["router_b"]
+        routers = {name: self.scenario["nodes"][name] for name in router_names(self.scenario)}
+        router_identity = {
+            name: {
+                "extaddr": f"{index + 1:02x}" * 8,
+                "rloc16": f"0x{(index + 1) * 0x1000:04x}",
+            }
+            for index, name in enumerate(routers)
+        }
+        mobile_tx_power = node_tx_power_dbm(self.scenario["nodes"]["mobile"])
 
         samples: list[dict[str, Any]] = []
         switch_events: list[dict[str, Any]] = []
@@ -1340,14 +1451,18 @@ class MockBenchmarkRunner:
 
         for index, (x, y) in enumerate(positions):
             sim_time_s = timing["settle_seconds"] + index * timing["step_seconds"]
-            dist_a = math.dist((x, y), (router_a["x"], router_a["y"]))
-            dist_b = math.dist((x, y), (router_b["x"], router_b["y"]))
-            parent = "router_a" if dist_a <= dist_b + 20 else "router_b"
+            distances = {
+                name: math.dist((x, y), (config["x"], config["y"]))
+                for name, config in routers.items()
+            }
+            parent = min(distances, key=distances.get)
             if index in (10, 11):
                 mobile_state = "detached"
             else:
                 mobile_state = "child"
             parent_probe_rx = 1 if mobile_state == "child" else 0
+            parent_identity = router_identity[parent]
+            parent_tx_power = node_tx_power_dbm(routers[parent])
 
             if previous_parent and parent != previous_parent:
                 switch_events.append(
@@ -1377,24 +1492,26 @@ class MockBenchmarkRunner:
                 "mobile_x": x,
                 "mobile_y": y,
                 "mobile_state": mobile_state,
-                "mobile_rloc16": "0x5400" if parent == "router_a" else "0x9800",
+                "mobile_rloc16": "0x5400",
                 "device_profile": self.scenario.get("device_profile", "mobile_end_device"),
                 "thread_device_type": self.thread_device_type,
                 "parent_search_config": self.parent_search_config,
                 "packet_probe_reliable": self.observability.get("packet_probe_reliable", True),
                 "primary_parent_observation": self.observability.get("primary_parent_observation", "packet_probe"),
-                "parent_extaddr": "aa00aa00aa00aa00" if parent == "router_a" else "bb00bb00bb00bb00",
-                "parent_rloc16": "0x1000" if parent == "router_a" else "0x2000",
+                "parent_extaddr": parent_identity["extaddr"],
+                "parent_rloc16": parent_identity["rloc16"],
                 "parent_link_quality_in": 3 if connectivity_ok else 0,
                 "parent_link_quality_out": 3 if connectivity_ok else 0,
                 "parent_age": 5,
                 "parent_version": 4,
                 "parent_node_guess": parent,
                 "mobile_to_parent_target": parent,
-                "mobile_to_parent_target_rloc16": "0x1000" if parent == "router_a" else "0x2000",
-                "mobile_to_parent_target_extaddr": (
-                    "aa00aa00aa00aa00" if parent == "router_a" else "bb00bb00bb00bb00"
-                ),
+                "mobile_to_parent_target_rloc16": parent_identity["rloc16"],
+                "mobile_to_parent_target_extaddr": parent_identity["extaddr"],
+                "mobile_tx_power_dbm": mobile_tx_power,
+                "mobile_verified_tx_power_dbm": mobile_tx_power,
+                "mobile_to_parent_target_tx_power_dbm": parent_tx_power,
+                "mobile_to_parent_target_verified_tx_power_dbm": parent_tx_power,
                 "mobile_to_parent_result": {
                     "tx": 1,
                     "rx": parent_probe_rx,
@@ -1413,31 +1530,39 @@ class MockBenchmarkRunner:
                     "AttachAttempts": str(index // 6 + 1),
                     "RoleDetached": "1" if mobile_state == "detached" else "0",
                 },
-                "router_a_scan_dbm": str(round(-25 - dist_a / 8, 1)),
-                "router_a_scan_lqi": "3" if dist_a < 250 else "2",
-                "router_b_scan_dbm": str(round(-25 - dist_b / 8, 1)),
-                "router_b_scan_lqi": "3" if dist_b < 250 else "2",
                 "probe_results": {},
                 "probe_sim_rss": {},
                 "mobile_to_parent_sim_rss": self._mock_ping_sim_rss(
                     (x, y),
-                    (
-                        router_a["x"] if parent == "router_a" else router_b["x"],
-                        router_a["y"] if parent == "router_a" else router_b["y"],
-                    ),
+                    (routers[parent]["x"], routers[parent]["y"]),
                     sim_time_s,
                     parent_probe_rx,
+                    mobile_tx_power,
+                    parent_tx_power,
                 ),
                 "selected_radio_model": "mock",
                 "connectivity_ok": connectivity_ok,
                 "parent_switch": bool(switch_events and switch_events[-1]["sample_index"] == index),
             }
+            for router_name, distance in distances.items():
+                sample[f"{router_name}_scan_dbm"] = str(round(-25 - distance / 8, 1))
+                sample[f"{router_name}_scan_lqi"] = "3" if distance < 250 else "2"
             samples.append(sample)
 
         if outage_active and outage_start is not None and samples:
             total_outage += samples[-1]["sim_time_s"] - outage_start
 
         rows = flatten_samples(samples)
+        configured_tx_power, verified_tx_power = scenario_tx_power_summary(self.scenario)
+        mock_node_refs = {
+            name: NodeRef(
+                name=name,
+                node_id=index + 1,
+                tx_power_dbm=configured_tx_power.get(name),
+                verified_tx_power_dbm=verified_tx_power.get(name),
+            )
+            for index, name in enumerate(self.scenario.get("nodes", {}))
+        }
         summary = build_summary(
             scenario=self.scenario,
             samples=samples,
@@ -1449,6 +1574,7 @@ class MockBenchmarkRunner:
             thread_device_type=self.thread_device_type,
             parent_search_config=self.parent_search_config,
             sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
+            node_refs=mock_node_refs,
         )
         return rows, summary
 
@@ -1474,6 +1600,12 @@ def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "mobile_to_parent_target": sample.get("mobile_to_parent_target"),
             "mobile_to_parent_target_rloc16": sample.get("mobile_to_parent_target_rloc16"),
             "mobile_to_parent_target_extaddr": sample.get("mobile_to_parent_target_extaddr"),
+            "mobile_tx_power_dbm": sample.get("mobile_tx_power_dbm"),
+            "mobile_verified_tx_power_dbm": sample.get("mobile_verified_tx_power_dbm"),
+            "mobile_to_parent_target_tx_power_dbm": sample.get("mobile_to_parent_target_tx_power_dbm"),
+            "mobile_to_parent_target_verified_tx_power_dbm": sample.get(
+                "mobile_to_parent_target_verified_tx_power_dbm"
+            ),
             "mobile_to_parent_tx": sample.get("mobile_to_parent_result", {}).get("tx"),
             "mobile_to_parent_rx": sample.get("mobile_to_parent_result", {}).get("rx"),
             "mobile_to_parent_loss_pct": sample.get("mobile_to_parent_result", {}).get("loss_pct"),
@@ -1496,13 +1628,12 @@ def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "parent_search_config": sample.get("parent_search_config"),
             "packet_probe_reliable": sample.get("packet_probe_reliable"),
             "primary_parent_observation": sample.get("primary_parent_observation"),
-            "router_a_scan_dbm": sample["router_a_scan_dbm"],
-            "router_a_scan_lqi": sample["router_a_scan_lqi"],
-            "router_b_scan_dbm": sample["router_b_scan_dbm"],
-            "router_b_scan_lqi": sample["router_b_scan_lqi"],
             "ip_counters_json": json.dumps(sample["ip_counters"], sort_keys=True),
             "mle_counters_json": json.dumps(sample["mle_counters"], sort_keys=True),
         }
+        for key, value in sorted(sample.items()):
+            if key.endswith("_scan_dbm") or key.endswith("_scan_lqi"):
+                row[key] = value
         for probe_name, probe in sample["probe_results"].items():
             prefix = probe_name
             sim_rss = sample.get("probe_sim_rss", {}).get(probe_name, {})
@@ -1577,6 +1708,63 @@ def end_dwell_sim_rss_values(
     return values
 
 
+def time_spent_by_parent(samples: list[dict[str, Any]], step_seconds: float | int | None) -> dict[str, float]:
+    spent: dict[str, float] = {}
+    if step_seconds in (None, "", "None"):
+        return spent
+    step = float(step_seconds)
+    for sample in samples:
+        parent = sample.get("parent_node_guess")
+        if parent:
+            spent[parent] = round(spent.get(parent, 0.0) + step, 6)
+    return spent
+
+
+def node_tx_power_summary(samples: list[dict[str, Any]]) -> tuple[dict[str, float], dict[str, float]]:
+    configured: dict[str, float] = {}
+    verified: dict[str, float] = {}
+    if not samples:
+        return configured, verified
+    mobile_value = samples[0].get("mobile_tx_power_dbm")
+    mobile_verified = samples[0].get("mobile_verified_tx_power_dbm")
+    if mobile_value is not None:
+        configured["mobile"] = float(mobile_value)
+    if mobile_verified is not None:
+        verified["mobile"] = float(mobile_verified)
+    for sample in samples:
+        parent = sample.get("mobile_to_parent_target")
+        parent_value = sample.get("mobile_to_parent_target_tx_power_dbm")
+        parent_verified = sample.get("mobile_to_parent_target_verified_tx_power_dbm")
+        if parent and parent_value is not None:
+            configured[str(parent)] = float(parent_value)
+        if parent and parent_verified is not None:
+            verified[str(parent)] = float(parent_verified)
+    return configured, verified
+
+
+def node_ref_tx_power_summary(node_refs: dict[str, NodeRef]) -> tuple[dict[str, float], dict[str, float]]:
+    configured = {
+        name: float(ref.tx_power_dbm)
+        for name, ref in node_refs.items()
+        if ref.tx_power_dbm is not None
+    }
+    verified = {
+        name: float(ref.verified_tx_power_dbm)
+        for name, ref in node_refs.items()
+        if ref.verified_tx_power_dbm is not None
+    }
+    return configured, verified
+
+
+def scenario_tx_power_summary(scenario: dict[str, Any]) -> tuple[dict[str, float], dict[str, float]]:
+    configured = {
+        name: float(tx_power)
+        for name, config in scenario.get("nodes", {}).items()
+        if (tx_power := node_tx_power_dbm(config)) is not None
+    }
+    return configured, dict(configured)
+
+
 def build_summary(
     scenario: dict[str, Any],
     samples: list[dict[str, Any]],
@@ -1589,6 +1777,7 @@ def build_summary(
     thread_device_type: str | None = None,
     parent_search_config: str = "unknown",
     sim_ping_rss_capture_enabled: bool = False,
+    node_refs: dict[str, NodeRef] | None = None,
 ) -> dict[str, Any]:
     total_tx = 0
     total_rx = 0
@@ -1596,11 +1785,6 @@ def build_summary(
     parent_probe_total_rx = 0
     parent_probe_rtt_values: list[float] = []
     parent_sequence = [sample.get("parent_node_guess") for sample in samples if sample.get("parent_node_guess")]
-    oscillations = 0
-    for left, middle, right in zip(parent_sequence, parent_sequence[1:], parent_sequence[2:]):
-        if left == right and left != middle:
-            oscillations += 1
-
     for sample in samples:
         for probe in sample["probe_results"].values():
             total_tx += int(probe["tx"] or 0)
@@ -1614,6 +1798,14 @@ def build_summary(
     parent_probe_pdr = (parent_probe_total_rx / parent_probe_total_tx) if parent_probe_total_tx else None
     pdr = (total_rx / total_tx) if total_tx else parent_probe_pdr
     compact_parent_sequence = [value for index, value in enumerate(parent_sequence) if index == 0 or value != parent_sequence[index - 1]]
+    oscillations = 0
+    for left, middle, right in zip(
+        compact_parent_sequence,
+        compact_parent_sequence[1:],
+        compact_parent_sequence[2:],
+    ):
+        if left == right and left != middle:
+            oscillations += 1
     initial_observed_parent = samples[0].get("parent_node_guess") if samples else None
     final_observed_parent = samples[-1].get("parent_node_guess") if samples else None
     final_mle_counters = samples[-1].get("mle_counters", {}) if samples else {}
@@ -1636,6 +1828,11 @@ def build_summary(
         if sim_ping_rss_capture_enabled
     }
     movement_steps = int(scenario.get("timing", {}).get("movement_steps", 0) or 0)
+    step_seconds = scenario.get("timing", {}).get("step_seconds")
+    if node_refs:
+        configured_tx_power, verified_tx_power = node_ref_tx_power_summary(node_refs)
+    else:
+        configured_tx_power, verified_tx_power = node_tx_power_summary(samples)
     mobile_parent_end_rssi = end_dwell_sim_rss_values(
         samples,
         movement_steps,
@@ -1681,7 +1878,12 @@ def build_summary(
         "switch_count": len(switch_events),
         "first_switch_time_s": switch_events[0]["sim_time_s"] if switch_events else None,
         "switch_position_x": samples[switch_events[0]["sample_index"]].get("mobile_x") if switch_events else None,
+        "second_switch_time_s": switch_events[1]["sim_time_s"] if len(switch_events) > 1 else None,
+        "second_switch_position_x": (
+            samples[switch_events[1]["sample_index"]].get("mobile_x") if len(switch_events) > 1 else None
+        ),
         "switch_events": switch_events,
+        "time_spent_by_parent_s": time_spent_by_parent(samples, step_seconds),
         "total_outage_s": total_outage_s,
         "packet_delivery_ratio": round(pdr, 6) if pdr is not None else None,
         "parent_probe_enabled": True,
@@ -1712,6 +1914,9 @@ def build_summary(
         "mobile_to_parent_end_dwell_sim_rss_dbm_mean": numeric_mean(mobile_parent_end_rssi),
         "mobile_to_parent_end_dwell_sim_rss_dbm_median": numeric_median(mobile_parent_end_rssi),
         "mobile_to_parent_end_dwell_sim_lqi_median": numeric_median(mobile_parent_end_lqi),
+        "configured_node_tx_power_dbm": configured_tx_power,
+        "verified_node_tx_power_dbm": verified_tx_power,
+        "tx_power_command": "txpower",
         "oscillation_events": oscillations,
         "mle_parent_changes": counter_int(final_mle_counters, "Parent Changes"),
         "mle_attach_attempts": counter_int(final_mle_counters, "Attach Attempts"),

@@ -88,7 +88,8 @@ The active simple parent-switch scenarios contain:
 
 - Router A
 - Router B
-- one mobile end device that starts near Router A and moves toward Router B
+- Router C
+- one mobile end device that starts near Router A and moves beyond Router C
 
 The benchmark prefers the `MutualInterference` OTNS radio model. If it is unavailable, the runner falls back in this order:
 
@@ -102,9 +103,9 @@ The active benchmark matrix uses three stock scenarios:
 - `scenarios/fed_simple_parent_switch.yaml` for a Full End Device variant that uses OTNS's FTD executable path
 - `scenarios/sed_simple_parent_switch.yaml` for a Sleepy End Device variant that treats the `parent` command as the primary attachment observation path
 
-The simple scenarios use widened router spacing and the runner records one 1 Hz ICMP ping from the mobile end device to its currently observed parent: Router A at `(250, 300)`, Router B at `(800, 300)`, and a mobile path from `(150, 360)` to `(900, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 75 m path; 15 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The moving end device remains horizontally offset from the router line and the routers stayed connected in pilot runs. See [`docs/scenarios.md`](docs/scenarios.md).
+The simple scenarios now use a three-router, static 0 dBm topology and the runner records one 1 Hz ICMP ping from the mobile end device to its currently observed parent: Router A at `(250, 300)`, Router B at `(525, 300)`, Router C at `(800, 300)`, and a mobile path from `(150, 360)` to `(900, 360)`. OTNS `MeterPerUnit = 0.1` makes this a 75 m path; 15 one-second movement steps target 5 m/s, followed by a 320 s end dwell. The moving end device remains horizontally offset from the router line. See [`docs/scenarios.md`](docs/scenarios.md).
 
-Runs can also include `--capture-sim-ping-rss`, which attaches simulator-model RSS/LQI to each ping probe row. The current method is `otns_model_derived_at_ping`: RSS is derived from OTNS `MutualInterference` radio-model parameters at the exact ping source/destination positions and sample time. It is not OpenThread neighbor-table RSS, parent-command link quality, scan RSS, or ping-output RSS.
+Each node is configured with `txpower 0` during initialization and the runner verifies the value with `txpower` when possible. Runs can also include `--capture-sim-ping-rss`, which attaches simulator-model RSS/LQI to each ping probe row. The current method is `otns_model_derived_at_ping`: RSS is derived from OTNS `MutualInterference` radio-model parameters at the exact ping source/destination positions, sample time, and configured source TX power. It is not OpenThread neighbor-table RSS, parent-command link quality, scan RSS, or ping-output RSS.
 
 Older committed artifacts may reference previous scenario names: `baseline_mobile_parent_switch`, `calibrated_mobile_parent_switch`, `fed_mobile_parent_switch`, and `sed_mobile_parent_switch`. Those old wider-geometry results are historical and should not be mixed with new simple-scenario results without labeling the geometry difference.
 
