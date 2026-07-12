@@ -54,12 +54,12 @@ nodes:
     tx_power_dbm: 0
   router_b:
     type: router
-    x: 750
+    x: 875
     y: 300
     tx_power_dbm: 0
   router_c:
     type: router
-    x: 1150
+    x: 1400
     y: 300
     tx_power_dbm: 0
   mobile:

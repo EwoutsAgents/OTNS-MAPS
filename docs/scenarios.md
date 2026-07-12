@@ -21,8 +21,8 @@ All active simple scenarios use the same intended overlapping-coverage geometry:
 | Node | x | y |
 |---|---:|---:|
 | Router A | 350 | 300 |
-| Router B | 750 | 300 |
-| Router C | 1150 | 300 |
+| Router B | 875 | 300 |
+| Router C | 1400 | 300 |
 | Mobile attach/movement start | 350 | 360 |
 | Mobile end | 1600 | 360 |
 
@@ -32,7 +32,21 @@ All nodes set OpenThread transmit power to `0 dBm` once during initialization us
 
 OTNS uses the `MeterPerUnit` radio parameter for coordinate scaling. The scenarios assume the default `MeterPerUnit = 0.1`, so one coordinate unit is treated as 0.1 m unless the radio parameter is overridden. This default is recorded in the local OTNS source at `radiomodel/model_params.go` and listed by `cli/README.md`.
 
-The mobile path from x=350 to x=1600 spans 1250 coordinate units, which is 125 m at `MeterPerUnit = 0.1`. With 25 one-second movement steps, the target movement speed is 5 m/s. The runner sends exactly one 1 Hz ICMP ping from the mobile end device to its currently observed parent when that parent resolves to a known router. When `--capture-sim-ping-rss` is enabled, the runner also attaches simulator-model RSS/LQI to that ping event using OTNS `MutualInterference` parameters at the ping source/destination positions.
+The mobile path from x=350 to x=1600 spans 1250 coordinate units, which is 125 m at `MeterPerUnit = 0.1`. With 25 one-second movement steps, the target movement speed is 5 m/s. Router C is placed close enough to the endpoint to give a detached mobile a strong reattachment candidate while Router A is weak at the endpoint.
+
+Model-derived RSS with static `0 dBm` transmit power is approximately:
+
+| Link | RSS (dBm) |
+|---|---:|
+| Router A -> mobile endpoint | -107.098 |
+| Router B -> mobile endpoint | -98.075 |
+| Router C -> mobile endpoint | -77.313 |
+| Router A -> Router B | -92.649 |
+| Router B -> Router C | -92.649 |
+
+The runner sends exactly one 1 Hz ICMP ping from the mobile end device to its currently observed parent when that parent resolves to a known router. When `--capture-sim-ping-rss` is enabled, the runner also attaches simulator-model RSS/LQI to that ping event using OTNS `MutualInterference` parameters at the ping source/destination positions.
+
+If the mobile detaches, summaries record `detach_count`, first detach/reattach timing and position, `reattach_latency_s`, `ended_detached`, and `recovery_classification`. The recovery classifications distinguish `detached_no_reattach`, `detached_reattached_same_parent`, and `detached_reattached_new_parent`.
 
 ## Timing
 

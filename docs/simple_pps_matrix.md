@@ -1,8 +1,8 @@
 # Simple Scenario PPS Matrix
 
-This page records the current repeated PPS-off/PPS-on matrix for the active
-simple parent-switch scenarios. The current topology is a three-router, static
-0 dBm topology with an explicit initial-attachment gate.
+This page records the current simple parent-switch topology and the latest
+PPS-off/PPS-on evidence. The active topology is a three-router, static 0 dBm
+topology with an explicit initial-attachment gate.
 
 No MAPS policy or OpenThread parent-selection logic is implemented here.
 PPS-off disables `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE`; active PPS-on enables
@@ -12,7 +12,7 @@ stock OpenThread, not the upstream/default PPS interval.
 ## Scenario Geometry
 
 All three active scenarios place Router A at `(350, 300)`, Router B at
-`(750, 300)`, Router C at `(1150, 300)`, and create the mobile end device at
+`(875, 300)`, Router C at `(1400, 300)`, and create the mobile end device at
 `(350, 360)`, close to Router A. Router A and the mobile are created first. The
 runner waits until the mobile is observed parented to Router A, then introduces
 Router B and Router C, settles, and starts movement from `(350, 360)` to
@@ -47,16 +47,46 @@ Model-derived RSS with `0 dBm` TX power:
 | Link | RSS (dBm) |
 |---|---:|
 | Router A -> mobile endpoint | -107.098 |
-| Router B -> mobile endpoint | -100.705 |
-| Router C -> mobile endpoint | -90.232 |
-| Router A -> Router B | -88.126 |
-| Router B -> Router C | -88.126 |
+| Router B -> mobile endpoint | -98.075 |
+| Router C -> mobile endpoint | -77.313 |
+| Router A -> Router B | -92.649 |
+| Router B -> Router C | -92.649 |
 
 Router A is weaker than the previous endpoint condition, Router C remains
 materially stronger than Router A, and the A-B/B-C router links remain viable
 in the model.
 
-## Artifacts
+## Latest Aggregate Pilot
+
+After adding detach/recovery classification, Router C was moved closer to the
+endpoint, from `(1150, 300)` to `(1400, 300)`, while Router B moved to
+`(875, 300)` to preserve the A-B-C chain. This targeted the MED PPS-off failure
+case where the mobile detached from Router A at the endpoint and never
+reattached.
+
+The aggregate-only pilot is archived at
+`results/.archive/endpoint_recovery_pilot_20260712/`. Replay-heavy scratch output
+was not retained.
+
+| Profile | PPS | Attach gate | Initial A | Pre-move switch | Switch rate | Final parents | Detached/no reattach | Mean outage (s) | Mean PDR |
+|---|---|---:|---:|---:|---:|---|---:|---:|---:|
+| MED | off | 10/10 | 10/10 | 0/10 | 9/10 | A 1, B 1, C 8 | 0/10 | 18.3 | 0.986098 |
+| MED | on-30s | 10/10 | 10/10 | 0/10 | 10/10 | B 2, C 8 | 0/10 | 18.0 | 0.986393 |
+| FED | off | 10/10 | 8/10 | 2/10 | 10/10 | B 2, C 8 | 0/10 | 18.0 | 0.986039 |
+| FED | on-30s | 10/10 | 9/10 | 1/10 | 9/10 | A 1, C 9 | 0/10 | 17.6 | 0.986187 |
+| SED | off | 10/10 | 10/10 | 0/10 | 9/10 | A 1, C 9 | 0/10 | 5.5 | 0.891373 |
+| SED | on-30s | 10/10 | 10/10 | 0/10 | 10/10 | B 2, C 8 | 0/10 | 1.1 | 0.982199 |
+
+Across these 60 runs, the detached-no-reattach failure was eliminated (`0/60`).
+This does not make switching perfect: a few runs still remain attached to Router
+A or switch before movement sampling, but they are now classified explicitly
+instead of being folded into generic no-switch behavior.
+
+## Previous Full Replay Artifacts
+
+The following full replay/MP4 artifacts were generated before Router C was moved
+to `(1400, 300)`. They remain useful as historical full-artifact evidence, but
+their geometry is not the current active geometry.
 
 - MED PPS off: `results/med_simple_parent_switch_med-pps-off-repeated/20260712-210435-experiment/`
 - MED PPS on: `results/med_simple_parent_switch_med-pps-on-repeated/20260712-210540-experiment/`
@@ -70,7 +100,7 @@ files, 10 replay metadata JSON files, node logs, `aggregate_summary.json`,
 `repeated_run_manifest.json`, `manifest.json`, `README.md`, one representative
 dot RSS-over-time SVG, and one representative MP4 beside the run-01 replay.
 
-## Aggregate Metrics
+## Previous Full-Artifact Aggregate Metrics
 
 | Profile | PPS | Attach gate | Initial A | Switch rate | Mean switches | Mean 1st switch (s) | SD 1st switch | Mean outage (s) | SD outage | Mean PDR | SD PDR | Median end-dwell RSS (dBm) |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -103,7 +133,9 @@ dot RSS-over-time SVG, and one representative MP4 beside the run-01 replay.
 
 Router A remained the final parent in 2 of 60 runs. The initial attachment gate
 succeeded in 60 of 60 runs, and the first movement sample observed Router A in
-58 of 60 runs.
+58 of 60 runs. One MED PPS-off run detached at the endpoint and never
+reattached; that failure mode is now represented by the `detached_no_reattach`
+classification and was not reproduced in the current aggregate pilot.
 
 ## Parent Probe and Simulator RSS Metrics
 
@@ -120,11 +152,12 @@ Representative dot RSS-over-time plots are stored with each repeated artifact:
 
 ## Interpretation
 
-The attachment-gated asymmetric topology is the best tested tradeoff so far. It
-keeps the Router A initial condition controlled while reducing Router-A-final
-runs from 4 of 60 in the previous committed topology to 2 of 60.
+The attachment-gated asymmetric topology keeps the Router A initial condition
+controlled. The current aggregate pilot strengthens the endpoint by moving
+Router C closer to the endpoint and eliminates the observed detached-no-reattach
+case in 60 scratch runs.
 
-The remaining Router-A-final cases are:
+The previous full-artifact matrix had these Router-A-final cases:
 
 - MED PPS on-30s: 1 of 10
 - FED PPS off: 1 of 10
@@ -163,9 +196,13 @@ Representative MP4s were rendered from run 01 of each arm with
 - Switch timing is still dominated by endpoint dwell in most arms; the first
   switch normally appears after movement reaches the endpoint.
 - Router B does not consistently appear as an intermediate parent.
-- This matrix was generated before post-activation settle parent changes were
-  promoted into explicit `pre_movement_*` summary fields. Current runs now
-  distinguish switches before movement sampling from unexpected first samples.
+- The full replay/MP4 matrix on this page used the previous Router B/C geometry.
+  The current Router B/C geometry is represented by aggregate-only pilot
+  summaries under `results/.archive/endpoint_recovery_pilot_20260712/`.
+- Current runs distinguish switches before movement sampling from unexpected
+  first samples through explicit `pre_movement_*` summary fields.
+- Current runs distinguish `detached_no_reattach`,
+  `detached_reattached_same_parent`, and `detached_reattached_new_parent`.
 - MED PPS off and FED/SED PPS on each include one unresolved final parent.
 - SED packet delivery ratio is not primary evidence.
 - FED uses OTNS's FTD executable family for both routers and the mobile FED.

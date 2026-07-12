@@ -450,6 +450,12 @@ def maybe_capture_replay(
         "switch_count": summary.get("switch_count"),
         "first_switch_time_s": summary.get("first_switch_time_s"),
         "second_switch_time_s": summary.get("second_switch_time_s"),
+        "detach_count": summary.get("detach_count"),
+        "first_detach_time_s": summary.get("first_detach_time_s"),
+        "first_reattach_time_s": summary.get("first_reattach_time_s"),
+        "reattach_latency_s": summary.get("reattach_latency_s"),
+        "ended_detached": summary.get("ended_detached"),
+        "recovery_classification": summary.get("recovery_classification"),
         "result_classification": summary.get("result_classification"),
         "configured_node_tx_power_dbm": summary.get("configured_node_tx_power_dbm"),
         "verified_node_tx_power_dbm": summary.get("verified_node_tx_power_dbm"),
@@ -582,6 +588,14 @@ def tracked_results_manifest(
         "second_switch_time_s": summary.get("second_switch_time_s"),
         "switch_position_x": summary.get("switch_position_x"),
         "second_switch_position_x": summary.get("second_switch_position_x"),
+        "detach_count": summary.get("detach_count"),
+        "first_detach_time_s": summary.get("first_detach_time_s"),
+        "first_detach_position_x": summary.get("first_detach_position_x"),
+        "first_reattach_time_s": summary.get("first_reattach_time_s"),
+        "first_reattach_position_x": summary.get("first_reattach_position_x"),
+        "reattach_latency_s": summary.get("reattach_latency_s"),
+        "ended_detached": summary.get("ended_detached"),
+        "recovery_classification": summary.get("recovery_classification"),
         "packet_delivery_ratio": summary.get("packet_delivery_ratio"),
         "total_outage_s": summary.get("total_outage_s"),
         "oscillation_events": summary.get("oscillation_events"),
@@ -640,6 +654,14 @@ def write_tracked_results_readme(
             f'- Second switch time (s): `{manifest["second_switch_time_s"]}`',
             f'- Switch position x: `{manifest["switch_position_x"]}`',
             f'- Second switch position x: `{manifest["second_switch_position_x"]}`',
+            f'- Detach count: `{manifest["detach_count"]}`',
+            f'- First detach time (s): `{manifest["first_detach_time_s"]}`',
+            f'- First detach position x: `{manifest["first_detach_position_x"]}`',
+            f'- First reattach time (s): `{manifest["first_reattach_time_s"]}`',
+            f'- First reattach position x: `{manifest["first_reattach_position_x"]}`',
+            f'- Reattach latency (s): `{manifest["reattach_latency_s"]}`',
+            f'- Ended detached: `{manifest["ended_detached"]}`',
+            f'- Recovery classification: `{manifest["recovery_classification"]}`',
             f'- Packet delivery ratio: `{manifest["packet_delivery_ratio"]}`',
             f'- Total outage (s): `{manifest["total_outage_s"]}`',
             f'- Oscillation events: `{manifest["oscillation_events"]}`',
@@ -1899,6 +1921,83 @@ def time_spent_by_parent(samples: list[dict[str, Any]], step_seconds: float | in
     return spent
 
 
+def is_detached_sample(sample: dict[str, Any]) -> bool:
+    return str(sample.get("mobile_state") or "").lower() in {"detached", "disabled"}
+
+
+def detach_recovery_summary(samples: list[dict[str, Any]]) -> dict[str, Any]:
+    events: list[dict[str, Any]] = []
+    detached = False
+    current_event: dict[str, Any] | None = None
+    last_parent: str | None = None
+
+    for sample in samples:
+        parent = sample.get("parent_node_guess")
+        state_detached = is_detached_sample(sample)
+        if parent:
+            last_parent = parent
+
+        if state_detached and not detached:
+            detached = True
+            current_event = {
+                "detach_time_s": sample.get("sim_time_s"),
+                "detach_position_x": sample.get("mobile_x"),
+                "previous_parent": last_parent,
+                "reattach_time_s": None,
+                "reattach_position_x": None,
+                "reattach_parent": None,
+                "reattach_latency_s": None,
+            }
+            events.append(current_event)
+            continue
+
+        if detached and not state_detached and parent:
+            detached = False
+            if current_event is not None:
+                current_event["reattach_time_s"] = sample.get("sim_time_s")
+                current_event["reattach_position_x"] = sample.get("mobile_x")
+                current_event["reattach_parent"] = parent
+                detach_time = current_event.get("detach_time_s")
+                if detach_time is not None and sample.get("sim_time_s") is not None:
+                    current_event["reattach_latency_s"] = round(
+                        float(sample["sim_time_s"]) - float(detach_time),
+                        6,
+                    )
+            current_event = None
+
+    first_event = events[0] if events else {}
+    reattached_events = [event for event in events if event.get("reattach_time_s") is not None]
+    ended_detached = bool(samples and is_detached_sample(samples[-1]))
+    recovery_classification = "no_detach"
+    if ended_detached and events:
+        recovery_classification = "detached_no_reattach"
+    elif reattached_events:
+        first_reattached = reattached_events[0]
+        if (
+            first_reattached.get("previous_parent")
+            and first_reattached.get("reattach_parent")
+            and first_reattached["previous_parent"] != first_reattached["reattach_parent"]
+        ):
+            recovery_classification = "detached_reattached_new_parent"
+        else:
+            recovery_classification = "detached_reattached_same_parent"
+
+    return {
+        "detach_count": len(events),
+        "detach_events": events,
+        "first_detach_time_s": first_event.get("detach_time_s"),
+        "first_detach_position_x": first_event.get("detach_position_x"),
+        "first_detach_previous_parent": first_event.get("previous_parent"),
+        "first_reattach_time_s": first_event.get("reattach_time_s"),
+        "first_reattach_position_x": first_event.get("reattach_position_x"),
+        "first_reattach_parent": first_event.get("reattach_parent"),
+        "reattach_latency_s": first_event.get("reattach_latency_s"),
+        "final_mobile_state": samples[-1].get("mobile_state") if samples else None,
+        "ended_detached": ended_detached,
+        "recovery_classification": recovery_classification,
+    }
+
+
 def node_tx_power_summary(samples: list[dict[str, Any]]) -> tuple[dict[str, float], dict[str, float]]:
     configured: dict[str, float] = {}
     verified: dict[str, float] = {}
@@ -2071,6 +2170,7 @@ def build_summary(
         "mobile_to_parent",
         "reply_rx_sim_lqi",
     )
+    recovery_summary = detach_recovery_summary(samples)
     expected_initial_parent = scenario.get("expected_initial_parent")
     if expected_initial_parent and initial_observed_parent != expected_initial_parent:
         result_classification = (
@@ -2082,6 +2182,13 @@ def build_summary(
         result_classification = "switch_observed"
     elif pre_movement_parent_events:
         result_classification = "pre_movement_switch_observed"
+    elif recovery_summary["recovery_classification"] == "detached_no_reattach":
+        result_classification = "detached_no_reattach"
+    elif recovery_summary["recovery_classification"] in {
+        "detached_reattached_same_parent",
+        "detached_reattached_new_parent",
+    }:
+        result_classification = recovery_summary["recovery_classification"]
     elif initial_observed_parent and final_observed_parent:
         result_classification = "no_switch_observed"
     else:
@@ -2124,6 +2231,7 @@ def build_summary(
             samples[switch_events[1]["sample_index"]].get("mobile_x") if len(switch_events) > 1 else None
         ),
         "switch_events": switch_events,
+        **recovery_summary,
         "time_spent_by_parent_s": time_spent_by_parent(samples, step_seconds),
         "total_outage_s": total_outage_s,
         "packet_delivery_ratio": round(pdr, 6) if pdr is not None else None,

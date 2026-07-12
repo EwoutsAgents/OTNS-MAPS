@@ -121,6 +121,81 @@ def end_dwell_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
     return [row for row in rows if to_float(row.get("mobile_x")) == max_x]
 
 
+def is_detached_row(row: dict[str, str]) -> bool:
+    return str(row.get("mobile_state") or "").lower() in {"detached", "disabled"}
+
+
+def detach_recovery_summary(rows: list[dict[str, str]]) -> dict[str, Any]:
+    events: list[dict[str, Any]] = []
+    detached = False
+    current_event: dict[str, Any] | None = None
+    last_parent: str | None = None
+
+    for row in rows:
+        parent = row.get("parent_node_guess")
+        if parent:
+            last_parent = parent
+        state_detached = is_detached_row(row)
+
+        if state_detached and not detached:
+            detached = True
+            current_event = {
+                "detach_time_s": to_float(row.get("sim_time_s")),
+                "detach_position_x": to_float(row.get("mobile_x")),
+                "previous_parent": last_parent,
+                "reattach_time_s": None,
+                "reattach_position_x": None,
+                "reattach_parent": None,
+                "reattach_latency_s": None,
+            }
+            events.append(current_event)
+            continue
+
+        if detached and not state_detached and parent:
+            detached = False
+            if current_event is not None:
+                reattach_time = to_float(row.get("sim_time_s"))
+                current_event["reattach_time_s"] = reattach_time
+                current_event["reattach_position_x"] = to_float(row.get("mobile_x"))
+                current_event["reattach_parent"] = parent
+                detach_time = current_event.get("detach_time_s")
+                if detach_time is not None and reattach_time is not None:
+                    current_event["reattach_latency_s"] = round(reattach_time - detach_time, 6)
+            current_event = None
+
+    first_event = events[0] if events else {}
+    reattached_events = [event for event in events if event.get("reattach_time_s") is not None]
+    ended_detached = bool(rows and is_detached_row(rows[-1]))
+    recovery_classification = "no_detach"
+    if ended_detached and events:
+        recovery_classification = "detached_no_reattach"
+    elif reattached_events:
+        first_reattached = reattached_events[0]
+        if (
+            first_reattached.get("previous_parent")
+            and first_reattached.get("reattach_parent")
+            and first_reattached["previous_parent"] != first_reattached["reattach_parent"]
+        ):
+            recovery_classification = "detached_reattached_new_parent"
+        else:
+            recovery_classification = "detached_reattached_same_parent"
+
+    return {
+        "detach_count": len(events),
+        "detach_events": events,
+        "first_detach_time_s": first_event.get("detach_time_s"),
+        "first_detach_position_x": first_event.get("detach_position_x"),
+        "first_detach_previous_parent": first_event.get("previous_parent"),
+        "first_reattach_time_s": first_event.get("reattach_time_s"),
+        "first_reattach_position_x": first_event.get("reattach_position_x"),
+        "first_reattach_parent": first_event.get("reattach_parent"),
+        "reattach_latency_s": first_event.get("reattach_latency_s"),
+        "final_mobile_state": rows[-1].get("mobile_state") if rows else None,
+        "ended_detached": ended_detached,
+        "recovery_classification": recovery_classification,
+    }
+
+
 def summarize_run(path: Path) -> dict[str, Any]:
     rows = load_rows(path)
     if not rows:
@@ -243,6 +318,7 @@ def summarize_run(path: Path) -> dict[str, Any]:
         else None
     )
     pre_movement_switch_count = int(sibling_summary.get("pre_movement_switch_count") or 0)
+    recovery_summary = detach_recovery_summary(rows)
     expected_initial_parent = sibling_summary.get("expected_initial_parent")
     if expected_initial_parent and initial_observed_parent != expected_initial_parent:
         result_classification = (
@@ -254,6 +330,13 @@ def summarize_run(path: Path) -> dict[str, Any]:
         result_classification = "switch_observed"
     elif pre_movement_switch_count:
         result_classification = "pre_movement_switch_observed"
+    elif recovery_summary["recovery_classification"] == "detached_no_reattach":
+        result_classification = "detached_no_reattach"
+    elif recovery_summary["recovery_classification"] in {
+        "detached_reattached_same_parent",
+        "detached_reattached_new_parent",
+    }:
+        result_classification = recovery_summary["recovery_classification"]
     elif initial_observed_parent and final_observed_parent:
         result_classification = "no_switch_observed"
     else:
@@ -303,6 +386,7 @@ def summarize_run(path: Path) -> dict[str, Any]:
             }
             for row in switch_rows
         ],
+        **recovery_summary,
         "time_spent_by_parent_s": time_spent_by_parent_s,
         "total_outage_s": total_outage_s,
         "packet_delivery_ratio": packet_delivery_ratio,
@@ -440,12 +524,19 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
     pre_movement_switch_runs = sum(1 for summary in summaries if summary.get("pre_movement_switch_count"))
     pre_movement_switch_counts = [summary.get("pre_movement_switch_count") or 0 for summary in summaries]
     pre_movement_final_parent_counts: dict[str, int] = {}
+    detach_counts = [summary.get("detach_count") or 0 for summary in summaries]
+    reattach_latency_values = [summary.get("reattach_latency_s") for summary in summaries]
+    recovery_classification_counts: dict[str, int] = {}
     final_parent_counts: dict[str, int] = {}
     parent_sequence_counts: dict[str, int] = {}
     classification_counts: dict[str, int] = {}
     for summary in summaries:
         classification = summary.get("result_classification") or "unknown"
         classification_counts[classification] = classification_counts.get(classification, 0) + 1
+        recovery_classification = summary.get("recovery_classification") or "unknown"
+        recovery_classification_counts[recovery_classification] = (
+            recovery_classification_counts.get(recovery_classification, 0) + 1
+        )
         final_parent = summary.get("final_observed_parent") or "None"
         final_parent_counts[final_parent] = final_parent_counts.get(final_parent, 0) + 1
         pre_movement_final = summary.get("pre_movement_parent_final") or "None"
@@ -468,6 +559,18 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
         "pre_movement_switch_rate": round(pre_movement_switch_runs / len(summaries), 6),
         "mean_pre_movement_switch_count": round(statistics.mean(pre_movement_switch_counts), 6),
         "pre_movement_final_parent_counts": pre_movement_final_parent_counts,
+        "detach_observed_runs": sum(1 for count in detach_counts if count > 0),
+        "detach_observed_rate": round(sum(1 for count in detach_counts if count > 0) / len(summaries), 6),
+        "detached_no_reattach_runs": recovery_classification_counts.get("detached_no_reattach", 0),
+        "detached_no_reattach_rate": round(
+            recovery_classification_counts.get("detached_no_reattach", 0) / len(summaries),
+            6,
+        ),
+        "mean_detach_count": round(statistics.mean(detach_counts), 6),
+        "max_detach_count": max(detach_counts),
+        "mean_reattach_latency_s": _mean_or_none(reattach_latency_values),
+        "median_reattach_latency_s": _median_or_none(reattach_latency_values),
+        "recovery_classification_counts": recovery_classification_counts,
         "final_parent_counts": final_parent_counts,
         "parent_sequence_counts": parent_sequence_counts,
         "switch_observed_runs": switch_observed_runs,
