@@ -197,6 +197,12 @@ def parse_args() -> argparse.Namespace:
         help="Path or command that documents how the node binary was built.",
     )
     parser.add_argument(
+        "--firmware-source-repo",
+        type=Path,
+        default=Path(os.environ["FIRMWARE_SOURCE_REPO"]) if os.environ.get("FIRMWARE_SOURCE_REPO") else None,
+        help="Optional firmware/patch repository recorded in artifact provenance.",
+    )
+    parser.add_argument(
         "--equivalent-to",
         default=None,
         help="Optional default-build classification, for example stock-med-pps-on.",
@@ -246,6 +252,43 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def git_source_state(path: Path | None) -> dict[str, Any] | None:
+    if path is None:
+        return None
+    resolved = path.resolve()
+    state: dict[str, Any] = {"path": str(resolved), "commit": None, "tracked_changes": None}
+    try:
+        state["commit"] = subprocess.run(
+            ["git", "-C", str(resolved), "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        status = subprocess.run(
+            ["git", "-C", str(resolved), "status", "--porcelain", "--untracked-files=no"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout
+        state["tracked_changes"] = bool(status.strip())
+    except (OSError, subprocess.CalledProcessError) as exc:
+        state["error"] = str(exc)
+    return state
+
+
+def write_artifact_checksums(artifact_dir: Path, output_name: str = "checksums.sha256") -> dict[str, str]:
+    checksums = {
+        path.relative_to(artifact_dir).as_posix(): sha256_file(path)
+        for path in sorted(artifact_dir.rglob("*"))
+        if path.is_file() and path.name != output_name
+    }
+    output_path = artifact_dir / output_name
+    with output_path.open("w", encoding="utf-8") as handle:
+        for relative_path, digest in checksums.items():
+            handle.write(f"{digest}  {relative_path}\n")
+    return checksums
 
 
 def expand_executable_path(value: str | Path, scenario_path: Path) -> Path:
@@ -758,15 +801,21 @@ def tracked_results_manifest(
     thread_device_type: str | None,
     parent_search_config: str,
     node_binary_path: Path | None,
+    node_binary_profile: str | None,
     ftd_node_binary_path: Path | None,
+    ftd_node_binary_profile: str | None,
     build_config_source: str | None,
+    firmware_source_repo: Path | None,
     equivalent_to: str | None,
     openthread_commit: str,
     otns_commit: str,
     otns_command: str,
     otns_workdir: Path | None,
+    runner_invocation: list[str],
+    scenario_copy_file: str,
     csv_file: str,
     summary_file: str,
+    preferred_parent_event_file: str | None,
     parent_rank_file: str | None,
     replay_file: str | None,
     replay_metadata_file: str | None,
@@ -775,28 +824,42 @@ def tracked_results_manifest(
     summary: dict[str, Any],
 ) -> dict[str, Any]:
     return {
+        "artifact_schema_version": 1,
         "results_collection": collection_name,
         "run_id": run_id,
         "scenario_name": scenario["name"],
         "scenario_file": scenario_file_label(scenario_path),
+        "scenario_copy_file": scenario_copy_file,
+        "scenario_sha256": sha256_file(scenario_path),
         "firmware_variant": firmware_variant,
         "device_profile": summary.get("device_profile"),
         "thread_device_type": thread_device_type,
         "parent_search_config": parent_search_config,
         "node_binary_path": str(node_binary_path) if node_binary_path is not None else None,
+        "node_binary_profile": node_binary_profile,
         "ftd_node_binary_path": str(ftd_node_binary_path) if ftd_node_binary_path is not None else None,
+        "ftd_node_binary_profile": ftd_node_binary_profile,
         "build_config_source": build_config_source,
+        "source_repositories": {
+            "otns_maps": git_source_state(ROOT),
+            "otns": git_source_state(otns_workdir),
+            "firmware_patches": git_source_state(firmware_source_repo),
+        },
         "equivalent_to": equivalent_to,
         "openthread_commit": openthread_commit,
         "otns_commit": otns_commit,
         "otns_command": otns_command,
         "otns_workdir": str(otns_workdir) if otns_workdir is not None else None,
+        "runner_invocation": runner_invocation,
+        "runner_command": shlex.join(runner_invocation),
         "csv_file": csv_file,
         "summary_file": summary_file,
+        "preferred_parent_event_file": preferred_parent_event_file,
         "parent_rank_file": parent_rank_file,
         "replay_file": replay_file,
         "replay_metadata_file": replay_metadata_file,
         "node_log_files": node_log_files,
+        "checksums_file": "checksums.sha256",
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
         "parent_rank_event_count": summary.get("parent_rank_event_count"),
         "parent_rank_decision_counts": summary.get("parent_rank_decision_counts"),
@@ -855,7 +918,6 @@ def tracked_results_manifest(
         "final_parent": summary.get("final_parent"),
         "labels": summary.get("labels", []),
         "preferred_parent_events": summary.get("preferred_parent_events", []),
-        "preferred_parent_event_file": summary.get("preferred_parent_event_file"),
         "protocol_event_timestamps": summary.get("protocol_event_timestamps", {}),
         "protocol_timing_ms": summary.get("protocol_timing_ms", {}),
         "protocol_timing_complete": summary.get("protocol_timing_complete"),
@@ -888,18 +950,22 @@ def write_tracked_results_readme(
             "",
             f'- Scenario: `{manifest["scenario_name"]}`',
             f'- Scenario file: `{manifest["scenario_file"]}`',
+            f'- Packaged scenario: `{manifest["scenario_copy_file"]}`',
             f'- Firmware variant: `{manifest["firmware_variant"]}`',
             f'- Device profile: `{manifest["device_profile"]}`',
             f'- Thread device type: `{manifest["thread_device_type"]}`',
             f'- Parent search config: `{manifest["parent_search_config"]}`',
             f'- Node binary path: `{manifest["node_binary_path"]}`',
+            f'- Node binary profile: `{manifest["node_binary_profile"]}`',
             f'- FTD node binary path: `{manifest["ftd_node_binary_path"]}`',
+            f'- FTD node binary profile: `{manifest["ftd_node_binary_profile"]}`',
             f'- Build config source: `{manifest["build_config_source"]}`',
             f'- Equivalent to: `{manifest["equivalent_to"]}`',
             f'- OpenThread commit: `{manifest["openthread_commit"]}`',
             f'- OTNS commit: `{manifest["otns_commit"]}`',
             f'- OTNS command: `{manifest["otns_command"]}`',
             f'- OTNS workdir: `{manifest["otns_workdir"]}`',
+            f'- Runner command: `{manifest["runner_command"]}`',
             f'- OTNS watch level: `{manifest["otns_watch_level"]}`',
             f'- Selected radio model: `{manifest["selected_radio_model"]}`',
             f'- Initial observed parent: `{manifest["initial_observed_parent"]}`',
@@ -956,6 +1022,8 @@ def write_tracked_results_readme(
             "## Parent Ranking",
             "",
             f'- Ranking CSV: `{manifest["parent_rank_file"] or "not captured"}`',
+            f'- Preferred-parent event CSV: `{manifest["preferred_parent_event_file"] or "not captured"}`',
+            f'- Integrity checks: `{manifest["checksums_file"]}`',
             "",
             "## Node Logs",
             "",
@@ -984,16 +1052,21 @@ def export_tracked_results(
     thread_device_type: str | None,
     parent_search_config: str,
     node_binary_path: Path | None,
+    node_binary_profile: str | None,
     ftd_node_binary_path: Path | None,
+    ftd_node_binary_profile: str | None,
     build_config_source: str | None,
+    firmware_source_repo: Path | None,
     equivalent_to: str | None,
     openthread_commit: str,
     otns_commit: str,
     otns_command: str,
     otns_workdir: Path | None,
+    runner_invocation: list[str],
     token: str,
     csv_path: Path,
     json_path: Path,
+    preferred_parent_event_path: Path | None,
     parent_rank_path: Path | None,
     replay_info: dict[str, Any],
     node_log_files: list[str],
@@ -1005,8 +1078,16 @@ def export_tracked_results(
 
     tracked_csv = tracked_dir / csv_path.name
     tracked_summary = tracked_dir / json_path.name
+    tracked_scenario = tracked_dir / "scenario.yaml"
     shutil.copy2(csv_path, tracked_csv)
     shutil.copy2(json_path, tracked_summary)
+    shutil.copy2(scenario_path, tracked_scenario)
+
+    preferred_parent_event_relpath = None
+    if preferred_parent_event_path is not None:
+        tracked_preferred_parent_events = tracked_dir / preferred_parent_event_path.name
+        shutil.copy2(preferred_parent_event_path, tracked_preferred_parent_events)
+        preferred_parent_event_relpath = tracked_preferred_parent_events.name
 
     parent_rank_relpath = None
     if parent_rank_path is not None:
@@ -1025,6 +1106,16 @@ def export_tracked_results(
         tracked_replay_metadata = tracked_dir / metadata_source.name
         shutil.copy2(metadata_source, tracked_replay_metadata)
         metadata_relpath = tracked_replay_metadata.name
+        replay_metadata = json.loads(tracked_replay_metadata.read_text(encoding="utf-8"))
+        replay_metadata["source_paths"] = {
+            "copied_replay_path": replay_metadata.get("copied_replay_path"),
+            "csv_path": replay_metadata.get("csv_path"),
+            "summary_json_path": replay_metadata.get("summary_json_path"),
+        }
+        replay_metadata["copied_replay_path"] = replay_relpath
+        replay_metadata["csv_path"] = tracked_csv.name
+        replay_metadata["summary_json_path"] = tracked_summary.name
+        write_json(replay_metadata, tracked_replay_metadata)
 
     tracked_node_log_files: list[str] = []
     for node_log_file in node_log_files:
@@ -1032,6 +1123,15 @@ def export_tracked_results(
         tracked_node_log = tracked_dir / node_log_source.name
         shutil.copy2(node_log_source, tracked_node_log)
         tracked_node_log_files.append(tracked_node_log.name)
+
+    tracked_summary_data = json.loads(tracked_summary.read_text(encoding="utf-8"))
+    tracked_summary_data["preferred_parent_event_file"] = preferred_parent_event_relpath
+    tracked_summary_data["parent_rank_file"] = parent_rank_relpath
+    tracked_summary_data["replay_file"] = replay_relpath
+    tracked_summary_data["replay_metadata_file"] = metadata_relpath
+    tracked_summary_data["node_log_files"] = tracked_node_log_files
+    tracked_summary_data["scenario_file"] = tracked_scenario.name
+    write_json(tracked_summary_data, tracked_summary)
 
     manifest = tracked_results_manifest(
         collection_name=tracked_collection,
@@ -1042,15 +1142,21 @@ def export_tracked_results(
         thread_device_type=thread_device_type,
         parent_search_config=parent_search_config,
         node_binary_path=node_binary_path,
+        node_binary_profile=node_binary_profile,
         ftd_node_binary_path=ftd_node_binary_path,
+        ftd_node_binary_profile=ftd_node_binary_profile,
         build_config_source=build_config_source,
+        firmware_source_repo=firmware_source_repo,
         equivalent_to=equivalent_to,
         openthread_commit=openthread_commit,
         otns_commit=otns_commit,
         otns_command=otns_command,
         otns_workdir=otns_workdir,
+        runner_invocation=runner_invocation,
+        scenario_copy_file=tracked_scenario.name,
         csv_file=tracked_csv.name,
         summary_file=tracked_summary.name,
+        preferred_parent_event_file=preferred_parent_event_relpath,
         parent_rank_file=parent_rank_relpath,
         replay_file=replay_relpath,
         replay_metadata_file=metadata_relpath,
@@ -1066,6 +1172,7 @@ def export_tracked_results(
         scenario=scenario,
         replay_file=replay_relpath,
     )
+    write_artifact_checksums(tracked_dir)
     return {
         "tracked_dir": str(tracked_dir),
         "manifest_path": str(manifest_path),
@@ -3708,6 +3815,9 @@ def main() -> int:
     )
     summary["ftd_node_binary_profile"] = args.ftd_node_binary_profile
     summary["build_config_source"] = args.build_config_source
+    summary["firmware_source_repo"] = (
+        str(args.firmware_source_repo.resolve()) if args.firmware_source_repo is not None else None
+    )
     summary["equivalent_to"] = args.equivalent_to
     summary["openthread_commit"] = args.openthread_commit
     summary["otns_commit"] = args.otns_commit
@@ -3748,16 +3858,21 @@ def main() -> int:
                 thread_device_type=args.thread_device_type,
                 parent_search_config=args.parent_search_config,
                 node_binary_path=args.node_binary_path,
+                node_binary_profile=args.node_binary_profile,
                 ftd_node_binary_path=args.ftd_node_binary_path,
+                ftd_node_binary_profile=args.ftd_node_binary_profile,
                 build_config_source=args.build_config_source,
+                firmware_source_repo=args.firmware_source_repo,
                 equivalent_to=args.equivalent_to,
                 openthread_commit=args.openthread_commit,
                 otns_commit=args.otns_commit,
                 otns_command=args.otns_command,
                 otns_workdir=args.otns_workdir,
+                runner_invocation=[sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]],
                 token=token,
                 csv_path=csv_path,
                 json_path=json_path,
+                preferred_parent_event_path=(preferred_parent_event_path if preferred_parent_events else None),
                 parent_rank_path=captured_parent_rank_path,
                 replay_info=replay_info,
                 node_log_files=node_log_info.get("copied_files", []),

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -110,6 +111,12 @@ def parse_args() -> argparse.Namespace:
         help="Build provenance metadata passed through to run_baseline.py.",
     )
     parser.add_argument(
+        "--firmware-source-repo",
+        type=Path,
+        default=Path(os.environ["FIRMWARE_SOURCE_REPO"]) if os.environ.get("FIRMWARE_SOURCE_REPO") else None,
+        help="Optional firmware/patch repository passed through to run_baseline.py.",
+    )
+    parser.add_argument(
         "--equivalent-to",
         default=None,
         help="Optional default-build classification passed through to run_baseline.py.",
@@ -190,6 +197,22 @@ def write_json(data: dict[str, Any], path: Path) -> None:
         handle.write("\n")
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def write_artifact_checksums(artifact_dir: Path, output_name: str = "checksums.sha256") -> None:
+    output_path = artifact_dir / output_name
+    with output_path.open("w", encoding="utf-8") as handle:
+        for path in sorted(artifact_dir.rglob("*")):
+            if path.is_file() and path != output_path:
+                handle.write(f"{sha256_file(path)}  {path.relative_to(artifact_dir).as_posix()}\n")
+
+
 def write_results_readme(
     path: Path,
     experiment_name: str,
@@ -215,6 +238,7 @@ def write_results_readme(
         f"- FTD node binary path: `{manifest['ftd_node_binary_path'] or 'not recorded'}`",
         f"- FTD node binary profile: `{manifest['ftd_node_binary_profile'] or 'not recorded'}`",
         f"- Build config source: `{manifest['build_config_source'] or 'not recorded'}`",
+        f"- Firmware source repository: `{manifest['firmware_source_repo'] or 'not recorded'}`",
         f"- OpenThread commit: `{manifest['openthread_commit']}`",
         f"- OTNS commit: `{manifest['otns_commit']}`",
         f"- Simulator ping RSS capture: `{manifest.get('capture_sim_ping_rss', False)}`",
@@ -317,6 +341,8 @@ def main() -> int:
             cmd.extend(["--ftd-node-binary-profile", args.ftd_node_binary_profile])
         if args.build_config_source is not None:
             cmd.extend(["--build-config-source", args.build_config_source])
+        if args.firmware_source_repo is not None:
+            cmd.extend(["--firmware-source-repo", str(args.firmware_source_repo)])
         if args.equivalent_to is not None:
             cmd.extend(["--equivalent-to", args.equivalent_to])
         if args.copy_results_to_artifact:
@@ -358,6 +384,9 @@ def main() -> int:
                         ),
                         "ftd_node_binary_profile": args.ftd_node_binary_profile,
                         "build_config_source": args.build_config_source,
+                        "firmware_source_repo": (
+                            str(args.firmware_source_repo) if args.firmware_source_repo is not None else None
+                        ),
                         "openthread_commit": args.openthread_commit,
                         "otns_commit": args.otns_commit,
                         "otns_watch_level": args.otns_watch_level,
@@ -387,6 +416,7 @@ def main() -> int:
         "ftd_node_binary_path": str(args.ftd_node_binary_path) if args.ftd_node_binary_path is not None else None,
         "ftd_node_binary_profile": args.ftd_node_binary_profile,
         "build_config_source": args.build_config_source,
+        "firmware_source_repo": str(args.firmware_source_repo) if args.firmware_source_repo is not None else None,
         "openthread_commit": args.openthread_commit,
         "otns_commit": args.otns_commit,
         "otns_watch_level": args.otns_watch_level,
@@ -404,8 +434,20 @@ def main() -> int:
         tracked_experiment_dir.mkdir(parents=True, exist_ok=True)
         artifact_manifest_path = tracked_experiment_dir / "repeated_run_manifest.json"
         tracked_manifest_path = tracked_experiment_dir / "manifest.json"
-        shutil.copy2(manifest_path, artifact_manifest_path)
-        shutil.copy2(manifest_path, tracked_manifest_path)
+        tracked_scenario_path = tracked_experiment_dir / "scenario.yaml"
+        shutil.copy2(args.scenario, tracked_scenario_path)
+        artifact_manifest = dict(manifest)
+        artifact_manifest.update(
+            {
+                "artifact_schema_version": 1,
+                "artifact_type": "repeated_experiment",
+                "scenario_copy_file": tracked_scenario_path.name,
+                "scenario_sha256": sha256_file(args.scenario),
+                "checksums_file": "checksums.sha256",
+            }
+        )
+        write_json(artifact_manifest, artifact_manifest_path)
+        write_json(artifact_manifest, tracked_manifest_path)
 
         aggregate_summary_path = tracked_experiment_dir / "aggregate_summary.json"
         analysis_cmd = [
@@ -428,6 +470,7 @@ def main() -> int:
             aggregate_summary_exists=aggregate_summary_path.exists(),
             manifest=manifest,
         )
+        write_artifact_checksums(tracked_experiment_dir)
         print(tracked_experiment_dir)
         print(tracked_manifest_path)
         print(artifact_manifest_path)
