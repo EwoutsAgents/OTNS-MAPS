@@ -8,9 +8,9 @@ The active benchmark matrix uses three simple parent-switch scenarios:
 
 ## Simple Parent Switch
 
-A simple parent-switch scenario has three routers, one mobile end device, straight-line movement, delayed Router B/Router C activation, static 0 dBm transmit power, and no intentional dead zone. The mobile starts near Router A, moves beyond Router C, and dwells at the end to give late or sticky parent switching behavior time to appear.
+A simple parent-switch scenario has four routers, one mobile end device, straight-line movement, delayed Router B/Router C/Router D activation, static 0 dBm transmit power, and no intentional dead zone. The mobile starts near Router A, moves beyond Router D, and dwells at the end to give late or sticky parent switching behavior time to appear.
 
-Router A and the mobile end device are created first. The scenario then runs a fixed Router-A-only attachment window before Router B and Router C are introduced. A post-activation settle period runs after Router B/C activation, and only then does movement toward Router C begin. All active scenarios keep `expected_initial_parent: router_a`.
+Router A and the mobile end device are created first. The scenario then runs a fixed Router-A-only attachment window before Router B, Router C, and Router D are introduced. A post-activation settle period runs after Router B/C/D activation, and only then does movement toward Router D begin. All active scenarios keep `expected_initial_parent: router_a`.
 
 The post-activation settle period is monitored, not treated as invisible time. The runner polls the mobile parent during this phase and records `pre_movement_parent_sequence`, `pre_movement_parent_final`, `pre_movement_switch_count`, and `pre_movement_parent_events` in the summary JSON. If the mobile leaves Router A before movement sampling starts, the run is classified as `pre_movement_switch_observed` instead of being folded into `initial_parent_unexpected`.
 
@@ -23,26 +23,29 @@ All active simple scenarios use the same intended overlapping-coverage geometry:
 | Router A | 350 | 300 |
 | Router B | 875 | 300 |
 | Router C | 1400 | 300 |
+| Router D | 1925 | 300 |
 | Mobile attach/movement start | 350 | 360 |
-| Mobile end | 1600 | 360 |
+| Mobile end | 2125 | 360 |
 
-The moving end device stays horizontally offset from the router line. The old symmetric start/end offset was removed because a large left-side offset made initial Router A attachment unreliable. The active geometry instead starts near Router A for a fixed Router-A-only attachment window, then moves the ED past Router C. Router B remains between Router A and Router C so it can preserve mesh connectivity while also acting as a possible intermediate parent.
+The moving end device stays horizontally offset from the router line. The old symmetric start/end offset was removed because a large left-side offset made initial Router A attachment unreliable. The active geometry instead starts near Router A for a fixed Router-A-only attachment window, then moves the ED past Router D. Routers B and C remain between Router A and Router D so adjacent router spacing stays constant while the endpoint moves farther away from Router A.
 
 All nodes set OpenThread transmit power to `0 dBm` once during initialization using `txpower 0`; the runner verifies the configured value with `txpower` when possible.
 
 OTNS uses the `MeterPerUnit` radio parameter for coordinate scaling. The scenarios assume the default `MeterPerUnit = 0.1`, so one coordinate unit is treated as 0.1 m unless the radio parameter is overridden. This default is recorded in the local OTNS source at `radiomodel/model_params.go` and listed by `cli/README.md`.
 
-The mobile path from x=350 to x=1600 spans 1250 coordinate units, which is 125 m at `MeterPerUnit = 0.1`. With 25 one-second movement steps, the target movement speed is 5 m/s. Router C is placed close enough to the endpoint to give a detached mobile a strong reattachment candidate while Router A is weak at the endpoint.
+The mobile path from x=350 to x=2125 spans 1775 coordinate units, which is 177.5 m at `MeterPerUnit = 0.1`. With 36 one-second movement steps, the effective speed is about 4.93 m/s. Router D is placed close enough to the endpoint to give a detached mobile a strong reattachment candidate while Router A is weak at the endpoint.
 
 Model-derived RSS with static `0 dBm` transmit power is approximately:
 
 | Link | RSS (dBm) |
 |---|---:|
-| Router A -> mobile endpoint | -107.098 |
-| Router B -> mobile endpoint | -98.075 |
-| Router C -> mobile endpoint | -77.313 |
+| Router A -> mobile endpoint | -112.921 |
+| Router B -> mobile endpoint | -107.098 |
+| Router C -> mobile endpoint | -98.075 |
+| Router D -> mobile endpoint | -77.313 |
 | Router A -> Router B | -92.649 |
 | Router B -> Router C | -92.649 |
+| Router C -> Router D | -92.649 |
 
 The runner sends exactly one 1 Hz ICMP ping from the mobile end device to its currently observed parent when that parent resolves to a known router. When `--capture-sim-ping-rss` is enabled, the runner also attaches simulator-model RSS/LQI to that ping event using OTNS `MutualInterference` parameters at the ping source/destination positions.
 
@@ -50,11 +53,11 @@ If the mobile detaches, summaries record `detach_count`, first detach/reattach t
 
 ## Timing
 
-| Scenario | Step seconds | Movement steps | Router-A-only delay before B/C (s) | Post-activation settle (s) | Hold end steps | End dwell (s) |
+| Scenario | Step seconds | Movement steps | Router-A-only delay before B/C/D (s) | Post-activation settle (s) | Hold end steps | End dwell (s) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| MED simple | 1 | 25 | 600 | 600 | 600 | 600 |
-| FED simple | 1 | 25 | 600 | 600 | 600 | 600 |
-| SED simple | 1 | 25 | 600 | 600 | 600 | 600 |
+| MED simple | 1 | 36 | 600 | 600 | 600 | 600 |
+| FED simple | 1 | 36 | 600 | 600 | 600 | 600 |
+| SED simple | 1 | 36 | 600 | 600 | 600 | 600 |
 
 The SED scenario now uses the same activation timing as MED/FED so the repeated PPS matrix uses a consistent geometry and movement schedule across profiles. SED observability remains different because regular SED packet probing is unreliable.
 

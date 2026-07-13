@@ -1,0 +1,348 @@
+{
+  "build_config_source": "docs/pps_build_variants.md#pps-enabled-30s",
+  "configured_node_tx_power_dbm": {
+    "mobile": 0.0,
+    "router_a": 0.0,
+    "router_b": 0.0,
+    "router_c": 0.0,
+    "router_d": 0.0
+  },
+  "copied_replay_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260713T023537Z/run_005/replay/fed_simple_parent_switch_20260713T023636Z.replay",
+  "created_at_utc": "2026-07-13T02:36:54.916680+00:00",
+  "csv_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260713T023537Z/run_005/baseline_run_20260713T023636Z.csv",
+  "detach_count": 1,
+  "device_profile": "full_end_device",
+  "ended_detached": false,
+  "equivalent_to": null,
+  "final_observed_parent": "router_d",
+  "firmware_variant": "stock-fed-pps-on",
+  "first_detach_time_s": 1244.0,
+  "first_reattach_time_s": 1245.0,
+  "first_switch_time_s": 1210.0,
+  "ftd_node_binary_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim/build/stock-fed-pps-on/bin/ot-cli-ftd",
+  "initial_observed_parent": "router_a",
+  "mock": false,
+  "node_binary_path": null,
+  "openthread_commit": "7874555efb1772bad66049ab06a78a2ce0c925f3",
+  "otns_command": "/home/ewout/go/bin/otns -web=false -autogo=false -speed 1 -listen localhost:10030",
+  "otns_commit": "099a6c26cb1d2b8749d3171d5cdd8597fc71049c",
+  "otns_workdir": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns",
+  "parent_search_config": "enabled",
+  "pre_movement_parent_events": [
+    {
+      "elapsed_s": 234,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 834.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 239,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 839.0,
+      "to_parent": "router_c"
+    },
+    {
+      "elapsed_s": 244,
+      "from_parent": "router_c",
+      "phase": "post_activation_settle",
+      "sim_time_s": 844.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 252,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 852.0,
+      "to_parent": "router_c"
+    },
+    {
+      "elapsed_s": 257,
+      "from_parent": "router_c",
+      "phase": "post_activation_settle",
+      "sim_time_s": 857.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 264,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 864.0,
+      "to_parent": "router_c"
+    },
+    {
+      "elapsed_s": 268,
+      "from_parent": "router_c",
+      "phase": "post_activation_settle",
+      "sim_time_s": 868.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 275,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 875.0,
+      "to_parent": "router_c"
+    },
+    {
+      "elapsed_s": 279,
+      "from_parent": "router_c",
+      "phase": "post_activation_settle",
+      "sim_time_s": 879.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 289,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 889.0,
+      "to_parent": "router_c"
+    },
+    {
+      "elapsed_s": 293,
+      "from_parent": "router_c",
+      "phase": "post_activation_settle",
+      "sim_time_s": 893.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 298,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 898.0,
+      "to_parent": "router_c"
+    },
+    {
+      "elapsed_s": 306,
+      "from_parent": "router_c",
+      "phase": "post_activation_settle",
+      "sim_time_s": 906.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 318,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 918.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 323,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 923.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 330,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 930.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 334,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 934.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 346,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 946.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 356,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 956.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 371,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 971.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 381,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 981.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 383,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 983.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 397,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 997.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 406,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1006.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 416,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1016.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 419,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1019.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 427,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1027.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 428,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1028.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 444,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1044.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 449,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1049.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 463,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1063.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 478,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1078.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 504,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1104.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 513,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1113.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 528,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1128.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 539,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1139.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 552,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1152.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 560,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1160.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 564,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1164.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 573,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1173.0,
+      "to_parent": "router_a"
+    },
+    {
+      "elapsed_s": 587,
+      "from_parent": "router_a",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1187.0,
+      "to_parent": "router_b"
+    },
+    {
+      "elapsed_s": 598,
+      "from_parent": "router_b",
+      "phase": "post_activation_settle",
+      "sim_time_s": 1198.0,
+      "to_parent": "router_a"
+    }
+  ],
+  "pre_movement_parent_final": "router_a",
+  "pre_movement_switch_count": 42,
+  "reattach_latency_s": 1.0,
+  "recovery_classification": "detached_reattached_new_parent",
+  "replay_source": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/otns_103.replay",
+  "result_classification": "switch_observed",
+  "scenario_file": "scenarios/fed_simple_parent_switch.yaml",
+  "scenario_name": "fed_simple_parent_switch",
+  "scenario_title": "Simple stock OpenThread FED parent-switch benchmark",
+  "second_switch_time_s": 1245.0,
+  "selected_radio_model": "MutualInterference",
+  "summary_json_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/fed_simple_parent_switch_20260713T023537Z/run_005/baseline_summary_20260713T023636Z.json",
+  "switch_count": 2,
+  "thread_device_type": "fed",
+  "verified_node_tx_power_dbm": {
+    "mobile": 0.0,
+    "router_a": 0.0,
+    "router_b": 0.0,
+    "router_c": 0.0,
+    "router_d": 0.0
+  }
+}

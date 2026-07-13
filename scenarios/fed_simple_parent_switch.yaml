@@ -2,10 +2,10 @@ name: fed_simple_parent_switch
 title: Simple stock OpenThread FED parent-switch benchmark
 description: >
   Simple stock OTNS parent-switching benchmark for a mobile Full End Device.
-  The scenario uses three routers, one mobile end device, straight-line
-  movement, delayed Router B/Router C activation, static 0 dBm transmit power,
+  The scenario uses four routers, one mobile end device, straight-line
+  movement, delayed Router B/Router C/Router D activation, static 0 dBm transmit power,
   and no intentional dead zone. The mobile is created near Router A and given
-  a fixed Router-A-only attachment window, then moves beyond Router C at a target 5 m/s and
+  a fixed Router-A-only attachment window, then moves beyond Router D at a target 5 m/s and
   dwells at the end to expose late parent switching.
 
 device_profile: full_end_device
@@ -32,7 +32,7 @@ radio_model:
 timing:
   settle_seconds: 120
   step_seconds: 1
-  movement_steps: 25
+  movement_steps: 36
 
 activation:
   initial_nodes:
@@ -43,6 +43,7 @@ activation:
       nodes:
         - router_b
         - router_c
+        - router_d
   post_activation_settle_seconds: 600
 
 nodes:
@@ -61,6 +62,11 @@ nodes:
     x: 1400
     y: 300
     tx_power_dbm: 0
+  router_d:
+    type: router
+    x: 1925
+    y: 300
+    tx_power_dbm: 0
   mobile:
     type: fed
     x: 350
@@ -73,7 +79,7 @@ movement:
     x: 350
     y: 360
   end:
-    x: 1600
+    x: 2125
     y: 360
   speed_mps: 5
   hold_end_steps: 600

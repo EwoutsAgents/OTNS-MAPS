@@ -89,7 +89,8 @@ The active simple parent-switch scenarios contain:
 - Router A
 - Router B
 - Router C
-- one mobile end device that starts near Router A and moves beyond Router C
+- Router D
+- one mobile end device that starts near Router A and moves beyond Router D
 
 The benchmark prefers the `MutualInterference` OTNS radio model. If it is unavailable, the runner falls back in this order:
 
@@ -103,7 +104,7 @@ The active benchmark matrix uses three stock scenarios:
 - `scenarios/fed_simple_parent_switch.yaml` for a Full End Device variant that uses OTNS's FTD executable path
 - `scenarios/sed_simple_parent_switch.yaml` for a Sleepy End Device variant that treats the `parent` command as the primary attachment observation path
 
-The simple scenarios now use a three-router, static 0 dBm topology and the runner records one 1 Hz ICMP ping from the mobile end device to its currently observed parent: Router A at `(350, 300)`, Router B at `(875, 300)`, Router C at `(1400, 300)`, and a mobile path from `(350, 360)` to `(1600, 360)`. The mobile is created near Router A, Router B and Router C are introduced after a fixed 600 s Router-A-only delay, and movement starts after a monitored 600 s post-activation settle period. During the post-activation settle period, the runner keeps polling the mobile parent so switches before movement sampling are recorded as `pre_movement_switch_observed` rather than hidden as unexpected first samples. OTNS `MeterPerUnit = 0.1` makes the movement path 125 m; 25 one-second movement steps target 5 m/s, followed by a 600 s end dwell. See [`docs/scenarios.md`](docs/scenarios.md).
+The simple scenarios now use a four-router, static 0 dBm topology and the runner records one 1 Hz ICMP ping from the mobile end device to its currently observed parent: Router A at `(350, 300)`, Router B at `(875, 300)`, Router C at `(1400, 300)`, Router D at `(1925, 300)`, and a mobile path from `(350, 360)` to `(2125, 360)`. The mobile is created near Router A; Router B, Router C, and Router D are introduced after a fixed 600 s Router-A-only delay; and movement starts after a monitored 600 s post-activation settle period. During the post-activation settle period, the runner keeps polling the mobile parent so switches before movement sampling are recorded as `pre_movement_switch_observed` rather than hidden as unexpected first samples. OTNS `MeterPerUnit = 0.1` makes the movement path 177.5 m; 36 one-second movement steps target about 5 m/s, followed by a 600 s end dwell. See [`docs/scenarios.md`](docs/scenarios.md).
 
 Runs also classify detach/recovery behavior. A no-switch result can now be separated into `no_switch_observed`, `detached_no_reattach`, `detached_reattached_same_parent`, or `detached_reattached_new_parent`, with first detach/reattach timing, position, and reattach latency recorded in summary JSON and artifact manifests.
 
