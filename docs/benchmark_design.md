@@ -35,35 +35,11 @@ The active comparison is:
 
 The current/default local MED build is classified separately as a discovery result. In the validated local checkout, the default MTD build is equivalent by configuration to `stock-med-pps-on` because `openthread/examples/platforms/simulation/openthread-core-simulation-config.h` defines `OPENTHREAD_CONFIG_PARENT_SEARCH_ENABLE 1` when no explicit build flag overrides it.
 
-Build provenance and exact commands are recorded in [`pps_build_variants.md`](pps_build_variants.md). The archived single-run calibrated MED comparison is recorded in [`pps_med_comparison.md`](pps_med_comparison.md), the archived 10-run MED follow-up is recorded in [`pps_med_repeated_comparison.md`](pps_med_repeated_comparison.md), and the archived FED/SED profile extension is recorded in [`pps_fed_sed_comparison.md`](pps_fed_sed_comparison.md). These archived comparisons used the older wider geometry. The single-run MED tracked artifacts are:
+Build provenance and exact commands are recorded in [`pps_build_variants.md`](pps_build_variants.md). The archived single-run calibrated MED comparison is recorded in [`pps_med_comparison.md`](pps_med_comparison.md), the archived 10-run MED follow-up is recorded in [`pps_med_repeated_comparison.md`](pps_med_repeated_comparison.md), and the archived FED/SED profile extension is recorded in [`pps_fed_sed_comparison.md`](pps_fed_sed_comparison.md). These archived comparisons used older geometry. Their bulky tracked artifact directories have been pruned from the repository; keep the metric tables as historical notes rather than live artifact links.
 
 The active simple-geometry 10-run PPS matrix is recorded in [`simple_pps_matrix.md`](simple_pps_matrix.md).
 
-- `../results/.archive/calibrated_mobile_parent_switch_med-pps-off/20260710-020657-run01/20260710-020657-run01/`
-- `../results/.archive/calibrated_mobile_parent_switch_med-pps-on/20260710-020715-run01/20260710-020715-run01/`
-
-Each artifact includes CSV, summary JSON, replay, replay metadata JSON, MP4, node logs, manifest, and README.
-
-The repeated MED PPS artifacts are:
-
-- `../results/.archive/calibrated_mobile_parent_switch_med-pps-off-repeated/20260710-023301-experiment/`
-- `../results/.archive/calibrated_mobile_parent_switch_med-pps-on-repeated/20260710-023336-experiment/`
-
 The archived repeated result shows earlier median switch timing and lower median outage for PPS-on, but similar mean switch timing and no oscillation in either variant.
-
-The FED/SED PPS extension artifacts are:
-
-- `../results/.archive/fed_mobile_parent_switch_fed-pps-off/20260710-104510-run01/20260710-104510-run01/`
-- `../results/.archive/fed_mobile_parent_switch_fed-pps-on/20260710-104523-run01/20260710-104523-run01/`
-- `../results/.archive/sed_mobile_parent_switch_sed-pps-off/20260710-104537-run01/20260710-104537-run01/`
-- `../results/.archive/sed_mobile_parent_switch_sed-pps-on/20260710-104550-run01/20260710-104550-run01/`
-
-The repeated FED/SED PPS extension artifacts are:
-
-- `../results/.archive/fed_mobile_parent_switch_fed-pps-off-repeated/20260710-163436-experiment/`
-- `../results/.archive/fed_mobile_parent_switch_fed-pps-on-repeated/20260710-163514-experiment/`
-- `../results/.archive/sed_mobile_parent_switch_sed-pps-off-repeated/20260710-163933-experiment/`
-- `../results/.archive/sed_mobile_parent_switch_sed-pps-on-repeated/20260710-164008-experiment/`
 
 ## RF propagation model
 

@@ -79,12 +79,10 @@ python3 scripts/replay_to_mp4.py <replay-file> \
 
 ## Artifacts
 
-- PPS off repeated: `results/.archive/calibrated_mobile_parent_switch_med-pps-off-repeated/20260710-023301-experiment/`
-- PPS on repeated: `results/.archive/calibrated_mobile_parent_switch_med-pps-on-repeated/20260710-023336-experiment/`
-- PPS off representative MP4: `results/.archive/calibrated_mobile_parent_switch_med-pps-off-repeated/20260710-023301-experiment/20260710-023310-run05/20260710-023310-run05/calibrated_mobile_parent_switch_20260710T023310Z.mp4`
-- PPS on representative MP4: `results/.archive/calibrated_mobile_parent_switch_med-pps-on-repeated/20260710-023336-experiment/20260710-023336-run01/20260710-023336-run01/calibrated_mobile_parent_switch_20260710T023336Z.mp4`
-
-Each repeated experiment directory contains `README.md`, `manifest.json`, `repeated_run_manifest.json`, `aggregate_summary.json`, and ten per-run tracked artifact directories. Each per-run directory contains CSV, summary JSON, replay, replay metadata JSON, node logs, manifest, and README. The representative runs also contain MP4 files.
+The original repeated MED artifacts were pruned from the repository during the
+results cleanup. Keep the aggregate table below as a historical note only. The
+current tracked artifacts live under the active `results/*simple_parent_switch*`
+directories and are summarized in [`simple_pps_matrix.md`](simple_pps_matrix.md).
 
 ## Aggregate Comparison
 

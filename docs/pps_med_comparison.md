@@ -85,10 +85,10 @@ python3 scripts/replay_to_mp4.py <artifact>/<replay>.replay \
 
 ## Artifact locations
 
-- PPS off: `results/.archive/calibrated_mobile_parent_switch_med-pps-off/20260710-020657-run01/20260710-020657-run01/`
-- PPS on: `results/.archive/calibrated_mobile_parent_switch_med-pps-on/20260710-020715-run01/20260710-020715-run01/`
-
-Each directory contains CSV, summary JSON, replay, replay metadata JSON, MP4, node logs, manifest, and README.
+The original single-run artifacts were pruned from the repository during the
+results cleanup. Keep the metrics below as historical notes only. The current
+tracked artifacts live under the active `results/*simple_parent_switch*`
+directories and are summarized in [`simple_pps_matrix.md`](simple_pps_matrix.md).
 
 ## Metric comparison
 

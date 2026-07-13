@@ -250,7 +250,7 @@ Render a replay file into an MP4:
 
 ```bash
 python3 scripts/replay_to_mp4.py \
-  results/.archive/calibrated_mobile_parent_switch_switch-observed/<run-id>/<run-id>/<captured-file>.replay \
+  results/med_simple_parent_switch_med-pps-off-repeated/20260713-022826-experiment/<run-id>/<run-id>/<captured-file>.replay \
   --replay-speed 4 \
   --cover-full-replay \
   --end-device-y-offset 40 \

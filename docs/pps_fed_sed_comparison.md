@@ -74,12 +74,10 @@ SED PPS on used the same command with `sed-pps-on`, `stock-sed-pps-on`, `--paren
 
 ## Single-Run Artifacts
 
-- FED PPS off: `results/.archive/fed_mobile_parent_switch_fed-pps-off/20260710-104510-run01/20260710-104510-run01/`
-- FED PPS on: `results/.archive/fed_mobile_parent_switch_fed-pps-on/20260710-104523-run01/20260710-104523-run01/`
-- SED PPS off: `results/.archive/sed_mobile_parent_switch_sed-pps-off/20260710-104537-run01/20260710-104537-run01/`
-- SED PPS on: `results/.archive/sed_mobile_parent_switch_sed-pps-on/20260710-104550-run01/20260710-104550-run01/`
-
-Each artifact includes CSV, summary JSON, replay, replay metadata JSON, MP4, node logs, manifest, and README.
+The original single-run FED/SED artifacts were pruned from the repository during
+the results cleanup. Keep the metric table below as a historical note only. The
+current tracked artifacts live under the active `results/*simple_parent_switch*`
+directories and are summarized in [`simple_pps_matrix.md`](simple_pps_matrix.md).
 
 ## Single-Run Metrics
 
@@ -101,12 +99,8 @@ Each artifact includes CSV, summary JSON, replay, replay metadata JSON, MP4, nod
 
 The repeated profile extension uses 10 runs per variant with the same explicit stock PPS binaries:
 
-- FED PPS off: `results/.archive/fed_mobile_parent_switch_fed-pps-off-repeated/20260710-163436-experiment/`
-- FED PPS on: `results/.archive/fed_mobile_parent_switch_fed-pps-on-repeated/20260710-163514-experiment/`
-- SED PPS off: `results/.archive/sed_mobile_parent_switch_sed-pps-off-repeated/20260710-163933-experiment/`
-- SED PPS on: `results/.archive/sed_mobile_parent_switch_sed-pps-on-repeated/20260710-164008-experiment/`
-
-Each repeated artifact includes 10 CSV files, 10 summary JSON files, 10 replay files, 10 replay metadata JSON files, 30 node logs, an aggregate summary, a manifest, and one representative MP4.
+The original repeated FED/SED artifacts were also pruned from the repository.
+Keep the aggregate table below as a historical note only.
 
 ## Repeated Metrics
 
