@@ -1,0 +1,1826 @@
+#
+# OpenThread node log for Node<3>   Created 2026-07-13T03:05:16+02:00
+# SimTimeUs NodeTime     Lev LogModule       Message
+  300000000 Node config: type=router IsMtd=false IsRouter=true IsBR=false RxOffWhenIdle=false
+  300000000   exe cmd : ./ot-rfsim/ot-versions/ot-cli-ftd 3 /tmp/otns/socket_dispatcher_107 2060417402
+  300000000   position: (450,360,0)
+  300000000 00:00:00.000 [D] SubMac--------: RadioState: Disabled -> Sleep
+  300000000 status push: "extaddr=bab20835f75f8b16"
+  300000000 00:00:00.000 [D] SubMac--------: RadioExtAddress: bab20835f75f8b16
+  300000000 status push: "rloc16=65534"
+  300000000 set node RLOC16: fffe -> fffe
+  300000000 00:00:00.000 [D] SubMac--------: RadioShortAddress: 0xfffe
+  300000000 00:00:00.000 [D] Platform------: Clear ShortAddr entries
+  300000000 00:00:00.000 [D] Platform------: Clear ExtAddr entries
+  300000000 00:00:00.000 [D] SrcMatchCtrl--: Cleared all entries
+  300000000 00:00:00.000 [I] CslTxScheduler: Set frame request ahead: 368 usec
+  300000000 00:00:00.000 [I] ChildSupervsn-: Timeout: 0 -> 190
+  300000000 00:00:00.000 [I] Notifier------: StateChanged (0x00038210) [MLAddr NetData PanId NetName ExtPanId]
+  300000000 00:00:00.000 [I] RouterTable---: Route table
+  300000000 start setup of node (version/commit, rfsim params, mode, init script)
+  300000000 UART-write: version
+  300000000 00:00:00.000 [D] Cli-----------: Input: version
+  300000000 00:00:00.000 [D] Cli-----------: Output: OPENTHREAD/thread-reference-20250612-1254-g7874555ef; RFSIM; Jul  7 2026 16:26:24
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: version
+  300000000 UART: OPENTHREAD/thread-reference-20250612-1254-g7874555ef; RFSIM; Jul  7 2026 16:26:24
+  300000000 UART: Done
+  300000000 UART-write: thread version
+  300000000 00:00:00.000 [D] Cli-----------: Input: thread version
+  300000000 00:00:00.000 [D] Cli-----------: Output: 5
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: thread version
+  300000000 UART: 5
+  300000000 UART: Done
+  300000000 UART-write: mode rdn
+  300000000 00:00:00.000 [D] Cli-----------: Input: mode rdn
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: mode rdn
+  300000000 UART: Done
+  300000000 UART-write: dataset init new
+  300000000 00:00:00.000 [D] Cli-----------: Input: dataset init new
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: dataset init new
+  300000000 UART: Done
+  300000000 UART-write: dataset networkname otns
+  300000000 00:00:00.000 [D] Cli-----------: Input: dataset networkname otns
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: dataset networkname otns
+  300000000 UART: Done
+  300000000 UART-write: dataset networkkey 00112233445566778899aabbccddeeff
+  300000000 00:00:00.000 [D] Cli-----------: Input: dataset networkkey 00112233445566778899aabbccddeeff
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: dataset networkkey 00112233445566778899aabbccddeeff
+  300000000 UART: Done
+  300000000 UART-write: dataset panid 0xface
+  300000000 00:00:00.000 [D] Cli-----------: Input: dataset panid 0xface
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: dataset panid 0xface
+  300000000 UART: Done
+  300000000 UART-write: dataset channel 11
+  300000000 00:00:00.000 [D] Cli-----------: Input: dataset channel 11
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: dataset channel 11
+  300000000 UART: Done
+  300000000 UART-write: dataset extpanid dead00beef00cafe
+  300000000 00:00:00.000 [D] Cli-----------: Input: dataset extpanid dead00beef00cafe
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: dataset extpanid dead00beef00cafe
+  300000000 UART: Done
+  300000000 UART-write: dataset meshlocalprefix fdde:ad00:beef:0::
+  300000000 00:00:00.000 [D] Cli-----------: Input: dataset meshlocalprefix fdde:ad00:beef:0::
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: dataset meshlocalprefix fdde:ad00:beef:0::
+  300000000 UART: Done
+  300000000 UART-write: dataset pskc 3aa55f91ca47d1e4e71a08cb35e91591
+  300000000 00:00:00.000 [D] Cli-----------: Input: dataset pskc 3aa55f91ca47d1e4e71a08cb35e91591
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: dataset pskc 3aa55f91ca47d1e4e71a08cb35e91591
+  300000000 UART: Done
+  300000000 UART-write: dataset commit active
+  300000000 00:00:00.000 [D] Cli-----------: Input: dataset commit active
+  300000000 00:00:00.000 [I] Settings------: Saved ActiveDataset
+  300000000 00:00:00.000 [I] DatasetManager: Active dataset set
+  300000000 00:00:00.000 [D] SubMac--------: RadioPanId: 0xface
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 00:00:00.000 [I] Notifier------: StateChanged (0x101dc100) [KeySeqCntr Channel PanId NetName NetworkKey PSKc SecPolicy ActDset]
+  300000000 00:00:00.000 [I] AnnounceSender: ChannelMask:{ 11-26 }, period:21500
+  300000000 00:00:00.000 [I] AnnounceSender: StartingChannel:11
+  300000000 00:00:00.000 [I] AnnounceSender: StartingChannel:11
+  300000000 UART: dataset commit active
+  300000000 UART: Done
+  300000000 UART-write: ifconfig up
+  300000000 00:00:00.000 [D] Cli-----------: Input: ifconfig up
+  300000000 00:00:00.000 [D] SubMac--------: RxOnWhenIdle: 1
+  300000000 00:00:00.000 [D] SubMac--------: RadioState: Sleep -> Receive
+  300000000 00:00:00.000 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  300000000 00:00:00.000 [I] Mle-----------: PeriodicParentSearch: (Re)starting timer for check interval
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 00:00:00.000 [I] Notifier------: StateChanged (0x01001009) [Ip6+ LLAddr Ip6Mult+ NetifState]
+  300000000 UART: ifconfig up
+  300000000 UART: Done
+  300000000 UART-write: thread start
+  300000000 00:00:00.000 [D] Cli-----------: Input: thread start
+  300000000 00:00:00.000 [N] Mle-----------: Role disabled -> detached
+  300000000 status push: "rloc16=65534"
+  300000000 set node RLOC16: fffe -> fffe
+  300000000 00:00:00.000 [D] SubMac--------: RadioShortAddress: 0xfffe
+  300000000 00:00:00.000 [I] Mle-----------: AttachState Idle -> Start
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 00:00:00.000 [I] Notifier------: StateChanged (0x10001005) [Ip6+ Role Ip6Mult+ ActDset]
+  300000000 00:00:00.000 [I] AnnounceSender: Stopped
+  300000000 status push: "role=1"
+  300000000 UART: thread start
+  300000000 UART: Done
+  300000000 UART-write: panid
+  300000000 00:00:00.000 [D] Cli-----------: Input: panid
+  300000000 00:00:00.000 [D] Cli-----------: Output: 0xface
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: panid
+  300000000 UART: 0xface
+  300000000 UART: Done
+  300000000 UART-write: channel
+  300000000 00:00:00.000 [D] Cli-----------: Input: channel
+  300000000 00:00:00.000 [D] Cli-----------: Output: 11
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: channel
+  300000000 UART: 11
+  300000000 UART: Done
+  300000000 UART-write: eui64
+  300000000 00:00:00.000 [D] Cli-----------: Input: eui64
+  300000000 00:00:00.000 [D] Cli-----------: Output: 18b4300000000003
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: eui64
+  300000000 UART: 18b4300000000003
+  300000000 UART: Done
+  300000000 UART-write: extaddr
+  300000000 00:00:00.000 [D] Cli-----------: Input: extaddr
+  300000000 00:00:00.000 [D] Cli-----------: Output: bab20835f75f8b16
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: extaddr
+  300000000 UART: bab20835f75f8b16
+  300000000 UART: Done
+  300000000 UART-write: state
+  300000000 00:00:00.000 [D] Cli-----------: Input: state
+  300000000 00:00:00.000 [D] Cli-----------: Output: detached
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: state
+  300000000 UART: detached
+  300000000 UART: Done
+  300000000 UART-write: networkkey
+  300000000 00:00:00.000 [D] Cli-----------: Input: networkkey
+  300000000 00:00:00.000 [D] Cli-----------: Output: 00112233445566778899aabbccddeeff
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: networkkey
+  300000000 UART: 00112233445566778899aabbccddeeff
+  300000000 UART: Done
+  300000000 UART-write: mode
+  300000000 00:00:00.000 [D] Cli-----------: Input: mode
+  300000000 00:00:00.000 [D] Cli-----------: Output: rdn
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: mode
+  300000000 UART: rdn
+  300000000 UART: Done
+  300000000 started, panid=0xface, chan=11, eui64="18b4300000000003", extaddr=0xbab20835f75f8b16, state=detached, key="00112233445566778899aabbccddeeff", mode=rdn
+  300000000          version=OPENTHREAD/thread-reference-20250612-1254-g7874555ef; RFSIM; Jul  7 2026 16:26:24
+  300000000 UART-write: txpower 0
+  300000000 00:00:00.000 [D] Cli-----------: Input: txpower 0
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: txpower 0
+  300000000 UART: Done
+  300000000 UART-write: txpower
+  300000000 00:00:00.000 [D] Cli-----------: Input: txpower
+  300000000 00:00:00.000 [D] Cli-----------: Output: 0 dBm
+  300000000 00:00:00.000 [D] Cli-----------: Output: Done
+  300000000 UART: txpower
+  300000000 UART: 0 dBm
+  300000000 UART: Done
+  300000000 (OTNS)       [T] RadioState----: EnergyState=Slp SubState=Startup RadioState=Slp Ch=11 RadioTime=0 NextStTime=+140
+  300000000 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Startup RadioState=Rx_ Ch=11 RadioTime=0 NextStTime=+140
+  300000140 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=140 NextStTime=+0
+  300647140 00:00:00.647 [N] Mle-----------: Attach attempt 1, AnyPartition reattaching with Active Dataset
+  300647140 00:00:00.647 [I] Mle-----------: AttachState Start -> ParentReq
+  300647140 00:00:00.647 [I] Mle-----------: Send Parent Request to routers (ff02:0:0:0:0:0:0:2)
+  300647140 00:00:00.647 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  300647140 00:00:00.647 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  300647140 00:00:00.647 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  300648420 00:00:00.648 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  300648420 status push: "transmit=11,d841,122,ffff"
+  300648420 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=648420 NextStTime=+129
+  300648548 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=648548 NextStTime=+40
+  300648588 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=648588 NextStTime=+2209
+  300650796 00:00:00.650 [D] SubMac--------: RadioState: Transmit -> Receive
+  300650796 00:00:00.650 [D] Mac-----------: ==============================[TX len=063]==============================
+  300650796 00:00:00.650 [D] Mac-----------: | 41 D8 7A CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A.z......_.5.... |
+  300650796 00:00:00.650 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 8A | C7 00 15 00 00 00 00 00 | ;..MLML......... |
+  300650796 00:00:00.650 [D] Mac-----------: | 00 00 00 01 EF 02 D0 6A | 4D 8F 31 D8 4E 5F BE 0D | .......jM.1.N_.. |
+  300650796 00:00:00.650 [D] Mac-----------: | 64 B9 A4 9C AD 13 44 1E | FE 25 FE A6 FB BB 53    | d.....D..%....S  |
+  300650796 00:00:00.650 [D] Mac-----------: ------------------------------------------------------------------------
+  300650796 00:00:00.650 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  300650796 00:00:00.650 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:8ac7, ecn:no, to:0xffff, sec:no, prio:net
+  300650796 00:00:00.650 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  300650796 00:00:00.650 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+  300650796 00:00:00.650 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  300650796 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=650796 NextStTime=+40
+  300650836 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=650836 NextStTime=+600
+  300651436 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=651436 NextStTime=+0
+  301397000 00:00:01.397 [I] Mle-----------: Send Parent Request to routers (ff02:0:0:0:0:0:0:2)
+  301397000 00:00:01.397 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  301397000 00:00:01.397 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  301397000 00:00:01.397 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  301398920 00:00:01.398 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  301398920 status push: "transmit=11,d841,123,ffff"
+  301398920 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=1398920 NextStTime=+129
+  301399048 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=1399048 NextStTime=+40
+  301399088 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=1399088 NextStTime=+2209
+  301401296 00:00:01.401 [D] SubMac--------: RadioState: Transmit -> Receive
+  301401296 00:00:01.401 [D] Mac-----------: ==============================[TX len=063]==============================
+  301401296 00:00:01.401 [D] Mac-----------: | 41 D8 7B CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A.{......_.5.... |
+  301401296 00:00:01.401 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 76 | 4A 00 15 01 00 00 00 00 | ;..MLMLvJ....... |
+  301401296 00:00:01.401 [D] Mac-----------: | 00 00 00 01 10 85 F8 D6 | 05 0C 5A BB 86 D8 41 4D | ..........Z...AM |
+  301401296 00:00:01.401 [D] Mac-----------: | 9A 72 65 17 B8 C6 CB B8 | 34 88 16 D0 BA B0 B7    | .re.....4......  |
+  301401296 00:00:01.401 [D] Mac-----------: ------------------------------------------------------------------------
+  301401296 00:00:01.401 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  301401296 00:00:01.401 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:764a, ecn:no, to:0xffff, sec:no, prio:net
+  301401296 00:00:01.401 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  301401296 00:00:01.401 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+  301401296 00:00:01.401 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  301401296 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=1401296 NextStTime=+40
+  301401336 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=1401336 NextStTime=+600
+  301401936 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=1401936 NextStTime=+0
+  302147000 00:00:02.147 [I] Mle-----------: Send Parent Request to routers and REEDs (ff02:0:0:0:0:0:0:2)
+  302147000 00:00:02.147 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  302147000 00:00:02.147 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  302147000 00:00:02.147 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  302147000 00:00:02.147 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  302147000 status push: "transmit=11,d841,124,ffff"
+  302147000 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=2147000 NextStTime=+129
+  302147128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=2147128 NextStTime=+40
+  302147168 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=2147168 NextStTime=+2209
+  302149376 00:00:02.149 [D] SubMac--------: RadioState: Transmit -> Receive
+  302149376 00:00:02.149 [D] Mac-----------: ==============================[TX len=063]==============================
+  302149376 00:00:02.149 [D] Mac-----------: | 41 D8 7C CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A.|......_.5.... |
+  302149376 00:00:02.149 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C A0 | DC 00 15 02 00 00 00 00 | ;..MLML......... |
+  302149376 00:00:02.149 [D] Mac-----------: | 00 00 00 01 EA AD 8A B2 | 99 20 21 F8 73 B5 9C 76 | ......... !.s..v |
+  302149376 00:00:02.149 [D] Mac-----------: | 11 3D B1 8D 7A BF FE CB | 30 B7 E8 CC 92 55 91    | .=..z...0....U.  |
+  302149376 00:00:02.149 [D] Mac-----------: ------------------------------------------------------------------------
+  302149376 00:00:02.149 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  302149376 00:00:02.149 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:a0dc, ecn:no, to:0xffff, sec:no, prio:net
+  302149376 00:00:02.149 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  302149376 00:00:02.149 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+  302149376 00:00:02.149 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  302149376 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=2149376 NextStTime=+40
+  302149416 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=2149416 NextStTime=+600
+  302150016 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=2150016 NextStTime=+0
+  303397000 00:00:03.397 [I] Mle-----------: Send Parent Request to routers and REEDs (ff02:0:0:0:0:0:0:2)
+  303397000 00:00:03.397 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  303397000 00:00:03.397 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  303397000 00:00:03.397 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  303397960 00:00:03.397 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  303397960 status push: "transmit=11,d841,125,ffff"
+  303397960 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=3397960 NextStTime=+129
+  303398088 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=3398088 NextStTime=+40
+  303398128 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=3398128 NextStTime=+2209
+  303400336 00:00:03.400 [D] SubMac--------: RadioState: Transmit -> Receive
+  303400336 00:00:03.400 [D] Mac-----------: ==============================[TX len=063]==============================
+  303400336 00:00:03.400 [D] Mac-----------: | 41 D8 7D CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A.}......_.5.... |
+  303400336 00:00:03.400 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 58 | 11 00 15 03 00 00 00 00 | ;..MLMLX........ |
+  303400336 00:00:03.400 [D] Mac-----------: | 00 00 00 01 96 D1 AE 02 | 20 32 E1 FC C9 9C E8 E8 | ........ 2...... |
+  303400336 00:00:03.400 [D] Mac-----------: | EB C9 19 E3 AC B3 F3 E3 | EB 64 12 95 56 3E 7A    | .........d..V>z  |
+  303400336 00:00:03.400 [D] Mac-----------: ------------------------------------------------------------------------
+  303400336 00:00:03.400 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  303400336 00:00:03.400 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:5811, ecn:no, to:0xffff, sec:no, prio:net
+  303400336 00:00:03.400 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  303400336 00:00:03.400 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+  303400336 00:00:03.400 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  303400336 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=3400336 NextStTime=+40
+  303400376 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=3400376 NextStTime=+600
+  303400976 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=3400976 NextStTime=+0
+  304647000 00:00:04.647 [I] Mle-----------: Send Parent Request to routers and REEDs (ff02:0:0:0:0:0:0:2)
+  304647000 00:00:04.647 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  304647000 00:00:04.647 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  304647000 00:00:04.647 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  304647320 00:00:04.647 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  304647320 status push: "transmit=11,d841,126,ffff"
+  304647320 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=4647320 NextStTime=+129
+  304647448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=4647448 NextStTime=+40
+  304647488 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=4647488 NextStTime=+2209
+  304649696 00:00:04.649 [D] SubMac--------: RadioState: Transmit -> Receive
+  304649696 00:00:04.649 [D] Mac-----------: ==============================[TX len=063]==============================
+  304649696 00:00:04.649 [D] Mac-----------: | 41 D8 7E CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A.~......_.5.... |
+  304649696 00:00:04.649 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C AC | 12 00 15 04 00 00 00 00 | ;..MLML......... |
+  304649696 00:00:04.649 [D] Mac-----------: | 00 00 00 01 6E 17 3E C4 | CB 76 AE 1E 53 89 74 39 | ....n.>..v..S.t9 |
+  304649696 00:00:04.649 [D] Mac-----------: | 0C A2 39 A7 9B 20 2C 7E | 98 10 C2 45 9C 6C 91    | ..9.. ,~...E.l.  |
+  304649696 00:00:04.649 [D] Mac-----------: ------------------------------------------------------------------------
+  304649696 00:00:04.649 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  304649696 00:00:04.649 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:ac12, ecn:no, to:0xffff, sec:no, prio:net
+  304649696 00:00:04.649 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  304649696 00:00:04.649 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+  304649696 00:00:04.649 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  304649696 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=4649696 NextStTime=+40
+  304649736 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=4649736 NextStTime=+600
+  304650336 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=4650336 NextStTime=+0
+  305897000 00:00:05.897 [I] Mle-----------: Send Parent Request to routers and REEDs (ff02:0:0:0:0:0:0:2)
+  305897000 00:00:05.897 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  305897000 00:00:05.897 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  305897000 00:00:05.897 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  305897320 00:00:05.897 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  305897320 status push: "transmit=11,d841,127,ffff"
+  305897320 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=5897320 NextStTime=+129
+  305897448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=5897448 NextStTime=+40
+  305897488 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=5897488 NextStTime=+2209
+  305899696 00:00:05.899 [D] SubMac--------: RadioState: Transmit -> Receive
+  305899696 00:00:05.899 [D] Mac-----------: ==============================[TX len=063]==============================
+  305899696 00:00:05.899 [D] Mac-----------: | 41 D8 7F CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  305899696 00:00:05.899 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 30 | 56 00 15 05 00 00 00 00 | ;..MLML0V....... |
+  305899696 00:00:05.899 [D] Mac-----------: | 00 00 00 01 5B 64 6A 2F | 9C 1C FF 81 C4 DA 98 C9 | ....[dj/........ |
+  305899696 00:00:05.899 [D] Mac-----------: | 3F 4A E2 8D E9 2E 96 F6 | 90 61 EF B6 CE EB D8    | ?J.......a.....  |
+  305899696 00:00:05.899 [D] Mac-----------: ------------------------------------------------------------------------
+  305899696 00:00:05.899 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  305899696 00:00:05.899 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:3056, ecn:no, to:0xffff, sec:no, prio:net
+  305899696 00:00:05.899 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  305899696 00:00:05.899 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+  305899696 00:00:05.899 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  305899696 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=5899696 NextStTime=+40
+  305899736 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=5899736 NextStTime=+600
+  305900336 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=5900336 NextStTime=+0
+  307147000 00:00:07.147 [I] Mle-----------: AttachState ParentReq -> Idle
+  307147000 00:00:07.147 [N] RouterTable---: Allocate router id 16
+  307147000 00:00:07.147 [N] Mle-----------: RLOC16 fffe -> 4000
+  307147000 status push: "rloc16=16384"
+  307147000 set node RLOC16: fffe -> 4000
+  307147000 00:00:07.147 [D] SubMac--------: RadioShortAddress: 0x4000
+  307147000 00:00:07.147 [N] Mle-----------: Role detached -> leader
+  307147000 00:00:07.147 [N] Mle-----------: Partition ID 0x190cef7a
+  307147000 00:00:07.147 [I] RouterTable---: Route table changed [ self+ ]
+  307147000 00:00:07.147 [I] RouterTable---: Route table
+  307147000 00:00:07.147 [I] RouterTable---:     16 0x4000 - me - leader
+  307147000 00:00:07.147 [I] Notifier------: StateChanged (0x100012a5) [Ip6+ Role Rloc+ PartitionId NetData Ip6Mult+ ActDset]
+  307147000 00:00:07.147 [I] Settings------: Saved NetworkInfo {rloc:0x4000, extaddr:bab20835f75f8b16, role:leader, mode:0x0f, version:5, keyseq:0x0, ...
+  307147000 00:00:07.147 [I] Settings------: ... pid:0x190cef7a, mlecntr:0x3ef, maccntr:0x3e8, mliid:3b3e66131d2dfc22}
+  307147000 00:00:07.147 [D] Mle-----------: Store Network Information
+  307147000 00:00:07.147 [I] Mle-----------: Send Data Response (ff02:0:0:0:0:0:0:1)
+  307147000 00:00:07.147 [I] Settings------: Re-saved NetworkInfo {rloc:0x4000, extaddr:bab20835f75f8b16, role:leader, mode:0x0f, version:5, keyseq:0x0, ...
+  307147000 00:00:07.147 [I] Settings------: ... pid:0x190cef7a, mlecntr:0x3ef, maccntr:0x3e8, mliid:3b3e66131d2dfc22}
+  307147000 00:00:07.147 [D] Mle-----------: Store Network Information
+  307147000 00:00:07.147 [I] AnnounceSender: Started
+  307147000 status push: "role=4"
+  307147000 status push: "parid=190cef7a"
+  307147000 00:00:07.147 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  307147000 00:00:07.147 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  307147000 00:00:07.147 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  307147960 00:00:07.147 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  307147960 status push: "transmit=11,d841,128,ffff"
+  307147960 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=7147960 NextStTime=+129
+  307148088 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=7148088 NextStTime=+40
+  307148128 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=7148128 NextStTime=+2593
+  307150720 00:00:07.150 [D] SubMac--------: RadioState: Transmit -> Receive
+  307150720 00:00:07.150 [D] Mac-----------: ==============================[TX len=075]==============================
+  307150720 00:00:07.150 [D] Mac-----------: | 41 D8 80 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  307150720 00:00:07.150 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 39 | 5C 00 15 06 00 00 00 00 | ;..MLML9\....... |
+  307150720 00:00:07.150 [D] Mac-----------: | 00 00 00 01 A3 21 D7 EF | C9 A4 06 6F F6 57 F6 73 | .....!.....o.W.s |
+  307150720 00:00:07.150 [D] Mac-----------: | 77 D7 B3 33 D5 4A 2D 10 | 21 29 15 43 7E D6 97 83 | w..3.J-.!).C~... |
+  307150720 00:00:07.150 [D] Mac-----------: | 4D FA 9B C1 A1 46 AB C2 | A9 0A 7A                | M....F....z      |
+  307150720 00:00:07.150 [D] Mac-----------: ------------------------------------------------------------------------
+  307150720 00:00:07.150 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  307150720 00:00:07.150 [I] MeshForwarder-: Sent IPv6 UDP msg, len:96, chksum:395c, ecn:no, to:0xffff, sec:no, prio:net
+  307150720 00:00:07.150 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  307150720 00:00:07.150 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  307150720 00:00:07.150 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  307150720 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=7150720 NextStTime=+40
+  307150760 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=7150760 NextStTime=+600
+  307151360 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=7151360 NextStTime=+0
+  307953360 00:00:07.953 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  307953360 00:00:07.953 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  307953360 00:00:07.953 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  307953360 00:00:07.953 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  307954000 00:00:07.954 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  307954000 status push: "transmit=11,d841,129,ffff"
+  307954000 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=7954000 NextStTime=+129
+  307954128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=7954128 NextStTime=+40
+  307954168 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=7954168 NextStTime=+2401
+  307956568 00:00:07.956 [D] SubMac--------: RadioState: Transmit -> Receive
+  307956568 00:00:07.956 [D] Mac-----------: ==============================[TX len=069]==============================
+  307956568 00:00:07.956 [D] Mac-----------: | 41 D8 81 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  307956568 00:00:07.956 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 34 | 3E 00 15 07 00 00 00 00 | ;..MLML4>....... |
+  307956568 00:00:07.956 [D] Mac-----------: | 00 00 00 01 DF CF B1 80 | 88 4B E9 41 68 78 71 FD | .........K.Ahxq. |
+  307956568 00:00:07.956 [D] Mac-----------: | 20 41 DB 37 40 37 0B E6 | 19 E0 8F 01 C0 14 48 F4 |  A.7@7........H. |
+  307956568 00:00:07.956 [D] Mac-----------: | 02 12 E3 2D 3D          |                         | ...-=            |
+  307956568 00:00:07.956 [D] Mac-----------: ------------------------------------------------------------------------
+  307956568 00:00:07.956 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  307956568 00:00:07.956 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:343e, ecn:no, to:0xffff, sec:no, prio:net
+  307956568 00:00:07.956 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  307956568 00:00:07.956 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  307956568 00:00:07.956 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  307956568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=7956568 NextStTime=+40
+  307956608 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=7956608 NextStTime=+600
+  307957208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=7957208 NextStTime=+0
+  310134000 00:00:10.134 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  310134000 00:00:10.134 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  310134000 00:00:10.134 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  310134000 00:00:10.134 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  310134640 00:00:10.134 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  310134640 status push: "transmit=11,d841,130,ffff"
+  310134640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=10134640 NextStTime=+129
+  310134768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=10134768 NextStTime=+40
+  310134808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=10134808 NextStTime=+2401
+  310137208 00:00:10.137 [D] SubMac--------: RadioState: Transmit -> Receive
+  310137208 00:00:10.137 [D] Mac-----------: ==============================[TX len=069]==============================
+  310137208 00:00:10.137 [D] Mac-----------: | 41 D8 82 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  310137208 00:00:10.137 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C E9 | 72 00 15 08 00 00 00 00 | ;..MLML.r....... |
+  310137208 00:00:10.137 [D] Mac-----------: | 00 00 00 01 48 14 76 D0 | C9 61 0E 2A 89 47 03 44 | ....H.v..a.*.G.D |
+  310137208 00:00:10.137 [D] Mac-----------: | 93 BE 77 A0 DB DE A2 E1 | D0 31 71 4A F4 8D 60 D8 | ..w......1qJ..`. |
+  310137208 00:00:10.137 [D] Mac-----------: | 91 32 B2 88 7C          |                         | .2..|            |
+  310137208 00:00:10.137 [D] Mac-----------: ------------------------------------------------------------------------
+  310137208 00:00:10.137 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  310137208 00:00:10.137 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:e972, ecn:no, to:0xffff, sec:no, prio:net
+  310137208 00:00:10.137 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  310137208 00:00:10.137 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  310137208 00:00:10.137 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  310137208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=10137208 NextStTime=+40
+  310137248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=10137248 NextStTime=+600
+  310137848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=10137848 NextStTime=+0
+  313221000 00:00:13.221 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  313221000 00:00:13.221 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  313221000 00:00:13.221 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  313221000 00:00:13.221 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  313223240 00:00:13.223 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  313223240 status push: "transmit=11,d841,131,ffff"
+  313223240 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=13223240 NextStTime=+129
+  313223368 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=13223368 NextStTime=+40
+  313223408 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=13223408 NextStTime=+2401
+  313225808 00:00:13.225 [D] SubMac--------: RadioState: Transmit -> Receive
+  313225808 00:00:13.225 [D] Mac-----------: ==============================[TX len=069]==============================
+  313225808 00:00:13.225 [D] Mac-----------: | 41 D8 83 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  313225808 00:00:13.225 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 85 | 4F 00 15 09 00 00 00 00 | ;..MLML.O....... |
+  313225808 00:00:13.225 [D] Mac-----------: | 00 00 00 01 C3 4F 9D 33 | 13 ED 46 85 74 91 E1 DD | .....O.3..F.t... |
+  313225808 00:00:13.225 [D] Mac-----------: | FA F9 23 62 6E D1 7B 02 | 18 5B 7C 94 93 25 97 8D | ..#bn.{..[|..%.. |
+  313225808 00:00:13.225 [D] Mac-----------: | BA 5C 17 35 E0          |                         | .\.5.            |
+  313225808 00:00:13.225 [D] Mac-----------: ------------------------------------------------------------------------
+  313225808 00:00:13.225 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  313225808 00:00:13.225 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:854f, ecn:no, to:0xffff, sec:no, prio:net
+  313225808 00:00:13.225 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  313225808 00:00:13.225 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  313225808 00:00:13.225 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  313225808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=13225808 NextStTime=+40
+  313225848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=13225848 NextStTime=+600
+  313226448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=13226448 NextStTime=+0
+  322092000 00:00:22.092 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  322092000 00:00:22.092 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  322092000 00:00:22.092 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  322092000 00:00:22.092 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  322092960 00:00:22.092 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  322092960 status push: "transmit=11,d841,132,ffff"
+  322092960 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=22092960 NextStTime=+129
+  322093088 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=22093088 NextStTime=+40
+  322093128 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=22093128 NextStTime=+2401
+  322095528 00:00:22.095 [D] SubMac--------: RadioState: Transmit -> Receive
+  322095528 00:00:22.095 [D] Mac-----------: ==============================[TX len=069]==============================
+  322095528 00:00:22.095 [D] Mac-----------: | 41 D8 84 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  322095528 00:00:22.095 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C A7 | DE 00 15 0A 00 00 00 00 | ;..MLML......... |
+  322095528 00:00:22.095 [D] Mac-----------: | 00 00 00 01 D6 58 54 E5 | 8E E4 B8 2F 66 D3 8B F2 | .....XT..../f... |
+  322095528 00:00:22.095 [D] Mac-----------: | DE BE A4 B3 B0 DA F8 DC | 45 C8 96 65 91 5E 45 FD | ........E..e.^E. |
+  322095528 00:00:22.095 [D] Mac-----------: | 6C A4 69 70 22          |                         | l.ip"            |
+  322095528 00:00:22.095 [D] Mac-----------: ------------------------------------------------------------------------
+  322095528 00:00:22.095 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  322095528 00:00:22.095 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:a7de, ecn:no, to:0xffff, sec:no, prio:net
+  322095528 00:00:22.095 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  322095528 00:00:22.095 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  322095528 00:00:22.095 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  322095528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=22095528 NextStTime=+40
+  322095568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=22095568 NextStTime=+600
+  322096168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=22096168 NextStTime=+0
+  331412000 00:00:31.412 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  331412000 00:00:31.412 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  331412000 00:00:31.412 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  331412000 00:00:31.412 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  331412000 00:00:31.412 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  331412000 status push: "transmit=11,d841,133,ffff"
+  331412000 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=31412000 NextStTime=+129
+  331412128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=31412128 NextStTime=+40
+  331412168 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=31412168 NextStTime=+2401
+  331414568 00:00:31.414 [D] SubMac--------: RadioState: Transmit -> Receive
+  331414568 00:00:31.414 [D] Mac-----------: ==============================[TX len=069]==============================
+  331414568 00:00:31.414 [D] Mac-----------: | 41 D8 85 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  331414568 00:00:31.414 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 2B | 38 00 15 0B 00 00 00 00 | ;..MLML+8....... |
+  331414568 00:00:31.414 [D] Mac-----------: | 00 00 00 01 49 6A 1E A7 | 66 BA A5 A1 24 55 56 33 | ....Ij..f...$UV3 |
+  331414568 00:00:31.414 [D] Mac-----------: | E8 29 79 F6 C0 F7 40 8C | C9 B2 5C C0 B3 EF 9D 12 | .)y...@...\..... |
+  331414568 00:00:31.414 [D] Mac-----------: | 55 DC A2 DD 32          |                         | U...2            |
+  331414568 00:00:31.414 [D] Mac-----------: ------------------------------------------------------------------------
+  331414568 00:00:31.414 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  331414568 00:00:31.414 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:2b38, ecn:no, to:0xffff, sec:no, prio:net
+  331414568 00:00:31.414 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  331414568 00:00:31.414 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  331414568 00:00:31.414 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  331414568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=31414568 NextStTime=+40
+  331414608 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=31414608 NextStTime=+600
+  331415208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=31415208 NextStTime=+0
+  340666000 00:00:40.666 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  340666000 00:00:40.666 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  340666000 00:00:40.666 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  340666000 00:00:40.666 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  340666640 00:00:40.666 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  340666640 status push: "transmit=11,d841,134,ffff"
+  340666640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=40666640 NextStTime=+129
+  340666768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=40666768 NextStTime=+40
+  340666808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=40666808 NextStTime=+2401
+  340669208 00:00:40.669 [D] SubMac--------: RadioState: Transmit -> Receive
+  340669208 00:00:40.669 [D] Mac-----------: ==============================[TX len=069]==============================
+  340669208 00:00:40.669 [D] Mac-----------: | 41 D8 86 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  340669208 00:00:40.669 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 57 | 79 00 15 0C 00 00 00 00 | ;..MLMLWy....... |
+  340669208 00:00:40.669 [D] Mac-----------: | 00 00 00 01 94 7A 8A F1 | 45 C3 74 F9 69 71 DA 1A | .....z..E.t.iq.. |
+  340669208 00:00:40.669 [D] Mac-----------: | B9 DE 9F 1C 23 61 58 6A | EF CB 5D 7E 97 3C 5A 60 | ....#aXj..]~.<Z` |
+  340669208 00:00:40.669 [D] Mac-----------: | EA 5B 65 90 D9          |                         | .[e..            |
+  340669208 00:00:40.669 [D] Mac-----------: ------------------------------------------------------------------------
+  340669208 00:00:40.669 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  340669208 00:00:40.669 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:5779, ecn:no, to:0xffff, sec:no, prio:net
+  340669208 00:00:40.669 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  340669208 00:00:40.669 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  340669208 00:00:40.669 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  340669208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=40669208 NextStTime=+40
+  340669248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=40669248 NextStTime=+600
+  340669848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=40669848 NextStTime=+0
+  354951000 00:00:54.951 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  354951000 00:00:54.951 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  354951000 00:00:54.951 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  354951000 00:00:54.951 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  354952280 00:00:54.952 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  354952280 status push: "transmit=11,d841,135,ffff"
+  354952280 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=54952280 NextStTime=+129
+  354952408 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=54952408 NextStTime=+40
+  354952448 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=54952448 NextStTime=+2401
+  354954848 00:00:54.954 [D] SubMac--------: RadioState: Transmit -> Receive
+  354954848 00:00:54.954 [D] Mac-----------: ==============================[TX len=069]==============================
+  354954848 00:00:54.954 [D] Mac-----------: | 41 D8 87 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  354954848 00:00:54.954 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 28 | 63 00 15 0D 00 00 00 00 | ;..MLML(c....... |
+  354954848 00:00:54.954 [D] Mac-----------: | 00 00 00 01 58 C3 D0 36 | DB EC 02 5E 8A CE 25 0C | ....X..6...^..%. |
+  354954848 00:00:54.954 [D] Mac-----------: | E2 FC C4 24 7A 82 B9 40 | EB F6 DD 03 26 6C F6 1B | ...$z..@....&l.. |
+  354954848 00:00:54.954 [D] Mac-----------: | 8F 65 90 36 C1          |                         | .e.6.            |
+  354954848 00:00:54.954 [D] Mac-----------: ------------------------------------------------------------------------
+  354954848 00:00:54.954 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  354954848 00:00:54.954 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:2863, ecn:no, to:0xffff, sec:no, prio:net
+  354954848 00:00:54.954 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  354954848 00:00:54.954 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  354954848 00:00:54.954 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  354954848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=54954848 NextStTime=+40
+  354954888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=54954888 NextStTime=+600
+  354955488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=54955488 NextStTime=+0
+  366096000 00:01:06.096 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  366096000 00:01:06.096 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  366096000 00:01:06.096 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  366096000 00:01:06.096 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  366096640 00:01:06.096 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  366096640 status push: "transmit=11,d841,136,ffff"
+  366096640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=66096640 NextStTime=+129
+  366096768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=66096768 NextStTime=+40
+  366096808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=66096808 NextStTime=+2401
+  366099208 00:01:06.099 [D] SubMac--------: RadioState: Transmit -> Receive
+  366099208 00:01:06.099 [D] Mac-----------: ==============================[TX len=069]==============================
+  366099208 00:01:06.099 [D] Mac-----------: | 41 D8 88 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  366099208 00:01:06.099 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C A8 | 63 00 15 0E 00 00 00 00 | ;..MLML.c....... |
+  366099208 00:01:06.099 [D] Mac-----------: | 00 00 00 01 E3 C1 42 92 | 72 4D EF 76 EA 76 15 02 | ......B.rM.v.v.. |
+  366099208 00:01:06.099 [D] Mac-----------: | 2E A0 85 05 67 3A 2C 79 | 98 D1 87 37 24 33 58 EE | ....g:,y...7$3X. |
+  366099208 00:01:06.099 [D] Mac-----------: | 82 56 A8 12 BF          |                         | .V...            |
+  366099208 00:01:06.099 [D] Mac-----------: ------------------------------------------------------------------------
+  366099208 00:01:06.099 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  366099208 00:01:06.099 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:a863, ecn:no, to:0xffff, sec:no, prio:net
+  366099208 00:01:06.099 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  366099208 00:01:06.099 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  366099208 00:01:06.099 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  366099208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=66099208 NextStTime=+40
+  366099248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=66099248 NextStTime=+600
+  366099848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=66099848 NextStTime=+0
+  379641000 00:01:19.641 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  379641000 00:01:19.641 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  379641000 00:01:19.641 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  379641000 00:01:19.641 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  379641640 00:01:19.641 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  379641640 status push: "transmit=11,d841,137,ffff"
+  379641640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=79641640 NextStTime=+129
+  379641768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=79641768 NextStTime=+40
+  379641808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=79641808 NextStTime=+2401
+  379644208 00:01:19.644 [D] SubMac--------: RadioState: Transmit -> Receive
+  379644208 00:01:19.644 [D] Mac-----------: ==============================[TX len=069]==============================
+  379644208 00:01:19.644 [D] Mac-----------: | 41 D8 89 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  379644208 00:01:19.644 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C D5 | 86 00 15 0F 00 00 00 00 | ;..MLML......... |
+  379644208 00:01:19.644 [D] Mac-----------: | 00 00 00 01 13 CF A0 8E | 99 F1 4D 76 A5 76 EB A6 | ..........Mv.v.. |
+  379644208 00:01:19.644 [D] Mac-----------: | 22 59 E7 EE 6F 54 84 F8 | E0 E8 0A 9A 8A 97 1E D2 | "Y..oT.......... |
+  379644208 00:01:19.644 [D] Mac-----------: | 95 D9 1D 01 74          |                         | ....t            |
+  379644208 00:01:19.644 [D] Mac-----------: ------------------------------------------------------------------------
+  379644208 00:01:19.644 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  379644208 00:01:19.644 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:d586, ecn:no, to:0xffff, sec:no, prio:net
+  379644208 00:01:19.644 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  379644208 00:01:19.644 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  379644208 00:01:19.644 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  379644208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=79644208 NextStTime=+40
+  379644248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=79644248 NextStTime=+600
+  379644848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=79644848 NextStTime=+0
+  388527000 00:01:28.527 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  388527000 00:01:28.527 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  388527000 00:01:28.527 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  388527000 00:01:28.527 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  388528280 00:01:28.528 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  388528280 status push: "transmit=11,d841,138,ffff"
+  388528280 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=88528280 NextStTime=+129
+  388528408 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=88528408 NextStTime=+40
+  388528448 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=88528448 NextStTime=+2401
+  388530848 00:01:28.530 [D] SubMac--------: RadioState: Transmit -> Receive
+  388530848 00:01:28.530 [D] Mac-----------: ==============================[TX len=069]==============================
+  388530848 00:01:28.530 [D] Mac-----------: | 41 D8 8A CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  388530848 00:01:28.530 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 45 | D2 00 15 10 00 00 00 00 | ;..MLMLE........ |
+  388530848 00:01:28.530 [D] Mac-----------: | 00 00 00 01 1D 00 E6 91 | F3 EE 29 12 53 7F 2E F2 | ..........).S... |
+  388530848 00:01:28.530 [D] Mac-----------: | 06 78 84 85 AE 43 A2 4F | EE 1E 42 B7 39 43 31 DE | .x...C.O..B.9C1. |
+  388530848 00:01:28.530 [D] Mac-----------: | B9 3F 54 00 B9          |                         | .?T..            |
+  388530848 00:01:28.530 [D] Mac-----------: ------------------------------------------------------------------------
+  388530848 00:01:28.530 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  388530848 00:01:28.530 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:45d2, ecn:no, to:0xffff, sec:no, prio:net
+  388530848 00:01:28.530 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  388530848 00:01:28.530 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  388530848 00:01:28.530 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  388530848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=88530848 NextStTime=+40
+  388530888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=88530888 NextStTime=+600
+  388531488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=88531488 NextStTime=+0
+  389130808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=89130808 NextStTime=+2945
+  389133753 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=89133753 NextStTime=+40
+  389133793 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=89133793 NextStTime=+0
+  389141744 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=89141744 NextStTime=+897
+  389142641 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=89142641 NextStTime=+40
+  389142681 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=89142681 NextStTime=+0
+  389147352 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=89147352 NextStTime=+353
+  389147704 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=89147704 NextStTime=+40
+  389147744 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=89147744 NextStTime=+0
+  402865000 00:01:42.865 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  402865000 00:01:42.865 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  402865000 00:01:42.865 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  402865000 00:01:42.865 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  402865320 00:01:42.865 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  402865320 status push: "transmit=11,d841,139,ffff"
+  402865320 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=102865320 NextStTime=+129
+  402865448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=102865448 NextStTime=+40
+  402865488 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=102865488 NextStTime=+2401
+  402867888 00:01:42.867 [D] SubMac--------: RadioState: Transmit -> Receive
+  402867888 00:01:42.867 [D] Mac-----------: ==============================[TX len=069]==============================
+  402867888 00:01:42.867 [D] Mac-----------: | 41 D8 8B CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  402867888 00:01:42.867 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 09 | 72 00 15 11 00 00 00 00 | ;..MLML.r....... |
+  402867888 00:01:42.867 [D] Mac-----------: | 00 00 00 01 CD C3 90 BF | D1 46 37 2E CE 0E E4 93 | .........F7..... |
+  402867888 00:01:42.867 [D] Mac-----------: | DB 74 BD 6C AC B8 3E 92 | E9 08 FE 9F F1 C2 2D 64 | .t.l..>.......-d |
+  402867888 00:01:42.867 [D] Mac-----------: | EE 6F F5 60 B7          |                         | .o.`.            |
+  402867888 00:01:42.867 [D] Mac-----------: ------------------------------------------------------------------------
+  402867888 00:01:42.867 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  402867888 00:01:42.867 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:0972, ecn:no, to:0xffff, sec:no, prio:net
+  402867888 00:01:42.867 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  402867888 00:01:42.867 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  402867888 00:01:42.867 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  402867888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=102867888 NextStTime=+40
+  402867928 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=102867928 NextStTime=+600
+  402868528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=102868528 NextStTime=+0
+  415010000 00:01:55.010 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  415010000 00:01:55.010 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  415010000 00:01:55.010 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  415010000 00:01:55.010 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  415012240 00:01:55.012 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  415012240 status push: "transmit=11,d841,140,ffff"
+  415012240 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=115012240 NextStTime=+129
+  415012368 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=115012368 NextStTime=+40
+  415012408 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=115012408 NextStTime=+2401
+  415014808 00:01:55.014 [D] SubMac--------: RadioState: Transmit -> Receive
+  415014808 00:01:55.014 [D] Mac-----------: ==============================[TX len=069]==============================
+  415014808 00:01:55.014 [D] Mac-----------: | 41 D8 8C CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  415014808 00:01:55.014 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 51 | 36 00 15 12 00 00 00 00 | ;..MLMLQ6....... |
+  415014808 00:01:55.014 [D] Mac-----------: | 00 00 00 01 C1 D8 B6 74 | 4F CB 38 F4 B8 FB 14 98 | .......tO.8..... |
+  415014808 00:01:55.014 [D] Mac-----------: | C4 A0 81 14 A9 16 55 86 | 0E 61 2D C5 6C AD 1A 83 | ......U..a-.l... |
+  415014808 00:01:55.014 [D] Mac-----------: | 1B 75 D2 33 85          |                         | .u.3.            |
+  415014808 00:01:55.014 [D] Mac-----------: ------------------------------------------------------------------------
+  415014808 00:01:55.014 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  415014808 00:01:55.014 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:5136, ecn:no, to:0xffff, sec:no, prio:net
+  415014808 00:01:55.014 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  415014808 00:01:55.014 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  415014808 00:01:55.014 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  415014808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=115014808 NextStTime=+40
+  415014848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=115014848 NextStTime=+600
+  415015448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=115015448 NextStTime=+0
+  426230000 00:02:06.230 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  426230000 00:02:06.230 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  426230000 00:02:06.230 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  426230000 00:02:06.230 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  426230000 00:02:06.230 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  426230000 status push: "transmit=11,d841,141,ffff"
+  426230000 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=126230000 NextStTime=+129
+  426230128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=126230128 NextStTime=+40
+  426230168 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=126230168 NextStTime=+2401
+  426232568 00:02:06.232 [D] SubMac--------: RadioState: Transmit -> Receive
+  426232568 00:02:06.232 [D] Mac-----------: ==============================[TX len=069]==============================
+  426232568 00:02:06.232 [D] Mac-----------: | 41 D8 8D CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  426232568 00:02:06.232 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C C2 | F1 00 15 13 00 00 00 00 | ;..MLML......... |
+  426232568 00:02:06.232 [D] Mac-----------: | 00 00 00 01 81 AB F0 58 | 31 80 73 3F 34 F6 DF E9 | .......X1.s?4... |
+  426232568 00:02:06.232 [D] Mac-----------: | EA 38 3A 91 7F C5 F1 DD | 1B 56 C1 F3 83 65 90 54 | .8:......V...e.T |
+  426232568 00:02:06.232 [D] Mac-----------: | 38 37 1D 6A 1C          |                         | 87.j.            |
+  426232568 00:02:06.232 [D] Mac-----------: ------------------------------------------------------------------------
+  426232568 00:02:06.232 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  426232568 00:02:06.232 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:c2f1, ecn:no, to:0xffff, sec:no, prio:net
+  426232568 00:02:06.232 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  426232568 00:02:06.232 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  426232568 00:02:06.232 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  426232568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=126232568 NextStTime=+40
+  426232608 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=126232608 NextStTime=+600
+  426233208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=126233208 NextStTime=+0
+  441579000 00:02:21.579 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  441579000 00:02:21.579 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  441579000 00:02:21.579 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  441579000 00:02:21.579 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  441581240 00:02:21.581 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  441581240 status push: "transmit=11,d841,142,ffff"
+  441581240 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=141581240 NextStTime=+129
+  441581368 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=141581368 NextStTime=+40
+  441581408 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=141581408 NextStTime=+2401
+  441583808 00:02:21.583 [D] SubMac--------: RadioState: Transmit -> Receive
+  441583808 00:02:21.583 [D] Mac-----------: ==============================[TX len=069]==============================
+  441583808 00:02:21.583 [D] Mac-----------: | 41 D8 8E CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  441583808 00:02:21.583 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 94 | 77 00 15 14 00 00 00 00 | ;..MLML.w....... |
+  441583808 00:02:21.583 [D] Mac-----------: | 00 00 00 01 B0 8B FB 50 | DF D7 6A F2 4A DE 19 16 | .......P..j.J... |
+  441583808 00:02:21.583 [D] Mac-----------: | 7C 87 1D 53 7A BF 7D 92 | 8D A9 9C 26 97 D8 0A E9 | |..Sz.}....&.... |
+  441583808 00:02:21.583 [D] Mac-----------: | B9 20 10 B2 2D          |                         | . ..-            |
+  441583808 00:02:21.583 [D] Mac-----------: ------------------------------------------------------------------------
+  441583808 00:02:21.583 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  441583808 00:02:21.583 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:9477, ecn:no, to:0xffff, sec:no, prio:net
+  441583808 00:02:21.583 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  441583808 00:02:21.583 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  441583808 00:02:21.583 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  441583808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=141583808 NextStTime=+40
+  441583848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=141583848 NextStTime=+600
+  441584448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=141584448 NextStTime=+0
+  449198000 00:02:29.198 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  449198000 00:02:29.198 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  449198000 00:02:29.198 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  449198000 00:02:29.198 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  449198320 00:02:29.198 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  449198320 status push: "transmit=11,d841,143,ffff"
+  449198320 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=149198320 NextStTime=+129
+  449198448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=149198448 NextStTime=+40
+  449198488 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=149198488 NextStTime=+2401
+  449200888 00:02:29.200 [D] SubMac--------: RadioState: Transmit -> Receive
+  449200888 00:02:29.200 [D] Mac-----------: ==============================[TX len=069]==============================
+  449200888 00:02:29.200 [D] Mac-----------: | 41 D8 8F CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  449200888 00:02:29.200 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 8D | A9 00 15 15 00 00 00 00 | ;..MLML......... |
+  449200888 00:02:29.200 [D] Mac-----------: | 00 00 00 01 74 DB 6C B9 | 65 C3 C7 67 2A 29 7B 1D | ....t.l.e..g*){. |
+  449200888 00:02:29.200 [D] Mac-----------: | 19 81 0E 5A AA BD 56 B2 | DD 55 A2 11 66 43 BD 1F | ...Z..V..U..fC.. |
+  449200888 00:02:29.200 [D] Mac-----------: | D5 62 FB 6A B6          |                         | .b.j.            |
+  449200888 00:02:29.200 [D] Mac-----------: ------------------------------------------------------------------------
+  449200888 00:02:29.200 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  449200888 00:02:29.200 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:8da9, ecn:no, to:0xffff, sec:no, prio:net
+  449200888 00:02:29.200 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  449200888 00:02:29.200 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  449200888 00:02:29.200 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  449200888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=149200888 NextStTime=+40
+  449200928 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=149200928 NextStTime=+600
+  449201528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=149201528 NextStTime=+0
+  464503000 00:02:44.503 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  464503000 00:02:44.503 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  464503000 00:02:44.503 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  464503000 00:02:44.503 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  464505240 00:02:44.505 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  464505240 status push: "transmit=11,d841,144,ffff"
+  464505240 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=164505240 NextStTime=+129
+  464505368 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=164505368 NextStTime=+40
+  464505408 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=164505408 NextStTime=+2401
+  464507808 00:02:44.507 [D] SubMac--------: RadioState: Transmit -> Receive
+  464507808 00:02:44.507 [D] Mac-----------: ==============================[TX len=069]==============================
+  464507808 00:02:44.507 [D] Mac-----------: | 41 D8 90 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  464507808 00:02:44.507 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 30 | A7 00 15 16 00 00 00 00 | ;..MLML0........ |
+  464507808 00:02:44.507 [D] Mac-----------: | 00 00 00 01 6C 5E 11 25 | EC 76 E5 2B BD 13 25 56 | ....l^.%.v.+..%V |
+  464507808 00:02:44.507 [D] Mac-----------: | 99 92 5E 97 DF DD 7C 1A | AD 73 65 54 16 D1 04 BB | ..^...|..seT.... |
+  464507808 00:02:44.507 [D] Mac-----------: | F2 D4 AC 59 85          |                         | ...Y.            |
+  464507808 00:02:44.507 [D] Mac-----------: ------------------------------------------------------------------------
+  464507808 00:02:44.507 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  464507808 00:02:44.507 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:30a7, ecn:no, to:0xffff, sec:no, prio:net
+  464507808 00:02:44.507 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  464507808 00:02:44.507 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  464507808 00:02:44.507 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  464507808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=164507808 NextStTime=+40
+  464507848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=164507848 NextStTime=+600
+  464508448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=164508448 NextStTime=+0
+  477786000 00:02:57.786 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  477786000 00:02:57.786 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  477786000 00:02:57.786 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  477786000 00:02:57.786 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  477787600 00:02:57.787 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  477787600 status push: "transmit=11,d841,145,ffff"
+  477787600 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=177787600 NextStTime=+129
+  477787728 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=177787728 NextStTime=+40
+  477787768 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=177787768 NextStTime=+2401
+  477790168 00:02:57.790 [D] SubMac--------: RadioState: Transmit -> Receive
+  477790168 00:02:57.790 [D] Mac-----------: ==============================[TX len=069]==============================
+  477790168 00:02:57.790 [D] Mac-----------: | 41 D8 91 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  477790168 00:02:57.790 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 82 | 4B 00 15 17 00 00 00 00 | ;..MLML.K....... |
+  477790168 00:02:57.790 [D] Mac-----------: | 00 00 00 01 76 61 EC 9C | F3 92 E6 26 FD DD A3 88 | ....va.....&.... |
+  477790168 00:02:57.790 [D] Mac-----------: | 4D 62 50 12 95 C0 32 EE | 5F 23 54 63 EF 58 4E 40 | MbP...2._#Tc.XN@ |
+  477790168 00:02:57.790 [D] Mac-----------: | 8E 26 EB 78 0C          |                         | .&.x.            |
+  477790168 00:02:57.790 [D] Mac-----------: ------------------------------------------------------------------------
+  477790168 00:02:57.790 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  477790168 00:02:57.790 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:824b, ecn:no, to:0xffff, sec:no, prio:net
+  477790168 00:02:57.790 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  477790168 00:02:57.790 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  477790168 00:02:57.790 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  477790168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=177790168 NextStTime=+40
+  477790208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=177790208 NextStTime=+600
+  477790808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=177790808 NextStTime=+0
+  480002448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=180002448 NextStTime=+1985
+  480004433 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=180004433 NextStTime=+40
+  480004473 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=180004473 NextStTime=+0
+  480005504 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=180005504 NextStTime=+897
+  480006401 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=180006401 NextStTime=+40
+  480006441 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=180006441 NextStTime=+0
+  480009384 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=180009384 NextStTime=+353
+  480009736 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=180009736 NextStTime=+40
+  480009776 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=180009776 NextStTime=+0
+  481002448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=181002448 NextStTime=+1985
+  481004433 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=181004433 NextStTime=+40
+  481004473 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=181004473 NextStTime=+0
+  481005824 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=181005824 NextStTime=+897
+  481006721 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=181006721 NextStTime=+40
+  481006761 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=181006761 NextStTime=+0
+  481011304 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=181011304 NextStTime=+353
+  481011656 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=181011656 NextStTime=+40
+  481011696 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=181011696 NextStTime=+0
+  482000848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=182000848 NextStTime=+1985
+  482002833 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=182002833 NextStTime=+40
+  482002873 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=182002873 NextStTime=+0
+  482004864 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=182004864 NextStTime=+897
+  482005761 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=182005761 NextStTime=+40
+  482005801 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=182005801 NextStTime=+0
+  482009704 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=182009704 NextStTime=+353
+  482010056 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=182010056 NextStTime=+40
+  482010096 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=182010096 NextStTime=+0
+  484000848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=184000848 NextStTime=+1985
+  484002833 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=184002833 NextStTime=+40
+  484002873 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=184002873 NextStTime=+0
+  484004224 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=184004224 NextStTime=+897
+  484005121 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=184005121 NextStTime=+40
+  484005161 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=184005161 NextStTime=+0
+  484008744 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=184008744 NextStTime=+353
+  484009096 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=184009096 NextStTime=+40
+  484009136 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=184009136 NextStTime=+0
+  486000528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=186000528 NextStTime=+1985
+  486002513 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=186002513 NextStTime=+40
+  486002553 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=186002553 NextStTime=+0
+  486004544 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=186004544 NextStTime=+897
+  486005441 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=186005441 NextStTime=+40
+  486005481 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=186005481 NextStTime=+0
+  486011944 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=186011944 NextStTime=+353
+  486012296 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=186012296 NextStTime=+40
+  486012336 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=186012336 NextStTime=+0
+  487001168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=187001168 NextStTime=+1985
+  487003153 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=187003153 NextStTime=+40
+  487003193 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=187003193 NextStTime=+0
+  487005824 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=187005824 NextStTime=+897
+  487006721 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=187006721 NextStTime=+40
+  487006761 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=187006761 NextStTime=+0
+  487011944 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=187011944 NextStTime=+353
+  487012296 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=187012296 NextStTime=+40
+  487012336 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=187012336 NextStTime=+0
+  487681336 00:03:07.681 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  487681336 00:03:07.681 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  487681336 00:03:07.681 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  487681336 00:03:07.681 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  487683256 00:03:07.683 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  487683256 status push: "transmit=11,d841,146,ffff"
+  487683256 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=187683256 NextStTime=+129
+  487683384 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=187683384 NextStTime=+40
+  487683424 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=187683424 NextStTime=+2401
+  487685824 00:03:07.685 [D] SubMac--------: RadioState: Transmit -> Receive
+  487685824 00:03:07.685 [D] Mac-----------: ==============================[TX len=069]==============================
+  487685824 00:03:07.685 [D] Mac-----------: | 41 D8 92 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  487685824 00:03:07.685 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C F2 | 9D 00 15 18 00 00 00 00 | ;..MLML......... |
+  487685824 00:03:07.685 [D] Mac-----------: | 00 00 00 01 DA FF 54 49 | 2E E6 39 1F EA 7B 97 FA | ......TI..9..{.. |
+  487685824 00:03:07.685 [D] Mac-----------: | BF 33 5E 66 9B 95 CA 39 | B3 DB 20 2A CF EB 90 00 | .3^f...9.. *.... |
+  487685824 00:03:07.685 [D] Mac-----------: | 13 F7 77 87 30          |                         | ..w.0            |
+  487685824 00:03:07.685 [D] Mac-----------: ------------------------------------------------------------------------
+  487685824 00:03:07.685 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  487685824 00:03:07.685 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:f29d, ecn:no, to:0xffff, sec:no, prio:net
+  487685824 00:03:07.685 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  487685824 00:03:07.685 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  487685824 00:03:07.685 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  487685824 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=187685824 NextStTime=+40
+  487685864 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=187685864 NextStTime=+600
+  487686464 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=187686464 NextStTime=+0
+  488002448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=188002448 NextStTime=+1985
+  488004433 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=188004433 NextStTime=+40
+  488004473 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=188004473 NextStTime=+0
+  488005504 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=188005504 NextStTime=+897
+  488006401 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=188006401 NextStTime=+40
+  488006441 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=188006441 NextStTime=+0
+  488009704 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=188009704 NextStTime=+353
+  488010056 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=188010056 NextStTime=+40
+  488010096 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=188010096 NextStTime=+0
+  489002128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=189002128 NextStTime=+1985
+  489004113 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=189004113 NextStTime=+40
+  489004153 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=189004153 NextStTime=+0
+  489006464 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=189006464 NextStTime=+897
+  489007361 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=189007361 NextStTime=+40
+  489007401 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=189007401 NextStTime=+0
+  489010664 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=189010664 NextStTime=+353
+  489011016 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=189011016 NextStTime=+40
+  489011056 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=189011056 NextStTime=+0
+  490001488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=190001488 NextStTime=+1985
+  490003473 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=190003473 NextStTime=+40
+  490003513 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=190003513 NextStTime=+0
+  490004224 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=190004224 NextStTime=+897
+  490005121 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=190005121 NextStTime=+40
+  490005161 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=190005161 NextStTime=+0
+  490008424 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=190008424 NextStTime=+353
+  490008776 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=190008776 NextStTime=+40
+  490008816 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=190008816 NextStTime=+0
+  491001488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=191001488 NextStTime=+1985
+  491003473 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=191003473 NextStTime=+40
+  491003513 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=191003513 NextStTime=+0
+  491004864 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=191004864 NextStTime=+897
+  491005761 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=191005761 NextStTime=+40
+  491005801 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=191005801 NextStTime=+0
+  491108080 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=191108080 NextStTime=+897
+  491108977 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=191108977 NextStTime=+40
+  491109017 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=191109017 NextStTime=+0
+  491111960 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=191111960 NextStTime=+353
+  491112312 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=191112312 NextStTime=+40
+  491112352 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=191112352 NextStTime=+0
+  492000848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192000848 NextStTime=+1985
+  492002833 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192002833 NextStTime=+40
+  492002873 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192002873 NextStTime=+0
+  492003432 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192003432 NextStTime=+1985
+  492005417 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192005417 NextStTime=+40
+  492005457 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192005457 NextStTime=+0
+  492007936 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192007936 NextStTime=+1985
+  492009921 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192009921 NextStTime=+40
+  492009961 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192009961 NextStTime=+0
+  492013720 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192013720 NextStTime=+1985
+  492015705 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192015705 NextStTime=+40
+  492015745 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192015745 NextStTime=+0
+  492016944 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192016944 NextStTime=+1985
+  492018929 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192018929 NextStTime=+40
+  492018969 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192018969 NextStTime=+0
+  492023048 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192023048 NextStTime=+1985
+  492025033 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192025033 NextStTime=+40
+  492025073 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192025073 NextStTime=+0
+  492029152 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192029152 NextStTime=+1985
+  492031137 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192031137 NextStTime=+40
+  492031177 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192031177 NextStTime=+0
+  492038136 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192038136 NextStTime=+1985
+  492040121 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192040121 NextStTime=+40
+  492040161 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192040161 NextStTime=+0
+  492049040 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192049040 NextStTime=+1985
+  492051025 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192051025 NextStTime=+40
+  492051065 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192051065 NextStTime=+0
+  492061544 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192061544 NextStTime=+1985
+  492063529 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192063529 NextStTime=+40
+  492063569 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192063569 NextStTime=+0
+  492065728 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192065728 NextStTime=+1985
+  492067713 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192067713 NextStTime=+40
+  492067753 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192067753 NextStTime=+0
+  492072472 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192072472 NextStTime=+1985
+  492074457 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192074457 NextStTime=+40
+  492074497 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192074497 NextStTime=+0
+  492081456 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192081456 NextStTime=+1985
+  492083441 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192083441 NextStTime=+40
+  492083481 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192083481 NextStTime=+0
+  492087880 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192087880 NextStTime=+1985
+  492089865 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192089865 NextStTime=+40
+  492089905 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192089905 NextStTime=+0
+  492094624 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192094624 NextStTime=+1985
+  492096609 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192096609 NextStTime=+40
+  492096649 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192096649 NextStTime=+0
+  492105528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=192105528 NextStTime=+1985
+  492107513 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=192107513 NextStTime=+40
+  492107553 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=192107553 NextStTime=+0
+  495002448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=195002448 NextStTime=+1985
+  495004433 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=195004433 NextStTime=+40
+  495004473 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=195004473 NextStTime=+0
+  495006784 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=195006784 NextStTime=+897
+  495007681 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=195007681 NextStTime=+40
+  495007721 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=195007721 NextStTime=+0
+  495013544 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=195013544 NextStTime=+353
+  495013896 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=195013896 NextStTime=+40
+  495013936 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=195013936 NextStTime=+0
+  496001488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196001488 NextStTime=+1985
+  496003473 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196003473 NextStTime=+40
+  496003513 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196003513 NextStTime=+0
+  496005992 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196005992 NextStTime=+1985
+  496007977 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196007977 NextStTime=+40
+  496008017 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196008017 NextStTime=+0
+  496009216 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196009216 NextStTime=+1985
+  496011201 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196011201 NextStTime=+40
+  496011241 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196011241 NextStTime=+0
+  496012760 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196012760 NextStTime=+1985
+  496014745 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196014745 NextStTime=+40
+  496014785 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196014785 NextStTime=+0
+  496016944 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196016944 NextStTime=+1985
+  496018929 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196018929 NextStTime=+40
+  496018969 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196018969 NextStTime=+0
+  496023688 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196023688 NextStTime=+1985
+  496025673 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196025673 NextStTime=+40
+  496025713 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196025713 NextStTime=+0
+  496033952 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196033952 NextStTime=+1985
+  496035937 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196035937 NextStTime=+40
+  496035977 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196035977 NextStTime=+0
+  496039736 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196039736 NextStTime=+1985
+  496041721 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196041721 NextStTime=+40
+  496041761 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196041761 NextStTime=+0
+  496050960 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196050960 NextStTime=+1985
+  496052945 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196052945 NextStTime=+40
+  496052985 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196052985 NextStTime=+0
+  496061224 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196061224 NextStTime=+1985
+  496063209 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196063209 NextStTime=+40
+  496063249 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196063249 NextStTime=+0
+  496068288 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196068288 NextStTime=+1985
+  496070273 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196070273 NextStTime=+40
+  496070313 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196070313 NextStTime=+0
+  496076952 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196076952 NextStTime=+1985
+  496078937 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196078937 NextStTime=+40
+  496078977 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196078977 NextStTime=+0
+  496086576 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196086576 NextStTime=+1985
+  496088561 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196088561 NextStTime=+40
+  496088601 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196088601 NextStTime=+0
+  496097800 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196097800 NextStTime=+1985
+  496099785 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196099785 NextStTime=+40
+  496099825 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196099825 NextStTime=+0
+  496100384 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196100384 NextStTime=+1985
+  496102369 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196102369 NextStTime=+40
+  496102409 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196102409 NextStTime=+0
+  496108088 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=196108088 NextStTime=+1985
+  496110073 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=196110073 NextStTime=+40
+  496110113 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=196110113 NextStTime=+0
+  499001168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199001168 NextStTime=+1985
+  499003153 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199003153 NextStTime=+40
+  499003193 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199003193 NextStTime=+0
+  499004072 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199004072 NextStTime=+1985
+  499006057 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199006057 NextStTime=+40
+  499006097 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199006097 NextStTime=+0
+  499008896 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199008896 NextStTime=+1985
+  499010881 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199010881 NextStTime=+40
+  499010921 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199010921 NextStTime=+0
+  499013080 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199013080 NextStTime=+1985
+  499015065 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199015065 NextStTime=+40
+  499015105 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199015105 NextStTime=+0
+  499018864 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199018864 NextStTime=+1985
+  499020849 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199020849 NextStTime=+40
+  499020889 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199020889 NextStTime=+0
+  499027848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199027848 NextStTime=+1985
+  499029833 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199029833 NextStTime=+40
+  499029873 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199029873 NextStTime=+0
+  499035872 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199035872 NextStTime=+1985
+  499037857 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199037857 NextStTime=+40
+  499037897 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199037897 NextStTime=+0
+  499047736 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199047736 NextStTime=+1985
+  499049721 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199049721 NextStTime=+40
+  499049761 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199049761 NextStTime=+0
+  499050320 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199050320 NextStTime=+1985
+  499052305 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199052305 NextStTime=+40
+  499052345 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199052345 NextStTime=+0
+  499058024 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199058024 NextStTime=+1985
+  499060009 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199060009 NextStTime=+40
+  499060049 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199060049 NextStTime=+0
+  499068608 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199068608 NextStTime=+1985
+  499070593 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199070593 NextStTime=+40
+  499070633 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199070633 NextStTime=+0
+  499074712 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199074712 NextStTime=+1985
+  499076697 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199076697 NextStTime=+40
+  499076737 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199076737 NextStTime=+0
+  499078256 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199078256 NextStTime=+1985
+  499080241 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199080241 NextStTime=+40
+  499080281 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199080281 NextStTime=+0
+  499088520 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199088520 NextStTime=+1985
+  499090505 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199090505 NextStTime=+40
+  499090545 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199090545 NextStTime=+0
+  499093344 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199093344 NextStTime=+1985
+  499095329 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199095329 NextStTime=+40
+  499095369 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199095369 NextStTime=+0
+  499100408 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=199100408 NextStTime=+1985
+  499102393 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=199102393 NextStTime=+40
+  499102433 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=199102433 NextStTime=+0
+  501401000 00:03:21.401 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  501401000 00:03:21.401 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  501401000 00:03:21.401 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  501401000 00:03:21.401 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  501401000 00:03:21.401 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  501401000 status push: "transmit=11,d841,147,ffff"
+  501401000 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=201401000 NextStTime=+129
+  501401128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=201401128 NextStTime=+40
+  501401168 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=201401168 NextStTime=+2401
+  501403568 00:03:21.403 [D] SubMac--------: RadioState: Transmit -> Receive
+  501403568 00:03:21.403 [D] Mac-----------: ==============================[TX len=069]==============================
+  501403568 00:03:21.403 [D] Mac-----------: | 41 D8 93 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  501403568 00:03:21.403 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C DB | 54 00 15 19 00 00 00 00 | ;..MLML.T....... |
+  501403568 00:03:21.403 [D] Mac-----------: | 00 00 00 01 B7 34 DA 74 | 9C B0 AF 54 98 95 9D 98 | .....4.t...T.... |
+  501403568 00:03:21.403 [D] Mac-----------: | 5D 24 C4 83 70 03 7E A2 | 85 A9 58 EB 63 64 51 0A | ]$..p.~...X.cdQ. |
+  501403568 00:03:21.403 [D] Mac-----------: | 1B FF D2 16 57          |                         | ....W            |
+  501403568 00:03:21.403 [D] Mac-----------: ------------------------------------------------------------------------
+  501403568 00:03:21.403 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  501403568 00:03:21.403 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:db54, ecn:no, to:0xffff, sec:no, prio:net
+  501403568 00:03:21.403 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  501403568 00:03:21.403 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  501403568 00:03:21.403 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  501403568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=201403568 NextStTime=+40
+  501403608 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=201403608 NextStTime=+600
+  501404208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=201404208 NextStTime=+0
+  512864000 00:03:32.864 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  512864000 00:03:32.864 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  512864000 00:03:32.864 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  512864000 00:03:32.864 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  512865280 00:03:32.865 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  512865280 status push: "transmit=11,d841,148,ffff"
+  512865280 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=212865280 NextStTime=+129
+  512865408 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=212865408 NextStTime=+40
+  512865448 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=212865448 NextStTime=+2401
+  512867848 00:03:32.867 [D] SubMac--------: RadioState: Transmit -> Receive
+  512867848 00:03:32.867 [D] Mac-----------: ==============================[TX len=069]==============================
+  512867848 00:03:32.867 [D] Mac-----------: | 41 D8 94 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  512867848 00:03:32.867 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 6A | 00 00 15 1A 00 00 00 00 | ;..MLMLj........ |
+  512867848 00:03:32.867 [D] Mac-----------: | 00 00 00 01 10 68 30 38 | 86 5D 7C 71 B1 8B E9 A7 | .....h08.]|q.... |
+  512867848 00:03:32.867 [D] Mac-----------: | 4E 36 62 DA 65 03 0C 8F | 97 FF B4 91 D4 5B 39 94 | N6b.e........[9. |
+  512867848 00:03:32.867 [D] Mac-----------: | 87 D7 16 D5 32          |                         | ....2            |
+  512867848 00:03:32.867 [D] Mac-----------: ------------------------------------------------------------------------
+  512867848 00:03:32.867 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  512867848 00:03:32.867 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:6a00, ecn:no, to:0xffff, sec:no, prio:net
+  512867848 00:03:32.867 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  512867848 00:03:32.867 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  512867848 00:03:32.867 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  512867848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=212867848 NextStTime=+40
+  512867888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=212867888 NextStTime=+600
+  512868488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=212868488 NextStTime=+0
+  520771000 00:03:40.771 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  520771000 00:03:40.771 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  520771000 00:03:40.771 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  520771000 00:03:40.771 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  520771320 00:03:40.771 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  520771320 status push: "transmit=11,d841,149,ffff"
+  520771320 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=220771320 NextStTime=+129
+  520771448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=220771448 NextStTime=+40
+  520771488 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=220771488 NextStTime=+2401
+  520773888 00:03:40.773 [D] SubMac--------: RadioState: Transmit -> Receive
+  520773888 00:03:40.773 [D] Mac-----------: ==============================[TX len=069]==============================
+  520773888 00:03:40.773 [D] Mac-----------: | 41 D8 95 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  520773888 00:03:40.773 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 70 | EB 00 15 1B 00 00 00 00 | ;..MLMLp........ |
+  520773888 00:03:40.773 [D] Mac-----------: | 00 00 00 01 0D F3 C2 DC | 39 FD 87 FC 71 CE 42 08 | ........9...q.B. |
+  520773888 00:03:40.773 [D] Mac-----------: | F5 B3 4C DD C6 E4 34 92 | 2A 5C 38 00 4B 1C 9B 07 | ..L...4.*\8.K... |
+  520773888 00:03:40.773 [D] Mac-----------: | C4 6D 7D 8F 8F          |                         | .m}..            |
+  520773888 00:03:40.773 [D] Mac-----------: ------------------------------------------------------------------------
+  520773888 00:03:40.773 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  520773888 00:03:40.773 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:70eb, ecn:no, to:0xffff, sec:no, prio:net
+  520773888 00:03:40.773 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  520773888 00:03:40.773 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  520773888 00:03:40.773 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  520773888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=220773888 NextStTime=+40
+  520773928 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=220773928 NextStTime=+600
+  520774528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=220774528 NextStTime=+0
+  536446000 00:03:56.446 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  536446000 00:03:56.446 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  536446000 00:03:56.446 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  536446000 00:03:56.446 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  536446640 00:03:56.446 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  536446640 status push: "transmit=11,d841,150,ffff"
+  536446640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=236446640 NextStTime=+129
+  536446768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=236446768 NextStTime=+40
+  536446808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=236446808 NextStTime=+2401
+  536449208 00:03:56.449 [D] SubMac--------: RadioState: Transmit -> Receive
+  536449208 00:03:56.449 [D] Mac-----------: ==============================[TX len=069]==============================
+  536449208 00:03:56.449 [D] Mac-----------: | 41 D8 96 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  536449208 00:03:56.449 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 23 | 82 00 15 1C 00 00 00 00 | ;..MLML#........ |
+  536449208 00:03:56.449 [D] Mac-----------: | 00 00 00 01 A5 CE 3F FA | 90 CA 15 26 8F 2A 33 1B | ......?....&.*3. |
+  536449208 00:03:56.449 [D] Mac-----------: | 99 A5 6A 8E C5 5D 62 F3 | CE 32 F8 D6 1D C3 72 8C | ..j..]b..2....r. |
+  536449208 00:03:56.449 [D] Mac-----------: | CD 04 D9 DD A2          |                         | .....            |
+  536449208 00:03:56.449 [D] Mac-----------: ------------------------------------------------------------------------
+  536449208 00:03:56.449 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  536449208 00:03:56.449 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:2382, ecn:no, to:0xffff, sec:no, prio:net
+  536449208 00:03:56.449 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  536449208 00:03:56.449 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  536449208 00:03:56.449 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  536449208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=236449208 NextStTime=+40
+  536449248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=236449248 NextStTime=+600
+  536449848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=236449848 NextStTime=+0
+  544444000 00:04:04.444 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  544444000 00:04:04.444 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  544444000 00:04:04.444 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  544444000 00:04:04.444 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  544445600 00:04:04.445 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  544445600 status push: "transmit=11,d841,151,ffff"
+  544445600 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=244445600 NextStTime=+129
+  544445728 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=244445728 NextStTime=+40
+  544445768 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=244445768 NextStTime=+2401
+  544448168 00:04:04.448 [D] SubMac--------: RadioState: Transmit -> Receive
+  544448168 00:04:04.448 [D] Mac-----------: ==============================[TX len=069]==============================
+  544448168 00:04:04.448 [D] Mac-----------: | 41 D8 97 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  544448168 00:04:04.448 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C EE | EB 00 15 1D 00 00 00 00 | ;..MLML......... |
+  544448168 00:04:04.448 [D] Mac-----------: | 00 00 00 01 93 FF DE CB | 9B 9B 16 97 BF 74 C5 72 | .............t.r |
+  544448168 00:04:04.448 [D] Mac-----------: | BD 18 9A DA 80 51 BF 4A | 67 A2 04 8D CA 6F 91 68 | .....Q.Jg....o.h |
+  544448168 00:04:04.448 [D] Mac-----------: | 26 99 DE 29 5D          |                         | &..)]            |
+  544448168 00:04:04.448 [D] Mac-----------: ------------------------------------------------------------------------
+  544448168 00:04:04.448 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  544448168 00:04:04.448 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:eeeb, ecn:no, to:0xffff, sec:no, prio:net
+  544448168 00:04:04.448 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  544448168 00:04:04.448 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  544448168 00:04:04.448 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  544448168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=244448168 NextStTime=+40
+  544448208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=244448208 NextStTime=+600
+  544448808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=244448808 NextStTime=+0
+  561262000 00:04:21.262 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  561262000 00:04:21.262 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  561262000 00:04:21.262 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  561262000 00:04:21.262 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  561262960 00:04:21.262 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  561262960 status push: "transmit=11,d841,152,ffff"
+  561262960 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=261262960 NextStTime=+129
+  561263088 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=261263088 NextStTime=+40
+  561263128 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=261263128 NextStTime=+2401
+  561265528 00:04:21.265 [D] SubMac--------: RadioState: Transmit -> Receive
+  561265528 00:04:21.265 [D] Mac-----------: ==============================[TX len=069]==============================
+  561265528 00:04:21.265 [D] Mac-----------: | 41 D8 98 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  561265528 00:04:21.265 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C B2 | 21 00 15 1E 00 00 00 00 | ;..MLML.!....... |
+  561265528 00:04:21.265 [D] Mac-----------: | 00 00 00 01 1F C0 B6 A1 | 34 BA 5B AE 0C CF A0 DD | ........4.[..... |
+  561265528 00:04:21.265 [D] Mac-----------: | 74 F3 06 16 9B C3 9C 7E | 21 B3 4F 94 6C 68 51 BE | t......~!.O.lhQ. |
+  561265528 00:04:21.265 [D] Mac-----------: | 93 21 4E 78 8C          |                         | .!Nx.            |
+  561265528 00:04:21.265 [D] Mac-----------: ------------------------------------------------------------------------
+  561265528 00:04:21.265 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  561265528 00:04:21.265 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:b221, ecn:no, to:0xffff, sec:no, prio:net
+  561265528 00:04:21.265 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  561265528 00:04:21.265 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  561265528 00:04:21.265 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  561265528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=261265528 NextStTime=+40
+  561265568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=261265568 NextStTime=+600
+  561266168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=261266168 NextStTime=+0
+  571996000 00:04:31.996 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  571996000 00:04:31.996 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  571996000 00:04:31.996 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  571996000 00:04:31.996 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  571997600 00:04:31.997 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  571997600 status push: "transmit=11,d841,153,ffff"
+  571997600 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=271997600 NextStTime=+129
+  571997728 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=271997728 NextStTime=+40
+  571997768 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=271997768 NextStTime=+2401
+  572000168 00:04:32.000 [D] SubMac--------: RadioState: Transmit -> Receive
+  572000168 00:04:32.000 [D] Mac-----------: ==============================[TX len=069]==============================
+  572000168 00:04:32.000 [D] Mac-----------: | 41 D8 99 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  572000168 00:04:32.000 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 8C | 8C 00 15 1F 00 00 00 00 | ;..MLML......... |
+  572000168 00:04:32.000 [D] Mac-----------: | 00 00 00 01 37 8B 83 D4 | 1A C6 AE 9D 17 4D D8 C0 | ....7........M.. |
+  572000168 00:04:32.000 [D] Mac-----------: | 11 6E 3D A9 21 7C C8 E8 | 14 8D F5 6C 43 5F 1F 83 | .n=.!|.....lC_.. |
+  572000168 00:04:32.000 [D] Mac-----------: | DA 4C 78 D9 84          |                         | .Lx..            |
+  572000168 00:04:32.000 [D] Mac-----------: ------------------------------------------------------------------------
+  572000168 00:04:32.000 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  572000168 00:04:32.000 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:8c8c, ecn:no, to:0xffff, sec:no, prio:net
+  572000168 00:04:32.000 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  572000168 00:04:32.000 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  572000168 00:04:32.000 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  572000168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=272000168 NextStTime=+40
+  572000208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=272000208 NextStTime=+600
+  572000808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=272000808 NextStTime=+0
+  582870000 00:04:42.870 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  582870000 00:04:42.870 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  582870000 00:04:42.870 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  582870000 00:04:42.870 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  582870640 00:04:42.870 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  582870640 status push: "transmit=11,d841,154,ffff"
+  582870640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=282870640 NextStTime=+129
+  582870768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=282870768 NextStTime=+40
+  582870808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=282870808 NextStTime=+2401
+  582873208 00:04:42.873 [D] SubMac--------: RadioState: Transmit -> Receive
+  582873208 00:04:42.873 [D] Mac-----------: ==============================[TX len=069]==============================
+  582873208 00:04:42.873 [D] Mac-----------: | 41 D8 9A CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  582873208 00:04:42.873 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 42 | 03 00 15 20 00 00 00 00 | ;..MLMLB... .... |
+  582873208 00:04:42.873 [D] Mac-----------: | 00 00 00 01 DB FF 73 DE | 53 D7 6F 7A 23 F5 69 96 | ......s.S.oz#.i. |
+  582873208 00:04:42.873 [D] Mac-----------: | CE 27 8C C9 03 A4 7D AE | 76 00 FA A0 22 B9 C7 5E | .'....}.v..."..^ |
+  582873208 00:04:42.873 [D] Mac-----------: | 2F 07 F0 A6 8D          |                         | /....            |
+  582873208 00:04:42.873 [D] Mac-----------: ------------------------------------------------------------------------
+  582873208 00:04:42.873 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  582873208 00:04:42.873 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:4203, ecn:no, to:0xffff, sec:no, prio:net
+  582873208 00:04:42.873 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  582873208 00:04:42.873 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  582873208 00:04:42.873 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  582873208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=282873208 NextStTime=+40
+  582873248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=282873248 NextStTime=+600
+  582873848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=282873848 NextStTime=+0
+  596563000 00:04:56.563 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  596563000 00:04:56.563 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  596563000 00:04:56.563 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  596563000 00:04:56.563 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  596563640 00:04:56.563 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  596563640 status push: "transmit=11,d841,155,ffff"
+  596563640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=296563640 NextStTime=+129
+  596563768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=296563768 NextStTime=+40
+  596563808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=296563808 NextStTime=+2401
+  596566208 00:04:56.566 [D] SubMac--------: RadioState: Transmit -> Receive
+  596566208 00:04:56.566 [D] Mac-----------: ==============================[TX len=069]==============================
+  596566208 00:04:56.566 [D] Mac-----------: | 41 D8 9B CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  596566208 00:04:56.566 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 8F | 15 00 15 21 00 00 00 00 | ;..MLML....!.... |
+  596566208 00:04:56.566 [D] Mac-----------: | 00 00 00 01 B2 8F C6 93 | AB 40 52 F0 CF E9 F0 AB | .........@R..... |
+  596566208 00:04:56.566 [D] Mac-----------: | A4 D4 E8 2B 5E 96 71 45 | 46 2B AA F4 7B 52 A4 39 | ...+^.qEF+..{R.9 |
+  596566208 00:04:56.566 [D] Mac-----------: | 59 FF E5 85 B4          |                         | Y....            |
+  596566208 00:04:56.566 [D] Mac-----------: ------------------------------------------------------------------------
+  596566208 00:04:56.566 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  596566208 00:04:56.566 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:8f15, ecn:no, to:0xffff, sec:no, prio:net
+  596566208 00:04:56.566 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  596566208 00:04:56.566 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  596566208 00:04:56.566 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  596566208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=296566208 NextStTime=+40
+  596566248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=296566248 NextStTime=+600
+  596566848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=296566848 NextStTime=+0
+  609486000 00:05:09.486 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  609486000 00:05:09.486 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  609486000 00:05:09.486 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  609486000 00:05:09.486 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  609488240 00:05:09.488 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  609488240 status push: "transmit=11,d841,156,ffff"
+  609488240 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=309488240 NextStTime=+129
+  609488368 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=309488368 NextStTime=+40
+  609488408 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=309488408 NextStTime=+2401
+  609490808 00:05:09.490 [D] SubMac--------: RadioState: Transmit -> Receive
+  609490808 00:05:09.490 [D] Mac-----------: ==============================[TX len=069]==============================
+  609490808 00:05:09.490 [D] Mac-----------: | 41 D8 9C CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  609490808 00:05:09.490 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 09 | F3 00 15 22 00 00 00 00 | ;..MLML....".... |
+  609490808 00:05:09.490 [D] Mac-----------: | 00 00 00 01 F5 04 64 F1 | 3E 4F 27 B3 A6 3D 9C DB | ......d.>O'..=.. |
+  609490808 00:05:09.490 [D] Mac-----------: | C4 1F D8 CA 7B 80 59 31 | 9C 8E 84 E5 63 B0 CA 34 | ....{.Y1....c..4 |
+  609490808 00:05:09.490 [D] Mac-----------: | 33 EF 0F 6A 20          |                         | 3..j             |
+  609490808 00:05:09.490 [D] Mac-----------: ------------------------------------------------------------------------
+  609490808 00:05:09.490 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  609490808 00:05:09.490 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:09f3, ecn:no, to:0xffff, sec:no, prio:net
+  609490808 00:05:09.490 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  609490808 00:05:09.490 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  609490808 00:05:09.490 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  609490808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=309490808 NextStTime=+40
+  609490848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=309490848 NextStTime=+600
+  609491448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=309491448 NextStTime=+0
+  616983000 00:05:16.983 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  616983000 00:05:16.983 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  616983000 00:05:16.983 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  616983000 00:05:16.983 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  616983640 00:05:16.983 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  616983640 status push: "transmit=11,d841,157,ffff"
+  616983640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=316983640 NextStTime=+129
+  616983768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=316983768 NextStTime=+40
+  616983808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=316983808 NextStTime=+2401
+  616986208 00:05:16.986 [D] SubMac--------: RadioState: Transmit -> Receive
+  616986208 00:05:16.986 [D] Mac-----------: ==============================[TX len=069]==============================
+  616986208 00:05:16.986 [D] Mac-----------: | 41 D8 9D CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  616986208 00:05:16.986 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 92 | 08 00 15 23 00 00 00 00 | ;..MLML....#.... |
+  616986208 00:05:16.986 [D] Mac-----------: | 00 00 00 01 7E 96 8D 2B | 16 D1 1C E7 E8 68 76 5C | ....~..+.....hv\ |
+  616986208 00:05:16.986 [D] Mac-----------: | 7F 5E 1B A2 65 94 3E 65 | 21 D9 DA 18 9E B5 27 1C | .^..e.>e!.....'. |
+  616986208 00:05:16.986 [D] Mac-----------: | 3F 70 13 CF ED          |                         | ?p...            |
+  616986208 00:05:16.986 [D] Mac-----------: ------------------------------------------------------------------------
+  616986208 00:05:16.986 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  616986208 00:05:16.986 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:9208, ecn:no, to:0xffff, sec:no, prio:net
+  616986208 00:05:16.986 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  616986208 00:05:16.986 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  616986208 00:05:16.986 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  616986208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=316986208 NextStTime=+40
+  616986248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=316986248 NextStTime=+600
+  616986848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=316986848 NextStTime=+0
+  632989000 00:05:32.989 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  632989000 00:05:32.989 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  632989000 00:05:32.989 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  632989000 00:05:32.989 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  632990600 00:05:32.990 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  632990600 status push: "transmit=11,d841,158,ffff"
+  632990600 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=332990600 NextStTime=+129
+  632990728 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=332990728 NextStTime=+40
+  632990768 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=332990768 NextStTime=+2401
+  632993168 00:05:32.993 [D] SubMac--------: RadioState: Transmit -> Receive
+  632993168 00:05:32.993 [D] Mac-----------: ==============================[TX len=069]==============================
+  632993168 00:05:32.993 [D] Mac-----------: | 41 D8 9E CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  632993168 00:05:32.993 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C CE | 9A 00 15 24 00 00 00 00 | ;..MLML....$.... |
+  632993168 00:05:32.993 [D] Mac-----------: | 00 00 00 01 C7 07 8B 2B | 15 B0 99 B5 D4 44 3F 12 | .......+.....D?. |
+  632993168 00:05:32.993 [D] Mac-----------: | FA 4B E9 15 24 68 E9 4D | 2E 6F 11 C1 DB 77 5C C7 | .K..$h.M.o...w\. |
+  632993168 00:05:32.993 [D] Mac-----------: | CE B8 12 0D C1          |                         | .....            |
+  632993168 00:05:32.993 [D] Mac-----------: ------------------------------------------------------------------------
+  632993168 00:05:32.993 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  632993168 00:05:32.993 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:ce9a, ecn:no, to:0xffff, sec:no, prio:net
+  632993168 00:05:32.993 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  632993168 00:05:32.993 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  632993168 00:05:32.993 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  632993168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=332993168 NextStTime=+40
+  632993208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=332993208 NextStTime=+600
+  632993808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=332993808 NextStTime=+0
+  641322000 00:05:41.322 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  641322000 00:05:41.322 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  641322000 00:05:41.322 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  641322000 00:05:41.322 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  641323280 00:05:41.323 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  641323280 status push: "transmit=11,d841,159,ffff"
+  641323280 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=341323280 NextStTime=+129
+  641323408 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=341323408 NextStTime=+40
+  641323448 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=341323448 NextStTime=+2401
+  641325848 00:05:41.325 [D] SubMac--------: RadioState: Transmit -> Receive
+  641325848 00:05:41.325 [D] Mac-----------: ==============================[TX len=069]==============================
+  641325848 00:05:41.325 [D] Mac-----------: | 41 D8 9F CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  641325848 00:05:41.325 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 0A | 34 00 15 25 00 00 00 00 | ;..MLML.4..%.... |
+  641325848 00:05:41.325 [D] Mac-----------: | 00 00 00 01 4E D9 35 D7 | C9 80 71 83 97 D8 92 AE | ....N.5...q..... |
+  641325848 00:05:41.325 [D] Mac-----------: | 11 64 70 65 11 EE 56 80 | 4B D0 DE E4 DA 1F 7A EB | .dpe..V.K.....z. |
+  641325848 00:05:41.325 [D] Mac-----------: | 5E BF 13 F6 60          |                         | ^...`            |
+  641325848 00:05:41.325 [D] Mac-----------: ------------------------------------------------------------------------
+  641325848 00:05:41.325 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  641325848 00:05:41.325 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:0a34, ecn:no, to:0xffff, sec:no, prio:net
+  641325848 00:05:41.325 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  641325848 00:05:41.325 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  641325848 00:05:41.325 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  641325848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=341325848 NextStTime=+40
+  641325888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=341325888 NextStTime=+600
+  641326488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=341326488 NextStTime=+0
+  655168000 00:05:55.168 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  655168000 00:05:55.168 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  655168000 00:05:55.168 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  655168000 00:05:55.168 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  655168320 00:05:55.168 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  655168320 status push: "transmit=11,d841,160,ffff"
+  655168320 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=355168320 NextStTime=+129
+  655168448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=355168448 NextStTime=+40
+  655168488 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=355168488 NextStTime=+2401
+  655170888 00:05:55.170 [D] SubMac--------: RadioState: Transmit -> Receive
+  655170888 00:05:55.170 [D] Mac-----------: ==============================[TX len=069]==============================
+  655170888 00:05:55.170 [D] Mac-----------: | 41 D8 A0 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  655170888 00:05:55.170 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 86 | C4 00 15 26 00 00 00 00 | ;..MLML....&.... |
+  655170888 00:05:55.170 [D] Mac-----------: | 00 00 00 01 10 DF CE 5E | C8 52 96 84 B9 79 75 FB | .......^.R...yu. |
+  655170888 00:05:55.170 [D] Mac-----------: | 9E 96 85 F2 C5 D6 C2 8D | 86 42 51 8C F5 C0 66 B4 | .........BQ...f. |
+  655170888 00:05:55.170 [D] Mac-----------: | 71 B9 75 22 52          |                         | q.u"R            |
+  655170888 00:05:55.170 [D] Mac-----------: ------------------------------------------------------------------------
+  655170888 00:05:55.170 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  655170888 00:05:55.170 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:86c4, ecn:no, to:0xffff, sec:no, prio:net
+  655170888 00:05:55.170 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  655170888 00:05:55.170 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  655170888 00:05:55.170 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  655170888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=355170888 NextStTime=+40
+  655170928 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=355170928 NextStTime=+600
+  655171528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=355171528 NextStTime=+0
+  666145000 00:06:06.145 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  666145000 00:06:06.145 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  666145000 00:06:06.145 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  666145000 00:06:06.145 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  666145960 00:06:06.145 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  666145960 status push: "transmit=11,d841,161,ffff"
+  666145960 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=366145960 NextStTime=+129
+  666146088 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=366146088 NextStTime=+40
+  666146128 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=366146128 NextStTime=+2401
+  666148528 00:06:06.148 [D] SubMac--------: RadioState: Transmit -> Receive
+  666148528 00:06:06.148 [D] Mac-----------: ==============================[TX len=069]==============================
+  666148528 00:06:06.148 [D] Mac-----------: | 41 D8 A1 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  666148528 00:06:06.148 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 35 | 9E 00 15 27 00 00 00 00 | ;..MLML5...'.... |
+  666148528 00:06:06.148 [D] Mac-----------: | 00 00 00 01 7B DB 0A F3 | 34 3C 27 3B A3 8C 05 D3 | ....{...4<';.... |
+  666148528 00:06:06.148 [D] Mac-----------: | FA CD 28 75 08 5B 41 47 | 82 0D A6 F6 B1 1D F3 8A | ..(u.[AG........ |
+  666148528 00:06:06.148 [D] Mac-----------: | A1 8D F4 96 A5          |                         | .....            |
+  666148528 00:06:06.148 [D] Mac-----------: ------------------------------------------------------------------------
+  666148528 00:06:06.148 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  666148528 00:06:06.148 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:359e, ecn:no, to:0xffff, sec:no, prio:net
+  666148528 00:06:06.148 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  666148528 00:06:06.148 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  666148528 00:06:06.148 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  666148528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=366148528 NextStTime=+40
+  666148568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=366148568 NextStTime=+600
+  666149168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=366149168 NextStTime=+0
+  680476000 00:06:20.476 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  680476000 00:06:20.476 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  680476000 00:06:20.476 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  680476000 00:06:20.476 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  680478240 00:06:20.478 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  680478240 status push: "transmit=11,d841,162,ffff"
+  680478240 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=380478240 NextStTime=+129
+  680478368 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=380478368 NextStTime=+40
+  680478408 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=380478408 NextStTime=+2401
+  680480808 00:06:20.480 [D] SubMac--------: RadioState: Transmit -> Receive
+  680480808 00:06:20.480 [D] Mac-----------: ==============================[TX len=069]==============================
+  680480808 00:06:20.480 [D] Mac-----------: | 41 D8 A2 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  680480808 00:06:20.480 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C A0 | 04 00 15 28 00 00 00 00 | ;..MLML....(.... |
+  680480808 00:06:20.480 [D] Mac-----------: | 00 00 00 01 99 71 2B 36 | 1A 47 48 E4 97 8D 8F CE | .....q+6.GH..... |
+  680480808 00:06:20.480 [D] Mac-----------: | 3B 48 6F 49 70 A9 05 EC | 0A 57 BD E1 B5 89 3D 46 | ;HoIp....W....=F |
+  680480808 00:06:20.480 [D] Mac-----------: | B1 FB 18 3F 93          |                         | ...?.            |
+  680480808 00:06:20.480 [D] Mac-----------: ------------------------------------------------------------------------
+  680480808 00:06:20.480 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  680480808 00:06:20.480 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:a004, ecn:no, to:0xffff, sec:no, prio:net
+  680480808 00:06:20.480 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  680480808 00:06:20.480 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  680480808 00:06:20.480 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  680480808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=380480808 NextStTime=+40
+  680480848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=380480848 NextStTime=+600
+  680481448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=380481448 NextStTime=+0
+  688415000 00:06:28.415 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  688415000 00:06:28.415 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  688415000 00:06:28.415 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  688415000 00:06:28.415 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  688416920 00:06:28.416 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  688416920 status push: "transmit=11,d841,163,ffff"
+  688416920 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=388416920 NextStTime=+129
+  688417048 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=388417048 NextStTime=+40
+  688417088 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=388417088 NextStTime=+2401
+  688419488 00:06:28.419 [D] SubMac--------: RadioState: Transmit -> Receive
+  688419488 00:06:28.419 [D] Mac-----------: ==============================[TX len=069]==============================
+  688419488 00:06:28.419 [D] Mac-----------: | 41 D8 A3 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  688419488 00:06:28.419 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 86 | 43 00 15 29 00 00 00 00 | ;..MLML.C..).... |
+  688419488 00:06:28.419 [D] Mac-----------: | 00 00 00 01 99 C0 9C CD | A5 36 A4 0A C0 BB 4A E8 | .........6....J. |
+  688419488 00:06:28.419 [D] Mac-----------: | 81 BB 83 41 B8 26 E7 E5 | 05 79 F8 75 C1 E0 3A 2D | ...A.&...y.u..:- |
+  688419488 00:06:28.419 [D] Mac-----------: | 77 F9 14 8B 41          |                         | w...A            |
+  688419488 00:06:28.419 [D] Mac-----------: ------------------------------------------------------------------------
+  688419488 00:06:28.419 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  688419488 00:06:28.419 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:8643, ecn:no, to:0xffff, sec:no, prio:net
+  688419488 00:06:28.419 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  688419488 00:06:28.419 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  688419488 00:06:28.419 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  688419488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=388419488 NextStTime=+40
+  688419528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=388419528 NextStTime=+600
+  688420128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=388420128 NextStTime=+0
+  703995000 00:06:43.995 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  703995000 00:06:43.995 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  703995000 00:06:43.995 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  703995000 00:06:43.995 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  703996280 00:06:43.996 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  703996280 status push: "transmit=11,d841,164,ffff"
+  703996280 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=403996280 NextStTime=+129
+  703996408 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=403996408 NextStTime=+40
+  703996448 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=403996448 NextStTime=+2401
+  703998848 00:06:43.998 [D] SubMac--------: RadioState: Transmit -> Receive
+  703998848 00:06:43.998 [D] Mac-----------: ==============================[TX len=069]==============================
+  703998848 00:06:43.998 [D] Mac-----------: | 41 D8 A4 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  703998848 00:06:43.998 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 13 | A4 00 15 2A 00 00 00 00 | ;..MLML....*.... |
+  703998848 00:06:43.998 [D] Mac-----------: | 00 00 00 01 85 45 9F 1E | F3 E2 D8 90 52 A9 BD 50 | .....E......R..P |
+  703998848 00:06:43.998 [D] Mac-----------: | 14 A1 E0 5A 95 62 D5 D4 | 09 E4 28 58 D2 A3 04 B6 | ...Z.b....(X.... |
+  703998848 00:06:43.998 [D] Mac-----------: | A4 49 47 90 71          |                         | .IG.q            |
+  703998848 00:06:43.998 [D] Mac-----------: ------------------------------------------------------------------------
+  703998848 00:06:43.998 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  703998848 00:06:43.998 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:13a4, ecn:no, to:0xffff, sec:no, prio:net
+  703998848 00:06:43.998 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  703998848 00:06:43.998 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  703998848 00:06:43.998 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  703998848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=403998848 NextStTime=+40
+  703998888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=403998888 NextStTime=+600
+  703999488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=403999488 NextStTime=+0
+  716896000 00:06:56.896 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  716896000 00:06:56.896 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  716896000 00:06:56.896 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  716896000 00:06:56.896 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  716898240 00:06:56.898 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  716898240 status push: "transmit=11,d841,165,ffff"
+  716898240 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=416898240 NextStTime=+129
+  716898368 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=416898368 NextStTime=+40
+  716898408 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=416898408 NextStTime=+2401
+  716900808 00:06:56.900 [D] SubMac--------: RadioState: Transmit -> Receive
+  716900808 00:06:56.900 [D] Mac-----------: ==============================[TX len=069]==============================
+  716900808 00:06:56.900 [D] Mac-----------: | 41 D8 A5 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  716900808 00:06:56.900 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 1D | 3B 00 15 2B 00 00 00 00 | ;..MLML.;..+.... |
+  716900808 00:06:56.900 [D] Mac-----------: | 00 00 00 01 F7 86 8E B3 | F3 4F 8B F4 D9 C7 75 4A | .........O....uJ |
+  716900808 00:06:56.900 [D] Mac-----------: | 66 61 A0 DF 23 CF 26 D7 | 12 5D 4E BA 43 01 43 77 | fa..#.&..]N.C.Cw |
+  716900808 00:06:56.900 [D] Mac-----------: | 1A D2 16 D9 3A          |                         | ....:            |
+  716900808 00:06:56.900 [D] Mac-----------: ------------------------------------------------------------------------
+  716900808 00:06:56.900 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  716900808 00:06:56.900 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:1d3b, ecn:no, to:0xffff, sec:no, prio:net
+  716900808 00:06:56.900 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  716900808 00:06:56.900 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  716900808 00:06:56.900 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  716900808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=416900808 NextStTime=+40
+  716900848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=416900848 NextStTime=+600
+  716901448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=416901448 NextStTime=+0
+  725527000 00:07:05.527 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  725527000 00:07:05.527 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  725527000 00:07:05.527 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  725527000 00:07:05.527 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  725527000 00:07:05.527 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  725527000 status push: "transmit=11,d841,166,ffff"
+  725527000 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=425527000 NextStTime=+129
+  725527128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=425527128 NextStTime=+40
+  725527168 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=425527168 NextStTime=+2401
+  725529568 00:07:05.529 [D] SubMac--------: RadioState: Transmit -> Receive
+  725529568 00:07:05.529 [D] Mac-----------: ==============================[TX len=069]==============================
+  725529568 00:07:05.529 [D] Mac-----------: | 41 D8 A6 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  725529568 00:07:05.529 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C A9 | 36 00 15 2C 00 00 00 00 | ;..MLML.6..,.... |
+  725529568 00:07:05.529 [D] Mac-----------: | 00 00 00 01 2B AE 88 87 | 46 71 B7 A4 F6 5B 55 BD | ....+...Fq...[U. |
+  725529568 00:07:05.529 [D] Mac-----------: | AC A6 5E F6 5D 3B B7 96 | AC 7D 52 D0 FD E5 A8 32 | ..^.];...}R....2 |
+  725529568 00:07:05.529 [D] Mac-----------: | B2 12 4D 2B FA          |                         | ..M+.            |
+  725529568 00:07:05.529 [D] Mac-----------: ------------------------------------------------------------------------
+  725529568 00:07:05.529 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  725529568 00:07:05.529 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:a936, ecn:no, to:0xffff, sec:no, prio:net
+  725529568 00:07:05.529 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  725529568 00:07:05.529 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  725529568 00:07:05.529 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  725529568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=425529568 NextStTime=+40
+  725529608 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=425529608 NextStTime=+600
+  725530208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=425530208 NextStTime=+0
+  740232000 00:07:20.232 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  740232000 00:07:20.232 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  740232000 00:07:20.232 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  740232000 00:07:20.232 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  740233280 00:07:20.233 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  740233280 status push: "transmit=11,d841,167,ffff"
+  740233280 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=440233280 NextStTime=+129
+  740233408 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=440233408 NextStTime=+40
+  740233448 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=440233448 NextStTime=+2401
+  740235848 00:07:20.235 [D] SubMac--------: RadioState: Transmit -> Receive
+  740235848 00:07:20.235 [D] Mac-----------: ==============================[TX len=069]==============================
+  740235848 00:07:20.235 [D] Mac-----------: | 41 D8 A7 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  740235848 00:07:20.235 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 7D | 78 00 15 2D 00 00 00 00 | ;..MLML}x..-.... |
+  740235848 00:07:20.235 [D] Mac-----------: | 00 00 00 01 5A FA E0 B5 | 00 7D 4A 64 C6 D1 E2 71 | ....Z....}Jd...q |
+  740235848 00:07:20.235 [D] Mac-----------: | 91 B9 95 09 D2 66 89 22 | 75 60 DD 4A 6F 4D 85 36 | .....f."u`.JoM.6 |
+  740235848 00:07:20.235 [D] Mac-----------: | 69 27 1F DE 21          |                         | i'..!            |
+  740235848 00:07:20.235 [D] Mac-----------: ------------------------------------------------------------------------
+  740235848 00:07:20.235 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  740235848 00:07:20.235 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:7d78, ecn:no, to:0xffff, sec:no, prio:net
+  740235848 00:07:20.235 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  740235848 00:07:20.235 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  740235848 00:07:20.235 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  740235848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=440235848 NextStTime=+40
+  740235888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=440235888 NextStTime=+600
+  740236488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=440236488 NextStTime=+0
+  750241000 00:07:30.241 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  750241000 00:07:30.241 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  750241000 00:07:30.241 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  750241000 00:07:30.241 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  750241960 00:07:30.241 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  750241960 status push: "transmit=11,d841,168,ffff"
+  750241960 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=450241960 NextStTime=+129
+  750242088 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=450242088 NextStTime=+40
+  750242128 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=450242128 NextStTime=+2401
+  750244528 00:07:30.244 [D] SubMac--------: RadioState: Transmit -> Receive
+  750244528 00:07:30.244 [D] Mac-----------: ==============================[TX len=069]==============================
+  750244528 00:07:30.244 [D] Mac-----------: | 41 D8 A8 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  750244528 00:07:30.244 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C BB | F8 00 15 2E 00 00 00 00 | ;..MLML......... |
+  750244528 00:07:30.244 [D] Mac-----------: | 00 00 00 01 0D CB 15 3B | B2 03 6D E5 48 8A 81 E3 | .......;..m.H... |
+  750244528 00:07:30.244 [D] Mac-----------: | DB 25 B6 E2 68 1E 53 84 | EE 7F E0 BB 4D A8 ED 3B | .%..h.S.....M..; |
+  750244528 00:07:30.244 [D] Mac-----------: | EE 0F AE BA 07          |                         | .....            |
+  750244528 00:07:30.244 [D] Mac-----------: ------------------------------------------------------------------------
+  750244528 00:07:30.244 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  750244528 00:07:30.244 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:bbf8, ecn:no, to:0xffff, sec:no, prio:net
+  750244528 00:07:30.244 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  750244528 00:07:30.244 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  750244528 00:07:30.244 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  750244528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=450244528 NextStTime=+40
+  750244568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=450244568 NextStTime=+600
+  750245168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=450245168 NextStTime=+0
+  762524408 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=462524408 NextStTime=+2401
+  762526808 00:07:42.526 [D] Mac-----------: ==============================[RX len=069]==============================
+  762526808 00:07:42.526 [D] Mac-----------: | 41 D8 67 CE FA FF FF 69 | AC 04 B5 1F 89 B8 12 7F | A.g....i........ |
+  762526808 00:07:42.526 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 5C | 75 00 15 51 00 00 00 00 | ;..MLML\u..Q.... |
+  762526808 00:07:42.526 [D] Mac-----------: | 00 00 00 01 9A 3B 77 74 | 13 86 84 F7 44 02 CB 78 | .....;wt....D..x |
+  762526808 00:07:42.526 [D] Mac-----------: | 46 E7 51 3E 9A 59 2F 24 | 56 E1 AA 18 4A 48 A2 CA | F.Q>.Y/$V...JH.. |
+  762526808 00:07:42.526 [D] Mac-----------: | 52 64 41 EF 60          |                         | RdA.`            |
+  762526808 00:07:42.526 [D] Mac-----------: ------------------------------------------------------------------------
+  762526808 00:07:42.526 [I] MeshForwarder-: Received IPv6 UDP msg, len:90, chksum:5c75, ecn:no, from:12b8891fb504ac69, sec:no, prio:net, rss:-98.0
+  762526808 00:07:42.526 [I] MeshForwarder-:     src:[fe80:0:0:0:10b8:891f:b504:ac69]:19788
+  762526808 00:07:42.526 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  762526808 00:07:42.526 [D] Mle-----------: Receive MLE message
+  762526808 00:07:42.526 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:10b8:891f:b504:ac69,0x9000)
+  762526808 00:07:42.526 [N] Mle-----------: Different partition (peer:1619749531, local:420278138)
+  762526808 00:07:42.526 [W] Mle-----------: Failed to process Advertisement - LinkMarginLow
+  762526808 00:07:42.526 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  762526808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=462526808 NextStTime=+40
+  762526848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=462526848 NextStTime=+0
+  762683848 00:07:42.683 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  762683848 00:07:42.683 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  762683848 00:07:42.683 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  762683848 00:07:42.683 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  762685128 00:07:42.685 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  762685128 status push: "transmit=11,d841,169,ffff"
+  762685128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=462685128 NextStTime=+129
+  762685256 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=462685256 NextStTime=+40
+  762685296 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=462685296 NextStTime=+2401
+  762687696 00:07:42.687 [D] SubMac--------: RadioState: Transmit -> Receive
+  762687696 00:07:42.687 [D] Mac-----------: ==============================[TX len=069]==============================
+  762687696 00:07:42.687 [D] Mac-----------: | 41 D8 A9 CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  762687696 00:07:42.687 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C F4 | 85 00 15 2F 00 00 00 00 | ;..MLML..../.... |
+  762687696 00:07:42.687 [D] Mac-----------: | 00 00 00 01 37 8C FD 22 | 52 13 82 60 BC 44 6F BB | ....7.."R..`.Do. |
+  762687696 00:07:42.687 [D] Mac-----------: | 4E F7 BB D1 5F 8B 85 41 | 90 F0 A9 1C C9 56 DB 95 | N..._..A.....V.. |
+  762687696 00:07:42.687 [D] Mac-----------: | 64 4C 0C B5 45          |                         | dL..E            |
+  762687696 00:07:42.687 [D] Mac-----------: ------------------------------------------------------------------------
+  762687696 00:07:42.687 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  762687696 00:07:42.687 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:f485, ecn:no, to:0xffff, sec:no, prio:net
+  762687696 00:07:42.687 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  762687696 00:07:42.687 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  762687696 00:07:42.687 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  762687696 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=462687696 NextStTime=+40
+  762687736 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=462687736 NextStTime=+600
+  762688336 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=462688336 NextStTime=+0
+  773037000 00:07:53.037 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  773037000 00:07:53.037 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  773037000 00:07:53.037 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  773037000 00:07:53.037 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  773038280 00:07:53.038 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  773038280 status push: "transmit=11,d841,170,ffff"
+  773038280 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=473038280 NextStTime=+129
+  773038408 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=473038408 NextStTime=+40
+  773038448 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=473038448 NextStTime=+2401
+  773040848 00:07:53.040 [D] SubMac--------: RadioState: Transmit -> Receive
+  773040848 00:07:53.040 [D] Mac-----------: ==============================[TX len=069]==============================
+  773040848 00:07:53.040 [D] Mac-----------: | 41 D8 AA CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  773040848 00:07:53.040 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 90 | 17 00 15 30 00 00 00 00 | ;..MLML....0.... |
+  773040848 00:07:53.040 [D] Mac-----------: | 00 00 00 01 FB 60 CA 0C | 59 C8 9A F5 16 C1 4F 58 | .....`..Y.....OX |
+  773040848 00:07:53.040 [D] Mac-----------: | 27 77 0C 0E FA 89 F1 5C | 76 F9 FC 18 5B 26 F3 49 | 'w.....\v...[&.I |
+  773040848 00:07:53.040 [D] Mac-----------: | 89 2E 58 3F 0B          |                         | ..X?.            |
+  773040848 00:07:53.040 [D] Mac-----------: ------------------------------------------------------------------------
+  773040848 00:07:53.040 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  773040848 00:07:53.040 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:9017, ecn:no, to:0xffff, sec:no, prio:net
+  773040848 00:07:53.040 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  773040848 00:07:53.040 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  773040848 00:07:53.040 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  773040848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=473040848 NextStTime=+40
+  773040888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=473040888 NextStTime=+600
+  773041488 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=473041488 NextStTime=+0
+  773864296 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=473864296 NextStTime=+2401
+  773866696 (OTNS)       [T] RadioModelMI--: applied OT_ERROR_FCS sirDb=-3.454838 src=1 dst=3 Psuc=0.152345 FrLen=75B
+  773866696 00:07:53.866 [I] Mac-----------: Frame rx failed, error:FcsErr
+  773866696 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=473866696 NextStTime=+40
+  773866736 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=473866736 NextStTime=+0
+  785557000 00:08:05.557 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  785557000 00:08:05.557 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  785557000 00:08:05.557 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  785557000 00:08:05.557 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  785558600 00:08:05.558 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  785558600 status push: "transmit=11,d841,171,ffff"
+  785558600 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=485558600 NextStTime=+129
+  785558728 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=485558728 NextStTime=+40
+  785558768 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=485558768 NextStTime=+2401
+  785561168 00:08:05.561 [D] SubMac--------: RadioState: Transmit -> Receive
+  785561168 00:08:05.561 [D] Mac-----------: ==============================[TX len=069]==============================
+  785561168 00:08:05.561 [D] Mac-----------: | 41 D8 AB CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  785561168 00:08:05.561 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C CF | 9B 00 15 31 00 00 00 00 | ;..MLML....1.... |
+  785561168 00:08:05.561 [D] Mac-----------: | 00 00 00 01 BB B3 E3 DE | 09 33 17 FD 4E 5B 42 33 | .........3..N[B3 |
+  785561168 00:08:05.561 [D] Mac-----------: | 1E BD 68 9B FB 4B 96 52 | 04 2D 0D DC A6 65 1D B8 | ..h..K.R.-...e.. |
+  785561168 00:08:05.561 [D] Mac-----------: | DF B2 3E CB 76          |                         | ..>.v            |
+  785561168 00:08:05.561 [D] Mac-----------: ------------------------------------------------------------------------
+  785561168 00:08:05.561 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  785561168 00:08:05.561 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:cf9b, ecn:no, to:0xffff, sec:no, prio:net
+  785561168 00:08:05.561 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  785561168 00:08:05.561 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  785561168 00:08:05.561 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  785561168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=485561168 NextStTime=+40
+  785561208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=485561208 NextStTime=+600
+  785561808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=485561808 NextStTime=+0
+  787409168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=487409168 NextStTime=+2401
+  787411568 (OTNS)       [T] RadioModelMI--: applied OT_ERROR_FCS sirDb=-3.454838 src=1 dst=3 Psuc=0.152345 FrLen=75B
+  787411568 00:08:07.411 [I] Mac-----------: Frame rx failed, error:FcsErr
+  787411568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=487411568 NextStTime=+40
+  787411608 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=487411608 NextStTime=+0
+  798892000 00:08:18.892 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  798892000 00:08:18.892 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  798892000 00:08:18.892 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  798892000 00:08:18.892 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  798892640 00:08:18.892 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  798892640 status push: "transmit=11,d841,172,ffff"
+  798892640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=498892640 NextStTime=+129
+  798892768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=498892768 NextStTime=+40
+  798892808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=498892808 NextStTime=+2401
+  798895208 00:08:18.895 [D] SubMac--------: RadioState: Transmit -> Receive
+  798895208 00:08:18.895 [D] Mac-----------: ==============================[TX len=069]==============================
+  798895208 00:08:18.895 [D] Mac-----------: | 41 D8 AC CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  798895208 00:08:18.895 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 49 | FF 00 15 32 00 00 00 00 | ;..MLMLI...2.... |
+  798895208 00:08:18.895 [D] Mac-----------: | 00 00 00 01 E5 AE 42 63 | 88 CC 5F 49 09 77 29 CF | ......Bc.._I.w). |
+  798895208 00:08:18.895 [D] Mac-----------: | 4A CA FA 03 52 DF AB D4 | 96 F9 73 6D 9E D6 A6 3D | J...R.....sm...= |
+  798895208 00:08:18.895 [D] Mac-----------: | 53 3A D1 DA FC          |                         | S:...            |
+  798895208 00:08:18.895 [D] Mac-----------: ------------------------------------------------------------------------
+  798895208 00:08:18.895 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  798895208 00:08:18.895 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:49ff, ecn:no, to:0xffff, sec:no, prio:net
+  798895208 00:08:18.895 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  798895208 00:08:18.895 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  798895208 00:08:18.895 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  798895208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=498895208 NextStTime=+40
+  798895248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=498895248 NextStTime=+600
+  798895848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=498895848 NextStTime=+0
+  799885448 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=499885448 NextStTime=+2401
+  799887848 (OTNS)       [T] RadioModelMI--: applied OT_ERROR_FCS sirDb=-3.454838 src=1 dst=3 Psuc=0.152345 FrLen=75B
+  799887848 00:08:19.887 [I] Mac-----------: Frame rx failed, error:FcsErr
+  799887848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=499887848 NextStTime=+40
+  799887888 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=499887888 NextStTime=+0
+  810104000 00:08:30.104 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  810104000 00:08:30.104 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  810104000 00:08:30.104 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  810104000 00:08:30.104 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  810104640 00:08:30.104 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  810104640 status push: "transmit=11,d841,173,ffff"
+  810104640 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=510104640 NextStTime=+129
+  810104768 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=510104768 NextStTime=+40
+  810104808 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=510104808 NextStTime=+2401
+  810107208 00:08:30.107 [D] SubMac--------: RadioState: Transmit -> Receive
+  810107208 00:08:30.107 [D] Mac-----------: ==============================[TX len=069]==============================
+  810107208 00:08:30.107 [D] Mac-----------: | 41 D8 AD CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  810107208 00:08:30.107 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 21 | 68 00 15 33 00 00 00 00 | ;..MLML!h..3.... |
+  810107208 00:08:30.107 [D] Mac-----------: | 00 00 00 01 2C 4E B2 77 | 14 F7 CC C4 29 28 23 4D | ....,N.w....)(#M |
+  810107208 00:08:30.107 [D] Mac-----------: | 8C AE B9 FC B3 D7 6E 22 | 88 6A 1F 15 00 E3 72 2F | ......n".j....r/ |
+  810107208 00:08:30.107 [D] Mac-----------: | AC 9F 55 5F E4          |                         | ..U_.            |
+  810107208 00:08:30.107 [D] Mac-----------: ------------------------------------------------------------------------
+  810107208 00:08:30.107 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  810107208 00:08:30.107 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:2168, ecn:no, to:0xffff, sec:no, prio:net
+  810107208 00:08:30.107 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  810107208 00:08:30.107 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  810107208 00:08:30.107 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  810107208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=510107208 NextStTime=+40
+  810107248 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=510107248 NextStTime=+600
+  810107848 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=510107848 NextStTime=+0
+  810435336 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=510435336 NextStTime=+2401
+  810437736 (OTNS)       [T] RadioModelMI--: applied OT_ERROR_FCS sirDb=-3.454838 src=1 dst=3 Psuc=0.152345 FrLen=75B
+  810437736 00:08:30.437 [I] Mac-----------: Frame rx failed, error:FcsErr
+  810437736 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=510437736 NextStTime=+40
+  810437776 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=510437776 NextStTime=+0
+  821674128 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=FrameRx RadioState=Rx_ Ch=11 RadioTime=521674128 NextStTime=+2401
+  821676528 (OTNS)       [T] RadioModelMI--: applied OT_ERROR_FCS sirDb=-3.454838 src=1 dst=3 Psuc=0.152345 FrLen=75B
+  821676528 00:08:41.676 [I] Mac-----------: Frame rx failed, error:FcsErr
+  821676528 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=521676528 NextStTime=+40
+  821676568 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=521676568 NextStTime=+0
+  823146000 00:08:43.146 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  823146000 00:08:43.146 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  823146000 00:08:43.146 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  823146000 00:08:43.146 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  823147600 00:08:43.147 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  823147600 status push: "transmit=11,d841,174,ffff"
+  823147600 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA____ RadioState=Tx_ Ch=11 RadioTime=523147600 NextStTime=+129
+  823147728 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=CCA2Tx_ RadioState=Tx_ Ch=11 RadioTime=523147728 NextStTime=+40
+  823147768 (OTNS)       [T] RadioState----: EnergyState=Tx_ SubState=FrameTx RadioState=Tx_ Ch=11 RadioTime=523147768 NextStTime=+2401
+  823150168 00:08:43.150 [D] SubMac--------: RadioState: Transmit -> Receive
+  823150168 00:08:43.150 [D] Mac-----------: ==============================[TX len=069]==============================
+  823150168 00:08:43.150 [D] Mac-----------: | 41 D8 AE CE FA FF FF 16 | 8B 5F F7 35 08 B2 BA 7F | A........_.5.... |
+  823150168 00:08:43.150 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C AB | 6A 00 15 34 00 00 00 00 | ;..MLML.j..4.... |
+  823150168 00:08:43.150 [D] Mac-----------: | 00 00 00 01 7D 94 E7 84 | 1B 83 45 9B 91 71 06 B8 | ....}.....E..q.. |
+  823150168 00:08:43.150 [D] Mac-----------: | 54 18 10 7F 49 94 C2 0A | 51 3D 06 E1 E9 AD D4 10 | T...I...Q=...... |
+  823150168 00:08:43.150 [D] Mac-----------: | E3 CD C7 6E C2          |                         | ...n.            |
+  823150168 00:08:43.150 [D] Mac-----------: ------------------------------------------------------------------------
+  823150168 00:08:43.150 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  823150168 00:08:43.150 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:ab6a, ecn:no, to:0xffff, sec:no, prio:net
+  823150168 00:08:43.150 [I] MeshForwarder-:     src:[fe80:0:0:0:b8b2:835:f75f:8b16]:19788
+  823150168 00:08:43.150 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  823150168 00:08:43.150 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  823150168 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Tx2Rx__ RadioState=Rx_ Ch=11 RadioTime=523150168 NextStTime=+40
+  823150208 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=IFS____ RadioState=Rx_ Ch=11 RadioTime=523150208 NextStTime=+600
+  823150808 (OTNS)       [T] RadioState----: EnergyState=Rx_ SubState=Ready__ RadioState=Rx_ Ch=11 RadioTime=523150808 NextStTime=+0
+  826000000 Sending SIGTERM to node process PID 734274
+  826000000 Sending SIGTERM to node process PID 734274
+  826000000 Waiting for process PID 734274 to exit ...
+  826000000 Node process exited. Wait().err=<nil>
+  826000000 Node process exited.
+  826000000 Closing log file.

@@ -10,7 +10,7 @@ The active benchmark matrix uses three simple parent-switch scenarios:
 
 A simple parent-switch scenario has three routers, one mobile end device, straight-line movement, delayed Router B/Router C activation, static 0 dBm transmit power, and no intentional dead zone. The mobile starts near Router A, moves beyond Router C, and dwells at the end to give late or sticky parent switching behavior time to appear.
 
-Router A and the mobile end device are created first. The runner waits until the mobile is observed parented to Router A, Router B and Router C are introduced after that attachment gate, a post-activation settle period runs, and only then does movement toward Router C begin. All active scenarios keep `expected_initial_parent: router_a`.
+Router A and the mobile end device are created first. The scenario then runs a fixed Router-A-only attachment window before Router B and Router C are introduced. A post-activation settle period runs after Router B/C activation, and only then does movement toward Router C begin. All active scenarios keep `expected_initial_parent: router_a`.
 
 The post-activation settle period is monitored, not treated as invisible time. The runner polls the mobile parent during this phase and records `pre_movement_parent_sequence`, `pre_movement_parent_final`, `pre_movement_switch_count`, and `pre_movement_parent_events` in the summary JSON. If the mobile leaves Router A before movement sampling starts, the run is classified as `pre_movement_switch_observed` instead of being folded into `initial_parent_unexpected`.
 
@@ -26,7 +26,7 @@ All active simple scenarios use the same intended overlapping-coverage geometry:
 | Mobile attach/movement start | 350 | 360 |
 | Mobile end | 1600 | 360 |
 
-The moving end device stays horizontally offset from the router line. The old symmetric start/end offset was removed because a large left-side offset made initial Router A attachment unreliable. The active geometry instead controls initial attachment near Router A, then moves the ED past Router C. Router B remains between Router A and Router C so it can preserve mesh connectivity while also acting as a possible intermediate parent.
+The moving end device stays horizontally offset from the router line. The old symmetric start/end offset was removed because a large left-side offset made initial Router A attachment unreliable. The active geometry instead starts near Router A for a fixed Router-A-only attachment window, then moves the ED past Router C. Router B remains between Router A and Router C so it can preserve mesh connectivity while also acting as a possible intermediate parent.
 
 All nodes set OpenThread transmit power to `0 dBm` once during initialization using `txpower 0`; the runner verifies the configured value with `txpower` when possible.
 
@@ -50,11 +50,11 @@ If the mobile detaches, summaries record `detach_count`, first detach/reattach t
 
 ## Timing
 
-| Scenario | Step seconds | Movement steps | Initial parent wait timeout (s) | Router B/C delay after gate (s) | Post-activation settle (s) | Hold end steps | End dwell (s) |
+| Scenario | Step seconds | Movement steps | Router-A-only delay before B/C (s) | Post-activation settle (s) | Hold end steps | End dwell (s) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| MED simple | 1 | 25 | 300 | 0 | 180 | 320 | 320 |
-| FED simple | 1 | 25 | 300 | 0 | 180 | 320 | 320 |
-| SED simple | 1 | 25 | 300 | 0 | 180 | 320 | 320 |
+| MED simple | 1 | 25 | 300 | 180 | 320 | 320 |
+| FED simple | 1 | 25 | 300 | 180 | 320 | 320 |
+| SED simple | 1 | 25 | 300 | 180 | 320 | 320 |
 
 The SED scenario now uses the same activation timing as MED/FED so the repeated PPS matrix uses a consistent geometry and movement schedule across profiles. SED observability remains different because regular SED packet probing is unreliable.
 
