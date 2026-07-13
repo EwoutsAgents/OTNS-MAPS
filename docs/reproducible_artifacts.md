@@ -133,3 +133,24 @@ The Phase 12 binaries were built from the separately isolated Track A
 OpenThread source stated above, and the artifacts recorded zero `ParentRank`
 events. The dirty submodule state therefore does not imply an unidentified
 change to the packaged native binaries; their hashes are authoritative.
+
+## Clean-checkout validation
+
+A fresh local clone of OTNS-MAPS commit `8a24698` verified all three
+four-router bundles and the repeated experiment without modification. A new
+four-router fast-response run was then launched from that clean checkout using
+OTNS seed 3214 and the packaged scenario/build provenance.
+
+The reproduction matched the reference on:
+
+- target-selection seed 2923 and OTNS seed 3214;
+- selected target `router_d`;
+- `selected_target_reached` classification;
+- all five node executable profiles and SHA-256 fingerprints;
+- Parent Request to Response: 9.072 ms;
+- Response to Child ID Request: 0.000 ms;
+- Child ID Request to Response: 10.128 ms;
+- full attach: 19.200 ms.
+
+The reproduced artifact independently passed `scripts/verify_artifact.py` with
+all 13 payload files and five available executable fingerprints checked.
