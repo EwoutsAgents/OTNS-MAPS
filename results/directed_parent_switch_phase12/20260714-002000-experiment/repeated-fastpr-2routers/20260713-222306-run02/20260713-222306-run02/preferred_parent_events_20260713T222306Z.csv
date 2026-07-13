@@ -1,0 +1,10 @@
+observed_time_s,event,generation,target,parent,rloc16,rssi,time_us,timing_source,resolution_us,state,mode,reason,error
+305.0,parent_request_started,1,,,,,5000000,otns_openthread_event,1,,,,
+305.0,attacher_state,1,,,,,,,,2,,,
+305.0,requested,1,12b19e6806d96011,,,,,,,,unicast,,
+306.0,target_response,1,12b19e6806d96011,,0800,-71,5013232,otns_openthread_event,1,,,,
+306.0,child_id_request_started,1,12b19e6806d96011,,,,5013232,otns_openthread_event,1,,,,
+306.0,attacher_state,1,,,,,,,,4,,,
+306.0,attacher_state,1,,,,,,,,0,,,
+306.0,child_id_response_received,1,,12b19e6806d96011,,,5025600,otns_openthread_event,1,,,,
+306.0,succeeded,1,,12b19e6806d96011,,,5025600,otns_openthread_event,1,,,,

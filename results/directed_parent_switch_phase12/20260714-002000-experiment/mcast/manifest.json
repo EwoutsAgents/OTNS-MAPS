@@ -1,0 +1,346 @@
+{
+  "artifact_schema_version": 1,
+  "build_config_source": "/home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent/scripts/build_otns_native_variants.sh",
+  "checksums_file": "checksums.sha256",
+  "command_acknowledged": true,
+  "configured_node_tx_power_dbm": {
+    "mobile": 0.0,
+    "router_a": 0.0,
+    "router_b": 0.0,
+    "router_c": 0.0,
+    "router_d": 0.0
+  },
+  "created_at_utc": "2026-07-13T22:19:31.145011+00:00",
+  "csv_file": "baseline_run_20260714T002001Z.csv",
+  "detach_count": 0,
+  "device_profile": "minimal_end_device",
+  "directed_mode": "multicast",
+  "directed_result_classification": "selected_target_reached",
+  "ended_detached": false,
+  "equivalent_to": null,
+  "final_observed_parent": "router_a",
+  "final_parent": "router_a",
+  "firmware_variant": "phase12-mcast-4routers",
+  "first_detach_position_x": null,
+  "first_detach_time_s": null,
+  "first_reattach_position_x": null,
+  "first_reattach_time_s": null,
+  "first_switch_time_s": 306.0,
+  "ftd_node_binary_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/stock-ftd/ot-cli-ftd",
+  "ftd_node_binary_profile": "stock",
+  "initial_observed_parent": "router_a",
+  "initial_parent": "router_b",
+  "labels": [
+    "SKIP_PARENT_IS_LEADER",
+    "ROUTER_TOPOLOGY_CHANGED",
+    "SELECTED_TARGET_REACHED"
+  ],
+  "mle_attach_attempts": 1,
+  "mle_better_parent_attach_attempts": 0,
+  "mle_parent_changes": 1,
+  "node_binary_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/preferred-parent-mtd-pps-off/ot-cli-mtd",
+  "node_binary_profile": "preferred-parent",
+  "node_executables": {
+    "mobile": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/preferred-parent-mtd-pps-off/ot-cli-mtd",
+      "executable_sha256": "dd6d97f5418bd7f35b1674f32687faa6116afc65d198436070e2cca8bdba3627",
+      "firmware_profile": "preferred-parent",
+      "node_id": 5
+    },
+    "router_a": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/stock-ftd/ot-cli-ftd",
+      "executable_sha256": "6c21e593fb01bd3cc984a138cbde863285c5842fe55dfd0b52a839fefe98064a",
+      "firmware_profile": "stock",
+      "node_id": 1
+    },
+    "router_b": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/stock-ftd/ot-cli-ftd",
+      "executable_sha256": "6c21e593fb01bd3cc984a138cbde863285c5842fe55dfd0b52a839fefe98064a",
+      "firmware_profile": "stock",
+      "node_id": 2
+    },
+    "router_c": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/stock-ftd/ot-cli-ftd",
+      "executable_sha256": "6c21e593fb01bd3cc984a138cbde863285c5842fe55dfd0b52a839fefe98064a",
+      "firmware_profile": "stock",
+      "node_id": 3
+    },
+    "router_d": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/stock-ftd/ot-cli-ftd",
+      "executable_sha256": "6c21e593fb01bd3cc984a138cbde863285c5842fe55dfd0b52a839fefe98064a",
+      "firmware_profile": "stock",
+      "node_id": 4
+    }
+  },
+  "node_log_files": [
+    "node_log_mobile_5.log",
+    "node_log_router_a_1.log",
+    "node_log_router_b_2.log",
+    "node_log_router_c_3.log",
+    "node_log_router_d_4.log"
+  ],
+  "openthread_commit": "a12ff0d0f54fd41954b45047fcdd08f302731c5f",
+  "oscillation_events": 0,
+  "otns_command": "/home/ewout/go/bin/otns -listen localhost:11400 -web=false -autogo=false -speed 0 -seed 3214 -pcap off",
+  "otns_commit": "099a6c26cb1d2b8749d3171d5cdd8597fc71049c",
+  "otns_watch_level": "info",
+  "otns_workdir": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns",
+  "packet_delivery_ratio": 1.0,
+  "parent_after_removal_final": null,
+  "parent_before_removal": null,
+  "parent_deletion_to_target_observed_ms": 1000.0,
+  "parent_deletion_to_target_observed_source": "otns_parent_poll",
+  "parent_rank_criterion_counts": {},
+  "parent_rank_decision_counts": {},
+  "parent_rank_event_count": 0,
+  "parent_rank_file": null,
+  "parent_removal_time_s": 305.0,
+  "parent_search_config": "disabled",
+  "parent_sequence": [
+    "router_a"
+  ],
+  "post_removal_first_switch_time_s": null,
+  "post_removal_reattach_latency_s": null,
+  "post_removal_switch_count": null,
+  "pre_movement_parent_events": [],
+  "pre_movement_parent_final": null,
+  "pre_movement_switch_count": 0,
+  "preferred_parent_event_file": "preferred_parent_events_20260714T002001Z.csv",
+  "preferred_parent_events": [
+    {
+      "event": "attacher_state",
+      "generation": "1",
+      "observed_time_s": 305.0,
+      "state": "1"
+    },
+    {
+      "event": "requested",
+      "generation": "1",
+      "mode": "multicast",
+      "observed_time_s": 305.0,
+      "target": "f61f10f10ee20aa4"
+    },
+    {
+      "event": "parent_request_started",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "resolution_us": "1",
+      "time_us": "5001000",
+      "timing_source": "otns_openthread_event"
+    },
+    {
+      "event": "attacher_state",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "state": "2"
+    },
+    {
+      "event": "target_response",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "resolution_us": "1",
+      "rloc16": "e400",
+      "rssi": "-57",
+      "target": "f61f10f10ee20aa4",
+      "time_us": "5430912",
+      "timing_source": "otns_openthread_event"
+    },
+    {
+      "event": "child_id_request_started",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "resolution_us": "1",
+      "target": "f61f10f10ee20aa4",
+      "time_us": "5430912",
+      "timing_source": "otns_openthread_event"
+    },
+    {
+      "event": "attacher_state",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "state": "4"
+    },
+    {
+      "event": "attacher_state",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "state": "0"
+    },
+    {
+      "event": "child_id_response_received",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "parent": "f61f10f10ee20aa4",
+      "resolution_us": "1",
+      "time_us": "5442320",
+      "timing_source": "otns_openthread_event"
+    },
+    {
+      "event": "succeeded",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "parent": "f61f10f10ee20aa4",
+      "resolution_us": "1",
+      "time_us": "5442320",
+      "timing_source": "otns_openthread_event"
+    }
+  ],
+  "protocol_event_timestamps": {
+    "receive_child_id_response": {
+      "clock_bits": 32,
+      "clock_time_s": 5.44232,
+      "event": "child_id_response_received",
+      "resolution_us": 1,
+      "time_us": 5442320,
+      "timing_source": "otns_openthread_event"
+    },
+    "receive_parent_response": {
+      "clock_bits": 32,
+      "clock_time_s": 5.430912,
+      "event": "target_response",
+      "resolution_us": 1,
+      "time_us": 5430912,
+      "timing_source": "otns_openthread_event"
+    },
+    "send_child_id_request": {
+      "clock_bits": 32,
+      "clock_time_s": 5.430912,
+      "event": "child_id_request_started",
+      "resolution_us": 1,
+      "time_us": 5430912,
+      "timing_source": "otns_openthread_event"
+    },
+    "send_parent_request": {
+      "clock_bits": 32,
+      "clock_time_s": 5.001,
+      "event": "parent_request_started",
+      "resolution_us": 1,
+      "time_us": 5001000,
+      "timing_source": "otns_openthread_event"
+    }
+  },
+  "protocol_timing_complete": true,
+  "protocol_timing_ms": {
+    "child_id_request_to_response": 11.408,
+    "parent_request_to_child_id_response": 441.32,
+    "parent_request_to_response": 429.912,
+    "parent_response_to_child_id_request": 0.0
+  },
+  "protocol_timing_resolution_us": 1,
+  "protocol_timing_source": "otns_openthread_event",
+  "random_seed": 2921,
+  "reattach_latency_s": null,
+  "recovery_classification": "no_detach",
+  "removed_parent_extaddr": null,
+  "removed_parent_node": null,
+  "removed_parent_node_id": null,
+  "removed_parent_rloc16": null,
+  "replay_file": "med_directed_mcast_4routers_20260714T002001Z.replay",
+  "replay_metadata_file": "med_directed_mcast_4routers_20260714T002001Z.replay.json",
+  "result_classification": "selected_target_reached",
+  "results_collection": "med_directed_mcast_4routers",
+  "router_count": 4,
+  "router_topology_changes": {
+    "router_d": {
+      "after": {
+        "extaddr": "6e696bfbdae22eab",
+        "node_id": 4,
+        "rloc16": "8400",
+        "role": "leader"
+      },
+      "before": {
+        "extaddr": "6e696bfbdae22eab",
+        "node_id": 4,
+        "rloc16": "8400",
+        "role": "router"
+      }
+    }
+  },
+  "run_id": "20260714-002001-run01",
+  "runner_command": "/usr/bin/python3 /home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/scripts/run_baseline.py --scenario /home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/scenarios/directed/med_directed_mcast_4routers.yaml --results-dir /tmp/phase12-parent-switch-scratch/mcast --timestamp-token 20260714T002001Z --otns-command '/home/ewout/go/bin/otns -listen localhost:11400 -web=false -autogo=false -speed 0 -seed 3214 -pcap off' --otns-workdir /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns --node-binary-path /home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/preferred-parent-mtd-pps-off/ot-cli-mtd --node-binary-profile preferred-parent --ftd-node-binary-path /home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/stock-ftd/ot-cli-ftd --ftd-node-binary-profile stock --firmware-variant phase12-mcast-4routers --parent-search-config disabled --build-config-source /home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent/scripts/build_otns_native_variants.sh --firmware-source-repo /home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent --openthread-commit a12ff0d0f54fd41954b45047fcdd08f302731c5f --otns-commit 099a6c26cb1d2b8749d3171d5cdd8597fc71049c --otns-watch-level info --capture-replay --replay-dir /tmp/phase12-parent-switch-scratch/mcast/replay --copy-results-to-artifact --commit-artifact-dir /home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/directed_parent_switch_phase12/20260714-002000-experiment/mcast",
+  "runner_invocation": [
+    "/usr/bin/python3",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/scripts/run_baseline.py",
+    "--scenario",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/scenarios/directed/med_directed_mcast_4routers.yaml",
+    "--results-dir",
+    "/tmp/phase12-parent-switch-scratch/mcast",
+    "--timestamp-token",
+    "20260714T002001Z",
+    "--otns-command",
+    "/home/ewout/go/bin/otns -listen localhost:11400 -web=false -autogo=false -speed 0 -seed 3214 -pcap off",
+    "--otns-workdir",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns",
+    "--node-binary-path",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/preferred-parent-mtd-pps-off/ot-cli-mtd",
+    "--node-binary-profile",
+    "preferred-parent",
+    "--ftd-node-binary-path",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/stock-ftd/ot-cli-ftd",
+    "--ftd-node-binary-profile",
+    "stock",
+    "--firmware-variant",
+    "phase12-mcast-4routers",
+    "--parent-search-config",
+    "disabled",
+    "--build-config-source",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent/scripts/build_otns_native_variants.sh",
+    "--firmware-source-repo",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent",
+    "--openthread-commit",
+    "a12ff0d0f54fd41954b45047fcdd08f302731c5f",
+    "--otns-commit",
+    "099a6c26cb1d2b8749d3171d5cdd8597fc71049c",
+    "--otns-watch-level",
+    "info",
+    "--capture-replay",
+    "--replay-dir",
+    "/tmp/phase12-parent-switch-scratch/mcast/replay",
+    "--copy-results-to-artifact",
+    "--commit-artifact-dir",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/directed_parent_switch_phase12/20260714-002000-experiment/mcast"
+  ],
+  "scenario_copy_file": "scenario.yaml",
+  "scenario_file": "scenarios/directed/med_directed_mcast_4routers.yaml",
+  "scenario_name": "med_directed_mcast_4routers",
+  "scenario_sha256": "84fd33f9020205b2ed6e7435e6d0d0e6e4a1e5702e5abd3d3ae88e02c555c787",
+  "scenario_type": "directed_parent_switch",
+  "second_switch_position_x": null,
+  "second_switch_time_s": null,
+  "selected_radio_model": "MutualInterference",
+  "source_repositories": {
+    "firmware_patches": {
+      "commit": "8c8964f9a777a4d457a3cb51daf2411f084dc4ec",
+      "path": "/home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent",
+      "tracked_changes": false
+    },
+    "otns": {
+      "commit": "099a6c26cb1d2b8749d3171d5cdd8597fc71049c",
+      "path": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns",
+      "tracked_changes": true
+    },
+    "otns_maps": {
+      "commit": "9c822f6cb6d8cecfde81923d6fc7d41d429f9978",
+      "path": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS",
+      "tracked_changes": false
+    }
+  },
+  "summary_file": "baseline_summary_20260714T002001Z.json",
+  "switch_count": 1,
+  "switch_position_x": 375.0,
+  "target_parent": "router_a",
+  "target_parent_extaddr": "f61f10f10ee20aa4",
+  "target_parent_rloc16": "e400",
+  "thread_device_type": null,
+  "time_spent_by_parent_s": {
+    "router_a": 360.0
+  },
+  "total_outage_s": 1.0,
+  "verified_node_tx_power_dbm": {
+    "mobile": 0.0,
+    "router_a": 0.0,
+    "router_b": 0.0,
+    "router_c": 0.0,
+    "router_d": 0.0
+  }
+}

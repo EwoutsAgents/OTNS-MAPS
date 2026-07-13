@@ -118,6 +118,10 @@ The staged build, CLI, protocol, classification, topology-matrix, repeated-run,
 and hardware-comparison evidence is recorded in
 [`docs/validation_ladder.md`](docs/validation_ladder.md).
 
+Self-describing result export, checksum verification, deterministic repeated
+seeds, and the Phase 12 reference artifacts are documented in
+[`docs/reproducible_artifacts.md`](docs/reproducible_artifacts.md).
+
 Native directed runs export microsecond protocol-event timestamps and derive the
 same four attach intervals used by the ESPHome PCAP analyzer. Timing-source and
 clock semantics are documented in

@@ -1,0 +1,386 @@
+{
+  "after_parent_removed_seconds": 360,
+  "build_config_source": "/home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent/scripts/build_otns_native_variants.sh",
+  "child_attach_seconds": 5,
+  "command_acknowledged": true,
+  "command_error": null,
+  "command_output": [
+    "Node<5>  PREFPARENT event=parent_request_started generation=1 time_us=5000000 timing_source=otns_openthread_event resolution_us=1",
+    "Node<5>  PREFPARENT event=attacher_state generation=1 state=2",
+    "PREFPARENT event=requested generation=1 target=6e696bfbdae22eab mode=unicast"
+  ],
+  "configured_node_tx_power_dbm": {
+    "mobile": 0.0,
+    "router_a": 0.0,
+    "router_b": 0.0,
+    "router_c": 0.0,
+    "router_d": 0.0
+  },
+  "detach_count": 0,
+  "detach_events": [],
+  "device_profile": "minimal_end_device",
+  "directed_mode": "unicast",
+  "directed_result_classification": "selected_target_reached",
+  "ended_detached": false,
+  "equivalent_to": null,
+  "expected_initial_parent": null,
+  "final_mobile_state": "child",
+  "final_observed_parent": "router_d",
+  "final_parent": "router_d",
+  "firmware_source_repo": "/home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent",
+  "firmware_variant": "phase12-ucast_fastpr-4routers",
+  "first_detach_position_x": null,
+  "first_detach_previous_parent": null,
+  "first_detach_time_s": null,
+  "first_reattach_parent": null,
+  "first_reattach_position_x": null,
+  "first_reattach_time_s": null,
+  "first_switch_time_s": 306.0,
+  "ftd_node_binary_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/fastpr-ftd/ot-cli-ftd",
+  "ftd_node_binary_profile": "fastpr",
+  "initial_attachment_expected_parent": null,
+  "initial_attachment_observed_parent": null,
+  "initial_attachment_timed_out": false,
+  "initial_attachment_wait_s": null,
+  "initial_observed_parent": "router_d",
+  "initial_parent": "router_b",
+  "initial_parent_extaddr": "066318587284321e",
+  "initial_parent_node_id": 2,
+  "initial_parent_rloc16": "5000",
+  "labels": [
+    "SKIP_PARENT_IS_LEADER",
+    "ROUTER_TOPOLOGY_CHANGED",
+    "SELECTED_TARGET_REACHED"
+  ],
+  "mle_attach_attempts": 1,
+  "mle_better_parent_attach_attempts": 0,
+  "mle_parent_changes": 1,
+  "mobile_to_parent_end_dwell_sim_lqi_median": null,
+  "mobile_to_parent_end_dwell_sim_rss_dbm_mean": null,
+  "mobile_to_parent_end_dwell_sim_rss_dbm_median": null,
+  "mock": false,
+  "node_binary_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/preferred-parent-mtd-pps-off/ot-cli-mtd",
+  "node_binary_profile": "preferred-parent",
+  "node_executables": {
+    "mobile": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/preferred-parent-mtd-pps-off/ot-cli-mtd",
+      "executable_sha256": "dd6d97f5418bd7f35b1674f32687faa6116afc65d198436070e2cca8bdba3627",
+      "firmware_profile": "preferred-parent",
+      "node_id": 5
+    },
+    "router_a": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/fastpr-ftd/ot-cli-ftd",
+      "executable_sha256": "7bc3917e1d80d8f57258b9eb20ce5049351b772dd4da84058cd8391bd0e6c260",
+      "firmware_profile": "fastpr",
+      "node_id": 1
+    },
+    "router_b": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/fastpr-ftd/ot-cli-ftd",
+      "executable_sha256": "7bc3917e1d80d8f57258b9eb20ce5049351b772dd4da84058cd8391bd0e6c260",
+      "firmware_profile": "fastpr",
+      "node_id": 2
+    },
+    "router_c": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/fastpr-ftd/ot-cli-ftd",
+      "executable_sha256": "7bc3917e1d80d8f57258b9eb20ce5049351b772dd4da84058cd8391bd0e6c260",
+      "firmware_profile": "fastpr",
+      "node_id": 3
+    },
+    "router_d": {
+      "executable_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/fastpr-ftd/ot-cli-ftd",
+      "executable_sha256": "7bc3917e1d80d8f57258b9eb20ce5049351b772dd4da84058cd8391bd0e6c260",
+      "firmware_profile": "fastpr",
+      "node_id": 4
+    }
+  },
+  "node_log_files": [
+    "node_log_mobile_5.log",
+    "node_log_router_a_1.log",
+    "node_log_router_b_2.log",
+    "node_log_router_c_3.log",
+    "node_log_router_d_4.log"
+  ],
+  "notes": [
+    "OTNS FTD executable set to /home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/fastpr-ftd/ot-cli-ftd.",
+    "OTNS MTD executable set to /home/ewout/.openclaw/workspace-softwaredeveloper/.tmp/openclaw-spikes/phase10-native-timing/artifacts/preferred-parent-mtd-pps-off/ot-cli-mtd.",
+    "Live OTNS scan compatibility is inconsistent in this setup; scan-derived RSSI/LQI fields are left empty."
+  ],
+  "openthread_commit": "a12ff0d0f54fd41954b45047fcdd08f302731c5f",
+  "operation_generation": "1",
+  "oscillation_events": 0,
+  "otns_commit": "099a6c26cb1d2b8749d3171d5cdd8597fc71049c",
+  "otns_watch_level": "info",
+  "packet_delivery_ratio": 1.0,
+  "packet_probe_reliable": true,
+  "parent_deletion": {
+    "resolution_us": 1,
+    "time_s": 305.0,
+    "timing_source": "otns_simulator_time"
+  },
+  "parent_deletion_to_target_observed_ms": 1000.0,
+  "parent_deletion_to_target_observed_source": "otns_parent_poll",
+  "parent_probe_delivery_ratio": 1.0,
+  "parent_probe_enabled": true,
+  "parent_probe_interval_s": 1,
+  "parent_probe_mean_rtt_avg_ms": 6.835655,
+  "parent_probe_total_rx": 359,
+  "parent_probe_total_tx": 359,
+  "parent_rank_criterion_counts": {},
+  "parent_rank_decision_counts": {},
+  "parent_rank_event_count": 0,
+  "parent_rank_file": null,
+  "parent_removal_time_s": 305.0,
+  "parent_search_config": "disabled",
+  "parent_sequence": [
+    "router_d"
+  ],
+  "pre_movement_parent_before_delayed_nodes": null,
+  "pre_movement_parent_events": [],
+  "pre_movement_parent_final": null,
+  "pre_movement_parent_observation_count": 0,
+  "pre_movement_parent_sequence": [],
+  "pre_movement_switch_count": 0,
+  "preferred_parent_event_file": "preferred_parent_events_20260714T002003Z.csv",
+  "preferred_parent_events": [
+    {
+      "event": "parent_request_started",
+      "generation": "1",
+      "observed_time_s": 305.0,
+      "resolution_us": "1",
+      "time_us": "5000000",
+      "timing_source": "otns_openthread_event"
+    },
+    {
+      "event": "attacher_state",
+      "generation": "1",
+      "observed_time_s": 305.0,
+      "state": "2"
+    },
+    {
+      "event": "requested",
+      "generation": "1",
+      "mode": "unicast",
+      "observed_time_s": 305.0,
+      "target": "6e696bfbdae22eab"
+    },
+    {
+      "event": "target_response",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "resolution_us": "1",
+      "rloc16": "8400",
+      "rssi": "-92",
+      "target": "6e696bfbdae22eab",
+      "time_us": "5009072",
+      "timing_source": "otns_openthread_event"
+    },
+    {
+      "event": "child_id_request_started",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "resolution_us": "1",
+      "target": "6e696bfbdae22eab",
+      "time_us": "5009072",
+      "timing_source": "otns_openthread_event"
+    },
+    {
+      "event": "attacher_state",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "state": "4"
+    },
+    {
+      "event": "attacher_state",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "state": "0"
+    },
+    {
+      "event": "child_id_response_received",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "parent": "6e696bfbdae22eab",
+      "resolution_us": "1",
+      "time_us": "5019200",
+      "timing_source": "otns_openthread_event"
+    },
+    {
+      "event": "succeeded",
+      "generation": "1",
+      "observed_time_s": 306.0,
+      "parent": "6e696bfbdae22eab",
+      "resolution_us": "1",
+      "time_us": "5019200",
+      "timing_source": "otns_openthread_event"
+    }
+  ],
+  "primary_parent_observation": "packet_probe",
+  "protocol_clock": "otns_node_platform_micro_32",
+  "protocol_event_timestamps": {
+    "receive_child_id_response": {
+      "clock_bits": 32,
+      "clock_time_s": 5.0192,
+      "event": "child_id_response_received",
+      "resolution_us": 1,
+      "time_us": 5019200,
+      "timing_source": "otns_openthread_event"
+    },
+    "receive_parent_response": {
+      "clock_bits": 32,
+      "clock_time_s": 5.009072,
+      "event": "target_response",
+      "resolution_us": 1,
+      "time_us": 5009072,
+      "timing_source": "otns_openthread_event"
+    },
+    "send_child_id_request": {
+      "clock_bits": 32,
+      "clock_time_s": 5.009072,
+      "event": "child_id_request_started",
+      "resolution_us": 1,
+      "time_us": 5009072,
+      "timing_source": "otns_openthread_event"
+    },
+    "send_parent_request": {
+      "clock_bits": 32,
+      "clock_time_s": 5.0,
+      "event": "parent_request_started",
+      "resolution_us": 1,
+      "time_us": 5000000,
+      "timing_source": "otns_openthread_event"
+    }
+  },
+  "protocol_timing_complete": true,
+  "protocol_timing_ms": {
+    "child_id_request_to_response": 10.128,
+    "parent_request_to_child_id_response": 19.2,
+    "parent_request_to_response": 9.072,
+    "parent_response_to_child_id_request": 0.0
+  },
+  "protocol_timing_resolution_us": 1,
+  "protocol_timing_source": "otns_openthread_event",
+  "random_seed": 2923,
+  "reattach_latency_s": null,
+  "recovery_classification": "no_detach",
+  "replay_capture_requested": true,
+  "replay_file": "med_directed_ucast_fastpr_4routers_20260714T002003Z.replay",
+  "replay_metadata_file": "med_directed_ucast_fastpr_4routers_20260714T002003Z.replay.json",
+  "result_classification": "selected_target_reached",
+  "router_count": 4,
+  "router_settling_seconds": 300,
+  "router_topology_after": {
+    "router_a": {
+      "extaddr": "f61f10f10ee20aa4",
+      "node_id": 1,
+      "rloc16": "e400",
+      "role": "leader"
+    },
+    "router_c": {
+      "extaddr": "6e7fc671ff137162",
+      "node_id": 3,
+      "rloc16": "7000",
+      "role": "router"
+    },
+    "router_d": {
+      "extaddr": "6e696bfbdae22eab",
+      "node_id": 4,
+      "rloc16": "8400",
+      "role": "router"
+    }
+  },
+  "router_topology_before": {
+    "router_a": {
+      "extaddr": "f61f10f10ee20aa4",
+      "node_id": 1,
+      "rloc16": "e400",
+      "role": "router"
+    },
+    "router_b": {
+      "extaddr": "066318587284321e",
+      "node_id": 2,
+      "rloc16": "5000",
+      "role": "leader"
+    },
+    "router_c": {
+      "extaddr": "6e7fc671ff137162",
+      "node_id": 3,
+      "rloc16": "7000",
+      "role": "router"
+    },
+    "router_d": {
+      "extaddr": "6e696bfbdae22eab",
+      "node_id": 4,
+      "rloc16": "8400",
+      "role": "router"
+    }
+  },
+  "router_topology_changes": {
+    "router_a": {
+      "after": {
+        "extaddr": "f61f10f10ee20aa4",
+        "node_id": 1,
+        "rloc16": "e400",
+        "role": "leader"
+      },
+      "before": {
+        "extaddr": "f61f10f10ee20aa4",
+        "node_id": 1,
+        "rloc16": "e400",
+        "role": "router"
+      }
+    }
+  },
+  "sample_count": 360,
+  "scenario_file": "scenario.yaml",
+  "scenario_model_rss": null,
+  "scenario_name": "med_directed_ucast_fastpr_4routers",
+  "scenario_title": "Directed fast-response unicast MED parent switch with 4 routers",
+  "scenario_type": "directed_parent_switch",
+  "second_switch_position_x": null,
+  "second_switch_time_s": null,
+  "selected_radio_model": "MutualInterference",
+  "sim_ping_rss_ambiguous_probe_events": 0,
+  "sim_ping_rss_capture_enabled": false,
+  "sim_ping_rss_capture_method": null,
+  "sim_ping_rss_capture_requested": false,
+  "sim_ping_rss_match_rate": null,
+  "sim_ping_rss_matched_probe_events": 0,
+  "sim_ping_rss_policy": "request_and_reply_when_available",
+  "sim_ping_rss_probe_stats": {},
+  "sim_ping_rss_total_probe_events": 0,
+  "sim_ping_rss_unmatched_probe_events": 0,
+  "switch_count": 1,
+  "switch_events": [
+    {
+      "from_parent": "router_b",
+      "phase": "post_parent_removal",
+      "sample_index": 0,
+      "sim_time_s": 306.0,
+      "to_parent": "router_d"
+    }
+  ],
+  "switch_position_x": 375.0,
+  "target_parent": "router_d",
+  "target_parent_extaddr": "6e696bfbdae22eab",
+  "target_parent_node_id": 4,
+  "target_parent_observation": {
+    "resolution_us": 1000000,
+    "time_s": 306.0,
+    "timing_source": "otns_parent_poll"
+  },
+  "target_parent_rloc16": "8400",
+  "target_selection": "random_non_current_parent",
+  "thread_device_type": null,
+  "time_spent_by_parent_s": {
+    "router_d": 360.0
+  },
+  "total_outage_s": 1.0,
+  "tx_power_command": "txpower",
+  "verified_node_tx_power_dbm": {
+    "mobile": 0.0,
+    "router_a": 0.0,
+    "router_b": 0.0,
+    "router_c": 0.0,
+    "router_d": 0.0
+  }
+}
