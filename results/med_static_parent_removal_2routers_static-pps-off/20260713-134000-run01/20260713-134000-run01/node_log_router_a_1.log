@@ -1,0 +1,1375 @@
+#
+# OpenThread node log for Node<1>   Created 2026-07-13T15:21:08+02:00
+# SimTimeUs NodeTime     Lev LogModule       Message
+          0 Node config: type=router IsMtd=false IsRouter=true IsBR=false RxOffWhenIdle=false
+          0   exe cmd : ./ot-rfsim/ot-versions/ot-cli-ftd 1 /tmp/otns/socket_dispatcher_0 352526572
+          0   position: (100,100,0)
+          0 00:00:00.000 [D] SubMac--------: RadioState: Disabled -> Sleep
+          0 00:00:00.000 [D] SubMac--------: RadioExtAddress: 9e3f630f0c3ca1e6
+          0 set node RLOC16: fffe -> fffe
+          0 00:00:00.000 [D] SubMac--------: RadioShortAddress: 0xfffe
+          0 00:00:00.000 [D] Platform------: Clear ShortAddr entries
+          0 00:00:00.000 [D] Platform------: Clear ExtAddr entries
+          0 00:00:00.000 [D] SrcMatchCtrl--: Cleared all entries
+          0 00:00:00.000 [I] CslTxScheduler: Set frame request ahead: 368 usec
+          0 00:00:00.000 [I] ChildSupervsn-: Timeout: 0 -> 190
+          0 00:00:00.000 [I] Notifier------: StateChanged (0x00038210) [MLAddr NetData PanId NetName ExtPanId]
+          0 00:00:00.000 [I] RouterTable---: Route table
+          0 start setup of node (version/commit, rfsim params, mode, init script)
+          0 00:00:00.000 [D] Cli-----------: Input: version
+          0 00:00:00.000 [D] Cli-----------: Output: OPENTHREAD/thread-reference-20250612-1254-g7874555ef; RFSIM; Jul  7 2026 16:26:24
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: thread version
+          0 00:00:00.000 [D] Cli-----------: Output: 5
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: mode rdn
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: dataset init new
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: dataset networkname otns
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: dataset networkkey 00112233445566778899aabbccddeeff
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: dataset panid 0xface
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: dataset channel 11
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: dataset extpanid dead00beef00cafe
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: dataset meshlocalprefix fdde:ad00:beef:0::
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: dataset pskc 3aa55f91ca47d1e4e71a08cb35e91591
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: dataset commit active
+          0 00:00:00.000 [I] Settings------: Saved ActiveDataset
+          0 00:00:00.000 [I] DatasetManager: Active dataset set
+          0 00:00:00.000 [D] SubMac--------: RadioPanId: 0xface
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [I] Notifier------: StateChanged (0x101dc100) [KeySeqCntr Channel PanId NetName NetworkKey PSKc SecPolicy ActDset]
+          0 00:00:00.000 [I] AnnounceSender: ChannelMask:{ 11-26 }, period:21500
+          0 00:00:00.000 [I] AnnounceSender: StartingChannel:11
+          0 00:00:00.000 [I] AnnounceSender: StartingChannel:11
+          0 00:00:00.000 [D] Cli-----------: Input: ifconfig up
+          0 00:00:00.000 [D] SubMac--------: RxOnWhenIdle: 1
+          0 00:00:00.000 [D] SubMac--------: RadioState: Sleep -> Receive
+          0 00:00:00.000 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+          0 00:00:00.000 [I] Mle-----------: PeriodicParentSearch: (Re)starting timer for check interval
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [I] Notifier------: StateChanged (0x01001009) [Ip6+ LLAddr Ip6Mult+ NetifState]
+          0 00:00:00.000 [D] Cli-----------: Input: thread start
+          0 00:00:00.000 [N] Mle-----------: Role disabled -> detached
+          0 set node RLOC16: fffe -> fffe
+          0 00:00:00.000 [D] SubMac--------: RadioShortAddress: 0xfffe
+          0 00:00:00.000 [I] Mle-----------: AttachState Idle -> Start
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [I] Notifier------: StateChanged (0x10001005) [Ip6+ Role Ip6Mult+ ActDset]
+          0 00:00:00.000 [I] AnnounceSender: Stopped
+          0 00:00:00.000 [D] Cli-----------: Input: panid
+          0 00:00:00.000 [D] Cli-----------: Output: 0xface
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: channel
+          0 00:00:00.000 [D] Cli-----------: Output: 11
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: eui64
+          0 00:00:00.000 [D] Cli-----------: Output: 18b4300000000001
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: extaddr
+          0 00:00:00.000 [D] Cli-----------: Output: 9e3f630f0c3ca1e6
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: state
+          0 00:00:00.000 [D] Cli-----------: Output: detached
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: networkkey
+          0 00:00:00.000 [D] Cli-----------: Output: 00112233445566778899aabbccddeeff
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: mode
+          0 00:00:00.000 [D] Cli-----------: Output: rdn
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 started, panid=0xface, chan=11, eui64="18b4300000000001", extaddr=0x9e3f630f0c3ca1e6, state=detached, key="00112233445566778899aabbccddeeff", mode=rdn
+          0          version=OPENTHREAD/thread-reference-20250612-1254-g7874555ef; RFSIM; Jul  7 2026 16:26:24
+          0 00:00:00.000 [D] Cli-----------: Input: txpower 0
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+          0 00:00:00.000 [D] Cli-----------: Input: txpower
+          0 00:00:00.000 [D] Cli-----------: Output: 0 dBm
+          0 00:00:00.000 [D] Cli-----------: Output: Done
+      69140 00:00:00.069 [N] Mle-----------: Attach attempt 1, AnyPartition reattaching with Active Dataset
+      69140 00:00:00.069 [I] Mle-----------: AttachState Start -> ParentReq
+      69140 00:00:00.069 [I] Mle-----------: Send Parent Request to routers (ff02:0:0:0:0:0:0:2)
+      69140 00:00:00.069 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+      69140 00:00:00.069 [D] Mac-----------: Starting operation "TransmitDataDirect"
+      69140 00:00:00.069 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+      70420 00:00:00.070 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+      72796 00:00:00.072 [D] SubMac--------: RadioState: Transmit -> Receive
+      72796 00:00:00.072 [D] Mac-----------: ==============================[TX len=063]==============================
+      72796 00:00:00.072 [D] Mac-----------: | 41 D8 A7 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+      72796 00:00:00.072 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 63 | 4E 00 15 00 00 00 00 00 | ;..MLMLcN....... |
+      72796 00:00:00.072 [D] Mac-----------: | 00 00 00 01 74 0E 5D A0 | 8E 68 C2 33 D0 16 68 E9 | ....t.]..h.3..h. |
+      72796 00:00:00.072 [D] Mac-----------: | 01 A9 A7 2C C7 FC 8A 08 | 91 44 B7 EA 04 0B A5    | ...,.....D.....  |
+      72796 00:00:00.072 [D] Mac-----------: ------------------------------------------------------------------------
+      72796 00:00:00.072 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+      72796 00:00:00.072 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:634e, ecn:no, to:0xffff, sec:no, prio:net
+      72796 00:00:00.072 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+      72796 00:00:00.072 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+      72796 00:00:00.072 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+     389132 00:00:00.389 [D] Mac-----------: ==============================[RX len=063]==============================
+     389132 00:00:00.389 [D] Mac-----------: | 41 D8 B9 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+     389132 00:00:00.389 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 49 | 2B 00 15 00 00 00 00 00 | ;..MLMLI+....... |
+     389132 00:00:00.389 [D] Mac-----------: | 00 00 00 01 20 5B D7 10 | 24 57 20 DC 56 BF 48 BE | .... [..$W .V.H. |
+     389132 00:00:00.389 [D] Mac-----------: | 6E 5A EE C8 0D 60 76 5B | 90 E3 76 04 FA 91 BD    | nZ...`v[..v....  |
+     389132 00:00:00.389 [D] Mac-----------: ------------------------------------------------------------------------
+     389132 00:00:00.389 [I] MeshForwarder-: Received IPv6 UDP msg, len:84, chksum:492b, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+     389132 00:00:00.389 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+     389132 00:00:00.389 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+     389132 00:00:00.389 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+     819172 00:00:00.819 [I] Mle-----------: Send Parent Request to routers (ff02:0:0:0:0:0:0:2)
+     819172 00:00:00.819 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+     819172 00:00:00.819 [D] Mac-----------: Starting operation "TransmitDataDirect"
+     819172 00:00:00.819 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+     821412 00:00:00.821 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+     823788 00:00:00.823 [D] SubMac--------: RadioState: Transmit -> Receive
+     823788 00:00:00.823 [D] Mac-----------: ==============================[TX len=063]==============================
+     823788 00:00:00.823 [D] Mac-----------: | 41 D8 A8 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+     823788 00:00:00.823 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C C4 | 95 00 15 01 00 00 00 00 | ;..MLML......... |
+     823788 00:00:00.823 [D] Mac-----------: | 00 00 00 01 29 B7 41 7F | A2 5E 31 C7 79 E0 3E D1 | ....).A..^1.y.>. |
+     823788 00:00:00.823 [D] Mac-----------: | 83 21 33 31 79 B5 B6 5D | 9D 97 12 E7 CD 4E C5    | .!31y..].....N.  |
+     823788 00:00:00.823 [D] Mac-----------: ------------------------------------------------------------------------
+     823788 00:00:00.823 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+     823788 00:00:00.823 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:c495, ecn:no, to:0xffff, sec:no, prio:net
+     823788 00:00:00.823 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+     823788 00:00:00.823 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+     823788 00:00:00.823 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    1137524 00:00:01.137 [D] Mac-----------: ==============================[RX len=063]==============================
+    1137524 00:00:01.137 [D] Mac-----------: | 41 D8 BA CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+    1137524 00:00:01.137 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C EC | DC 00 15 01 00 00 00 00 | ;..MLML......... |
+    1137524 00:00:01.137 [D] Mac-----------: | 00 00 00 01 63 DC 4B BE | 39 C8 FF 64 39 0D 48 5C | ....c.K.9..d9.H\ |
+    1137524 00:00:01.137 [D] Mac-----------: | 3D FB DC 8A B4 5B CF 8A | F1 93 4D 0D C5 C8 37    | =....[....M...7  |
+    1137524 00:00:01.137 [D] Mac-----------: ------------------------------------------------------------------------
+    1137524 00:00:01.137 [I] MeshForwarder-: Received IPv6 UDP msg, len:84, chksum:ecdc, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+    1137524 00:00:01.137 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    1137524 00:00:01.137 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    1137524 00:00:01.137 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    1569564 00:00:01.569 [I] Mle-----------: Send Parent Request to routers and REEDs (ff02:0:0:0:0:0:0:2)
+    1569564 00:00:01.569 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+    1569564 00:00:01.569 [D] Mac-----------: Starting operation "TransmitDataDirect"
+    1569564 00:00:01.569 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+    1569564 00:00:01.569 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+    1571940 00:00:01.571 [D] SubMac--------: RadioState: Transmit -> Receive
+    1571940 00:00:01.571 [D] Mac-----------: ==============================[TX len=063]==============================
+    1571940 00:00:01.571 [D] Mac-----------: | 41 D8 A9 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+    1571940 00:00:01.571 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 20 | 46 00 15 02 00 00 00 00 | ;..MLML F....... |
+    1571940 00:00:01.571 [D] Mac-----------: | 00 00 00 01 17 48 4F 2F | ED 31 C3 CF CD FA A7 1C | .....HO/.1...... |
+    1571940 00:00:01.571 [D] Mac-----------: | 11 8A 15 B2 87 BF 3A ED | B3 1A FA 01 88 D2 B4    | ......:........  |
+    1571940 00:00:01.571 [D] Mac-----------: ------------------------------------------------------------------------
+    1571940 00:00:01.571 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+    1571940 00:00:01.571 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:2046, ecn:no, to:0xffff, sec:no, prio:net
+    1571940 00:00:01.571 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    1571940 00:00:01.571 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    1571940 00:00:01.571 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    1888956 00:00:01.888 [D] Mac-----------: ==============================[RX len=063]==============================
+    1888956 00:00:01.888 [D] Mac-----------: | 41 D8 BB CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+    1888956 00:00:01.888 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C BB | 62 00 15 02 00 00 00 00 | ;..MLML.b....... |
+    1888956 00:00:01.888 [D] Mac-----------: | 00 00 00 01 FA 53 56 92 | 27 EE E1 BB 31 7C 44 C5 | .....SV.'...1|D. |
+    1888956 00:00:01.888 [D] Mac-----------: | 7E 77 EE 2F 0A 29 DC 74 | 06 FD AE 5B AD A8 08    | ~w./.).t...[...  |
+    1888956 00:00:01.888 [D] Mac-----------: ------------------------------------------------------------------------
+    1888956 00:00:01.888 [I] MeshForwarder-: Received IPv6 UDP msg, len:84, chksum:bb62, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+    1888956 00:00:01.888 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    1888956 00:00:01.888 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    1888956 00:00:01.888 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    2819996 00:00:02.819 [I] Mle-----------: Send Parent Request to routers and REEDs (ff02:0:0:0:0:0:0:2)
+    2819996 00:00:02.819 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+    2819996 00:00:02.819 [D] Mac-----------: Starting operation "TransmitDataDirect"
+    2819996 00:00:02.819 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+    2820636 00:00:02.820 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+    2823012 00:00:02.823 [D] SubMac--------: RadioState: Transmit -> Receive
+    2823012 00:00:02.823 [D] Mac-----------: ==============================[TX len=063]==============================
+    2823012 00:00:02.823 [D] Mac-----------: | 41 D8 AA CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+    2823012 00:00:02.823 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 45 | 59 00 15 03 00 00 00 00 | ;..MLMLEY....... |
+    2823012 00:00:02.823 [D] Mac-----------: | 00 00 00 01 C3 DE B7 D8 | 93 D2 22 99 B3 AD C9 9B | .........."..... |
+    2823012 00:00:02.823 [D] Mac-----------: | BF 71 E1 DA 71 B8 3C 1B | FA 54 FA 8D A5 AC F5    | .q..q.<..T.....  |
+    2823012 00:00:02.823 [D] Mac-----------: ------------------------------------------------------------------------
+    2823012 00:00:02.823 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+    2823012 00:00:02.823 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:4559, ecn:no, to:0xffff, sec:no, prio:net
+    2823012 00:00:02.823 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    2823012 00:00:02.823 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    2823012 00:00:02.823 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    3136748 00:00:03.136 [D] Mac-----------: ==============================[RX len=063]==============================
+    3136748 00:00:03.136 [D] Mac-----------: | 41 D8 BC CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+    3136748 00:00:03.136 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 37 | 5A 00 15 03 00 00 00 00 | ;..MLML7Z....... |
+    3136748 00:00:03.136 [D] Mac-----------: | 00 00 00 01 FA 41 A3 18 | 80 34 6D 71 F8 00 6F AA | .....A...4mq..o. |
+    3136748 00:00:03.136 [D] Mac-----------: | 3C 8D 70 33 50 52 E6 DE | AE EB 32 69 D7 63 2A    | <.p3PR....2i.c*  |
+    3136748 00:00:03.136 [D] Mac-----------: ------------------------------------------------------------------------
+    3136748 00:00:03.136 [I] MeshForwarder-: Received IPv6 UDP msg, len:84, chksum:375a, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+    3136748 00:00:03.136 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    3136748 00:00:03.136 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    3136748 00:00:03.136 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    4069788 00:00:04.069 [I] Mle-----------: Send Parent Request to routers and REEDs (ff02:0:0:0:0:0:0:2)
+    4069788 00:00:04.069 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+    4069788 00:00:04.069 [D] Mac-----------: Starting operation "TransmitDataDirect"
+    4069788 00:00:04.069 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+    4071388 00:00:04.071 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+    4073764 00:00:04.073 [D] SubMac--------: RadioState: Transmit -> Receive
+    4073764 00:00:04.073 [D] Mac-----------: ==============================[TX len=063]==============================
+    4073764 00:00:04.073 [D] Mac-----------: | 41 D8 AB CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+    4073764 00:00:04.073 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 73 | C2 00 15 04 00 00 00 00 | ;..MLMLs........ |
+    4073764 00:00:04.073 [D] Mac-----------: | 00 00 00 01 3C DF E4 E0 | EF F5 0B A2 E9 6E 67 05 | ....<........ng. |
+    4073764 00:00:04.073 [D] Mac-----------: | 94 4B 88 9D D2 48 B7 C8 | 59 BC 80 BD 40 7E 92    | .K...H..Y...@~.  |
+    4073764 00:00:04.073 [D] Mac-----------: ------------------------------------------------------------------------
+    4073764 00:00:04.073 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+    4073764 00:00:04.073 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:73c2, ecn:no, to:0xffff, sec:no, prio:net
+    4073764 00:00:04.073 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    4073764 00:00:04.073 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    4073764 00:00:04.073 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    4388460 00:00:04.388 [D] Mac-----------: ==============================[RX len=063]==============================
+    4388460 00:00:04.388 [D] Mac-----------: | 41 D8 BD CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+    4388460 00:00:04.388 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C DD | 3B 00 15 04 00 00 00 00 | ;..MLML.;....... |
+    4388460 00:00:04.388 [D] Mac-----------: | 00 00 00 01 C7 56 CB A4 | C0 D5 44 00 7C 75 44 71 | .....V....D.|uDq |
+    4388460 00:00:04.388 [D] Mac-----------: | B7 29 99 41 74 F1 94 3D | 74 E5 FD 13 89 13 BA    | .).At..=t......  |
+    4388460 00:00:04.388 [D] Mac-----------: ------------------------------------------------------------------------
+    4388460 00:00:04.388 [I] MeshForwarder-: Received IPv6 UDP msg, len:84, chksum:dd3b, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+    4388460 00:00:04.388 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    4388460 00:00:04.388 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    4388460 00:00:04.388 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    5319500 00:00:05.319 [I] Mle-----------: Send Parent Request to routers and REEDs (ff02:0:0:0:0:0:0:2)
+    5319500 00:00:05.319 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+    5319500 00:00:05.319 [D] Mac-----------: Starting operation "TransmitDataDirect"
+    5319500 00:00:05.319 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+    5321740 00:00:05.321 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+    5324116 00:00:05.324 [D] SubMac--------: RadioState: Transmit -> Receive
+    5324116 00:00:05.324 [D] Mac-----------: ==============================[TX len=063]==============================
+    5324116 00:00:05.324 [D] Mac-----------: | 41 D8 AC CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+    5324116 00:00:05.324 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C AD | C6 00 15 05 00 00 00 00 | ;..MLML......... |
+    5324116 00:00:05.324 [D] Mac-----------: | 00 00 00 01 51 A2 A7 81 | EF 84 BB A6 78 00 74 AA | ....Q.......x.t. |
+    5324116 00:00:05.324 [D] Mac-----------: | 02 F0 95 EB 91 C8 1F 47 | 86 FA 1D 25 AC 72 2D    | .......G...%.r-  |
+    5324116 00:00:05.324 [D] Mac-----------: ------------------------------------------------------------------------
+    5324116 00:00:05.324 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+    5324116 00:00:05.324 [I] MeshForwarder-: Sent IPv6 UDP msg, len:84, chksum:adc6, ecn:no, to:0xffff, sec:no, prio:net
+    5324116 00:00:05.324 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    5324116 00:00:05.324 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    5324116 00:00:05.324 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    5638772 00:00:05.638 [D] Mac-----------: ==============================[RX len=063]==============================
+    5638772 00:00:05.638 [D] Mac-----------: | 41 D8 BE CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+    5638772 00:00:05.638 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 63 | 2C 00 15 05 00 00 00 00 | ;..MLMLc,....... |
+    5638772 00:00:05.638 [D] Mac-----------: | 00 00 00 01 04 31 67 80 | 40 C6 E9 7C 9F E6 82 7A | .....1g.@..|...z |
+    5638772 00:00:05.638 [D] Mac-----------: | 40 2D 28 52 DE C7 05 3C | E6 61 D0 8A 01 2E CC    | @-(R...<.a.....  |
+    5638772 00:00:05.638 [D] Mac-----------: ------------------------------------------------------------------------
+    5638772 00:00:05.638 [I] MeshForwarder-: Received IPv6 UDP msg, len:84, chksum:632c, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+    5638772 00:00:05.638 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    5638772 00:00:05.638 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    5638772 00:00:05.638 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    6569812 00:00:06.569 [I] Mle-----------: AttachState ParentReq -> Idle
+    6569812 00:00:06.569 [N] RouterTable---: Allocate router id 53
+    6569812 00:00:06.569 [N] Mle-----------: RLOC16 fffe -> d400
+    6569812 set node RLOC16: fffe -> d400
+    6569812 00:00:06.569 [D] SubMac--------: RadioShortAddress: 0xd400
+    6569812 00:00:06.569 [N] Mle-----------: Role detached -> leader
+    6569812 00:00:06.569 [N] Mle-----------: Partition ID 0x257c5fd0
+    6569812 00:00:06.569 [I] RouterTable---: Route table changed [ self+ ]
+    6569812 00:00:06.569 [I] RouterTable---: Route table
+    6569812 00:00:06.569 [I] RouterTable---:     53 0xd400 - me - leader
+    6569812 00:00:06.569 [I] Notifier------: StateChanged (0x100012a5) [Ip6+ Role Rloc+ PartitionId NetData Ip6Mult+ ActDset]
+    6569812 00:00:06.569 [I] Settings------: Saved NetworkInfo {rloc:0xd400, extaddr:9e3f630f0c3ca1e6, role:leader, mode:0x0f, version:5, keyseq:0x0, ...
+    6569812 00:00:06.569 [I] Settings------: ... pid:0x257c5fd0, mlecntr:0x3ef, maccntr:0x3e8, mliid:46993c22190ea19f}
+    6569812 00:00:06.569 [D] Mle-----------: Store Network Information
+    6569812 00:00:06.569 [I] Mle-----------: Send Data Response (ff02:0:0:0:0:0:0:1)
+    6569812 00:00:06.569 [I] Settings------: Re-saved NetworkInfo {rloc:0xd400, extaddr:9e3f630f0c3ca1e6, role:leader, mode:0x0f, version:5, keyseq:0x0, ...
+    6569812 00:00:06.569 [I] Settings------: ... pid:0x257c5fd0, mlecntr:0x3ef, maccntr:0x3e8, mliid:46993c22190ea19f}
+    6569812 00:00:06.569 [D] Mle-----------: Store Network Information
+    6569812 00:00:06.569 [I] AnnounceSender: Started
+    6569812 00:00:06.569 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+    6569812 00:00:06.569 [D] Mac-----------: Starting operation "TransmitDataDirect"
+    6569812 00:00:06.569 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+    6569812 00:00:06.569 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+    6572572 00:00:06.572 [D] SubMac--------: RadioState: Transmit -> Receive
+    6572572 00:00:06.572 [D] Mac-----------: ==============================[TX len=075]==============================
+    6572572 00:00:06.572 [D] Mac-----------: | 41 D8 AD CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+    6572572 00:00:06.572 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C F0 | EE 00 15 06 00 00 00 00 | ;..MLML......... |
+    6572572 00:00:06.572 [D] Mac-----------: | 00 00 00 01 9E 65 24 80 | FD 85 9C DF 4F 76 6E 01 | .....e$.....Ovn. |
+    6572572 00:00:06.572 [D] Mac-----------: | 8F DC FE A3 BA A6 83 15 | 05 B9 96 75 E9 91 05 3F | ...........u...? |
+    6572572 00:00:06.572 [D] Mac-----------: | 91 06 98 E9 50 15 CA BC | 35 6B 15                | ....P...5k.      |
+    6572572 00:00:06.572 [D] Mac-----------: ------------------------------------------------------------------------
+    6572572 00:00:06.572 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+    6572572 00:00:06.572 [I] MeshForwarder-: Sent IPv6 UDP msg, len:96, chksum:f0ee, ecn:no, to:0xffff, sec:no, prio:net
+    6572572 00:00:06.572 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    6572572 00:00:06.572 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+    6572572 00:00:06.572 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    6887372 00:00:06.887 [D] Mac-----------: ==============================[RX len=075]==============================
+    6887372 00:00:06.887 [D] Mac-----------: | 41 D8 BF CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+    6887372 00:00:06.887 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 32 | 43 00 15 06 00 00 00 00 | ;..MLML2C....... |
+    6887372 00:00:06.887 [D] Mac-----------: | 00 00 00 01 94 F3 2A 3C | 6A 43 8B 3C 5F 9B 9C 6E | ......*<jC.<_..n |
+    6887372 00:00:06.887 [D] Mac-----------: | 4F ED 53 4A 6F FF 3A B8 | 72 87 59 58 A2 F0 47 5D | O.SJo.:.r.YX..G] |
+    6887372 00:00:06.887 [D] Mac-----------: | 65 30 B5 B2 83 F0 DE 4A | 5D ED 4F                | e0.....J].O      |
+    6887372 00:00:06.887 [D] Mac-----------: ------------------------------------------------------------------------
+    6887372 00:00:06.887 [I] MeshForwarder-: Received IPv6 UDP msg, len:96, chksum:3243, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+    6887372 00:00:06.887 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    6887372 00:00:06.887 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+    6887372 00:00:06.887 [D] Mle-----------: Receive MLE message
+    6887372 00:00:06.887 [I] Mle-----------: Receive Data Response (fe80:0:0:0:c874:b9a8:ca0d:ec4e)
+    6887372 00:00:06.887 [I] Mle-----------: Failed to process Data Response - Drop
+    6887372 00:00:06.887 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    7546412 00:00:07.546 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+    7546412 00:00:07.546 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+    7546412 00:00:07.546 [D] Mac-----------: Starting operation "TransmitDataDirect"
+    7546412 00:00:07.546 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+    7546412 00:00:07.546 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+    7548980 00:00:07.548 [D] SubMac--------: RadioState: Transmit -> Receive
+    7548980 00:00:07.548 [D] Mac-----------: ==============================[TX len=069]==============================
+    7548980 00:00:07.548 [D] Mac-----------: | 41 D8 AE CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+    7548980 00:00:07.548 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C BB | A7 00 15 07 00 00 00 00 | ;..MLML......... |
+    7548980 00:00:07.548 [D] Mac-----------: | 00 00 00 01 61 8E 7B 10 | D2 47 D6 05 DC 9A D9 86 | ....a.{..G...... |
+    7548980 00:00:07.548 [D] Mac-----------: | 9C 8C 93 04 A3 FA 9A DB | F1 9A 69 C1 CC E9 4B 0A | ..........i...K. |
+    7548980 00:00:07.548 [D] Mac-----------: | 99 2F 89 F9 0D          |                         | ./...            |
+    7548980 00:00:07.548 [D] Mac-----------: ------------------------------------------------------------------------
+    7548980 00:00:07.548 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+    7548980 00:00:07.548 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:bba7, ecn:no, to:0xffff, sec:no, prio:net
+    7548980 00:00:07.548 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    7548980 00:00:07.548 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+    7548980 00:00:07.548 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    7551396 00:00:07.551 [D] Mac-----------: ==============================[RX len=063]==============================
+    7551396 00:00:07.551 [D] Mac-----------: | 41 D8 C0 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+    7551396 00:00:07.551 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C 7B | C3 00 15 07 00 00 00 00 | ;..MLML{........ |
+    7551396 00:00:07.551 [D] Mac-----------: | 00 00 00 01 BF 23 DE BE | 69 4F EF BD 20 8A 1A E9 | .....#..iO.. ... |
+    7551396 00:00:07.551 [D] Mac-----------: | 9C 4D 91 30 7E CA D0 96 | D5 DB 5D 8C 43 70 C0    | .M.0~.....].Cp.  |
+    7551396 00:00:07.551 [D] Mac-----------: ------------------------------------------------------------------------
+    7551396 00:00:07.551 [I] MeshForwarder-: Received IPv6 UDP msg, len:84, chksum:7bc3, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+    7551396 00:00:07.551 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    7551396 00:00:07.551 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+    7551396 00:00:07.551 [D] Mle-----------: Receive MLE message
+    7551396 00:00:07.551 [I] Mle-----------: Receive Parent Request (fe80:0:0:0:c874:b9a8:ca0d:ec4e)
+    7551396 00:00:07.551 [I] Mle-----------: Schedule tx of Parent Response (fe80:0:0:0:c874:b9a8:ca0d:ec4e)
+    7551396 00:00:07.551 [I] Mle-----------:     Will send in 315 msec
+    7551396 00:00:07.551 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    7866436 00:00:07.866 [I] Mle-----------: Send Parent Response (fe80:0:0:0:c874:b9a8:ca0d:ec4e)
+    7866436 00:00:07.866 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+    7866436 00:00:07.866 [D] Mac-----------: Starting operation "TransmitDataDirect"
+    7866436 00:00:07.866 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+    7867716 00:00:07.867 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+    7872236 00:00:07.872 [D] SubMac--------: RadioState: Transmit -> Receive
+    7872236 00:00:07.872 [D] Mac-----------: ==============================[TX len=113]==============================
+    7872236 00:00:07.872 [D] Mac-----------: | 61 DC AF CE FA 4E EC 0D | CA A8 B9 74 CA E6 A1 3C | a....N.....t...< |
+    7872236 00:00:07.872 [D] Mac-----------: | 0C 0F 63 3F 9E 7F 33 F0 | 4D 4C 4D 4C A6 CE 00 15 | ..c?..3.MLML.... |
+    7872236 00:00:07.872 [D] Mac-----------: | 08 00 00 00 00 00 00 00 | 01 CB D6 B8 01 E8 10 BA | ................ |
+    7872236 00:00:07.872 [D] Mac-----------: | 00 24 29 9A 15 95 FD 10 | 32 4E 57 66 7B 06 86 6F | .$).....2NWf{..o |
+    7872236 00:00:07.872 [D] Mac-----------: | 04 60 1C 59 3B 08 1B 6D | 8D 61 1C 3F 44 FB 94 E3 | .`.Y;..m.a.?D... |
+    7872236 00:00:07.872 [D] Mac-----------: | 8F 6D E6 40 F2 CB 00 A6 | 6D 81 A9 74 79 C2 A1 F1 | .m.@....m..ty... |
+    7872236 00:00:07.872 [D] Mac-----------: | DC A5 98 73 03 50 EF 89 | B6 00 B2 0C 27 A4 92 25 | ...s.P......'..% |
+    7872236 00:00:07.872 [D] Mac-----------: | 3B                      |                         | ;                |
+    7872236 00:00:07.872 [D] Mac-----------: ------------------------------------------------------------------------
+    7872236 00:00:07.872 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+    7872236 00:00:07.872 [I] MeshForwarder-: Sent IPv6 UDP msg, len:129, chksum:a6ce, ecn:no, to:ca74b9a8ca0dec4e, sec:no, prio:net
+    7872236 00:00:07.872 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    7872236 00:00:07.872 [I] MeshForwarder-:     dst:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    7872236 00:00:07.872 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    8305052 00:00:08.305 [D] Mac-----------: ==============================[RX len=098]==============================
+    8305052 00:00:08.305 [D] Mac-----------: | 61 DC C1 CE FA E6 A1 3C | 0C 0F 63 3F 9E 4E EC 0D | a......<..c?.N.. |
+    8305052 00:00:08.305 [D] Mac-----------: | CA A8 B9 74 CA 7F 33 F0 | 4D 4C 4D 4C 38 35 00 15 | ...t..3.MLML85.. |
+    8305052 00:00:08.305 [D] Mac-----------: | 08 00 00 00 00 00 00 00 | 01 F8 E6 CD 88 B1 03 F7 | ................ |
+    8305052 00:00:08.305 [D] Mac-----------: | 4E C3 64 26 DD 77 29 35 | D4 68 B0 21 56 0C AB 47 | N.d&.w)5.h.!V..G |
+    8305052 00:00:08.305 [D] Mac-----------: | D6 E9 43 14 93 9D 43 F3 | AB CF 5C D3 EC 24 4C 37 | ..C...C...\..$L7 |
+    8305052 00:00:08.305 [D] Mac-----------: | 76 D4 B6 49 27 ED 5C 5F | 47 B3 AE CD F1 D4 C0 57 | v..I'.\_G......W |
+    8305052 00:00:08.305 [D] Mac-----------: | 9A F6                   |                         | ..               |
+    8305052 00:00:08.305 [D] Mac-----------: ------------------------------------------------------------------------
+    8305052 00:00:08.305 [I] MeshForwarder-: Received IPv6 UDP msg, len:114, chksum:3835, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+    8305052 00:00:08.305 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    8305052 00:00:08.305 [I] MeshForwarder-:     dst:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    8305052 00:00:08.305 [D] Mle-----------: Receive MLE message
+    8305052 00:00:08.305 [I] Mle-----------: Receive Child ID Request (fe80:0:0:0:c874:b9a8:ca0d:ec4e)
+    8305052 00:00:08.305 [I] Settings------: Added ChildInfo {rloc:0xd401, extaddr:ca74b9a8ca0dec4e, timeout:240, mode:0x0f, version:5}
+    8305052 00:00:08.305 [I] Mle-----------: Send Child ID Response (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0xd401)
+    8305052 00:00:08.305 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    8305052 00:00:08.305 [I] Notifier------: StateChanged (0x00000400) [Child+]
+    8305052 00:00:08.305 [I] ChildSupervsn-: Starting Child Supervision
+    8305052 00:00:08.305 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+    8305052 00:00:08.305 [D] Mac-----------: Starting operation "TransmitDataDirect"
+    8305052 00:00:08.305 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+    8306332 00:00:08.306 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+    8310308 00:00:08.310 [D] SubMac--------: RadioState: Transmit -> Receive
+    8310308 00:00:08.310 [D] Mac-----------: ==============================[TX len=096]==============================
+    8310308 00:00:08.310 [D] Mac-----------: | 61 DC B0 CE FA 4E EC 0D | CA A8 B9 74 CA E6 A1 3C | a....N.....t...< |
+    8310308 00:00:08.310 [D] Mac-----------: | 0C 0F 63 3F 9E 7F 33 F0 | 4D 4C 4D 4C 5C F8 00 15 | ..c?..3.MLML\... |
+    8310308 00:00:08.310 [D] Mac-----------: | 09 00 00 00 00 00 00 00 | 01 56 05 41 89 A7 FE D9 | .........V.A.... |
+    8310308 00:00:08.310 [D] Mac-----------: | D9 22 1A 38 A6 7C 2B 7A | 86 9A 00 7B BB 1A AE 50 | .".8.|+z...{...P |
+    8310308 00:00:08.310 [D] Mac-----------: | BC A6 3C 15 AA 63 AD EF | D3 25 30 C8 78 C8 6C 12 | ..<..c...%0.x.l. |
+    8310308 00:00:08.310 [D] Mac-----------: | 00 D4 EC 99 50 3F 3A ED | 61 BD 47 D3 7A DC 24 E4 | ....P?:.a.G.z.$. |
+    8310308 00:00:08.310 [D] Mac-----------: ------------------------------------------------------------------------
+    8310308 00:00:08.310 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+    8310308 00:00:08.310 [I] MeshForwarder-: Sent IPv6 UDP msg, len:112, chksum:5cf8, ecn:no, to:ca74b9a8ca0dec4e, sec:no, prio:net
+    8310308 00:00:08.310 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    8310308 00:00:08.310 [I] MeshForwarder-:     dst:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+    8310308 00:00:08.310 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+    9288948 00:00:09.288 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+    9288948 00:00:09.288 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+    9288948 00:00:09.288 [D] Mac-----------: Starting operation "TransmitDataDirect"
+    9288948 00:00:09.288 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+    9288948 00:00:09.288 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+    9291516 00:00:09.291 [D] SubMac--------: RadioState: Transmit -> Receive
+    9291516 00:00:09.291 [D] Mac-----------: ==============================[TX len=069]==============================
+    9291516 00:00:09.291 [D] Mac-----------: | 41 D8 B1 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+    9291516 00:00:09.291 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 34 | 31 00 15 0A 00 00 00 00 | ;..MLML41....... |
+    9291516 00:00:09.291 [D] Mac-----------: | 00 00 00 01 D1 AE C1 3B | 97 E0 76 AD BF 05 1D F4 | .......;..v..... |
+    9291516 00:00:09.291 [D] Mac-----------: | 89 0C 0C B6 F1 C7 EA 19 | 7D 84 E8 34 92 D6 F7 6D | ........}..4...m |
+    9291516 00:00:09.291 [D] Mac-----------: | 83 65 52 AF 80          |                         | .eR..            |
+    9291516 00:00:09.291 [D] Mac-----------: ------------------------------------------------------------------------
+    9291516 00:00:09.291 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+    9291516 00:00:09.291 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:3431, ecn:no, to:0xffff, sec:no, prio:net
+    9291516 00:00:09.291 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+    9291516 00:00:09.291 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+    9291516 00:00:09.291 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   11755156 00:00:11.755 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   11755156 00:00:11.755 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   11755156 00:00:11.755 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   11755156 00:00:11.755 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   11757076 00:00:11.757 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   11759644 00:00:11.759 [D] SubMac--------: RadioState: Transmit -> Receive
+   11759644 00:00:11.759 [D] Mac-----------: ==============================[TX len=069]==============================
+   11759644 00:00:11.759 [D] Mac-----------: | 41 D8 B2 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   11759644 00:00:11.759 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C BC | 68 00 15 0B 00 00 00 00 | ;..MLML.h....... |
+   11759644 00:00:11.759 [D] Mac-----------: | 00 00 00 01 65 34 DA 86 | 77 B4 17 65 46 CD 8A A3 | ....e4..w..eF... |
+   11759644 00:00:11.759 [D] Mac-----------: | 92 69 2A 02 57 03 91 05 | F5 1E 50 BA E8 63 14 31 | .i*.W.....P..c.1 |
+   11759644 00:00:11.759 [D] Mac-----------: | C4 C8 32 36 DB          |                         | ..26.            |
+   11759644 00:00:11.759 [D] Mac-----------: ------------------------------------------------------------------------
+   11759644 00:00:11.759 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   11759644 00:00:11.759 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:bc68, ecn:no, to:0xffff, sec:no, prio:net
+   11759644 00:00:11.759 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   11759644 00:00:11.759 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   11759644 00:00:11.759 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   20877284 00:00:20.877 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   20877284 00:00:20.877 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   20877284 00:00:20.877 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   20877284 00:00:20.877 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   20877284 00:00:20.877 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   20879852 00:00:20.879 [D] SubMac--------: RadioState: Transmit -> Receive
+   20879852 00:00:20.879 [D] Mac-----------: ==============================[TX len=069]==============================
+   20879852 00:00:20.879 [D] Mac-----------: | 41 D8 B3 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   20879852 00:00:20.879 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 48 | EE 00 15 0C 00 00 00 00 | ;..MLMLH........ |
+   20879852 00:00:20.879 [D] Mac-----------: | 00 00 00 01 B3 89 48 B0 | C8 CF C6 A6 E0 CF 57 35 | ......H.......W5 |
+   20879852 00:00:20.879 [D] Mac-----------: | 64 11 3A 8E 9D D1 55 99 | 2D D6 F7 AA A2 87 8A 26 | d.:...U.-......& |
+   20879852 00:00:20.879 [D] Mac-----------: | D4 73 7C 73 0F          |                         | .s|s.            |
+   20879852 00:00:20.879 [D] Mac-----------: ------------------------------------------------------------------------
+   20879852 00:00:20.879 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   20879852 00:00:20.879 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:48ee, ecn:no, to:0xffff, sec:no, prio:net
+   20879852 00:00:20.879 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   20879852 00:00:20.879 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   20879852 00:00:20.879 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   29580492 00:00:29.580 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   29580492 00:00:29.580 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   29580492 00:00:29.580 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   29580492 00:00:29.580 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   29582732 00:00:29.582 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   29585300 00:00:29.585 [D] SubMac--------: RadioState: Transmit -> Receive
+   29585300 00:00:29.585 [D] Mac-----------: ==============================[TX len=069]==============================
+   29585300 00:00:29.585 [D] Mac-----------: | 41 D8 B4 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   29585300 00:00:29.585 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 3B | D7 00 15 0D 00 00 00 00 | ;..MLML;........ |
+   29585300 00:00:29.585 [D] Mac-----------: | 00 00 00 01 C0 51 BB D5 | 27 D4 E0 EC B8 D0 23 0C | .....Q..'.....#. |
+   29585300 00:00:29.585 [D] Mac-----------: | 33 08 58 8E A1 89 16 74 | D0 56 2A F3 51 62 16 E4 | 3.X....t.V*.Qb.. |
+   29585300 00:00:29.585 [D] Mac-----------: | 6E 85 99 7D FB          |                         | n..}.            |
+   29585300 00:00:29.585 [D] Mac-----------: ------------------------------------------------------------------------
+   29585300 00:00:29.585 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   29585300 00:00:29.585 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:3bd7, ecn:no, to:0xffff, sec:no, prio:net
+   29585300 00:00:29.585 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   29585300 00:00:29.585 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   29585300 00:00:29.585 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   43841940 00:00:43.841 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   43841940 00:00:43.841 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   43841940 00:00:43.841 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   43841940 00:00:43.841 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   43842580 00:00:43.842 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   43845148 00:00:43.845 [D] SubMac--------: RadioState: Transmit -> Receive
+   43845148 00:00:43.845 [D] Mac-----------: ==============================[TX len=069]==============================
+   43845148 00:00:43.845 [D] Mac-----------: | 41 D8 B5 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   43845148 00:00:43.845 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C D9 | 79 00 15 0E 00 00 00 00 | ;..MLML.y....... |
+   43845148 00:00:43.845 [D] Mac-----------: | 00 00 00 01 F6 D7 12 34 | 13 54 CB 80 99 F1 76 E3 | .......4.T....v. |
+   43845148 00:00:43.845 [D] Mac-----------: | D9 B5 E2 BF 55 4E 7A 6A | 98 74 FB F7 06 70 9A C2 | ....UNzj.t...p.. |
+   43845148 00:00:43.845 [D] Mac-----------: | 49 4D 69 2A 21          |                         | IMi*!            |
+   43845148 00:00:43.845 [D] Mac-----------: ------------------------------------------------------------------------
+   43845148 00:00:43.845 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   43845148 00:00:43.845 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:d979, ecn:no, to:0xffff, sec:no, prio:net
+   43845148 00:00:43.845 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   43845148 00:00:43.845 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   43845148 00:00:43.845 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   54941788 00:00:54.941 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   54941788 00:00:54.941 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   54941788 00:00:54.941 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   54941788 00:00:54.941 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   54944028 00:00:54.944 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   54946596 00:00:54.946 [D] SubMac--------: RadioState: Transmit -> Receive
+   54946596 00:00:54.946 [D] Mac-----------: ==============================[TX len=069]==============================
+   54946596 00:00:54.946 [D] Mac-----------: | 41 D8 B6 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   54946596 00:00:54.946 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C EE | A5 00 15 0F 00 00 00 00 | ;..MLML......... |
+   54946596 00:00:54.946 [D] Mac-----------: | 00 00 00 01 C1 BD C2 BD | 94 E0 5C 3E 27 0B 1E 9E | ..........\>'... |
+   54946596 00:00:54.946 [D] Mac-----------: | 75 C5 DA 97 12 E7 F0 08 | C3 EC 54 C5 30 27 60 5E | u.........T.0'`^ |
+   54946596 00:00:54.946 [D] Mac-----------: | 20 F2 68 37 D4          |                         |  .h7.            |
+   54946596 00:00:54.946 [D] Mac-----------: ------------------------------------------------------------------------
+   54946596 00:00:54.946 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   54946596 00:00:54.946 [I] MeshForwarder-: Sent IPv6 UDP msg, len:90, chksum:eea5, ecn:no, to:0xffff, sec:no, prio:net
+   54946596 00:00:54.946 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   54946596 00:00:54.946 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   54946596 00:00:54.946 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   57209780 00:00:57.209 [D] Mac-----------: Received frame from short address 0xd401
+   57209780 00:00:57.209 [D] Mac-----------: Rx security - frame counter 0
+   57209780 00:00:57.209 [D] Mac-----------: ==============================[RX len=057]==============================
+   57209780 00:00:57.209 [D] Mac-----------: | 69 98 C2 CE FA 00 D4 01 | D4 0D 00 00 00 00 01 76 | i..............v |
+   57209780 00:00:57.209 [D] Mac-----------: | 77 07 F3 FF 1C FD 42 02 | 5D 43 7C F9 B1 61 02 61 | w.....B.]C|..a.a |
+   57209780 00:00:57.209 [D] Mac-----------: | 73 FF 01 08 CA 74 B9 A8 | CA 0D EC 4E 02 02 00 00 | s....t.....N.... |
+   57209780 00:00:57.209 [D] Mac-----------: | 04 01 02 6B D1 FC F0 A4 | 85                      | ...k.....        |
+   57209780 00:00:57.209 [D] Mac-----------: ------------------------------------------------------------------------
+   57209780 00:00:57.209 [I] MeshForwarder-: Received IPv6 UDP msg, len:77, chksum:1cfd, ecn:no, from:0xd401, sec:yes, prio:net, rss:-78.0
+   57209780 00:00:57.209 [I] MeshForwarder-:     src:[fdde:ad00:beef:0:0:ff:fe00:d401]:61631
+   57209780 00:00:57.209 [I] MeshForwarder-:     dst:[fdde:ad00:beef:0:0:ff:fe00:d400]:61631
+   57209780 00:00:57.209 [I] Mle-----------: Receive Address Solicit (fdde:ad00:beef:0:0:ff:fe00:d401)
+   57209780 00:00:57.209 [I] Mle-----------: AddrSolicit Reason: TooFewRouters
+   57209780 00:00:57.209 [I] Mle-----------: AddrSolicit Requested ID: 0
+   57209780 00:00:57.209 [N] RouterTable---: Allocate router id 0
+   57209780 00:00:57.209 [I] Mle-----------: Send Address Reply (fdde:ad00:beef:0:0:ff:fe00:d401)
+   57209780 00:00:57.209 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   57209780 00:00:57.209 [I] RouterTable---: Route table changed [ router+ ]
+   57209780 00:00:57.209 [I] RouterTable---: Route table
+   57209780 00:00:57.209 [I] RouterTable---:     53 0xd400 - me - leader
+   57209780 00:00:57.209 [I] RouterTable---:      0 0x0000
+   57209780 00:00:57.209 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   57209780 00:00:57.209 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   57209780 00:00:57.209 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   57212020 00:00:57.212 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   57214620 00:00:57.214 [D] SubMac--------: RadioState: Transmit -> Receive
+   57214620 00:00:57.214 [D] Mac-----------: ==============================[TX len=053]==============================
+   57214620 00:00:57.214 [D] Mac-----------: | 69 98 B7 CE FA 01 D4 00 | D4 0D 00 00 00 00 01 69 | i..............i |
+   57214620 00:00:57.214 [D] Mac-----------: | E0 9D 5F E0 27 16 7A C9 | 82 A7 23 E1 B0 06 40 DA | .._.'.z...#...@. |
+   57214620 00:00:57.214 [D] Mac-----------: | EA E7 22 80 45 64 42 EB | EF 73 38 D1 0B 6C 1E A3 | ..".EdB..s8..l.. |
+   57214620 00:00:57.214 [D] Mac-----------: | B4 28 BD 6D 7D          |                         | .(.m}            |
+   57214620 00:00:57.214 [D] Mac-----------: ------------------------------------------------------------------------
+   57214620 00:00:57.214 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   57214620 00:00:57.214 [I] MeshForwarder-: Sent IPv6 UDP msg, len:73, chksum:ea75, ecn:no, to:0xd401, sec:yes, prio:net
+   57214620 00:00:57.214 [I] MeshForwarder-:     src:[fdde:ad00:beef:0:0:ff:fe00:d400]:61631
+   57214620 00:00:57.214 [I] MeshForwarder-:     dst:[fdde:ad00:beef:0:0:ff:fe00:d401]:61631
+   57214620 00:00:57.214 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   57218276 00:00:57.218 [D] Mac-----------: ==============================[RX len=070]==============================
+   57218276 00:00:57.218 [D] Mac-----------: | 41 D8 C3 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+   57218276 00:00:57.218 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 5F | 08 00 15 09 00 00 00 00 | ;..MLML_........ |
+   57218276 00:00:57.218 [D] Mac-----------: | 00 00 00 01 0C C5 BE 62 | F5 F3 7B 8B F3 7C 0C C7 | .......b..{..|.. |
+   57218276 00:00:57.218 [D] Mac-----------: | 19 99 F0 09 CC FB 18 8E | EA F0 92 59 D9 61 CD 5C | ...........Y.a.\ |
+   57218276 00:00:57.218 [D] Mac-----------: | 85 D3 FD D0 98 90       |                         | ......           |
+   57218276 00:00:57.218 [D] Mac-----------: ------------------------------------------------------------------------
+   57218276 00:00:57.218 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:5f08, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+   57218276 00:00:57.218 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+   57218276 00:00:57.218 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   57218276 00:00:57.218 [D] Mle-----------: Receive MLE message
+   57218276 00:00:57.218 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+   57218276 00:00:57.218 [I] Settings------: Read ChildInfo {rloc:0xd401, extaddr:ca74b9a8ca0dec4e, timeout:240, mode:0x0f, version:5}
+   57218276 00:00:57.218 [I] Settings------: Removed ChildInfo {rloc:0xd401, extaddr:ca74b9a8ca0dec4e, timeout:240, mode:0x0f, version:5}
+   57218276 00:00:57.218 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   57218276 00:00:57.218 [I] RouterTable---: Route table changed [ lqo nbr+ ]
+   57218276 00:00:57.218 [I] RouterTable---: Route table
+   57218276 00:00:57.218 [I] RouterTable---:     53 0xd400 - me - leader
+   57218276 00:00:57.218 [I] RouterTable---:      0 0x0000 - nbr{lq[i/o]:3/3 cost:1}
+   57218276 00:00:57.218 [I] Notifier------: StateChanged (0x00000800) [Child-]
+   57218276 00:00:57.218 [I] ChildSupervsn-: Stopping Child Supervision
+   57714316 00:00:57.714 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   57714316 00:00:57.714 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   57714316 00:00:57.714 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   57714316 00:00:57.714 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   57714636 00:00:57.714 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   57717236 00:00:57.717 [D] SubMac--------: RadioState: Transmit -> Receive
+   57717236 00:00:57.717 [D] Mac-----------: ==============================[TX len=070]==============================
+   57717236 00:00:57.717 [D] Mac-----------: | 41 D8 B8 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   57717236 00:00:57.717 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 44 | F7 00 15 10 00 00 00 00 | ;..MLMLD........ |
+   57717236 00:00:57.717 [D] Mac-----------: | 00 00 00 01 7A ED C2 C2 | 77 54 1A 65 28 E6 4A BB | ....z...wT.e(.J. |
+   57717236 00:00:57.717 [D] Mac-----------: | 7C 26 33 16 90 C9 A3 91 | 5B 08 0F C1 AE 65 53 E0 | |&3.....[....eS. |
+   57717236 00:00:57.717 [D] Mac-----------: | 40 4D 19 64 42 9F       |                         | @M.dB.           |
+   57717236 00:00:57.717 [D] Mac-----------: ------------------------------------------------------------------------
+   57717236 00:00:57.717 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   57717236 00:00:57.717 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:44f7, ecn:no, to:0xffff, sec:no, prio:net
+   57717236 00:00:57.717 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   57717236 00:00:57.717 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   57717236 00:00:57.717 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   58083876 00:00:58.083 [D] Mac-----------: ==============================[RX len=070]==============================
+   58083876 00:00:58.083 [D] Mac-----------: | 41 D8 C4 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+   58083876 00:00:58.083 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 6D | 2D 00 15 0A 00 00 00 00 | ;..MLMLm-....... |
+   58083876 00:00:58.083 [D] Mac-----------: | 00 00 00 01 12 65 DC 72 | 6D E3 E3 38 20 07 71 EA | .....e.rm..8 .q. |
+   58083876 00:00:58.083 [D] Mac-----------: | 92 00 E2 CB 8E A3 7B 58 | A6 CC DB 7D 93 F4 91 28 | ......{X...}...( |
+   58083876 00:00:58.083 [D] Mac-----------: | A2 48 14 58 9E 9A       |                         | .H.X..           |
+   58083876 00:00:58.083 [D] Mac-----------: ------------------------------------------------------------------------
+   58083876 00:00:58.083 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:6d2d, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+   58083876 00:00:58.083 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+   58083876 00:00:58.083 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   58083876 00:00:58.083 [D] Mle-----------: Receive MLE message
+   58083876 00:00:58.083 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+   58083876 00:00:58.083 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   59250396 00:00:59.250 [D] Mac-----------: ==============================[RX len=070]==============================
+   59250396 00:00:59.250 [D] Mac-----------: | 41 D8 C5 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+   59250396 00:00:59.250 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C FF | 20 00 15 0B 00 00 00 00 | ;..MLML. ....... |
+   59250396 00:00:59.250 [D] Mac-----------: | 00 00 00 01 83 66 30 79 | CF 61 21 96 45 F6 27 AD | .....f0y.a!.E.'. |
+   59250396 00:00:59.250 [D] Mac-----------: | BD FC 18 53 33 39 53 EB | 38 2D B3 72 6A 38 74 D1 | ...S39S.8-.rj8t. |
+   59250396 00:00:59.250 [D] Mac-----------: | 02 11 7E 79 97 80       |                         | ..~y..           |
+   59250396 00:00:59.250 [D] Mac-----------: ------------------------------------------------------------------------
+   59250396 00:00:59.250 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:ff20, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+   59250396 00:00:59.250 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+   59250396 00:00:59.250 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   59250396 00:00:59.250 [D] Mle-----------: Receive MLE message
+   59250396 00:00:59.250 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+   59250396 00:00:59.250 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   59256436 00:00:59.256 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   59256436 00:00:59.256 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   59256436 00:00:59.256 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   59256436 00:00:59.256 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   59258036 00:00:59.258 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   59260636 00:00:59.260 [D] SubMac--------: RadioState: Transmit -> Receive
+   59260636 00:00:59.260 [D] Mac-----------: ==============================[TX len=070]==============================
+   59260636 00:00:59.260 [D] Mac-----------: | 41 D8 B9 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   59260636 00:00:59.260 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 51 | 44 00 15 11 00 00 00 00 | ;..MLMLQD....... |
+   59260636 00:00:59.260 [D] Mac-----------: | 00 00 00 01 82 87 7A 22 | 0C B1 F1 8C F1 6D 3A 50 | ......z".....m:P |
+   59260636 00:00:59.260 [D] Mac-----------: | 0E 05 19 80 92 89 50 AB | 78 24 D0 16 04 52 1A FC | ......P.x$...R.. |
+   59260636 00:00:59.260 [D] Mac-----------: | AA EE 5C 7E AB 74       |                         | ..\~.t           |
+   59260636 00:00:59.260 [D] Mac-----------: ------------------------------------------------------------------------
+   59260636 00:00:59.260 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   59260636 00:00:59.260 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:5144, ecn:no, to:0xffff, sec:no, prio:net
+   59260636 00:00:59.260 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   59260636 00:00:59.260 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   59260636 00:00:59.260 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   62936516 00:01:02.936 [D] Mac-----------: ==============================[RX len=070]==============================
+   62936516 00:01:02.936 [D] Mac-----------: | 41 D8 C6 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+   62936516 00:01:02.936 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 80 | B3 00 15 0C 00 00 00 00 | ;..MLML......... |
+   62936516 00:01:02.936 [D] Mac-----------: | 00 00 00 01 1D 17 2D 68 | 8C D0 BE 9D 8D 79 C3 8E | ......-h.....y.. |
+   62936516 00:01:02.936 [D] Mac-----------: | 32 1F 7A 43 7A 2F 11 7A | AF 4C E2 6F 38 D9 E7 6F | 2.zCz/.z.L.o8..o |
+   62936516 00:01:02.936 [D] Mac-----------: | C8 72 8F 26 B5 8F       |                         | .r.&..           |
+   62936516 00:01:02.936 [D] Mac-----------: ------------------------------------------------------------------------
+   62936516 00:01:02.936 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:80b3, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+   62936516 00:01:02.936 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+   62936516 00:01:02.936 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   62936516 00:01:02.936 [D] Mle-----------: Receive MLE message
+   62936516 00:01:02.936 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+   62936516 00:01:02.936 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   63517556 00:01:03.517 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   63517556 00:01:03.517 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   63517556 00:01:03.517 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   63517556 00:01:03.517 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   63519156 00:01:03.519 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   63521756 00:01:03.521 [D] SubMac--------: RadioState: Transmit -> Receive
+   63521756 00:01:03.521 [D] Mac-----------: ==============================[TX len=070]==============================
+   63521756 00:01:03.521 [D] Mac-----------: | 41 D8 BA CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   63521756 00:01:03.521 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C EA | 5D 00 15 12 00 00 00 00 | ;..MLML.]....... |
+   63521756 00:01:03.521 [D] Mac-----------: | 00 00 00 01 12 48 A2 E2 | 7C 2A D2 CB C6 D2 9F 7D | .....H..|*.....} |
+   63521756 00:01:03.521 [D] Mac-----------: | 73 06 0E 28 21 55 60 B1 | 78 CF CE BF 7A BD 0E 22 | s..(!U`.x...z.." |
+   63521756 00:01:03.521 [D] Mac-----------: | 59 93 EF 13 3C E7       |                         | Y...<.           |
+   63521756 00:01:03.521 [D] Mac-----------: ------------------------------------------------------------------------
+   63521756 00:01:03.521 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   63521756 00:01:03.521 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:ea5d, ecn:no, to:0xffff, sec:no, prio:net
+   63521756 00:01:03.521 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   63521756 00:01:03.521 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   63521756 00:01:03.521 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   69261396 00:01:09.261 [D] Mac-----------: ==============================[RX len=070]==============================
+   69261396 00:01:09.261 [D] Mac-----------: | 41 D8 C7 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+   69261396 00:01:09.261 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C D2 | 8F 00 15 0D 00 00 00 00 | ;..MLML......... |
+   69261396 00:01:09.261 [D] Mac-----------: | 00 00 00 01 08 1B C2 57 | 5B 42 EA FB EA EE 73 AC | .......W[B....s. |
+   69261396 00:01:09.261 [D] Mac-----------: | FA 6D 4C 06 38 45 81 D3 | E5 88 CB 56 9E 4A E2 50 | .mL.8E.....V.J.P |
+   69261396 00:01:09.261 [D] Mac-----------: | A5 8B 05 6E 9A 49       |                         | ...n.I           |
+   69261396 00:01:09.261 [D] Mac-----------: ------------------------------------------------------------------------
+   69261396 00:01:09.261 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:d28f, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+   69261396 00:01:09.261 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+   69261396 00:01:09.261 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   69261396 00:01:09.261 [D] Mle-----------: Receive MLE message
+   69261396 00:01:09.261 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+   69261396 00:01:09.261 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   69760436 00:01:09.760 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   69760436 00:01:09.760 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   69760436 00:01:09.760 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   69760436 00:01:09.760 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   69762036 00:01:09.762 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   69764636 00:01:09.764 [D] SubMac--------: RadioState: Transmit -> Receive
+   69764636 00:01:09.764 [D] Mac-----------: ==============================[TX len=070]==============================
+   69764636 00:01:09.764 [D] Mac-----------: | 41 D8 BB CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   69764636 00:01:09.764 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C D6 | 78 00 15 13 00 00 00 00 | ;..MLML.x....... |
+   69764636 00:01:09.764 [D] Mac-----------: | 00 00 00 01 0C 01 1E A9 | 9A 76 6D 30 1F 38 6C A0 | .........vm0.8l. |
+   69764636 00:01:09.764 [D] Mac-----------: | 1A 1E 87 A1 C5 20 3B A2 | 8E B1 A5 10 8B E8 A6 44 | ..... ;........D |
+   69764636 00:01:09.764 [D] Mac-----------: | 5F 71 45 C2 CE 07       |                         | _qE...           |
+   69764636 00:01:09.764 [D] Mac-----------: ------------------------------------------------------------------------
+   69764636 00:01:09.764 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   69764636 00:01:09.764 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:d678, ecn:no, to:0xffff, sec:no, prio:net
+   69764636 00:01:09.764 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   69764636 00:01:09.764 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   69764636 00:01:09.764 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   80247276 00:01:20.247 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   80247276 00:01:20.247 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   80247276 00:01:20.247 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   80247276 00:01:20.247 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   80247916 00:01:20.247 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   80250516 00:01:20.250 [D] SubMac--------: RadioState: Transmit -> Receive
+   80250516 00:01:20.250 [D] Mac-----------: ==============================[TX len=070]==============================
+   80250516 00:01:20.250 [D] Mac-----------: | 41 D8 BC CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   80250516 00:01:20.250 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 25 | 7D 00 15 14 00 00 00 00 | ;..MLML%}....... |
+   80250516 00:01:20.250 [D] Mac-----------: | 00 00 00 01 46 2D 17 21 | FD 34 61 41 A1 F4 3D 10 | ....F-.!.4aA..=. |
+   80250516 00:01:20.250 [D] Mac-----------: | 26 60 DF 98 C7 49 CA BD | 1D A1 73 55 43 DE 63 1C | &`...I....sUC.c. |
+   80250516 00:01:20.250 [D] Mac-----------: | F4 7F 08 44 DB 52       |                         | ...D.R           |
+   80250516 00:01:20.250 [D] Mac-----------: ------------------------------------------------------------------------
+   80250516 00:01:20.250 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   80250516 00:01:20.250 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:257d, ecn:no, to:0xffff, sec:no, prio:net
+   80250516 00:01:20.250 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   80250516 00:01:20.250 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   80250516 00:01:20.250 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   82260796 00:01:22.260 [D] Mac-----------: ==============================[RX len=070]==============================
+   82260796 00:01:22.260 [D] Mac-----------: | 41 D8 C8 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+   82260796 00:01:22.260 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 29 | 78 00 15 0E 00 00 00 00 | ;..MLML)x....... |
+   82260796 00:01:22.260 [D] Mac-----------: | 00 00 00 01 53 66 34 B0 | 9D FE 33 D9 D8 3B 87 A6 | ....Sf4...3..;.. |
+   82260796 00:01:22.260 [D] Mac-----------: | 78 D2 AD 85 E4 65 AE 9E | 25 49 C9 A0 E1 D8 C9 96 | x....e..%I...... |
+   82260796 00:01:22.260 [D] Mac-----------: | 3F 03 17 6C 55 3E       |                         | ?..lU>           |
+   82260796 00:01:22.260 [D] Mac-----------: ------------------------------------------------------------------------
+   82260796 00:01:22.260 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:2978, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-78.0
+   82260796 00:01:22.260 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+   82260796 00:01:22.260 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   82260796 00:01:22.260 [D] Mle-----------: Receive MLE message
+   82260796 00:01:22.260 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+   82260796 00:01:22.260 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   92066836 00:01:32.066 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+   92066836 00:01:32.066 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+   92066836 00:01:32.066 [D] Mac-----------: Starting operation "TransmitDataDirect"
+   92066836 00:01:32.066 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+   92068756 00:01:32.068 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+   92071356 00:01:32.071 [D] SubMac--------: RadioState: Transmit -> Receive
+   92071356 00:01:32.071 [D] Mac-----------: ==============================[TX len=070]==============================
+   92071356 00:01:32.071 [D] Mac-----------: | 41 D8 BD CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+   92071356 00:01:32.071 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 33 | 9B 00 15 15 00 00 00 00 | ;..MLML3........ |
+   92071356 00:01:32.071 [D] Mac-----------: | 00 00 00 01 04 70 DF 7F | C2 05 F6 2D F0 CB 08 D9 | .....p.....-.... |
+   92071356 00:01:32.071 [D] Mac-----------: | FD 2E 0E C3 61 D8 52 8A | CB EA DD C0 16 EB 50 35 | ....a.R.......P5 |
+   92071356 00:01:32.071 [D] Mac-----------: | A6 E1 3B A5 C1 2F       |                         | ..;../           |
+   92071356 00:01:32.071 [D] Mac-----------: ------------------------------------------------------------------------
+   92071356 00:01:32.071 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+   92071356 00:01:32.071 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:339b, ecn:no, to:0xffff, sec:no, prio:net
+   92071356 00:01:32.071 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+   92071356 00:01:32.071 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   92071356 00:01:32.071 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+   94679916 00:01:34.679 [D] Mac-----------: ==============================[RX len=070]==============================
+   94679916 00:01:34.679 [D] Mac-----------: | 41 D8 C9 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+   94679916 00:01:34.679 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 63 | D7 00 15 0F 00 00 00 00 | ;..MLMLc........ |
+   94679916 00:01:34.679 [D] Mac-----------: | 00 00 00 01 4F 63 46 7B | DB 98 28 7B 37 B2 AA 6A | ....OcF{..({7..j |
+   94679916 00:01:34.679 [D] Mac-----------: | 5D 16 88 4A 8B A4 A8 BF | 5B AB 47 DB C3 C3 F4 8E | ]..J....[.G..... |
+   94679916 00:01:34.679 [D] Mac-----------: | 24 06 EF 06 64 58       |                         | $...dX           |
+   94679916 00:01:34.679 [D] Mac-----------: ------------------------------------------------------------------------
+   94679916 00:01:34.679 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:63d7, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+   94679916 00:01:34.679 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+   94679916 00:01:34.679 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+   94679916 00:01:34.679 [D] Mle-----------: Receive MLE message
+   94679916 00:01:34.679 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+   94679916 00:01:34.679 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  102293796 00:01:42.293 [D] Mac-----------: ==============================[RX len=070]==============================
+  102293796 00:01:42.293 [D] Mac-----------: | 41 D8 CA CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  102293796 00:01:42.293 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 37 | B5 00 15 10 00 00 00 00 | ;..MLML7........ |
+  102293796 00:01:42.293 [D] Mac-----------: | 00 00 00 01 66 93 FE 78 | C5 20 1A E5 2D A6 C0 9D | ....f..x. ..-... |
+  102293796 00:01:42.293 [D] Mac-----------: | 02 31 3F B8 1B 40 01 0B | 71 BA 11 D5 0F 9D 17 61 | .1?..@..q......a |
+  102293796 00:01:42.293 [D] Mac-----------: | 3F 98 AB 35 EF 78       |                         | ?..5.x           |
+  102293796 00:01:42.293 [D] Mac-----------: ------------------------------------------------------------------------
+  102293796 00:01:42.293 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:37b5, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  102293796 00:01:42.293 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  102293796 00:01:42.293 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  102293796 00:01:42.293 [D] Mle-----------: Receive MLE message
+  102293796 00:01:42.293 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  102293796 00:01:42.293 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  102348836 00:01:42.348 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  102348836 00:01:42.348 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  102348836 00:01:42.348 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  102348836 00:01:42.348 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  102349796 00:01:42.349 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  102352396 00:01:42.352 [D] SubMac--------: RadioState: Transmit -> Receive
+  102352396 00:01:42.352 [D] Mac-----------: ==============================[TX len=070]==============================
+  102352396 00:01:42.352 [D] Mac-----------: | 41 D8 BE CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  102352396 00:01:42.352 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 0B | 9F 00 15 16 00 00 00 00 | ;..MLML......... |
+  102352396 00:01:42.352 [D] Mac-----------: | 00 00 00 01 DF DF A4 91 | 4A A0 3A 54 96 7D 71 FB | ........J.:T.}q. |
+  102352396 00:01:42.352 [D] Mac-----------: | B7 99 74 8D 46 4A 3F 74 | EA 94 20 D0 EF 4B A2 A3 | ..t.FJ?t.. ..K.. |
+  102352396 00:01:42.352 [D] Mac-----------: | C3 68 21 15 9D B0       |                         | .h!...           |
+  102352396 00:01:42.352 [D] Mac-----------: ------------------------------------------------------------------------
+  102352396 00:01:42.352 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  102352396 00:01:42.352 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:0b9f, ecn:no, to:0xffff, sec:no, prio:net
+  102352396 00:01:42.352 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  102352396 00:01:42.352 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  102352396 00:01:42.352 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  116417036 00:01:56.417 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  116417036 00:01:56.417 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  116417036 00:01:56.417 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  116417036 00:01:56.417 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  116417036 00:01:56.417 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  116419636 00:01:56.419 [D] SubMac--------: RadioState: Transmit -> Receive
+  116419636 00:01:56.419 [D] Mac-----------: ==============================[TX len=070]==============================
+  116419636 00:01:56.419 [D] Mac-----------: | 41 D8 BF CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  116419636 00:01:56.419 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 19 | A5 00 15 17 00 00 00 00 | ;..MLML......... |
+  116419636 00:01:56.419 [D] Mac-----------: | 00 00 00 01 16 6E C5 A9 | B4 6A 63 66 02 D6 E0 C9 | .....n...jcf.... |
+  116419636 00:01:56.419 [D] Mac-----------: | 2F F0 3A FA 72 EE 62 A0 | 70 C5 30 54 59 9B F3 A9 | /.:.r.b.p.0TY... |
+  116419636 00:01:56.419 [D] Mac-----------: | 72 31 C6 F5 2B 11       |                         | r1..+.           |
+  116419636 00:01:56.419 [D] Mac-----------: ------------------------------------------------------------------------
+  116419636 00:01:56.419 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  116419636 00:01:56.419 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:19a5, ecn:no, to:0xffff, sec:no, prio:net
+  116419636 00:01:56.419 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  116419636 00:01:56.419 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  116419636 00:01:56.419 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  116768236 00:01:56.768 [D] Mac-----------: ==============================[RX len=070]==============================
+  116768236 00:01:56.768 [D] Mac-----------: | 41 D8 CB CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  116768236 00:01:56.768 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C E3 | 9A 00 15 11 00 00 00 00 | ;..MLML......... |
+  116768236 00:01:56.768 [D] Mac-----------: | 00 00 00 01 90 24 F9 3C | 39 D3 2D 24 FD AC 33 11 | .....$.<9.-$..3. |
+  116768236 00:01:56.768 [D] Mac-----------: | B4 2D 95 CC 43 35 4B DD | B9 73 0D 93 3A 38 4E A7 | .-..C5K..s..:8N. |
+  116768236 00:01:56.768 [D] Mac-----------: | FB 1C FC 11 FF AF       |                         | ......           |
+  116768236 00:01:56.768 [D] Mac-----------: ------------------------------------------------------------------------
+  116768236 00:01:56.768 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:e39a, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  116768236 00:01:56.768 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  116768236 00:01:56.768 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  116768236 00:01:56.768 [D] Mle-----------: Receive MLE message
+  116768236 00:01:56.768 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  116768236 00:01:56.768 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  116768236 00:01:56.768 [I] RouterTable---: Route table changed [ lqo ]
+  116768236 00:01:56.768 [I] RouterTable---: Route table
+  116768236 00:01:56.768 [I] RouterTable---:     53 0xd400 - me - leader
+  116768236 00:01:56.768 [I] RouterTable---:      0 0x0000 - nbr{lq[i/o]:2/2 cost:2}
+  130749276 00:02:10.749 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  130749276 00:02:10.749 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  130749276 00:02:10.749 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  130749276 00:02:10.749 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  130750556 00:02:10.750 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  130753156 00:02:10.753 [D] SubMac--------: RadioState: Transmit -> Receive
+  130753156 00:02:10.753 [D] Mac-----------: ==============================[TX len=070]==============================
+  130753156 00:02:10.753 [D] Mac-----------: | 41 D8 C0 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  130753156 00:02:10.753 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C FC | A5 00 15 18 00 00 00 00 | ;..MLML......... |
+  130753156 00:02:10.753 [D] Mac-----------: | 00 00 00 01 92 2E 68 E6 | 79 E8 05 8E E7 8C 0A BF | ......h.y....... |
+  130753156 00:02:10.753 [D] Mac-----------: | B0 8B 8A 3E B3 E4 94 DA | 16 C4 A5 DA 3A F2 3B 5E | ...>........:.;^ |
+  130753156 00:02:10.753 [D] Mac-----------: | 40 3F DB 14 07 97       |                         | @?....           |
+  130753156 00:02:10.753 [D] Mac-----------: ------------------------------------------------------------------------
+  130753156 00:02:10.753 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  130753156 00:02:10.753 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:fca5, ecn:no, to:0xffff, sec:no, prio:net
+  130753156 00:02:10.753 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  130753156 00:02:10.753 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  130753156 00:02:10.753 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  131125756 00:02:11.125 [D] Mac-----------: ==============================[RX len=070]==============================
+  131125756 00:02:11.125 [D] Mac-----------: | 41 D8 CC CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  131125756 00:02:11.125 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C A8 | E9 00 15 12 00 00 00 00 | ;..MLML......... |
+  131125756 00:02:11.125 [D] Mac-----------: | 00 00 00 01 72 A3 B7 15 | 7A 34 40 10 FE 2E 39 D8 | ....r...z4@...9. |
+  131125756 00:02:11.125 [D] Mac-----------: | 0B 38 47 02 81 86 4A FC | F5 4A 43 46 0C 84 26 DC | .8G...J..JCF..&. |
+  131125756 00:02:11.125 [D] Mac-----------: | D7 68 74 56 B9 88       |                         | .htV..           |
+  131125756 00:02:11.125 [D] Mac-----------: ------------------------------------------------------------------------
+  131125756 00:02:11.125 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:a8e9, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  131125756 00:02:11.125 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  131125756 00:02:11.125 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  131125756 00:02:11.125 [D] Mle-----------: Receive MLE message
+  131125756 00:02:11.125 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  131125756 00:02:11.125 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  139824236 00:02:19.824 [D] Mac-----------: ==============================[RX len=070]==============================
+  139824236 00:02:19.824 [D] Mac-----------: | 41 D8 CD CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  139824236 00:02:19.824 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 53 | B5 00 15 13 00 00 00 00 | ;..MLMLS........ |
+  139824236 00:02:19.824 [D] Mac-----------: | 00 00 00 01 1C DA 68 D6 | 80 02 81 3E DE 30 4C 15 | ......h....>.0L. |
+  139824236 00:02:19.824 [D] Mac-----------: | 76 FF 1C 47 23 0F 57 5B | A7 CA 2E 34 0D 61 8D 02 | v..G#.W[...4.a.. |
+  139824236 00:02:19.824 [D] Mac-----------: | 53 BD A3 BE 52 2F       |                         | S...R/           |
+  139824236 00:02:19.824 [D] Mac-----------: ------------------------------------------------------------------------
+  139824236 00:02:19.824 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:53b5, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  139824236 00:02:19.824 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  139824236 00:02:19.824 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  139824236 00:02:19.824 [D] Mle-----------: Receive MLE message
+  139824236 00:02:19.824 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  139824236 00:02:19.824 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  142353276 00:02:22.353 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  142353276 00:02:22.353 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  142353276 00:02:22.353 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  142353276 00:02:22.353 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  142354876 00:02:22.354 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  142357476 00:02:22.357 [D] SubMac--------: RadioState: Transmit -> Receive
+  142357476 00:02:22.357 [D] Mac-----------: ==============================[TX len=070]==============================
+  142357476 00:02:22.357 [D] Mac-----------: | 41 D8 C1 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  142357476 00:02:22.357 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 8A | ED 00 15 19 00 00 00 00 | ;..MLML......... |
+  142357476 00:02:22.357 [D] Mac-----------: | 00 00 00 01 C4 2A 6D 75 | DB F1 9D EF 88 BE 65 75 | .....*mu......eu |
+  142357476 00:02:22.357 [D] Mac-----------: | 0F AA ED 3D 36 8B 83 F0 | 33 BB 4B CC EF 61 8B 66 | ...=6...3.K..a.f |
+  142357476 00:02:22.357 [D] Mac-----------: | 58 5B 53 50 85 C2       |                         | X[SP..           |
+  142357476 00:02:22.357 [D] Mac-----------: ------------------------------------------------------------------------
+  142357476 00:02:22.357 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  142357476 00:02:22.357 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:8aed, ecn:no, to:0xffff, sec:no, prio:net
+  142357476 00:02:22.357 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  142357476 00:02:22.357 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  142357476 00:02:22.357 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  151134116 00:02:31.134 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  151134116 00:02:31.134 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  151134116 00:02:31.134 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  151134116 00:02:31.134 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  151134116 00:02:31.134 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  151136716 00:02:31.136 [D] SubMac--------: RadioState: Transmit -> Receive
+  151136716 00:02:31.136 [D] Mac-----------: ==============================[TX len=070]==============================
+  151136716 00:02:31.136 [D] Mac-----------: | 41 D8 C2 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  151136716 00:02:31.136 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 66 | 5A 00 15 1A 00 00 00 00 | ;..MLMLfZ....... |
+  151136716 00:02:31.136 [D] Mac-----------: | 00 00 00 01 D9 40 A1 6A | 57 11 94 FA 4A 68 74 ED | .....@.jW...Jht. |
+  151136716 00:02:31.136 [D] Mac-----------: | 32 85 A9 1B 18 F4 83 41 | D4 62 B5 4F 11 55 76 8A | 2......A.b.O.Uv. |
+  151136716 00:02:31.136 [D] Mac-----------: | C3 0B 17 B7 B5 1C       |                         | ......           |
+  151136716 00:02:31.136 [D] Mac-----------: ------------------------------------------------------------------------
+  151136716 00:02:31.136 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  151136716 00:02:31.136 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:665a, ecn:no, to:0xffff, sec:no, prio:net
+  151136716 00:02:31.136 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  151136716 00:02:31.136 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  151136716 00:02:31.136 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  154437276 00:02:34.437 [D] Mac-----------: ==============================[RX len=070]==============================
+  154437276 00:02:34.437 [D] Mac-----------: | 41 D8 CE CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  154437276 00:02:34.437 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C D8 | 35 00 15 14 00 00 00 00 | ;..MLML.5....... |
+  154437276 00:02:34.437 [D] Mac-----------: | 00 00 00 01 5D EA 39 AA | 75 3B 28 70 32 E6 34 03 | ....].9.u;(p2.4. |
+  154437276 00:02:34.437 [D] Mac-----------: | 3C C7 ED D5 51 B0 0E 56 | 1D 94 4F AB 1F EC 15 15 | <...Q..V..O..... |
+  154437276 00:02:34.437 [D] Mac-----------: | 20 DC BC 57 6F 86       |                         |  ..Wo.           |
+  154437276 00:02:34.437 [D] Mac-----------: ------------------------------------------------------------------------
+  154437276 00:02:34.437 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:d835, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  154437276 00:02:34.437 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  154437276 00:02:34.437 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  154437276 00:02:34.437 [D] Mle-----------: Receive MLE message
+  154437276 00:02:34.437 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  154437276 00:02:34.437 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  164042316 00:02:44.042 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  164042316 00:02:44.042 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  164042316 00:02:44.042 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  164042316 00:02:44.042 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  164044236 00:02:44.044 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  164046836 00:02:44.046 [D] SubMac--------: RadioState: Transmit -> Receive
+  164046836 00:02:44.046 [D] Mac-----------: ==============================[TX len=070]==============================
+  164046836 00:02:44.046 [D] Mac-----------: | 41 D8 C3 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  164046836 00:02:44.046 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 97 | D0 00 15 1B 00 00 00 00 | ;..MLML......... |
+  164046836 00:02:44.046 [D] Mac-----------: | 00 00 00 01 4D 2B 38 4E | 93 8A 99 04 6D 1E AF 8A | ....M+8N....m... |
+  164046836 00:02:44.046 [D] Mac-----------: | A6 78 BB 41 63 16 2B 21 | 23 AA D2 8B D6 47 57 87 | .x.Ac.+!#....GW. |
+  164046836 00:02:44.046 [D] Mac-----------: | FF 34 32 28 84 F3       |                         | .42(..           |
+  164046836 00:02:44.046 [D] Mac-----------: ------------------------------------------------------------------------
+  164046836 00:02:44.046 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  164046836 00:02:44.046 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:97d0, ecn:no, to:0xffff, sec:no, prio:net
+  164046836 00:02:44.046 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  164046836 00:02:44.046 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  164046836 00:02:44.046 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  164414396 00:02:44.414 [D] Mac-----------: ==============================[RX len=070]==============================
+  164414396 00:02:44.414 [D] Mac-----------: | 41 D8 CF CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  164414396 00:02:44.414 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C D6 | 31 00 15 15 00 00 00 00 | ;..MLML.1....... |
+  164414396 00:02:44.414 [D] Mac-----------: | 00 00 00 01 E1 25 1F 9A | C7 80 90 D0 79 92 8D C0 | .....%......y... |
+  164414396 00:02:44.414 [D] Mac-----------: | 4D 24 D2 56 4A 12 C1 F7 | AC 41 08 06 E9 8D 9E DA | M$.VJ....A...... |
+  164414396 00:02:44.414 [D] Mac-----------: | 84 88 5D 20 33 7F       |                         | ..] 3.           |
+  164414396 00:02:44.414 [D] Mac-----------: ------------------------------------------------------------------------
+  164414396 00:02:44.414 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:d631, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  164414396 00:02:44.414 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  164414396 00:02:44.414 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  164414396 00:02:44.414 [D] Mle-----------: Receive MLE message
+  164414396 00:02:44.414 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  164414396 00:02:44.414 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  174235276 00:02:54.235 [D] Mac-----------: ==============================[RX len=070]==============================
+  174235276 00:02:54.235 [D] Mac-----------: | 41 D8 D0 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  174235276 00:02:54.235 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 16 | 54 00 15 16 00 00 00 00 | ;..MLML.T....... |
+  174235276 00:02:54.235 [D] Mac-----------: | 00 00 00 01 52 27 B2 5D | 04 6E 95 AA A1 5B 15 AB | ....R'.].n...[.. |
+  174235276 00:02:54.235 [D] Mac-----------: | 3A 94 CE 3D 80 EC 5D 7C | 90 70 1F FB B5 BA C9 43 | :..=..]|.p.....C |
+  174235276 00:02:54.235 [D] Mac-----------: | 59 C0 C1 F7 CE 2B       |                         | Y....+           |
+  174235276 00:02:54.235 [D] Mac-----------: ------------------------------------------------------------------------
+  174235276 00:02:54.235 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:1654, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  174235276 00:02:54.235 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  174235276 00:02:54.235 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  174235276 00:02:54.235 [D] Mle-----------: Receive MLE message
+  174235276 00:02:54.235 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  174235276 00:02:54.235 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  175108316 00:02:55.108 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  175108316 00:02:55.108 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  175108316 00:02:55.108 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  175108316 00:02:55.108 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  175108636 00:02:55.108 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  175111236 00:02:55.111 [D] SubMac--------: RadioState: Transmit -> Receive
+  175111236 00:02:55.111 [D] Mac-----------: ==============================[TX len=070]==============================
+  175111236 00:02:55.111 [D] Mac-----------: | 41 D8 C4 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  175111236 00:02:55.111 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 3C | BB 00 15 1C 00 00 00 00 | ;..MLML<........ |
+  175111236 00:02:55.111 [D] Mac-----------: | 00 00 00 01 63 2C C8 C7 | 30 B1 5E F8 D0 57 A6 67 | ....c,..0.^..W.g |
+  175111236 00:02:55.111 [D] Mac-----------: | BF F9 1A 7A 98 72 56 29 | DD 87 ED 8D 5A 56 8C 6E | ...z.rV)....ZV.n |
+  175111236 00:02:55.111 [D] Mac-----------: | 1C 98 5F 80 51 E1       |                         | .._.Q.           |
+  175111236 00:02:55.111 [D] Mac-----------: ------------------------------------------------------------------------
+  175111236 00:02:55.111 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  175111236 00:02:55.111 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:3cbb, ecn:no, to:0xffff, sec:no, prio:net
+  175111236 00:02:55.111 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  175111236 00:02:55.111 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  175111236 00:02:55.111 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  186507796 00:03:06.507 [D] Mac-----------: ==============================[RX len=070]==============================
+  186507796 00:03:06.507 [D] Mac-----------: | 41 D8 D1 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  186507796 00:03:06.507 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C D1 | 36 00 15 17 00 00 00 00 | ;..MLML.6....... |
+  186507796 00:03:06.507 [D] Mac-----------: | 00 00 00 01 4A 70 34 3F | 90 9D D6 09 2A 56 58 B4 | ....Jp4?....*VX. |
+  186507796 00:03:06.507 [D] Mac-----------: | 80 E2 55 43 31 DC 56 EB | D9 A0 5B 7C 8C C1 E7 7A | ..UC1.V...[|...z |
+  186507796 00:03:06.507 [D] Mac-----------: | CF 9E 64 FE A5 1B       |                         | ..d...           |
+  186507796 00:03:06.507 [D] Mac-----------: ------------------------------------------------------------------------
+  186507796 00:03:06.507 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:d136, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  186507796 00:03:06.507 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  186507796 00:03:06.507 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  186507796 00:03:06.507 [D] Mle-----------: Receive MLE message
+  186507796 00:03:06.507 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  186507796 00:03:06.507 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  188466836 00:03:08.466 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  188466836 00:03:08.466 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  188466836 00:03:08.466 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  188466836 00:03:08.466 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  188467476 00:03:08.467 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  188470076 00:03:08.470 [D] SubMac--------: RadioState: Transmit -> Receive
+  188470076 00:03:08.470 [D] Mac-----------: ==============================[TX len=070]==============================
+  188470076 00:03:08.470 [D] Mac-----------: | 41 D8 C5 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  188470076 00:03:08.470 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 35 | 09 00 15 1D 00 00 00 00 | ;..MLML5........ |
+  188470076 00:03:08.470 [D] Mac-----------: | 00 00 00 01 03 05 03 C0 | E5 F5 44 73 F8 66 64 E4 | ..........Ds.fd. |
+  188470076 00:03:08.470 [D] Mac-----------: | D3 45 12 70 5F 7D 9E F6 | F5 52 A4 B3 30 2D 47 C6 | .E.p_}...R..0-G. |
+  188470076 00:03:08.470 [D] Mac-----------: | 46 C0 10 09 19 3B       |                         | F....;           |
+  188470076 00:03:08.470 [D] Mac-----------: ------------------------------------------------------------------------
+  188470076 00:03:08.470 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  188470076 00:03:08.470 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:3509, ecn:no, to:0xffff, sec:no, prio:net
+  188470076 00:03:08.470 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  188470076 00:03:08.470 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  188470076 00:03:08.470 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  201276716 00:03:21.276 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  201276716 00:03:21.276 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  201276716 00:03:21.276 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  201276716 00:03:21.276 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  201277356 00:03:21.277 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  201279956 00:03:21.279 [D] SubMac--------: RadioState: Transmit -> Receive
+  201279956 00:03:21.279 [D] Mac-----------: ==============================[TX len=070]==============================
+  201279956 00:03:21.279 [D] Mac-----------: | 41 D8 C6 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  201279956 00:03:21.279 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 71 | EA 00 15 1E 00 00 00 00 | ;..MLMLq........ |
+  201279956 00:03:21.279 [D] Mac-----------: | 00 00 00 01 09 AE 18 36 | 22 6F 5C D9 44 AD F5 33 | .......6"o\.D..3 |
+  201279956 00:03:21.279 [D] Mac-----------: | DA 2B 10 81 1E 8B 07 B0 | 66 E9 A7 63 84 0E FC 15 | .+......f..c.... |
+  201279956 00:03:21.279 [D] Mac-----------: | B0 AB CF 15 29 1C       |                         | ....).           |
+  201279956 00:03:21.279 [D] Mac-----------: ------------------------------------------------------------------------
+  201279956 00:03:21.279 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  201279956 00:03:21.279 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:71ea, ecn:no, to:0xffff, sec:no, prio:net
+  201279956 00:03:21.279 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  201279956 00:03:21.279 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  201279956 00:03:21.279 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  203671556 00:03:23.671 [D] Mac-----------: ==============================[RX len=070]==============================
+  203671556 00:03:23.671 [D] Mac-----------: | 41 D8 D2 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  203671556 00:03:23.671 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C EF | F2 00 15 18 00 00 00 00 | ;..MLML......... |
+  203671556 00:03:23.671 [D] Mac-----------: | 00 00 00 01 78 12 4B 5C | 5D ED 60 02 E3 C9 1A D7 | ....x.K\].`..... |
+  203671556 00:03:23.671 [D] Mac-----------: | 8B B4 60 47 83 FB 9B 58 | 4C 70 13 1C 4E 39 15 63 | ..`G...XLp..N9.c |
+  203671556 00:03:23.671 [D] Mac-----------: | C6 F1 D3 BB D9 39       |                         | .....9           |
+  203671556 00:03:23.671 [D] Mac-----------: ------------------------------------------------------------------------
+  203671556 00:03:23.671 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:eff2, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  203671556 00:03:23.671 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  203671556 00:03:23.671 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  203671556 00:03:23.671 [D] Mle-----------: Receive MLE message
+  203671556 00:03:23.671 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  203671556 00:03:23.671 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  211175396 00:03:31.175 [D] Mac-----------: ==============================[RX len=070]==============================
+  211175396 00:03:31.175 [D] Mac-----------: | 41 D8 D3 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  211175396 00:03:31.175 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C E7 | 30 00 15 19 00 00 00 00 | ;..MLML.0....... |
+  211175396 00:03:31.175 [D] Mac-----------: | 00 00 00 01 AF BE 93 37 | E4 C9 A3 7B D5 87 E3 0B | .......7...{.... |
+  211175396 00:03:31.175 [D] Mac-----------: | B4 FF FD 5E 83 FA DE 64 | E4 0E DE 0C AA B5 59 6C | ...^...d......Yl |
+  211175396 00:03:31.175 [D] Mac-----------: | D9 82 72 DF 91 70       |                         | ..r..p           |
+  211175396 00:03:31.175 [D] Mac-----------: ------------------------------------------------------------------------
+  211175396 00:03:31.175 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:e730, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  211175396 00:03:31.175 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  211175396 00:03:31.175 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  211175396 00:03:31.175 [D] Mle-----------: Receive MLE message
+  211175396 00:03:31.175 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  211175396 00:03:31.175 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  213002436 00:03:33.002 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  213002436 00:03:33.002 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  213002436 00:03:33.002 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  213002436 00:03:33.002 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  213002756 00:03:33.002 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  213005356 00:03:33.005 [D] SubMac--------: RadioState: Transmit -> Receive
+  213005356 00:03:33.005 [D] Mac-----------: ==============================[TX len=070]==============================
+  213005356 00:03:33.005 [D] Mac-----------: | 41 D8 C7 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  213005356 00:03:33.005 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C C6 | 02 00 15 1F 00 00 00 00 | ;..MLML......... |
+  213005356 00:03:33.005 [D] Mac-----------: | 00 00 00 01 7A B2 32 DC | 5A 4B 86 C8 97 C2 8D B7 | ....z.2.ZK...... |
+  213005356 00:03:33.005 [D] Mac-----------: | 03 B2 56 EB 06 08 3C 23 | D8 A2 11 93 49 45 8F CC | ..V...<#....IE.. |
+  213005356 00:03:33.005 [D] Mac-----------: | 0D 6A C0 3C 3F 6F       |                         | .j.<?o           |
+  213005356 00:03:33.005 [D] Mac-----------: ------------------------------------------------------------------------
+  213005356 00:03:33.005 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  213005356 00:03:33.005 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:c602, ecn:no, to:0xffff, sec:no, prio:net
+  213005356 00:03:33.005 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  213005356 00:03:33.005 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  213005356 00:03:33.005 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  222802596 00:03:42.802 [D] Mac-----------: ==============================[RX len=070]==============================
+  222802596 00:03:42.802 [D] Mac-----------: | 41 D8 D4 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  222802596 00:03:42.802 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 59 | AC 00 15 1A 00 00 00 00 | ;..MLMLY........ |
+  222802596 00:03:42.802 [D] Mac-----------: | 00 00 00 01 71 82 E7 02 | 87 F5 FC F8 CA 96 EA 51 | ....q..........Q |
+  222802596 00:03:42.802 [D] Mac-----------: | 1E A8 3E 27 A0 6F 32 4E | 02 72 B7 28 FA 75 7D FC | ..>'.o2N.r.(.u}. |
+  222802596 00:03:42.802 [D] Mac-----------: | 8C 4D AF 75 3A B1       |                         | .M.u:.           |
+  222802596 00:03:42.802 [D] Mac-----------: ------------------------------------------------------------------------
+  222802596 00:03:42.802 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:59ac, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  222802596 00:03:42.802 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  222802596 00:03:42.802 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  222802596 00:03:42.802 [D] Mle-----------: Receive MLE message
+  222802596 00:03:42.802 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  222802596 00:03:42.802 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  226718636 00:03:46.718 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  226718636 00:03:46.718 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  226718636 00:03:46.718 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  226718636 00:03:46.718 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  226718636 00:03:46.718 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  226721236 00:03:46.721 [D] SubMac--------: RadioState: Transmit -> Receive
+  226721236 00:03:46.721 [D] Mac-----------: ==============================[TX len=070]==============================
+  226721236 00:03:46.721 [D] Mac-----------: | 41 D8 C8 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  226721236 00:03:46.721 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 4A | 4A 00 15 20 00 00 00 00 | ;..MLMLJJ.. .... |
+  226721236 00:03:46.721 [D] Mac-----------: | 00 00 00 01 47 48 EF 32 | A0 4A E5 25 44 46 8D 73 | ....GH.2.J.%DF.s |
+  226721236 00:03:46.721 [D] Mac-----------: | E0 E2 19 2A CF 36 4E E1 | 19 AE 24 65 4E 7D 98 99 | ...*.6N...$eN}.. |
+  226721236 00:03:46.721 [D] Mac-----------: | AE A8 20 B1 7D 0E       |                         | .. .}.           |
+  226721236 00:03:46.721 [D] Mac-----------: ------------------------------------------------------------------------
+  226721236 00:03:46.721 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  226721236 00:03:46.721 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:4a4a, ecn:no, to:0xffff, sec:no, prio:net
+  226721236 00:03:46.721 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  226721236 00:03:46.721 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  226721236 00:03:46.721 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  237667796 00:03:57.667 [D] Mac-----------: ==============================[RX len=070]==============================
+  237667796 00:03:57.667 [D] Mac-----------: | 41 D8 D5 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  237667796 00:03:57.667 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 05 | B5 00 15 1B 00 00 00 00 | ;..MLML......... |
+  237667796 00:03:57.667 [D] Mac-----------: | 00 00 00 01 0F 91 B9 58 | A4 33 1B 48 C8 F7 FB 59 | .......X.3.H...Y |
+  237667796 00:03:57.667 [D] Mac-----------: | E8 BD 94 93 33 2D A2 47 | 39 81 21 6C D7 92 BC EB | ....3-.G9.!l.... |
+  237667796 00:03:57.667 [D] Mac-----------: | 78 C8 1F 5B 6F 9F       |                         | x..[o.           |
+  237667796 00:03:57.667 [D] Mac-----------: ------------------------------------------------------------------------
+  237667796 00:03:57.667 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:05b5, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  237667796 00:03:57.667 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  237667796 00:03:57.667 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  237667796 00:03:57.667 [D] Mle-----------: Receive MLE message
+  237667796 00:03:57.667 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  237667796 00:03:57.667 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  239869836 00:03:59.869 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  239869836 00:03:59.869 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  239869836 00:03:59.869 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  239869836 00:03:59.869 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  239871116 00:03:59.871 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  239873716 00:03:59.873 [D] SubMac--------: RadioState: Transmit -> Receive
+  239873716 00:03:59.873 [D] Mac-----------: ==============================[TX len=070]==============================
+  239873716 00:03:59.873 [D] Mac-----------: | 41 D8 C9 CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  239873716 00:03:59.873 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C D3 | B7 00 15 21 00 00 00 00 | ;..MLML....!.... |
+  239873716 00:03:59.873 [D] Mac-----------: | 00 00 00 01 48 62 09 96 | E9 C3 A0 34 88 F4 49 F1 | ....Hb.....4..I. |
+  239873716 00:03:59.873 [D] Mac-----------: | A5 A1 38 52 0E 48 D2 51 | 1B B7 C9 81 A0 71 44 57 | ..8R.H.Q.....qDW |
+  239873716 00:03:59.873 [D] Mac-----------: | 50 93 A4 CA EC 0C       |                         | P.....           |
+  239873716 00:03:59.873 [D] Mac-----------: ------------------------------------------------------------------------
+  239873716 00:03:59.873 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  239873716 00:03:59.873 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:d3b7, ecn:no, to:0xffff, sec:no, prio:net
+  239873716 00:03:59.873 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  239873716 00:03:59.873 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  239873716 00:03:59.873 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  247654636 00:04:07.654 [D] Mac-----------: ==============================[RX len=070]==============================
+  247654636 00:04:07.654 [D] Mac-----------: | 41 D8 D6 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  247654636 00:04:07.654 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C FC | 4C 00 15 1C 00 00 00 00 | ;..MLML.L....... |
+  247654636 00:04:07.654 [D] Mac-----------: | 00 00 00 01 42 8E BC A5 | 74 E1 E8 DA 7C D8 C9 BB | ....B...t...|... |
+  247654636 00:04:07.654 [D] Mac-----------: | EF 11 C7 F6 B0 C4 8C B3 | E8 9D 70 62 D1 32 48 7D | ..........pb.2H} |
+  247654636 00:04:07.654 [D] Mac-----------: | DB C5 A8 99 E9 FA       |                         | ......           |
+  247654636 00:04:07.654 [D] Mac-----------: ------------------------------------------------------------------------
+  247654636 00:04:07.654 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:fc4c, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-84.0
+  247654636 00:04:07.654 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  247654636 00:04:07.654 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  247654636 00:04:07.654 [D] Mle-----------: Receive MLE message
+  247654636 00:04:07.654 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  247654636 00:04:07.654 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  249198676 00:04:09.198 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  249198676 00:04:09.198 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  249198676 00:04:09.198 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  249198676 00:04:09.198 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  249200916 00:04:09.200 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  249203516 00:04:09.203 [D] SubMac--------: RadioState: Transmit -> Receive
+  249203516 00:04:09.203 [D] Mac-----------: ==============================[TX len=070]==============================
+  249203516 00:04:09.203 [D] Mac-----------: | 41 D8 CA CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  249203516 00:04:09.203 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 56 | A4 00 15 22 00 00 00 00 | ;..MLMLV...".... |
+  249203516 00:04:09.203 [D] Mac-----------: | 00 00 00 01 34 8C F6 E9 | 1D 87 49 94 7B 55 85 FB | ....4.....I.{U.. |
+  249203516 00:04:09.203 [D] Mac-----------: | 12 9F ED 21 CC 85 EE 5C | 04 52 BF 47 BE CD 4C DD | ...!...\.R.G..L. |
+  249203516 00:04:09.203 [D] Mac-----------: | 62 66 C0 0E 88 85       |                         | bf....           |
+  249203516 00:04:09.203 [D] Mac-----------: ------------------------------------------------------------------------
+  249203516 00:04:09.203 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  249203516 00:04:09.203 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:56a4, ecn:no, to:0xffff, sec:no, prio:net
+  249203516 00:04:09.203 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  249203516 00:04:09.203 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  249203516 00:04:09.203 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  259451156 00:04:19.451 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  259451156 00:04:19.451 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  259451156 00:04:19.451 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  259451156 00:04:19.451 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  259452116 00:04:19.452 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  259454716 00:04:19.454 [D] SubMac--------: RadioState: Transmit -> Receive
+  259454716 00:04:19.454 [D] Mac-----------: ==============================[TX len=070]==============================
+  259454716 00:04:19.454 [D] Mac-----------: | 41 D8 CB CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  259454716 00:04:19.454 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 51 | C2 00 15 23 00 00 00 00 | ;..MLMLQ...#.... |
+  259454716 00:04:19.454 [D] Mac-----------: | 00 00 00 01 B0 C3 88 79 | 1D 11 7D AB E0 60 7D 86 | .......y..}..`}. |
+  259454716 00:04:19.454 [D] Mac-----------: | 55 FE 59 BA 5D 7A 0F 47 | 12 C2 24 B8 14 2B C1 69 | U.Y.]z.G..$..+.i |
+  259454716 00:04:19.454 [D] Mac-----------: | DA 02 EC D6 AC D4       |                         | ......           |
+  259454716 00:04:19.454 [D] Mac-----------: ------------------------------------------------------------------------
+  259454716 00:04:19.454 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  259454716 00:04:19.454 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:51c2, ecn:no, to:0xffff, sec:no, prio:net
+  259454716 00:04:19.454 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  259454716 00:04:19.454 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  259454716 00:04:19.454 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  263734996 00:04:23.734 [D] Mac-----------: ==============================[RX len=070]==============================
+  263734996 00:04:23.734 [D] Mac-----------: | 41 D8 D7 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  263734996 00:04:23.734 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 4F | 3D 00 15 1D 00 00 00 00 | ;..MLMLO=....... |
+  263734996 00:04:23.734 [D] Mac-----------: | 00 00 00 01 DF 79 85 FE | B3 7B 36 E3 B5 F1 6F C0 | .....y...{6...o. |
+  263734996 00:04:23.734 [D] Mac-----------: | 20 D8 CA BD 11 82 B1 83 | 84 65 32 81 7F 32 3B 34 |  ........e2..2;4 |
+  263734996 00:04:23.734 [D] Mac-----------: | EF 78 19 D6 59 1B       |                         | .x..Y.           |
+  263734996 00:04:23.734 [D] Mac-----------: ------------------------------------------------------------------------
+  263734996 00:04:23.734 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:4f3d, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-79.0
+  263734996 00:04:23.734 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  263734996 00:04:23.734 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  263734996 00:04:23.734 [D] Mle-----------: Receive MLE message
+  263734996 00:04:23.734 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  263734996 00:04:23.734 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  274682196 00:04:34.682 [D] Mac-----------: ==============================[RX len=070]==============================
+  274682196 00:04:34.682 [D] Mac-----------: | 41 D8 D8 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  274682196 00:04:34.682 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 44 | AF 00 15 1E 00 00 00 00 | ;..MLMLD........ |
+  274682196 00:04:34.682 [D] Mac-----------: | 00 00 00 01 67 71 3F 25 | 40 6E 5E A9 11 CC 47 50 | ....gq?%@n^...GP |
+  274682196 00:04:34.682 [D] Mac-----------: | FC 6A 9B 22 FD AB 74 63 | A5 3E 93 12 9B DD 51 47 | .j."..tc.>....QG |
+  274682196 00:04:34.682 [D] Mac-----------: | 71 10 ED DC 51 5A       |                         | q...QZ           |
+  274682196 00:04:34.682 [D] Mac-----------: ------------------------------------------------------------------------
+  274682196 00:04:34.682 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:44af, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-79.0
+  274682196 00:04:34.682 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  274682196 00:04:34.682 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  274682196 00:04:34.682 [D] Mle-----------: Receive MLE message
+  274682196 00:04:34.682 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  274682196 00:04:34.682 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  276132236 00:04:36.132 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  276132236 00:04:36.132 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  276132236 00:04:36.132 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  276132236 00:04:36.132 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  276133836 00:04:36.133 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  276136436 00:04:36.136 [D] SubMac--------: RadioState: Transmit -> Receive
+  276136436 00:04:36.136 [D] Mac-----------: ==============================[TX len=070]==============================
+  276136436 00:04:36.136 [D] Mac-----------: | 41 D8 CC CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  276136436 00:04:36.136 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C CF | C3 00 15 24 00 00 00 00 | ;..MLML....$.... |
+  276136436 00:04:36.136 [D] Mac-----------: | 00 00 00 01 A6 39 3F D1 | 3F F8 82 9C 24 10 4A 25 | .....9?.?...$.J% |
+  276136436 00:04:36.136 [D] Mac-----------: | 37 BA 9E 60 40 C0 2F 59 | 43 C9 2E 1B D2 B1 BA EB | 7..`@./YC....... |
+  276136436 00:04:36.136 [D] Mac-----------: | CE 98 F5 A0 5C ED       |                         | ....\.           |
+  276136436 00:04:36.136 [D] Mac-----------: ------------------------------------------------------------------------
+  276136436 00:04:36.136 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  276136436 00:04:36.136 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:cfc3, ecn:no, to:0xffff, sec:no, prio:net
+  276136436 00:04:36.136 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  276136436 00:04:36.136 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  276136436 00:04:36.136 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  282476076 00:04:42.476 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  282476076 00:04:42.476 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  282476076 00:04:42.476 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  282476076 00:04:42.476 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  282477356 00:04:42.477 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  282479956 00:04:42.479 [D] SubMac--------: RadioState: Transmit -> Receive
+  282479956 00:04:42.479 [D] Mac-----------: ==============================[TX len=070]==============================
+  282479956 00:04:42.479 [D] Mac-----------: | 41 D8 CD CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  282479956 00:04:42.479 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 75 | F3 00 15 25 00 00 00 00 | ;..MLMLu...%.... |
+  282479956 00:04:42.479 [D] Mac-----------: | 00 00 00 01 FB 07 06 0E | 3E A7 A5 F0 27 31 2B 50 | ........>...'1+P |
+  282479956 00:04:42.479 [D] Mac-----------: | DD 9F 8A D3 13 94 1B BC | 65 96 28 58 9B 8F 72 2E | ........e.(X..r. |
+  282479956 00:04:42.479 [D] Mac-----------: | CE 86 B6 F7 F6 30       |                         | .....0           |
+  282479956 00:04:42.479 [D] Mac-----------: ------------------------------------------------------------------------
+  282479956 00:04:42.479 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  282479956 00:04:42.479 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:75f3, ecn:no, to:0xffff, sec:no, prio:net
+  282479956 00:04:42.479 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  282479956 00:04:42.479 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  282479956 00:04:42.479 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  287156876 00:04:47.156 [D] Mac-----------: ==============================[RX len=070]==============================
+  287156876 00:04:47.156 [D] Mac-----------: | 41 D8 D9 CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  287156876 00:04:47.156 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 1B | A1 00 15 1F 00 00 00 00 | ;..MLML......... |
+  287156876 00:04:47.156 [D] Mac-----------: | 00 00 00 01 F2 90 D2 6C | 76 DE 0B 6F 2A C0 E7 39 | .......lv..o*..9 |
+  287156876 00:04:47.156 [D] Mac-----------: | 8D ED 3C 76 87 2D A8 F0 | 70 78 A7 3A C2 77 6F DC | ..<v.-..px.:.wo. |
+  287156876 00:04:47.156 [D] Mac-----------: | 5B C5 41 5F E8 74       |                         | [.A_.t           |
+  287156876 00:04:47.156 [D] Mac-----------: ------------------------------------------------------------------------
+  287156876 00:04:47.156 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:1ba1, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-79.0
+  287156876 00:04:47.156 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  287156876 00:04:47.156 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  287156876 00:04:47.156 [D] Mle-----------: Receive MLE message
+  287156876 00:04:47.156 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  287156876 00:04:47.156 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  295914756 00:04:55.914 [D] Mac-----------: ==============================[RX len=070]==============================
+  295914756 00:04:55.914 [D] Mac-----------: | 41 D8 DA CE FA FF FF 4E | EC 0D CA A8 B9 74 CA 7F | A......N.....t.. |
+  295914756 00:04:55.914 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 02 | 0B 00 15 20 00 00 00 00 | ;..MLML.... .... |
+  295914756 00:04:55.914 [D] Mac-----------: | 00 00 00 01 6D DE 51 E5 | C3 08 C5 BC C3 34 E4 D2 | ....m.Q......4.. |
+  295914756 00:04:55.914 [D] Mac-----------: | 4D C3 47 02 50 1F 03 8B | 8C 70 1E A5 60 D3 F1 5F | M.G.P....p..`.._ |
+  295914756 00:04:55.914 [D] Mac-----------: | 83 32 77 8F 95 B6       |                         | .2w...           |
+  295914756 00:04:55.914 [D] Mac-----------: ------------------------------------------------------------------------
+  295914756 00:04:55.914 [I] MeshForwarder-: Received IPv6 UDP msg, len:91, chksum:020b, ecn:no, from:ca74b9a8ca0dec4e, sec:no, prio:net, rss:-79.0
+  295914756 00:04:55.914 [I] MeshForwarder-:     src:[fe80:0:0:0:c874:b9a8:ca0d:ec4e]:19788
+  295914756 00:04:55.914 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  295914756 00:04:55.914 [D] Mle-----------: Receive MLE message
+  295914756 00:04:55.914 [I] Mle-----------: Receive Advertisement (fe80:0:0:0:c874:b9a8:ca0d:ec4e,0x0000)
+  295914756 00:04:55.914 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  299508796 00:04:59.508 [I] Mle-----------: Send Advertisement (ff02:0:0:0:0:0:0:1)
+  299508796 00:04:59.508 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  299508796 00:04:59.508 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  299508796 00:04:59.508 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  299509436 00:04:59.509 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  299512036 00:04:59.512 [D] SubMac--------: RadioState: Transmit -> Receive
+  299512036 00:04:59.512 [D] Mac-----------: ==============================[TX len=070]==============================
+  299512036 00:04:59.512 [D] Mac-----------: | 41 D8 CE CE FA FF FF E6 | A1 3C 0C 0F 63 3F 9E 7F | A........<..c?.. |
+  299512036 00:04:59.512 [D] Mac-----------: | 3B 01 F0 4D 4C 4D 4C 80 | EC 00 15 26 00 00 00 00 | ;..MLML....&.... |
+  299512036 00:04:59.512 [D] Mac-----------: | 00 00 00 01 A3 8A FE 24 | B8 76 C4 4A C9 DC F9 65 | .......$.v.J...e |
+  299512036 00:04:59.512 [D] Mac-----------: | 16 8A 2E BF 17 06 F3 05 | 15 6F DF 6A BA B4 7D EC | .........o.j..}. |
+  299512036 00:04:59.512 [D] Mac-----------: | 3B 5D 5E 30 FC 25       |                         | ;]^0.%           |
+  299512036 00:04:59.512 [D] Mac-----------: ------------------------------------------------------------------------
+  299512036 00:04:59.512 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  299512036 00:04:59.512 [I] MeshForwarder-: Sent IPv6 UDP msg, len:91, chksum:80ec, ecn:no, to:0xffff, sec:no, prio:net
+  299512036 00:04:59.512 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  299512036 00:04:59.512 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:1]:19788
+  299512036 00:04:59.512 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  300602476 00:05:00.602 [D] Mac-----------: ==============================[RX len=063]==============================
+  300602476 00:05:00.602 [D] Mac-----------: | 41 D8 49 CE FA FF FF 22 | 04 A1 50 DC 2B 02 EE 7F | A.I...."..P.+... |
+  300602476 00:05:00.602 [D] Mac-----------: | 3B 02 F0 4D 4C 4D 4C C5 | 0C 00 15 00 00 00 00 00 | ;..MLML......... |
+  300602476 00:05:00.602 [D] Mac-----------: | 00 00 00 01 68 C1 C8 78 | 10 38 73 79 77 4E 21 D0 | ....h..x.8sywN!. |
+  300602476 00:05:00.602 [D] Mac-----------: | 8D DC 4B 94 42 B1 60 8D | 96 F6 90 83 C2 50 7F    | ..K.B.`......P.  |
+  300602476 00:05:00.602 [D] Mac-----------: ------------------------------------------------------------------------
+  300602476 00:05:00.602 [I] MeshForwarder-: Received IPv6 UDP msg, len:84, chksum:c50c, ecn:no, from:ee022bdc50a10422, sec:no, prio:net, rss:-59.0
+  300602476 00:05:00.602 [I] MeshForwarder-:     src:[fe80:0:0:0:ec02:2bdc:50a1:422]:19788
+  300602476 00:05:00.602 [I] MeshForwarder-:     dst:[ff02:0:0:0:0:0:0:2]:19788
+  300602476 00:05:00.602 [D] Mle-----------: Receive MLE message
+  300602476 00:05:00.602 [I] Mle-----------: Receive Parent Request (fe80:0:0:0:ec02:2bdc:50a1:422)
+  300602476 00:05:00.602 [I] Mle-----------: Schedule tx of Parent Response (fe80:0:0:0:ec02:2bdc:50a1:422)
+  300602476 00:05:00.602 [I] Mle-----------:     Will send in 387 msec
+  300602476 00:05:00.602 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  300989076 00:05:00.989 [I] Mle-----------: Send Parent Response (fe80:0:0:0:ec02:2bdc:50a1:422)
+  300989076 00:05:00.989 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  300989076 00:05:00.989 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  300989076 00:05:00.989 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  300990996 00:05:00.990 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  300995516 00:05:00.995 [D] SubMac--------: RadioState: Transmit -> Receive
+  300995516 00:05:00.995 [D] Mac-----------: ==============================[TX len=113]==============================
+  300995516 00:05:00.995 [D] Mac-----------: | 61 DC CF CE FA 22 04 A1 | 50 DC 2B 02 EE E6 A1 3C | a...."..P.+....< |
+  300995516 00:05:00.995 [D] Mac-----------: | 0C 0F 63 3F 9E 7F 33 F0 | 4D 4C 4D 4C 5F 8C 00 15 | ..c?..3.MLML_... |
+  300995516 00:05:00.995 [D] Mac-----------: | 27 00 00 00 00 00 00 00 | 01 CE 97 52 24 86 94 25 | '..........R$..% |
+  300995516 00:05:00.995 [D] Mac-----------: | C1 DC 47 BC 28 55 22 D6 | 5F C6 09 CD 04 AB 5F A4 | ..G.(U"._....._. |
+  300995516 00:05:00.995 [D] Mac-----------: | 82 1C 29 3C 60 6B B9 57 | E3 42 E5 70 FA 8B EA F4 | ..)<`k.W.B.p.... |
+  300995516 00:05:00.995 [D] Mac-----------: | 9D F7 2E E8 9E 91 2D 5A | 79 54 F3 C1 CD E1 B1 8D | ......-ZyT...... |
+  300995516 00:05:00.995 [D] Mac-----------: | CE 0E D3 3C 3A 13 4F AD | 74 A6 C6 2B 67 F8 8C A9 | ...<:.O.t..+g... |
+  300995516 00:05:00.995 [D] Mac-----------: | 57                      |                         | W                |
+  300995516 00:05:00.995 [D] Mac-----------: ------------------------------------------------------------------------
+  300995516 00:05:00.995 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  300995516 00:05:00.995 [I] MeshForwarder-: Sent IPv6 UDP msg, len:129, chksum:5f8c, ecn:no, to:ee022bdc50a10422, sec:no, prio:net
+  300995516 00:05:00.995 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  300995516 00:05:00.995 [I] MeshForwarder-:     dst:[fe80:0:0:0:ec02:2bdc:50a1:422]:19788
+  300995516 00:05:00.995 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  301354372 00:05:01.354 [D] Mac-----------: ==============================[RX len=098]==============================
+  301354372 00:05:01.354 [D] Mac-----------: | 61 DC 4A CE FA E6 A1 3C | 0C 0F 63 3F 9E 22 04 A1 | a.J....<..c?.".. |
+  301354372 00:05:01.354 [D] Mac-----------: | 50 DC 2B 02 EE 7F 33 F0 | 4D 4C 4D 4C CD 9D 00 15 | P.+...3.MLML.... |
+  301354372 00:05:01.354 [D] Mac-----------: | 01 00 00 00 00 00 00 00 | 01 6D C6 03 99 DB C0 AB | .........m...... |
+  301354372 00:05:01.354 [D] Mac-----------: | 17 02 08 CF 58 EB E8 F3 | 4A A8 5E ED 50 1A EE 3D | ....X...J.^.P..= |
+  301354372 00:05:01.354 [D] Mac-----------: | BF 7E DA 3E 0B 91 20 9C | 0A CC 1F 70 DF 4C 30 D7 | .~.>.. ....p.L0. |
+  301354372 00:05:01.354 [D] Mac-----------: | 57 32 EF 2B 55 7F 83 0C | E9 8E 5D 3F 58 80 54 DF | W2.+U.....]?X.T. |
+  301354372 00:05:01.354 [D] Mac-----------: | 24 82                   |                         | $.               |
+  301354372 00:05:01.354 [D] Mac-----------: ------------------------------------------------------------------------
+  301354372 00:05:01.354 [I] MeshForwarder-: Received IPv6 UDP msg, len:114, chksum:cd9d, ecn:no, from:ee022bdc50a10422, sec:no, prio:net, rss:-59.0
+  301354372 00:05:01.354 [I] MeshForwarder-:     src:[fe80:0:0:0:ec02:2bdc:50a1:422]:19788
+  301354372 00:05:01.354 [I] MeshForwarder-:     dst:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  301354372 00:05:01.354 [D] Mle-----------: Receive MLE message
+  301354372 00:05:01.354 [I] Mle-----------: Receive Child ID Request (fe80:0:0:0:ec02:2bdc:50a1:422)
+  301354372 00:05:01.354 [I] Mle-----------: Child 0x0000 IPv6 address[1]=fdde:ad00:beef:0:afb8:d04d:a118:2aac
+  301354372 00:05:01.354 [I] Mle-----------: Child 0x0000 has 1 registered IPv6 address, 1 address stored
+  301354372 00:05:01.354 [I] Settings------: Added ChildInfo {rloc:0xd402, extaddr:ee022bdc50a10422, timeout:240, mode:0x0d, version:5}
+  301354372 00:05:01.354 [I] Mle-----------: Send Child ID Response (fe80:0:0:0:ec02:2bdc:50a1:422,0xd402)
+  301354372 00:05:01.354 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  301354372 00:05:01.354 [I] Notifier------: StateChanged (0x00000400) [Child+]
+  301354372 00:05:01.354 [I] ChildSupervsn-: Starting Child Supervision
+  301354372 00:05:01.354 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  301354372 00:05:01.354 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  301354372 00:05:01.354 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  301356612 00:05:01.356 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  301361548 00:05:01.361 [D] SubMac--------: RadioState: Transmit -> Receive
+  301361548 00:05:01.361 [D] Mac-----------: ==============================[TX len=126]==============================
+  301361548 00:05:01.361 [D] Mac-----------: | 79 DC D0 CE FA 22 04 A1 | 50 DC 2B 02 EE E6 A1 3C | y...."..P.+....< |
+  301361548 00:05:01.361 [D] Mac-----------: | 0C 0F 63 3F 9E 0D 01 00 | 00 00 01 BA C5 EA 0A 8D | ..c?............ |
+  301361548 00:05:01.361 [D] Mac-----------: | C6 6B EF 05 B2 81 96 11 | F8 BC 49 4A CA AA 7B 6D | .k........IJ..{m |
+  301361548 00:05:01.361 [D] Mac-----------: | CA DB 04 23 38 F6 52 76 | 21 9B 81 3C CF F6 FD 63 | ...#8.Rv!..<...c |
+  301361548 00:05:01.361 [D] Mac-----------: | 6A B6 7C 8A 74 73 FD DE | 2D 8E 59 15 9E A2 54 59 | j.|.ts..-.Y...TY |
+  301361548 00:05:01.361 [D] Mac-----------: | F3 7D A1 8E 6B AD 9F FF | 3E FD 3C 1F 44 60 16 31 | .}..k...>.<.D`.1 |
+  301361548 00:05:01.361 [D] Mac-----------: | 9F 29 18 D2 99 D9 02 61 | C1 B8 02 1E E8 7A 97 41 | .).....a.....z.A |
+  301361548 00:05:01.361 [D] Mac-----------: | E4 EC 81 22 BB 5B 52 3C | 68 52 9C A0 A4 07       | ...".[R<hR....   |
+  301361548 00:05:01.361 [D] Mac-----------: ------------------------------------------------------------------------
+  301361548 00:05:01.361 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  301361548 00:05:01.361 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  301361548 00:05:01.361 [D] Mac-----------: Request to start operation "TransmitDataDirect"
+  301361548 00:05:01.361 [D] Mac-----------: Starting operation "TransmitDataDirect"
+  301361548 00:05:01.361 [D] SubMac--------: RadioState: Receive -> CsmaBackoff
+  301361548 00:05:01.361 [D] SubMac--------: RadioState: CsmaBackoff -> Transmit
+  301366420 00:05:01.366 [D] SubMac--------: RadioState: Transmit -> Receive
+  301366420 00:05:01.366 [D] Mac-----------: ==============================[TX len=104]==============================
+  301366420 00:05:01.366 [D] Mac-----------: | 69 DC D1 CE FA 22 04 A1 | 50 DC 2B 02 EE E6 A1 3C | i...."..P.+....< |
+  301366420 00:05:01.366 [D] Mac-----------: | 0C 0F 63 3F 9E 0D 02 00 | 00 00 01 6A 59 F5 3D 9D | ..c?.......jY.=. |
+  301366420 00:05:01.366 [D] Mac-----------: | F2 01 2E BD E8 E8 27 FA | 9B 11 9F C8 24 5B E0 5E | ......'.....$[.^ |
+  301366420 00:05:01.366 [D] Mac-----------: | 01 7F A9 44 1C 92 E1 8D | 1F 23 66 19 A2 F5 BF 37 | ...D.....#f....7 |
+  301366420 00:05:01.366 [D] Mac-----------: | 28 35 7E 12 E3 1F 4D AF | A4 87 C7 B5 66 8A 30 70 | (5~...M.....f.0p |
+  301366420 00:05:01.366 [D] Mac-----------: | E4 C7 D7 2D FA 7E 68 48 | 37 7D 1C 10 C1 AE B7 2C | ...-.~hH7}....., |
+  301366420 00:05:01.366 [D] Mac-----------: | 35 A1 7E 33 47 6D 2D 27 |                         | 5.~3Gm-'         |
+  301366420 00:05:01.366 [D] Mac-----------: ------------------------------------------------------------------------
+  301366420 00:05:01.366 [D] Mac-----------: Finishing operation "TransmitDataDirect"
+  301366420 00:05:01.366 [I] MeshForwarder-: Sent IPv6 UDP msg, len:194, chksum:fabd, ecn:no, to:ee022bdc50a10422, sec:yes, prio:net
+  301366420 00:05:01.366 [I] MeshForwarder-:     src:[fe80:0:0:0:9c3f:630f:c3c:a1e6]:19788
+  301366420 00:05:01.366 [I] MeshForwarder-:     dst:[fe80:0:0:0:ec02:2bdc:50a1:422]:19788
+  301366420 00:05:01.366 [D] Mac-----------: Idle mode: Radio receiving on channel 11
+  305000000 Node process exited.
+  305000000 Closing log file.

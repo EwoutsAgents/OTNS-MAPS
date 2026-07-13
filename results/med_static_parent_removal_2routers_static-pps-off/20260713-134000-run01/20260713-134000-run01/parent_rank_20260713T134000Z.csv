@@ -1,0 +1,2 @@
+source_log,node,sim_time_us,sim_time_s,decision,criterion,challenger_rloc16,incumbent_rloc16,challenger_value,incumbent_value,challenger_margin,incumbent_margin
+node_log_mobile_3.log,mobile_3,300994972,300.994972,accept,two_way_link_margin,0xd400,0x0000,41,38,41,38

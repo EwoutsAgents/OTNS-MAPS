@@ -104,9 +104,15 @@ The active benchmark matrix uses three stock scenarios:
 - `scenarios/fed_simple_parent_switch.yaml` for a Full End Device variant that uses OTNS's FTD executable path
 - `scenarios/sed_simple_parent_switch.yaml` for a Sleepy End Device variant that treats the `parent` command as the primary attachment observation path
 
+Static parent-removal scenarios are kept in `scenarios/static/` and mirror the
+local ESPHome stock switch-parent tests with 2, 3, or 4 routers. See
+[`docs/static_scenarios.md`](docs/static_scenarios.md).
+
 The simple scenarios now use a four-router, static 0 dBm topology and the runner records one 1 Hz ICMP ping from the mobile end device to its currently observed parent: Router A at `(350, 300)`, Router B at `(875, 300)`, Router C at `(1400, 300)`, Router D at `(1925, 300)`, and a mobile path from `(350, 360)` to `(2125, 360)`. The mobile is created near Router A; Router B, Router C, and Router D are introduced after a fixed 600 s Router-A-only delay; and movement starts after a monitored 600 s post-activation settle period. During the post-activation settle period, the runner keeps polling the mobile parent so switches before movement sampling are recorded as `pre_movement_switch_observed` rather than hidden as unexpected first samples. OTNS `MeterPerUnit = 0.1` makes the movement path 177.5 m; 36 one-second movement steps target about 5 m/s, followed by a 600 s end dwell. See [`docs/scenarios.md`](docs/scenarios.md).
 
 Runs also classify detach/recovery behavior. A no-switch result can now be separated into `no_switch_observed`, `detached_no_reattach`, `detached_reattached_same_parent`, or `detached_reattached_new_parent`, with first detach/reattach timing, position, and reattach latency recorded in summary JSON and artifact manifests.
+
+Instrumented local OpenThread builds emit structured `ParentRank` log lines whenever a node compares a new MLE Parent Response with an existing parent candidate. The runner parses copied OTNS node logs and writes `parent_rank_<timestamp>.csv` when ranking events occur. Each row records the simulation time, node log, accept/reject decision, challenger/incumbent RLOC16s, the first criterion that differed, both criterion values, and both two-way link margins. Enable OTNS node logging with `--otns-watch-level info` or lower; stock upstream OpenThread binaries without the local `ParentRank` instrumentation will not produce this file.
 
 Each node is configured with `txpower 0` during initialization and the runner verifies the value with `txpower` when possible. Runs can also include `--capture-sim-ping-rss`, which attaches simulator-model RSS/LQI to each ping probe row. The current method is `otns_model_derived_at_ping`: RSS is derived from OTNS `MutualInterference` radio-model parameters at the exact ping source/destination positions, sample time, and configured source TX power. It is not OpenThread neighbor-table RSS, parent-command link quality, scan RSS, or ping-output RSS.
 

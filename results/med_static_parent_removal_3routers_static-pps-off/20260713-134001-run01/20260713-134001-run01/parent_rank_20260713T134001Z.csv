@@ -1,0 +1,5 @@
+source_log,node,sim_time_us,sim_time_s,decision,criterion,challenger_rloc16,incumbent_rloc16,challenger_value,incumbent_value,challenger_margin,incumbent_margin
+node_log_mobile_4.log,mobile_4,300189252,300.189252,reject,link_quality_3_count,0xf800,0xcc00,1,2,29,37
+node_log_mobile_4.log,mobile_4,300274412,300.274412,reject,link_quality_3_count,0x4000,0xcc00,1,2,42,37
+node_log_mobile_4.log,mobile_4,540865432,540.865432,reject,two_way_link_margin,0xf800,0x4000,24,42,24,42
+node_log_router_c_3.log,router_c_3,7705588,7.705588,accept,partition,0xcc00,0x4000,1,0,22,16

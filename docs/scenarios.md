@@ -6,6 +6,9 @@ The active benchmark matrix uses three simple parent-switch scenarios:
 - `scenarios/fed_simple_parent_switch.yaml`
 - `scenarios/sed_simple_parent_switch.yaml`
 
+Static router-removal scenarios live under `scenarios/static/` and are described
+in [`static_scenarios.md`](static_scenarios.md).
+
 ## Simple Parent Switch
 
 A simple parent-switch scenario has four routers, one mobile end device, straight-line movement, delayed Router B/Router C/Router D activation, static 0 dBm transmit power, and no intentional dead zone. The mobile starts near Router A, moves beyond Router D, and dwells at the end to give late or sticky parent switching behavior time to appear.

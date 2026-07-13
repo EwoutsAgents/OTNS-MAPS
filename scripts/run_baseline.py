@@ -31,6 +31,44 @@ PING_NODE_RE = re.compile(r"Node<(\d+)>")
 SCAN_NODE_PREFIX_RE = re.compile(r"^Node<\d+>\s+")
 TIMESTAMP_TOKEN_RE = re.compile(r"^(?P<date>\d{8})T(?P<time>\d{6})Z$")
 OTNS_LOG_LINE_RE = re.compile(r"^(trace|debug|info|note|warn|error)\t\d{4}-\d{2}-\d{2}\s", re.IGNORECASE)
+PARENT_RANK_LOG_RE = re.compile(r"^\s*(?P<sim_time_us>\d+)\s+.*\bParentRank:\s+(?P<fields>.+)$")
+PARENT_RANK_FIELD_RE = re.compile(r"(?P<key>[A-Za-z0-9_]+)=(?P<value>\S+)")
+PARENT_RANK_KEY_ALIASES = {
+    "d": "decision",
+    "c": "criterion",
+    "r": "challenger_rloc16",
+    "i": "incumbent_rloc16",
+    "v": "challenger_value",
+    "iv": "incumbent_value",
+    "lm": "challenger_margin",
+    "im": "incumbent_margin",
+}
+PARENT_RANK_CRITERION_ALIASES = {
+    "tw_lq": "two_way_link_quality",
+    "router": "is_router",
+    "priority": "parent_priority",
+    "lq3_count": "link_quality_3_count",
+    "version": "thread_version",
+    "sed_buf": "sed_buffer_size",
+    "sed_dgram": "sed_datagram_count",
+    "lq2_count": "link_quality_2_count",
+    "lq1_count": "link_quality_1_count",
+    "tw_margin": "two_way_link_margin",
+}
+PARENT_RANK_CSV_FIELDS = [
+    "source_log",
+    "node",
+    "sim_time_us",
+    "sim_time_s",
+    "decision",
+    "criterion",
+    "challenger_rloc16",
+    "incumbent_rloc16",
+    "challenger_value",
+    "incumbent_value",
+    "challenger_margin",
+    "incumbent_margin",
+]
 
 
 @dataclass
@@ -515,6 +553,54 @@ def capture_node_logs(
     return info
 
 
+def parse_parent_rank_events(node_log_files: list[str]) -> list[dict[str, Any]]:
+    events: list[dict[str, Any]] = []
+    for node_log_file in node_log_files:
+        path = Path(node_log_file)
+        node_label = path.stem.removeprefix("node_log_")
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            match = PARENT_RANK_LOG_RE.match(line)
+            if match is None:
+                continue
+
+            event: dict[str, Any] = {
+                "source_log": path.name,
+                "node": node_label,
+                "sim_time_us": int(match.group("sim_time_us")),
+                "sim_time_s": round(int(match.group("sim_time_us")) / 1_000_000, 6),
+            }
+            for field in PARENT_RANK_FIELD_RE.finditer(match.group("fields")):
+                key = PARENT_RANK_KEY_ALIASES.get(field.group("key"), field.group("key"))
+                value = field.group("value")
+                if key == "criterion":
+                    value = PARENT_RANK_CRITERION_ALIASES.get(value, value)
+                event[key] = value
+            events.append(event)
+    return events
+
+
+def parent_rank_summary(events: list[dict[str, Any]]) -> dict[str, Any]:
+    decisions: dict[str, int] = {}
+    criteria: dict[str, int] = {}
+    for event in events:
+        decision = str(event.get("decision") or "unknown")
+        criterion = str(event.get("criterion") or "unknown")
+        decisions[decision] = decisions.get(decision, 0) + 1
+        criteria[criterion] = criteria.get(criterion, 0) + 1
+    return {
+        "parent_rank_event_count": len(events),
+        "parent_rank_decision_counts": decisions,
+        "parent_rank_criterion_counts": criteria,
+    }
+
+
+def write_parent_rank_csv(events: list[dict[str, Any]], path: Path) -> None:
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=PARENT_RANK_CSV_FIELDS, extrasaction="ignore", lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(events)
+
+
 def resolve_tracked_results_dir(
     commit_artifact_dir: Path | None,
     artifact_name: str | None,
@@ -547,6 +633,7 @@ def tracked_results_manifest(
     otns_workdir: Path | None,
     csv_file: str,
     summary_file: str,
+    parent_rank_file: str | None,
     replay_file: str | None,
     replay_metadata_file: str | None,
     node_log_files: list[str],
@@ -572,10 +659,26 @@ def tracked_results_manifest(
         "otns_workdir": str(otns_workdir) if otns_workdir is not None else None,
         "csv_file": csv_file,
         "summary_file": summary_file,
+        "parent_rank_file": parent_rank_file,
         "replay_file": replay_file,
         "replay_metadata_file": replay_metadata_file,
         "node_log_files": node_log_files,
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
+        "parent_rank_event_count": summary.get("parent_rank_event_count"),
+        "parent_rank_decision_counts": summary.get("parent_rank_decision_counts"),
+        "parent_rank_criterion_counts": summary.get("parent_rank_criterion_counts"),
+        "scenario_type": summary.get("scenario_type", scenario.get("scenario_type")),
+        "router_count": summary.get("router_count"),
+        "parent_before_removal": summary.get("parent_before_removal"),
+        "removed_parent_node": summary.get("removed_parent_node"),
+        "removed_parent_node_id": summary.get("removed_parent_node_id"),
+        "removed_parent_rloc16": summary.get("removed_parent_rloc16"),
+        "removed_parent_extaddr": summary.get("removed_parent_extaddr"),
+        "parent_removal_time_s": summary.get("parent_removal_time_s"),
+        "parent_after_removal_final": summary.get("parent_after_removal_final"),
+        "post_removal_switch_count": summary.get("post_removal_switch_count"),
+        "post_removal_first_switch_time_s": summary.get("post_removal_first_switch_time_s"),
+        "post_removal_reattach_latency_s": summary.get("post_removal_reattach_latency_s"),
         "selected_radio_model": summary.get("selected_radio_model"),
         "otns_watch_level": summary.get("otns_watch_level"),
         "initial_observed_parent": summary.get("initial_observed_parent"),
@@ -673,6 +776,22 @@ def write_tracked_results_readme(
             f'- MLE attach attempts: `{manifest["mle_attach_attempts"]}`',
             f'- MLE better parent attach attempts: `{manifest["mle_better_parent_attach_attempts"]}`',
             f'- Result classification: `{manifest["result_classification"]}`',
+            f'- Parent ranking events: `{manifest["parent_rank_event_count"]}`',
+            f'- Parent ranking decisions: `{manifest["parent_rank_decision_counts"]}`',
+            f'- Parent ranking criteria: `{manifest["parent_rank_criterion_counts"]}`',
+            f'- Scenario type: `{manifest["scenario_type"]}`',
+            f'- Router count: `{manifest["router_count"]}`',
+            f'- Parent before removal: `{manifest["parent_before_removal"]}`',
+            f'- Removed parent: `{manifest["removed_parent_node"]}`',
+            f'- Parent removal time (s): `{manifest["parent_removal_time_s"]}`',
+            f'- Final parent after removal: `{manifest["parent_after_removal_final"]}`',
+            f'- Post-removal switch count: `{manifest["post_removal_switch_count"]}`',
+            f'- Post-removal first switch time (s): `{manifest["post_removal_first_switch_time_s"]}`',
+            f'- Post-removal reattach latency (s): `{manifest["post_removal_reattach_latency_s"]}`',
+            "",
+            "## Parent Ranking",
+            "",
+            f'- Ranking CSV: `{manifest["parent_rank_file"] or "not captured"}`',
             "",
             "## Node Logs",
             "",
@@ -711,6 +830,7 @@ def export_tracked_results(
     token: str,
     csv_path: Path,
     json_path: Path,
+    parent_rank_path: Path | None,
     replay_info: dict[str, Any],
     node_log_files: list[str],
     summary: dict[str, Any],
@@ -723,6 +843,12 @@ def export_tracked_results(
     tracked_summary = tracked_dir / json_path.name
     shutil.copy2(csv_path, tracked_csv)
     shutil.copy2(json_path, tracked_summary)
+
+    parent_rank_relpath = None
+    if parent_rank_path is not None:
+        tracked_parent_rank = tracked_dir / parent_rank_path.name
+        shutil.copy2(parent_rank_path, tracked_parent_rank)
+        parent_rank_relpath = tracked_parent_rank.name
 
     replay_relpath = None
     metadata_relpath = None
@@ -761,6 +887,7 @@ def export_tracked_results(
         otns_workdir=otns_workdir,
         csv_file=tracked_csv.name,
         summary_file=tracked_summary.name,
+        parent_rank_file=parent_rank_relpath,
         replay_file=replay_relpath,
         replay_metadata_file=metadata_relpath,
         node_log_files=tracked_node_log_files,
@@ -1023,6 +1150,7 @@ class RealBenchmarkRunner:
         self.pre_movement_parent_final: str | None = None
         self.pre_movement_parent_observation_count = 0
         self.observability = scenario.get("observability", {})
+        self.removed_node_names: set[str] = set()
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         if shutil.which(self.otns_command.split()[0]) is None:
@@ -1031,6 +1159,9 @@ class RealBenchmarkRunner:
             )
 
         timing = self.scenario["timing"]
+        if self.scenario.get("scenario_type") == "static_parent_removal":
+            return self._run_static_parent_removal(timing)
+
         positions = movement_positions(self.scenario)
 
         with OtnsSession(self.otns_command, cwd=self.otns_runtime_cwd) as session:
@@ -1114,6 +1245,161 @@ class RealBenchmarkRunner:
             sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
             node_refs=self.node_refs,
         )
+        return rows, summary
+
+    def _configure_session(self, session: OtnsSession) -> str:
+        session.command_output("speed 0")
+        session.command_output(f'title "{self.scenario["title"]}"')
+        if self.ftd_node_binary_path is not None:
+            session.command_output(f'exe ftd "{self.ftd_node_binary_path}"')
+            self.notes.append(f"OTNS FTD executable set to {self.ftd_node_binary_path}.")
+        if self.node_binary_path is not None:
+            session.command_output(f'exe mtd "{self.node_binary_path}"')
+            self.notes.append(f"OTNS MTD executable set to {self.node_binary_path}.")
+        return self._select_radio_model(session)
+
+    def _run_static_parent_removal(self, timing: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+        removal = self.scenario.get("removal", {})
+        step_seconds = int(timing.get("step_seconds", 1))
+        observe_seconds = int(timing.get("after_parent_removed_seconds", 0))
+        router_settle_seconds = int(timing.get("router_settling_seconds", 0))
+        child_attach_seconds = int(timing.get("child_attach_seconds", 0))
+        samples: list[dict[str, Any]] = []
+        switch_events: list[dict[str, Any]] = []
+        total_outage = 0.0
+        outage_start = None
+        parent_before_removal: str | None = None
+        removed_parent_name: str | None = None
+        removed_parent_node_id: int | None = None
+        removed_parent_rloc16: str | None = None
+        removed_parent_extaddr: str | None = None
+        removal_time_s: float | None = None
+
+        with OtnsSession(self.otns_command, cwd=self.otns_runtime_cwd) as session:
+            radio_model = self._configure_session(session)
+            router_node_names = list(
+                self.scenario.get("activation", {}).get("initial_nodes")
+                or [name for name in self.scenario["nodes"] if name != "mobile"]
+            )
+            named_ids = self._create_nodes(session, router_node_names)
+            if router_settle_seconds:
+                session.command_output(f"go {router_settle_seconds}")
+            self._refresh_node_identity(session)
+
+            named_ids.update(self._create_nodes(session, ["mobile"]))
+            if child_attach_seconds:
+                session.command_output(f"go {child_attach_seconds}")
+            self._refresh_node_identity(session)
+
+            mobile_ref = self.node_refs["mobile"]
+            try:
+                parent_info = parse_key_value_lines(session.command_output(f'node {mobile_ref.node_id} "parent"'))
+                parent_before_removal = self._parent_name_from_identity(parent_info)
+            except OtnsSessionError as exc:
+                if "InvalidState" not in str(exc):
+                    raise
+                parent_before_removal = None
+                self.notes.append("Static removal scenario could not read a mobile parent before removal.")
+
+            if removal.get("target") == "observed_mobile_parent" and parent_before_removal:
+                removed_parent_name = parent_before_removal
+                removed_ref = self.node_refs[removed_parent_name]
+                removed_parent_node_id = removed_ref.node_id
+                removed_parent_rloc16 = removed_ref.rloc16
+                removed_parent_extaddr = removed_ref.extaddr
+                session.command_output(f"del {removed_ref.node_id}")
+                self.removed_node_names.add(removed_parent_name)
+                removal_time_s = int(session.command_output("time")[0]) / 1_000_000.0
+                self.notes.append(
+                    f"Static removal scenario deleted observed mobile parent `{removed_parent_name}` "
+                    f"(Node<{removed_ref.node_id}>) after {child_attach_seconds}s child attach wait."
+                )
+            else:
+                reason = "no observed mobile parent" if not parent_before_removal else f"unsupported target {removal.get('target')!r}"
+                self.notes.append(f"Static removal scenario did not delete a parent: {reason}.")
+
+            previous_parent = parent_before_removal
+            mobile_x = float(self.scenario["nodes"]["mobile"]["x"])
+            mobile_y = float(self.scenario["nodes"]["mobile"]["y"])
+            sample_count = max(1, observe_seconds // max(1, step_seconds))
+            for index in range(sample_count):
+                parent_probe = self._send_mobile_to_parent_probe(session, named_ids["mobile"])
+                go_output_lines = session.command_output(f"go {step_seconds}")
+                sample = self._collect_sample(session, index, mobile_x, mobile_y, go_output_lines, parent_probe)
+                sample["selected_radio_model"] = radio_model
+                sample["scenario_phase"] = "post_parent_removal"
+                sample["removed_parent_node"] = removed_parent_name
+                sample["removed_parent_node_id"] = removed_parent_node_id
+
+                parent_identity = sample.get("parent_node_guess")
+                switch = bool(previous_parent and parent_identity and parent_identity != previous_parent)
+                sample["parent_switch"] = switch
+                if switch:
+                    switch_events.append(
+                        {
+                            "sample_index": index,
+                            "sim_time_s": sample["sim_time_s"],
+                            "phase": "post_parent_removal",
+                            "from_parent": previous_parent,
+                            "to_parent": parent_identity,
+                        }
+                    )
+                previous_parent = parent_identity or previous_parent
+
+                connectivity_ok = self._connectivity_ok(sample)
+                if not connectivity_ok and outage_start is None:
+                    outage_start = sample["sim_time_s"]
+                elif connectivity_ok and outage_start is not None:
+                    total_outage += sample["sim_time_s"] - outage_start
+                    outage_start = None
+                sample["connectivity_ok"] = connectivity_ok
+                samples.append(sample)
+
+            if outage_start is not None and samples:
+                total_outage += samples[-1]["sim_time_s"] - outage_start
+
+        rows = flatten_samples(samples)
+        summary = build_summary(
+            scenario=self.scenario,
+            samples=samples,
+            switch_events=switch_events,
+            notes=self.notes,
+            selected_radio_model=rows[0]["selected_radio_model"] if rows else None,
+            total_outage_s=round(total_outage, 3),
+            mock=False,
+            thread_device_type=self.thread_device_type,
+            parent_search_config=self.parent_search_config,
+            sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
+            node_refs=self.node_refs,
+        )
+        summary.update(
+            {
+                "scenario_type": "static_parent_removal",
+                "router_count": len(router_names(self.scenario)),
+                "router_settling_seconds": router_settle_seconds,
+                "child_attach_seconds": child_attach_seconds,
+                "after_parent_removed_seconds": observe_seconds,
+                "parent_before_removal": parent_before_removal,
+                "removed_parent_node": removed_parent_name,
+                "removed_parent_node_id": removed_parent_node_id,
+                "removed_parent_rloc16": removed_parent_rloc16,
+                "removed_parent_extaddr": removed_parent_extaddr,
+                "parent_removal_time_s": removal_time_s,
+                "parent_after_removal_final": samples[-1].get("parent_node_guess") if samples else None,
+                "post_removal_switch_events": switch_events,
+                "post_removal_switch_count": len(switch_events),
+            }
+        )
+        if switch_events:
+            summary["post_removal_first_switch_time_s"] = switch_events[0]["sim_time_s"]
+            summary["post_removal_reattach_latency_s"] = (
+                round(float(switch_events[0]["sim_time_s"]) - float(removal_time_s), 6)
+                if removal_time_s is not None
+                else None
+            )
+        else:
+            summary["post_removal_first_switch_time_s"] = None
+            summary["post_removal_reattach_latency_s"] = None
         return rows, summary
 
     def _derive_ping_sim_rss(
@@ -1569,6 +1855,8 @@ class RealBenchmarkRunner:
         extaddr = parent_info.get("Ext Addr", "").lower()
         rloc16 = (parent_info.get("Rloc") or parent_info.get("RLOC16") or "").lower()
         for name, node_ref in self.node_refs.items():
+            if name in self.removed_node_names:
+                continue
             if node_ref.extaddr and node_ref.extaddr.lower() == extaddr:
                 return name
             if node_ref.rloc16 and node_ref.rloc16.lower() == rloc16:
@@ -1631,6 +1919,9 @@ class MockBenchmarkRunner:
         }
 
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+        if self.scenario.get("scenario_type") == "static_parent_removal":
+            return self._run_static_parent_removal_mock()
+
         timing = self.scenario["timing"]
         positions = movement_positions(self.scenario)
         routers = {name: self.scenario["nodes"][name] for name in router_names(self.scenario)}
@@ -1779,6 +2070,170 @@ class MockBenchmarkRunner:
         )
         return rows, summary
 
+    def _run_static_parent_removal_mock(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+        timing = self.scenario["timing"]
+        routers = {name: self.scenario["nodes"][name] for name in router_names(self.scenario)}
+        router_names_list = list(routers)
+        router_identity = {
+            name: {
+                "extaddr": f"{index + 1:02x}" * 8,
+                "rloc16": f"0x{(index + 1) * 0x1000:04x}",
+            }
+            for index, name in enumerate(routers)
+        }
+        mobile = self.scenario["nodes"]["mobile"]
+        mobile_tx_power = node_tx_power_dbm(mobile)
+        removed_parent = router_names_list[0]
+        fallback_parent = router_names_list[1] if len(router_names_list) > 1 else removed_parent
+        observe_seconds = int(timing.get("after_parent_removed_seconds", 0))
+        step_seconds = int(timing.get("step_seconds", 1))
+        sample_count = max(1, observe_seconds // max(1, step_seconds))
+        base_time = int(timing.get("router_settling_seconds", 0)) + int(timing.get("child_attach_seconds", 0))
+        samples: list[dict[str, Any]] = []
+        switch_events: list[dict[str, Any]] = []
+        previous_parent = removed_parent
+        total_outage = 0.0
+        outage_start = None
+
+        for index in range(sample_count):
+            sim_time_s = base_time + (index + 1) * step_seconds
+            mobile_state = "detached" if index < 2 else "child"
+            parent = None if mobile_state == "detached" else fallback_parent
+            parent_identity = router_identity.get(parent or "", {})
+            parent_probe_rx = 1 if parent else 0
+            if parent and previous_parent and parent != previous_parent:
+                switch_events.append(
+                    {
+                        "sample_index": index,
+                        "sim_time_s": sim_time_s,
+                        "phase": "post_parent_removal",
+                        "from_parent": previous_parent,
+                        "to_parent": parent,
+                    }
+                )
+            previous_parent = parent or previous_parent
+
+            connectivity_ok = parent_probe_rx > 0
+            if not connectivity_ok and outage_start is None:
+                outage_start = sim_time_s
+            elif connectivity_ok and outage_start is not None:
+                total_outage += sim_time_s - outage_start
+                outage_start = None
+
+            parent_tx_power = node_tx_power_dbm(routers[parent]) if parent else None
+            sample = {
+                "sample_index": index,
+                "sim_time_s": sim_time_s,
+                "mobile_x": mobile["x"],
+                "mobile_y": mobile["y"],
+                "mobile_state": mobile_state,
+                "mobile_rloc16": "0x5400",
+                "device_profile": self.scenario.get("device_profile", "mobile_end_device"),
+                "thread_device_type": self.thread_device_type,
+                "parent_search_config": self.parent_search_config,
+                "packet_probe_reliable": self.observability.get("packet_probe_reliable", True),
+                "primary_parent_observation": self.observability.get("primary_parent_observation", "packet_probe"),
+                "parent_extaddr": parent_identity.get("extaddr"),
+                "parent_rloc16": parent_identity.get("rloc16"),
+                "parent_link_quality_in": 3 if parent else None,
+                "parent_link_quality_out": 3 if parent else None,
+                "parent_age": 5 if parent else None,
+                "parent_version": 4 if parent else None,
+                "parent_node_guess": parent,
+                "mobile_to_parent_target": parent,
+                "mobile_to_parent_target_rloc16": parent_identity.get("rloc16"),
+                "mobile_to_parent_target_extaddr": parent_identity.get("extaddr"),
+                "mobile_tx_power_dbm": mobile_tx_power,
+                "mobile_verified_tx_power_dbm": mobile_tx_power,
+                "mobile_to_parent_target_tx_power_dbm": parent_tx_power,
+                "mobile_to_parent_target_verified_tx_power_dbm": parent_tx_power,
+                "mobile_to_parent_result": {
+                    "tx": 1 if parent else None,
+                    "rx": parent_probe_rx if parent else None,
+                    "loss_pct": 0.0 if parent else None,
+                    "rtt_min_ms": 8.0 if parent else None,
+                    "rtt_avg_ms": 10.0 if parent else None,
+                    "rtt_max_ms": 12.0 if parent else None,
+                },
+                "ip_counters": {"TxSuccess": str(index), "TxFailed": "0", "RxSuccess": str(index), "RxFailed": "0"},
+                "mle_counters": {"AttachAttempts": "2", "RoleDetached": "1" if mobile_state == "detached" else "0"},
+                "probe_results": {},
+                "probe_sim_rss": {},
+                "mobile_to_parent_sim_rss": self._mock_ping_sim_rss(
+                    (mobile["x"], mobile["y"]),
+                    (routers[parent]["x"], routers[parent]["y"]) if parent else None,
+                    sim_time_s,
+                    parent_probe_rx,
+                    mobile_tx_power,
+                    parent_tx_power,
+                ),
+                "selected_radio_model": "mock",
+                "connectivity_ok": connectivity_ok,
+                "parent_switch": bool(switch_events and switch_events[-1]["sample_index"] == index),
+                "scenario_phase": "post_parent_removal",
+                "removed_parent_node": removed_parent,
+                "removed_parent_node_id": 1,
+            }
+            for router_name, router in routers.items():
+                distance = math.dist((mobile["x"], mobile["y"]), (router["x"], router["y"]))
+                sample[f"{router_name}_scan_dbm"] = str(round(-25 - distance / 8, 1))
+                sample[f"{router_name}_scan_lqi"] = "3"
+            samples.append(sample)
+
+        if outage_start is not None and samples:
+            total_outage += samples[-1]["sim_time_s"] - outage_start
+
+        rows = flatten_samples(samples)
+        configured_tx_power, verified_tx_power = scenario_tx_power_summary(self.scenario)
+        mock_node_refs = {
+            name: NodeRef(
+                name=name,
+                node_id=index + 1,
+                tx_power_dbm=configured_tx_power.get(name),
+                verified_tx_power_dbm=verified_tx_power.get(name),
+            )
+            for index, name in enumerate(self.scenario.get("nodes", {}))
+        }
+        summary = build_summary(
+            scenario=self.scenario,
+            samples=samples,
+            switch_events=switch_events,
+            notes=["Mock mode was used. These results are for script validation only."],
+            selected_radio_model="mock",
+            total_outage_s=round(total_outage, 3),
+            mock=True,
+            thread_device_type=self.thread_device_type,
+            parent_search_config=self.parent_search_config,
+            sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
+            node_refs=mock_node_refs,
+        )
+        removal_time_s = base_time
+        summary.update(
+            {
+                "scenario_type": "static_parent_removal",
+                "router_count": len(router_names_list),
+                "router_settling_seconds": int(timing.get("router_settling_seconds", 0)),
+                "child_attach_seconds": int(timing.get("child_attach_seconds", 0)),
+                "after_parent_removed_seconds": observe_seconds,
+                "parent_before_removal": removed_parent,
+                "removed_parent_node": removed_parent,
+                "removed_parent_node_id": 1,
+                "removed_parent_rloc16": router_identity[removed_parent]["rloc16"],
+                "removed_parent_extaddr": router_identity[removed_parent]["extaddr"],
+                "parent_removal_time_s": removal_time_s,
+                "parent_after_removal_final": samples[-1].get("parent_node_guess") if samples else None,
+                "post_removal_switch_events": switch_events,
+                "post_removal_switch_count": len(switch_events),
+                "post_removal_first_switch_time_s": switch_events[0]["sim_time_s"] if switch_events else None,
+                "post_removal_reattach_latency_s": (
+                    round(float(switch_events[0]["sim_time_s"]) - float(removal_time_s), 6)
+                    if switch_events
+                    else None
+                ),
+            }
+        )
+        return rows, summary
+
 
 def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
@@ -1829,6 +2284,9 @@ def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "parent_search_config": sample.get("parent_search_config"),
             "packet_probe_reliable": sample.get("packet_probe_reliable"),
             "primary_parent_observation": sample.get("primary_parent_observation"),
+            "scenario_phase": sample.get("scenario_phase"),
+            "removed_parent_node": sample.get("removed_parent_node"),
+            "removed_parent_node_id": sample.get("removed_parent_node_id"),
             "ip_counters_json": json.dumps(sample["ip_counters"], sort_keys=True),
             "mle_counters_json": json.dumps(sample["mle_counters"], sort_keys=True),
         }
@@ -2279,7 +2737,7 @@ def write_csv(rows: list[dict[str, Any]], path: Path) -> None:
     if not rows:
         raise ValueError("No rows to write")
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -2298,6 +2756,8 @@ def main() -> int:
     token = args.timestamp_token or timestamp_token()
     csv_path = args.results_dir / f"baseline_run_{token}.csv"
     json_path = args.results_dir / f"baseline_summary_{token}.json"
+    parent_rank_path = args.results_dir / f"parent_rank_{token}.csv"
+    captured_parent_rank_path: Path | None = None
     replay_before = snapshot_replay_files(args.otns_workdir) if args.capture_replay and not args.mock else {}
 
     runner: RealBenchmarkRunner | MockBenchmarkRunner
@@ -2377,6 +2837,15 @@ def main() -> int:
         )
         if node_log_info.get("warning"):
             summary.setdefault("notes", []).append(str(node_log_info["warning"]))
+    parent_rank_events = parse_parent_rank_events(node_log_info.get("copied_files", []))
+    summary.update(parent_rank_summary(parent_rank_events))
+    if parent_rank_events:
+        write_parent_rank_csv(parent_rank_events, parent_rank_path)
+        captured_parent_rank_path = parent_rank_path
+    elif not args.mock and args.otns_watch_level.lower() == "off":
+        summary.setdefault("notes", []).append(
+            "Parent ranking export requires OTNS node logs; rerun with --otns-watch-level info or lower."
+        )
     summary["firmware_variant"] = args.firmware_variant
     summary["thread_device_type"] = args.thread_device_type
     summary["parent_search_config"] = args.parent_search_config
@@ -2428,6 +2897,7 @@ def main() -> int:
                 token=token,
                 csv_path=csv_path,
                 json_path=json_path,
+                parent_rank_path=captured_parent_rank_path,
                 replay_info=replay_info,
                 node_log_files=node_log_info.get("copied_files", []),
                 summary=summary,
@@ -2438,6 +2908,8 @@ def main() -> int:
         print(tracked_info["tracked_dir"])
         print(tracked_info["manifest_path"])
 
+    if captured_parent_rank_path is not None:
+        print(captured_parent_rank_path)
     print(csv_path)
     print(json_path)
     return 0
