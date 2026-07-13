@@ -72,6 +72,22 @@ PARENT_RANK_CSV_FIELDS = [
     "challenger_margin",
     "incumbent_margin",
 ]
+PREFERRED_PARENT_EVENT_CSV_FIELDS = [
+    "observed_time_s",
+    "event",
+    "generation",
+    "target",
+    "parent",
+    "rloc16",
+    "rssi",
+    "time_us",
+    "timing_source",
+    "resolution_us",
+    "state",
+    "mode",
+    "reason",
+    "error",
+]
 
 
 @dataclass
@@ -707,6 +723,18 @@ def write_parent_rank_csv(events: list[dict[str, Any]], path: Path) -> None:
         writer.writerows(events)
 
 
+def write_preferred_parent_event_csv(events: list[dict[str, Any]], path: Path) -> None:
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=PREFERRED_PARENT_EVENT_CSV_FIELDS,
+            extrasaction="ignore",
+            lineterminator="\n",
+        )
+        writer.writeheader()
+        writer.writerows(events)
+
+
 def resolve_tracked_results_dir(
     commit_artifact_dir: Path | None,
     artifact_name: str | None,
@@ -827,6 +855,14 @@ def tracked_results_manifest(
         "final_parent": summary.get("final_parent"),
         "labels": summary.get("labels", []),
         "preferred_parent_events": summary.get("preferred_parent_events", []),
+        "preferred_parent_event_file": summary.get("preferred_parent_event_file"),
+        "protocol_event_timestamps": summary.get("protocol_event_timestamps", {}),
+        "protocol_timing_ms": summary.get("protocol_timing_ms", {}),
+        "protocol_timing_complete": summary.get("protocol_timing_complete"),
+        "protocol_timing_source": summary.get("protocol_timing_source"),
+        "protocol_timing_resolution_us": summary.get("protocol_timing_resolution_us"),
+        "parent_deletion_to_target_observed_ms": summary.get("parent_deletion_to_target_observed_ms"),
+        "parent_deletion_to_target_observed_source": summary.get("parent_deletion_to_target_observed_source"),
         "router_topology_changes": summary.get("router_topology_changes", {}),
         "directed_result_classification": summary.get("directed_result_classification"),
     }
@@ -1202,6 +1238,105 @@ def first_integer_payload(lines: list[str], description: str) -> int:
         if re.fullmatch(r"-?\d+", value):
             return int(value)
     raise OtnsSessionError(f"No integer {description} found in OTNS output: {lines!r}")
+
+
+PROTOCOL_EVENT_NAMES = {
+    "send_parent_request": "parent_request_started",
+    "receive_parent_response": "target_response",
+    "send_child_id_request": "child_id_request_started",
+    "receive_child_id_response": "child_id_response_received",
+}
+
+
+def uint32_microsecond_delta(start_us: int, end_us: int) -> int:
+    return (end_us - start_us) & 0xFFFFFFFF
+
+
+def derive_preferred_parent_timing(
+    events: list[dict[str, Any]],
+    *,
+    deletion_time_s: float | None,
+    samples: list[dict[str, Any]],
+    target_parent: str | None,
+    poll_resolution_s: int,
+) -> dict[str, Any]:
+    event_records: dict[str, dict[str, Any]] = {}
+    for semantic_name, event_name in PROTOCOL_EVENT_NAMES.items():
+        event = next(
+            (
+                candidate
+                for candidate in events
+                if candidate.get("event") == event_name and candidate.get("time_us") is not None
+            ),
+            None,
+        )
+        if event is None:
+            continue
+        time_us = int(str(event["time_us"]), 10)
+        event_records[semantic_name] = {
+            "event": event_name,
+            "time_us": time_us,
+            "clock_time_s": round(time_us / 1_000_000.0, 6),
+            "timing_source": event.get("timing_source", "otns_openthread_event"),
+            "resolution_us": int(str(event.get("resolution_us", 1))),
+            "clock_bits": 32,
+        }
+
+    def interval_ms(start: str, end: str) -> float | None:
+        if start not in event_records or end not in event_records:
+            return None
+        delta_us = uint32_microsecond_delta(
+            event_records[start]["time_us"], event_records[end]["time_us"]
+        )
+        if delta_us > 0x7FFFFFFF:
+            return None
+        return round(delta_us / 1000.0, 3)
+
+    timing_ms = {
+        "parent_request_to_response": interval_ms("send_parent_request", "receive_parent_response"),
+        "parent_response_to_child_id_request": interval_ms(
+            "receive_parent_response", "send_child_id_request"
+        ),
+        "child_id_request_to_response": interval_ms(
+            "send_child_id_request", "receive_child_id_response"
+        ),
+        "parent_request_to_child_id_response": interval_ms(
+            "send_parent_request", "receive_child_id_response"
+        ),
+    }
+    complete = all(value is not None for value in timing_ms.values())
+    target_sample = next(
+        (sample for sample in samples if sample.get("parent_node_guess") == target_parent),
+        None,
+    )
+    target_observed_s = float(target_sample["sim_time_s"]) if target_sample is not None else None
+    deletion_to_target_ms = (
+        round((target_observed_s - deletion_time_s) * 1000.0, 3)
+        if target_observed_s is not None and deletion_time_s is not None
+        else None
+    )
+    return {
+        "protocol_event_timestamps": event_records,
+        "protocol_timing_ms": timing_ms,
+        "protocol_timing_complete": complete,
+        "protocol_timing_source": "otns_openthread_event" if complete else None,
+        "protocol_timing_resolution_us": 1 if complete else None,
+        "protocol_clock": "otns_node_platform_micro_32",
+        "parent_deletion": {
+            "time_s": deletion_time_s,
+            "timing_source": "otns_simulator_time" if deletion_time_s is not None else None,
+            "resolution_us": 1 if deletion_time_s is not None else None,
+        },
+        "target_parent_observation": {
+            "time_s": target_observed_s,
+            "timing_source": "otns_parent_poll" if target_observed_s is not None else None,
+            "resolution_us": poll_resolution_s * 1_000_000 if target_observed_s is not None else None,
+        },
+        "parent_deletion_to_target_observed_ms": deletion_to_target_ms,
+        "parent_deletion_to_target_observed_source": (
+            "otns_parent_poll" if deletion_to_target_ms is not None else None
+        ),
+    }
 
 
 class OtnsSessionError(RuntimeError):
@@ -1646,6 +1781,13 @@ class RealBenchmarkRunner:
             sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
             node_refs=self.node_refs,
         )
+        timing_summary = derive_preferred_parent_timing(
+            preferred_parent_events,
+            deletion_time_s=deletion_time_s,
+            samples=samples,
+            target_parent=target_name,
+            poll_resolution_s=step_seconds,
+        )
         summary.update(
             {
                 "scenario_type": "directed_parent_switch",
@@ -1677,6 +1819,7 @@ class RealBenchmarkRunner:
                 "router_topology_changes": topology_changes,
                 "directed_result_classification": directed_result,
                 "result_classification": directed_result,
+                **timing_summary,
             }
         )
         return rows, summary
@@ -2643,10 +2786,23 @@ class MockBenchmarkRunner:
             name: {"node_id": index + 1, "role": "router", **router_identity[name]}
             for index, name in enumerate(router_names_list)
         }
+        base_time_us = base_time * 1_000_000
+        timing_fields = {"timing_source": "otns_openthread_event", "resolution_us": "1"}
         preferred_events = [
             {"observed_time_s": base_time, "event": "requested", "generation": "1", "target": router_identity[target]["extaddr"], "mode": directed["mode"]},
-            {"observed_time_s": base_time + step_seconds, "event": "succeeded", "generation": "1", "parent": router_identity[target]["extaddr"]},
+            {"observed_time_s": base_time, "event": "parent_request_started", "generation": "1", "time_us": str(base_time_us + 1_000), **timing_fields},
+            {"observed_time_s": base_time, "event": "target_response", "generation": "1", "time_us": str(base_time_us + 51_000), **timing_fields},
+            {"observed_time_s": base_time, "event": "child_id_request_started", "generation": "1", "time_us": str(base_time_us + 56_000), **timing_fields},
+            {"observed_time_s": base_time, "event": "child_id_response_received", "generation": "1", "time_us": str(base_time_us + 66_000), **timing_fields},
+            {"observed_time_s": base_time + step_seconds, "event": "succeeded", "generation": "1", "parent": router_identity[target]["extaddr"], "time_us": str(base_time_us + 66_000), **timing_fields},
         ]
+        timing_summary = derive_preferred_parent_timing(
+            preferred_events,
+            deletion_time_s=float(base_time),
+            samples=samples,
+            target_parent=target,
+            poll_resolution_s=step_seconds,
+        )
         summary.update(
             {
                 "scenario_type": "directed_parent_switch",
@@ -2677,6 +2833,7 @@ class MockBenchmarkRunner:
                 "router_topology_changes": {},
                 "directed_result_classification": "selected_target_reached",
                 "result_classification": "selected_target_reached",
+                **timing_summary,
             }
         )
         return rows, summary
@@ -3398,6 +3555,7 @@ def main() -> int:
     csv_path = args.results_dir / f"baseline_run_{token}.csv"
     json_path = args.results_dir / f"baseline_summary_{token}.json"
     parent_rank_path = args.results_dir / f"parent_rank_{token}.csv"
+    preferred_parent_event_path = args.results_dir / f"preferred_parent_events_{token}.csv"
     captured_parent_rank_path: Path | None = None
     replay_before = snapshot_replay_files(args.otns_workdir) if args.capture_replay and not args.mock else {}
 
@@ -3510,6 +3668,13 @@ def main() -> int:
     summary["replay_file"] = replay_info.get("copied_path")
     summary["replay_metadata_file"] = replay_info.get("metadata_path")
 
+    preferred_parent_events = summary.get("preferred_parent_events", [])
+    if preferred_parent_events:
+        write_preferred_parent_event_csv(preferred_parent_events, preferred_parent_event_path)
+        summary["preferred_parent_event_file"] = str(preferred_parent_event_path)
+    else:
+        summary["preferred_parent_event_file"] = None
+
     write_csv(rows, csv_path)
     write_json(summary, json_path)
 
@@ -3556,6 +3721,8 @@ def main() -> int:
 
     if captured_parent_rank_path is not None:
         print(captured_parent_rank_path)
+    if preferred_parent_events:
+        print(preferred_parent_event_path)
     print(csv_path)
     print(json_path)
     return 0

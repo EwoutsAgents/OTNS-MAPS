@@ -87,6 +87,8 @@ artifacts. Multicast, unicast, and fast-response unicast each acknowledged the
 command, emitted the selected-parent event sequence, and finished attached to
 the requested target.
 
-Phase 9 intentionally records controller events at the runner's observation
-time. Protocol-event timestamp extraction and hardware-comparable attach timing
-belong to Phase 10.
+Timestamped native binaries add `time_us`, `timing_source`, and `resolution_us`
+to the four protocol events. The runner exports these events to
+`preferred_parent_events_<timestamp>.csv` and derives comparable attach
+intervals in the summary JSON. See
+[`comparable_timing.md`](comparable_timing.md).

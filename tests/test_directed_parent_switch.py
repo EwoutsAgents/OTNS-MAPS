@@ -88,6 +88,37 @@ class DirectedParentSwitchTests(unittest.TestCase):
         self.assertEqual(summary["target_parent"], summary["final_parent"])
         self.assertEqual("selected_target_reached", summary["result_classification"])
         self.assertIn("SELECTED_TARGET_REACHED", summary["labels"])
+        self.assertTrue(summary["protocol_timing_complete"])
+        self.assertEqual(65.0, summary["protocol_timing_ms"]["parent_request_to_child_id_response"])
+
+    def test_protocol_timing_uses_native_event_timestamps(self) -> None:
+        events = [
+            {"event": "parent_request_started", "time_us": "1000", "timing_source": "otns_openthread_event", "resolution_us": "1"},
+            {"event": "target_response", "time_us": "51000", "timing_source": "otns_openthread_event", "resolution_us": "1"},
+            {"event": "child_id_request_started", "time_us": "56000", "timing_source": "otns_openthread_event", "resolution_us": "1"},
+            {"event": "child_id_response_received", "time_us": "66000", "timing_source": "otns_openthread_event", "resolution_us": "1"},
+        ]
+        timing = runner.derive_preferred_parent_timing(
+            events,
+            deletion_time_s=0.0,
+            samples=[{"sim_time_s": 1.0, "parent_node_guess": "router_b"}],
+            target_parent="router_b",
+            poll_resolution_s=1,
+        )
+        self.assertEqual(
+            {
+                "parent_request_to_response": 50.0,
+                "parent_response_to_child_id_request": 5.0,
+                "child_id_request_to_response": 10.0,
+                "parent_request_to_child_id_response": 65.0,
+            },
+            timing["protocol_timing_ms"],
+        )
+        self.assertEqual("otns_openthread_event", timing["protocol_timing_source"])
+        self.assertEqual("otns_parent_poll", timing["parent_deletion_to_target_observed_source"])
+
+    def test_uint32_microsecond_clock_wrap(self) -> None:
+        self.assertEqual(32, runner.uint32_microsecond_delta(0xFFFFFFF0, 0x10))
 
     def test_prefparent_event_parser_preserves_fields(self) -> None:
         events = runner.parse_prefparent_events(
