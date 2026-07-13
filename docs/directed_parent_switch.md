@@ -45,6 +45,10 @@ python3 scripts/run_baseline.py \
 For `med_directed_ucast_fastpr_*.yaml`, select the fast-response FTD and pass
 `--ftd-node-binary-profile fastpr`.
 
+`scripts/run_repeated_baseline.py` accepts the same binary paths and profile
+arguments, including `--node-binary-profile` and
+`--ftd-node-binary-profile`, for repeated directed campaigns.
+
 The global MTD/FTD paths provide homogeneous defaults. A node may override its
 default with `nodes.<name>.executable`; OTNS then receives
 `add <type> exe "<path>"`. Relative paths are resolved against the scenario

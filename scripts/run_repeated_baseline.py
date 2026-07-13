@@ -87,10 +87,22 @@ def parse_args() -> argparse.Namespace:
         help="Optional MTD node binary path passed through to run_baseline.py.",
     )
     parser.add_argument(
+        "--node-binary-profile",
+        choices=("stock", "preferred-parent"),
+        default=None,
+        help="Declared MTD profile passed through to run_baseline.py.",
+    )
+    parser.add_argument(
         "--ftd-node-binary-path",
         type=Path,
         default=None,
         help="Optional FTD node binary path passed through to run_baseline.py.",
+    )
+    parser.add_argument(
+        "--ftd-node-binary-profile",
+        choices=("stock", "fastpr"),
+        default=None,
+        help="Declared FTD profile passed through to run_baseline.py.",
     )
     parser.add_argument(
         "--build-config-source",
@@ -199,7 +211,9 @@ def write_results_readme(
         f"- Thread device type: `{manifest['thread_device_type'] or 'unspecified'}`",
         f"- Parent search config: `{manifest['parent_search_config']}`",
         f"- Node binary path: `{manifest['node_binary_path'] or 'not recorded'}`",
+        f"- Node binary profile: `{manifest['node_binary_profile'] or 'not recorded'}`",
         f"- FTD node binary path: `{manifest['ftd_node_binary_path'] or 'not recorded'}`",
+        f"- FTD node binary profile: `{manifest['ftd_node_binary_profile'] or 'not recorded'}`",
         f"- Build config source: `{manifest['build_config_source'] or 'not recorded'}`",
         f"- OpenThread commit: `{manifest['openthread_commit']}`",
         f"- OTNS commit: `{manifest['otns_commit']}`",
@@ -295,8 +309,12 @@ def main() -> int:
             cmd.extend(["--thread-device-type", args.thread_device_type])
         if args.node_binary_path is not None:
             cmd.extend(["--node-binary-path", str(args.node_binary_path)])
+        if args.node_binary_profile is not None:
+            cmd.extend(["--node-binary-profile", args.node_binary_profile])
         if args.ftd_node_binary_path is not None:
             cmd.extend(["--ftd-node-binary-path", str(args.ftd_node_binary_path)])
+        if args.ftd_node_binary_profile is not None:
+            cmd.extend(["--ftd-node-binary-profile", args.ftd_node_binary_profile])
         if args.build_config_source is not None:
             cmd.extend(["--build-config-source", args.build_config_source])
         if args.equivalent_to is not None:
@@ -334,9 +352,11 @@ def main() -> int:
                         "thread_device_type": args.thread_device_type,
                         "parent_search_config": args.parent_search_config,
                         "node_binary_path": str(args.node_binary_path) if args.node_binary_path is not None else None,
+                        "node_binary_profile": args.node_binary_profile,
                         "ftd_node_binary_path": (
                             str(args.ftd_node_binary_path) if args.ftd_node_binary_path is not None else None
                         ),
+                        "ftd_node_binary_profile": args.ftd_node_binary_profile,
                         "build_config_source": args.build_config_source,
                         "openthread_commit": args.openthread_commit,
                         "otns_commit": args.otns_commit,
@@ -363,7 +383,9 @@ def main() -> int:
         "thread_device_type": args.thread_device_type,
         "parent_search_config": args.parent_search_config,
         "node_binary_path": str(args.node_binary_path) if args.node_binary_path is not None else None,
+        "node_binary_profile": args.node_binary_profile,
         "ftd_node_binary_path": str(args.ftd_node_binary_path) if args.ftd_node_binary_path is not None else None,
+        "ftd_node_binary_profile": args.ftd_node_binary_profile,
         "build_config_source": args.build_config_source,
         "openthread_commit": args.openthread_commit,
         "otns_commit": args.otns_commit,

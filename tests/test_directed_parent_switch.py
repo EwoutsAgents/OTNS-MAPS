@@ -129,6 +129,104 @@ class DirectedParentSwitchTests(unittest.TestCase):
         self.assertEqual("2", events[0]["generation"])
         self.assertEqual(305.0, events[0]["observed_time_s"])
 
+    def test_directed_preflight_skip_and_advisory_labels(self) -> None:
+        cases = (
+            (
+                {"has_parent": False, "parent_is_mapped": False},
+                ["SKIP_NO_CHILD_PARENT"],
+            ),
+            (
+                {"has_parent": True, "parent_is_mapped": False},
+                ["SKIP_PARENT_NOT_MAPPED_TO_DEVICE"],
+            ),
+            (
+                {
+                    "has_parent": True,
+                    "parent_is_mapped": True,
+                    "eligible_target_count": 0,
+                },
+                ["SKIP_NO_ELIGIBLE_TARGET_PARENT"],
+            ),
+            (
+                {
+                    "has_parent": True,
+                    "parent_is_mapped": True,
+                    "parent_is_leader": True,
+                    "eligible_target_count": 1,
+                },
+                ["SKIP_PARENT_IS_LEADER"],
+            ),
+            (
+                {
+                    "has_parent": True,
+                    "parent_is_mapped": True,
+                    "parent_is_leader": True,
+                    "eligible_target_count": 0,
+                },
+                ["SKIP_PARENT_IS_LEADER", "SKIP_NO_ELIGIBLE_TARGET_PARENT"],
+            ),
+        )
+        for arguments, expected in cases:
+            with self.subTest(arguments=arguments):
+                self.assertEqual(expected, runner.directed_preflight_labels(**arguments))
+
+    def test_every_directed_result_classification(self) -> None:
+        cases = (
+            (
+                {
+                    "command_acknowledged": True,
+                    "command_error": None,
+                    "labels": [],
+                    "final_parent": "router_b",
+                    "target_parent": "router_b",
+                },
+                ("selected_target_reached", "SELECTED_TARGET_REACHED"),
+            ),
+            (
+                {
+                    "command_acknowledged": True,
+                    "command_error": None,
+                    "labels": [],
+                    "final_parent": "router_c",
+                    "target_parent": "router_b",
+                },
+                ("attached_to_non_target_parent", "ATTACHED_TO_NON_TARGET_PARENT"),
+            ),
+            (
+                {
+                    "command_acknowledged": True,
+                    "command_error": None,
+                    "labels": [],
+                    "final_parent": None,
+                    "target_parent": "router_b",
+                },
+                ("no_reattachment", "NO_REATTACHMENT"),
+            ),
+            (
+                {
+                    "command_acknowledged": False,
+                    "command_error": "InvalidCommand",
+                    "labels": ["COMMAND_REJECTED"],
+                    "final_parent": None,
+                    "target_parent": "router_b",
+                },
+                ("command_rejected", None),
+            ),
+            (
+                {
+                    "command_acknowledged": False,
+                    "command_error": None,
+                    "labels": ["SKIP_NO_CHILD_PARENT"],
+                    "final_parent": None,
+                    "target_parent": None,
+                },
+                ("skipped", None),
+            ),
+        )
+        for arguments, expected in cases:
+            with self.subTest(expected=expected):
+                self.assertEqual(expected, runner.classify_directed_result(**arguments))
+
 
 if __name__ == "__main__":
     unittest.main()

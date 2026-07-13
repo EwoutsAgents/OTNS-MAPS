@@ -114,6 +114,10 @@ profiles, select a deterministic non-current target, command the preferred-paren
 controller, remove the initial parent, and classify the final attachment. See
 [`docs/directed_parent_switch.md`](docs/directed_parent_switch.md).
 
+The staged build, CLI, protocol, classification, topology-matrix, repeated-run,
+and hardware-comparison evidence is recorded in
+[`docs/validation_ladder.md`](docs/validation_ladder.md).
+
 Native directed runs export microsecond protocol-event timestamps and derive the
 same four attach intervals used by the ESPHome PCAP analyzer. Timing-source and
 clock semantics are documented in

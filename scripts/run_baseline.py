@@ -1227,6 +1227,45 @@ def parse_prefparent_events(lines: list[str], observed_time_s: float | None = No
     return events
 
 
+def directed_preflight_labels(
+    *,
+    has_parent: bool,
+    parent_is_mapped: bool,
+    parent_is_leader: bool = False,
+    eligible_target_count: int = 0,
+) -> list[str]:
+    """Classify directed-switch setup without depending on an OTNS session."""
+    if not has_parent:
+        return ["SKIP_NO_CHILD_PARENT"]
+    if not parent_is_mapped:
+        return ["SKIP_PARENT_NOT_MAPPED_TO_DEVICE"]
+
+    labels = ["SKIP_PARENT_IS_LEADER"] if parent_is_leader else []
+    if eligible_target_count < 1:
+        labels.append("SKIP_NO_ELIGIBLE_TARGET_PARENT")
+    return labels
+
+
+def classify_directed_result(
+    *,
+    command_acknowledged: bool,
+    command_error: str | None,
+    labels: list[str],
+    final_parent: str | None,
+    target_parent: str | None,
+) -> tuple[str, str | None]:
+    """Return the stable result classification and optional result label."""
+    if command_acknowledged:
+        if final_parent == target_parent:
+            return "selected_target_reached", "SELECTED_TARGET_REACHED"
+        if final_parent:
+            return "attached_to_non_target_parent", "ATTACHED_TO_NON_TARGET_PARENT"
+        return "no_reattachment", "NO_REATTACHMENT"
+    if command_error or "COMMAND_REJECTED" in labels:
+        return "command_rejected", None
+    return "skipped", None
+
+
 def command_payload_lines(lines: list[str]) -> list[str]:
     """Return synchronous CLI payload lines, excluding asynchronous controller events."""
     return [line for line in lines if PREFPARENT_EVENT_RE.search(line) is None]
@@ -1633,22 +1672,38 @@ class RealBenchmarkRunner:
             initial_parent_name = self._parent_name_from_identity(parent_info)
 
             if not parent_info:
-                labels.append("SKIP_NO_CHILD_PARENT")
+                labels.extend(
+                    directed_preflight_labels(
+                        has_parent=False,
+                        parent_is_mapped=False,
+                    )
+                )
             elif initial_parent_name is None:
-                labels.append("SKIP_PARENT_NOT_MAPPED_TO_DEVICE")
+                labels.extend(
+                    directed_preflight_labels(
+                        has_parent=True,
+                        parent_is_mapped=False,
+                    )
+                )
             else:
                 initial_ref = self.node_refs[initial_parent_name]
                 initial_parent_node_id = initial_ref.node_id
-                if topology_before.get(initial_parent_name, {}).get("role") == "leader":
-                    labels.append("SKIP_PARENT_IS_LEADER")
                 eligible = sorted(
                     name
                     for name in router_node_names
                     if name != initial_parent_name and self.node_refs[name].extaddr
                 )
-                if not eligible:
-                    labels.append("SKIP_NO_ELIGIBLE_TARGET_PARENT")
-                else:
+                labels.extend(
+                    directed_preflight_labels(
+                        has_parent=True,
+                        parent_is_mapped=True,
+                        parent_is_leader=(
+                            topology_before.get(initial_parent_name, {}).get("role") == "leader"
+                        ),
+                        eligible_target_count=len(eligible),
+                    )
+                )
+                if eligible:
                     target_name = random.Random(seed).choice(eligible)
                     target_ref = self.node_refs[target_name]
                     target_extaddr = target_ref.extaddr
@@ -1752,20 +1807,15 @@ class RealBenchmarkRunner:
             labels.append("ROUTER_TOPOLOGY_CHANGED")
 
         final_parent = samples[-1].get("parent_node_guess") if samples else None
-        if command_acknowledged:
-            if final_parent == target_name:
-                labels.append("SELECTED_TARGET_REACHED")
-                directed_result = "selected_target_reached"
-            elif final_parent:
-                labels.append("ATTACHED_TO_NON_TARGET_PARENT")
-                directed_result = "attached_to_non_target_parent"
-            else:
-                labels.append("NO_REATTACHMENT")
-                directed_result = "no_reattachment"
-        elif command_error or "COMMAND_REJECTED" in labels:
-            directed_result = "command_rejected"
-        else:
-            directed_result = "skipped"
+        directed_result, result_label = classify_directed_result(
+            command_acknowledged=command_acknowledged,
+            command_error=command_error,
+            labels=labels,
+            final_parent=final_parent,
+            target_parent=target_name,
+        )
+        if result_label is not None:
+            labels.append(result_label)
 
         rows = flatten_samples(samples)
         summary = build_summary(
