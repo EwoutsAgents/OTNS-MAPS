@@ -155,8 +155,8 @@ def verify_artifact(artifact_dir: Path) -> dict[str, Any]:
 
     binary_checks = 0
     for node in manifest.get("node_executables", {}).values():
-        binary_path = node.get("path")
-        expected = node.get("sha256")
+        binary_path = node.get("executable_path")
+        expected = node.get("executable_sha256")
         if binary_path and expected and Path(binary_path).is_file():
             binary_checks += 1
             if sha256_file(Path(binary_path)) != expected:

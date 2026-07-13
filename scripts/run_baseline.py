@@ -254,6 +254,16 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def command_option_value(command: str, option: str) -> str | None:
+    arguments = shlex.split(command)
+    for index, argument in enumerate(arguments):
+        if argument == option and index + 1 < len(arguments):
+            return arguments[index + 1]
+        if argument.startswith(f"{option}="):
+            return argument.split("=", 1)[1]
+    return None
+
+
 def git_source_state(path: Path | None) -> dict[str, Any] | None:
     if path is None:
         return None
@@ -637,6 +647,7 @@ def maybe_capture_replay(
         "openthread_commit": openthread_commit,
         "otns_commit": otns_commit,
         "otns_command": otns_command,
+        "otns_seed": command_option_value(otns_command, "-seed"),
         "otns_workdir": str(otns_workdir) if otns_workdir is not None else None,
         "replay_source": str(detected_source),
         "copied_replay_path": str(copied_path),
@@ -964,6 +975,7 @@ def write_tracked_results_readme(
             f'- OpenThread commit: `{manifest["openthread_commit"]}`',
             f'- OTNS commit: `{manifest["otns_commit"]}`',
             f'- OTNS command: `{manifest["otns_command"]}`',
+            f'- OTNS random seed: `{manifest["otns_seed"]}`',
             f'- OTNS workdir: `{manifest["otns_workdir"]}`',
             f'- Runner command: `{manifest["runner_command"]}`',
             f'- OTNS watch level: `{manifest["otns_watch_level"]}`',

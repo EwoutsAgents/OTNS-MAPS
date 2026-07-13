@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from scripts import run_baseline
+from scripts import run_repeated_baseline
 from scripts import verify_artifact
 
 
@@ -79,6 +80,12 @@ class ArtifactIntegrityTests(unittest.TestCase):
             run_baseline.write_artifact_checksums(artifact)
             with self.assertRaisesRegex(ValueError, "not artifact-relative"):
                 verify_artifact.verify_artifact(artifact)
+
+    def test_repeated_command_adds_explicit_seed(self) -> None:
+        command = run_repeated_baseline.command_with_seed("otns -web=false", 3201)
+        self.assertEqual("otns -web=false -seed 3201", command)
+        with self.assertRaisesRegex(ValueError, "cannot be combined"):
+            run_repeated_baseline.command_with_seed("otns -seed 1", 3201)
 
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -52,6 +53,12 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=9990,
         help="Base listen port for repeated real OTNS runs. Must be >= 9000 and divisible by 10.",
+    )
+    parser.add_argument(
+        "--otns-seed-base",
+        type=int,
+        default=None,
+        help="Optional deterministic OTNS seed for run 1; each following run increments it by one.",
     )
     parser.add_argument("--capture-replay", action="store_true", help="Pass through replay capture to each run.")
     parser.add_argument(
@@ -191,6 +198,13 @@ def command_with_listen_port(command: str, port: int) -> str:
     return f"{command} -listen localhost:{port}"
 
 
+def command_with_seed(command: str, seed: int) -> str:
+    arguments = shlex.split(command)
+    if "-seed" in arguments or any(argument.startswith("-seed=") for argument in arguments):
+        raise ValueError("--otns-seed-base cannot be combined with -seed in --otns-command")
+    return f"{command} -seed {seed}"
+
+
 def write_json(data: dict[str, Any], path: Path) -> None:
     with path.open("w", encoding="utf-8") as handle:
         json.dump(data, handle, indent=2, sort_keys=True)
@@ -241,6 +255,7 @@ def write_results_readme(
         f"- Firmware source repository: `{manifest['firmware_source_repo'] or 'not recorded'}`",
         f"- OpenThread commit: `{manifest['openthread_commit']}`",
         f"- OTNS commit: `{manifest['otns_commit']}`",
+        f"- OTNS seed base: `{manifest.get('otns_seed_base')}`",
         f"- Simulator ping RSS capture: `{manifest.get('capture_sim_ping_rss', False)}`",
         f"- Aggregate summary: `{'aggregate_summary.json' if aggregate_summary_exists else 'not generated'}`",
         f"- Manifest: `manifest.json`",
@@ -268,6 +283,12 @@ def main() -> int:
     if not args.mock and (args.listen_port_base < 9000 or args.listen_port_base % 10 != 0):
         print("--listen-port-base must be >= 9000 and divisible by 10 for real OTNS runs", file=sys.stderr)
         return 2
+    if args.otns_seed_base is not None:
+        try:
+            command_with_seed(args.otns_command, args.otns_seed_base)
+        except ValueError as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
 
     experiment_token = timestamp_token()
     experiment_name = args.experiment_name or f"{scenario_name(args.scenario)}_{experiment_token}"
@@ -306,7 +327,10 @@ def main() -> int:
             cmd.append("--mock")
         else:
             port = args.listen_port_base + index * 10
-            cmd.extend(["--otns-command", command_with_listen_port(args.otns_command, port)])
+            run_otns_command = command_with_listen_port(args.otns_command, port)
+            if args.otns_seed_base is not None:
+                run_otns_command = command_with_seed(run_otns_command, args.otns_seed_base + index)
+            cmd.extend(["--otns-command", run_otns_command])
             if args.otns_workdir is not None:
                 cmd.extend(["--otns-workdir", str(args.otns_workdir)])
         if args.capture_replay:
@@ -363,6 +387,7 @@ def main() -> int:
             "stdout": completed.stdout.strip().splitlines(),
             "stderr": completed.stderr.strip(),
             "run_dir": str(run_dir),
+            "otns_seed": args.otns_seed_base + index if args.otns_seed_base is not None else None,
         }
         runs.append(run_entry)
         if completed.returncode != 0:
@@ -390,6 +415,7 @@ def main() -> int:
                         "openthread_commit": args.openthread_commit,
                         "otns_commit": args.otns_commit,
                         "otns_watch_level": args.otns_watch_level,
+                        "otns_seed_base": args.otns_seed_base,
                         "capture_replay": args.capture_replay,
                         "capture_sim_ping_rss": args.capture_sim_ping_rss,
                         "runs": runs,
@@ -420,6 +446,7 @@ def main() -> int:
         "openthread_commit": args.openthread_commit,
         "otns_commit": args.otns_commit,
         "otns_watch_level": args.otns_watch_level,
+        "otns_seed_base": args.otns_seed_base,
         "capture_replay": args.capture_replay,
         "capture_sim_ping_rss": args.capture_sim_ping_rss,
         "tracked_experiment_dir": str(tracked_experiment_dir) if tracked_experiment_dir is not None else None,
