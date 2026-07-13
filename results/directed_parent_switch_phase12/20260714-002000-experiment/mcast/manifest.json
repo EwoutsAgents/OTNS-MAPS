@@ -83,6 +83,7 @@
   "oscillation_events": 0,
   "otns_command": "/home/ewout/go/bin/otns -listen localhost:11400 -web=false -autogo=false -speed 0 -seed 3214 -pcap off",
   "otns_commit": "099a6c26cb1d2b8749d3171d5cdd8597fc71049c",
+  "otns_seed": "3214",
   "otns_watch_level": "info",
   "otns_workdir": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns",
   "packet_delivery_ratio": 1.0,
