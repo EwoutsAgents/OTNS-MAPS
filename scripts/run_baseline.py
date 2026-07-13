@@ -5,9 +5,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import os
+import random
 import re
 import shlex
 import shutil
@@ -33,6 +35,7 @@ TIMESTAMP_TOKEN_RE = re.compile(r"^(?P<date>\d{8})T(?P<time>\d{6})Z$")
 OTNS_LOG_LINE_RE = re.compile(r"^(trace|debug|info|note|warn|error)\t\d{4}-\d{2}-\d{2}\s", re.IGNORECASE)
 PARENT_RANK_LOG_RE = re.compile(r"^\s*(?P<sim_time_us>\d+)\s+.*\bParentRank:\s+(?P<fields>.+)$")
 PARENT_RANK_FIELD_RE = re.compile(r"(?P<key>[A-Za-z0-9_]+)=(?P<value>\S+)")
+PREFPARENT_EVENT_RE = re.compile(r"(?:^|\s)PREFPARENT\s+(?P<fields>.+)$")
 PARENT_RANK_KEY_ALIASES = {
     "d": "decision",
     "c": "criterion",
@@ -81,6 +84,9 @@ class NodeRef:
     y: float | None = None
     tx_power_dbm: float | None = None
     verified_tx_power_dbm: float | None = None
+    executable_path: str | None = None
+    executable_sha256: str | None = None
+    firmware_profile: str | None = None
 
 
 def parse_args() -> argparse.Namespace:
@@ -152,10 +158,22 @@ def parse_args() -> argparse.Namespace:
         help="Optional MTD node binary path. When provided, OTNS is told to use it for med/sed/ssed nodes.",
     )
     parser.add_argument(
+        "--node-binary-profile",
+        choices=("stock", "preferred-parent"),
+        default=None,
+        help="Declared profile for --node-binary-path; required by directed scenarios.",
+    )
+    parser.add_argument(
         "--ftd-node-binary-path",
         type=Path,
         default=None,
         help="Optional FTD node binary path. When provided, OTNS is told to use it for router/reed/fed nodes.",
+    )
+    parser.add_argument(
+        "--ftd-node-binary-profile",
+        choices=("stock", "fastpr"),
+        default=None,
+        help="Declared profile for --ftd-node-binary-path; required by directed scenarios.",
     )
     parser.add_argument(
         "--build-config-source",
@@ -204,6 +222,94 @@ def parse_args() -> argparse.Namespace:
 def load_scenario(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         return yaml.safe_load(handle)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def expand_executable_path(value: str | Path, scenario_path: Path) -> Path:
+    expanded = Path(os.path.expandvars(os.path.expanduser(str(value))))
+    if not expanded.is_absolute():
+        expanded = scenario_path.resolve().parent / expanded
+    return expanded.resolve()
+
+
+def validate_scenario_configuration(
+    scenario: dict[str, Any],
+    scenario_path: Path,
+    *,
+    node_binary_path: Path | None,
+    node_binary_profile: str | None,
+    ftd_node_binary_path: Path | None,
+    ftd_node_binary_profile: str | None,
+    mock: bool,
+) -> None:
+    if scenario.get("scenario_type") != "directed_parent_switch":
+        return
+
+    directed = scenario.get("directed_switch")
+    if not isinstance(directed, dict):
+        raise ValueError("directed_parent_switch requires a directed_switch mapping")
+    mode = directed.get("mode")
+    if mode not in {"multicast", "unicast"}:
+        raise ValueError("directed_switch.mode must be multicast or unicast")
+    if directed.get("target_selection") != "random_non_current_parent":
+        raise ValueError("directed_switch.target_selection must be random_non_current_parent")
+    if not isinstance(directed.get("random_seed"), int):
+        raise ValueError("directed_switch.random_seed must be an integer")
+    expected_router_profile = directed.get("expected_router_firmware")
+    if expected_router_profile not in {"stock", "fastpr"}:
+        raise ValueError("directed_switch.expected_router_firmware must be stock or fastpr")
+    if mode == "multicast" and expected_router_profile != "stock":
+        raise ValueError("multicast directed switching requires stock router firmware")
+    if expected_router_profile == "fastpr" and mode != "unicast":
+        raise ValueError("fastpr router firmware is only valid with unicast mode")
+
+    mobile = scenario.get("nodes", {}).get("mobile", {})
+    mobile_override = mobile.get("executable")
+    mobile_path = mobile_override or node_binary_path
+    mobile_expected_profile = mobile.get("firmware_profile")
+    mobile_profile = mobile_expected_profile if mobile_override else (node_binary_profile or mobile_expected_profile)
+    if mobile_expected_profile != "preferred-parent" or mobile_profile != "preferred-parent":
+        raise ValueError("directed switching requires the preferred-parent MTD profile")
+    if not mock and mobile_path is None:
+        raise ValueError("directed switching requires --node-binary-path or nodes.mobile.executable")
+    if not mock and mobile_override is None and node_binary_profile is None:
+        raise ValueError("--node-binary-profile is required with --node-binary-path")
+
+    for name in router_names(scenario):
+        config = scenario["nodes"][name]
+        executable_override = config.get("executable")
+        executable = executable_override or ftd_node_binary_path
+        configured_profile = config.get("firmware_profile")
+        profile = configured_profile if executable_override else (ftd_node_binary_profile or configured_profile)
+        if configured_profile != expected_router_profile or profile != expected_router_profile:
+            raise ValueError(
+                f"{name} firmware profile {profile!r} does not match expected {expected_router_profile!r}"
+            )
+        if not mock and executable is None:
+            raise ValueError(f"directed switching requires an executable for {name}")
+        if not mock and executable_override is None and ftd_node_binary_profile is None:
+            raise ValueError("--ftd-node-binary-profile is required with --ftd-node-binary-path")
+
+    if mock:
+        return
+    configured_paths = [("mobile", mobile_path)] + [
+        (name, scenario["nodes"][name].get("executable") or ftd_node_binary_path)
+        for name in router_names(scenario)
+    ]
+    for name, value in configured_paths:
+        assert value is not None
+        path = expand_executable_path(value, scenario_path)
+        if not path.is_file():
+            raise ValueError(f"Executable for {name} does not exist: {path}")
+        if not os.access(path, os.X_OK):
+            raise ValueError(f"Executable for {name} is not executable: {path}")
 
 
 def timestamp_token() -> str:
@@ -710,6 +816,19 @@ def tracked_results_manifest(
         "mle_attach_attempts": summary.get("mle_attach_attempts"),
         "mle_better_parent_attach_attempts": summary.get("mle_better_parent_attach_attempts"),
         "result_classification": summary.get("result_classification"),
+        "node_executables": summary.get("node_executables", {}),
+        "directed_mode": summary.get("directed_mode"),
+        "random_seed": summary.get("random_seed"),
+        "initial_parent": summary.get("initial_parent"),
+        "target_parent": summary.get("target_parent"),
+        "target_parent_extaddr": summary.get("target_parent_extaddr"),
+        "target_parent_rloc16": summary.get("target_parent_rloc16"),
+        "command_acknowledged": summary.get("command_acknowledged"),
+        "final_parent": summary.get("final_parent"),
+        "labels": summary.get("labels", []),
+        "preferred_parent_events": summary.get("preferred_parent_events", []),
+        "router_topology_changes": summary.get("router_topology_changes", {}),
+        "directed_result_classification": summary.get("directed_result_classification"),
     }
 
 
@@ -776,6 +895,15 @@ def write_tracked_results_readme(
             f'- MLE attach attempts: `{manifest["mle_attach_attempts"]}`',
             f'- MLE better parent attach attempts: `{manifest["mle_better_parent_attach_attempts"]}`',
             f'- Result classification: `{manifest["result_classification"]}`',
+            f'- Node executable provenance: `{manifest["node_executables"]}`',
+            f'- Directed mode: `{manifest["directed_mode"]}`',
+            f'- Directed random seed: `{manifest["random_seed"]}`',
+            f'- Directed initial parent: `{manifest["initial_parent"]}`',
+            f'- Directed target parent: `{manifest["target_parent"]}`',
+            f'- Directed command acknowledged: `{manifest["command_acknowledged"]}`',
+            f'- Directed final parent: `{manifest["final_parent"]}`',
+            f'- Directed labels: `{manifest["labels"]}`',
+            f'- Directed result: `{manifest["directed_result_classification"]}`',
             f'- Parent ranking events: `{manifest["parent_rank_event_count"]}`',
             f'- Parent ranking decisions: `{manifest["parent_rank_decision_counts"]}`',
             f'- Parent ranking criteria: `{manifest["parent_rank_criterion_counts"]}`',
@@ -1047,6 +1175,35 @@ def parse_scan_table(lines: list[str]) -> list[dict[str, str]]:
     return rows
 
 
+def parse_prefparent_events(lines: list[str], observed_time_s: float | None = None) -> list[dict[str, Any]]:
+    events: list[dict[str, Any]] = []
+    for line in lines:
+        match = PREFPARENT_EVENT_RE.search(line)
+        if match is None:
+            continue
+        fields = {
+            field.group("key"): field.group("value")
+            for field in PARENT_RANK_FIELD_RE.finditer(match.group("fields"))
+        }
+        if "event" not in fields:
+            continue
+        events.append({"observed_time_s": observed_time_s, **fields})
+    return events
+
+
+def command_payload_lines(lines: list[str]) -> list[str]:
+    """Return synchronous CLI payload lines, excluding asynchronous controller events."""
+    return [line for line in lines if PREFPARENT_EVENT_RE.search(line) is None]
+
+
+def first_integer_payload(lines: list[str], description: str) -> int:
+    for line in command_payload_lines(lines):
+        value = line.strip()
+        if re.fullmatch(r"-?\d+", value):
+            return int(value)
+    raise OtnsSessionError(f"No integer {description} found in OTNS output: {lines!r}")
+
+
 class OtnsSessionError(RuntimeError):
     """Raised when OTNS exits or reports a CLI error."""
 
@@ -1124,16 +1281,22 @@ class RealBenchmarkRunner:
         otns_watch_level: str = "off",
         node_binary_path: Path | None = None,
         ftd_node_binary_path: Path | None = None,
+        node_binary_profile: str | None = None,
+        ftd_node_binary_profile: str | None = None,
         thread_device_type: str | None = None,
         parent_search_config: str = "unknown",
         capture_sim_ping_rss: bool = False,
+        scenario_path: Path = DEFAULT_SCENARIO,
     ) -> None:
         self.scenario = scenario
+        self.scenario_path = scenario_path
         self.otns_command = with_otns_watch_level(otns_command, otns_watch_level)
         self.otns_workdir = otns_workdir
         self.otns_watch_level = otns_watch_level
         self.node_binary_path = node_binary_path
         self.ftd_node_binary_path = ftd_node_binary_path
+        self.node_binary_profile = node_binary_profile
+        self.ftd_node_binary_profile = ftd_node_binary_profile
         self.thread_device_type = thread_device_type
         self.parent_search_config = parent_search_config
         self.capture_sim_ping_rss = capture_sim_ping_rss
@@ -1161,6 +1324,8 @@ class RealBenchmarkRunner:
         timing = self.scenario["timing"]
         if self.scenario.get("scenario_type") == "static_parent_removal":
             return self._run_static_parent_removal(timing)
+        if self.scenario.get("scenario_type") == "directed_parent_switch":
+            return self._run_directed_parent_switch(timing)
 
         positions = movement_positions(self.scenario)
 
@@ -1258,6 +1423,264 @@ class RealBenchmarkRunner:
             self.notes.append(f"OTNS MTD executable set to {self.node_binary_path}.")
         return self._select_radio_model(session)
 
+    def _router_topology_snapshot(self, session: OtnsSession) -> dict[str, dict[str, Any]]:
+        self._refresh_node_identity(session)
+        snapshot: dict[str, dict[str, Any]] = {}
+        for name in router_names(self.scenario):
+            if name in self.removed_node_names:
+                continue
+            ref = self.node_refs[name]
+            state = command_payload_lines(session.command_output(f'node {ref.node_id} "state"'))
+            snapshot[name] = {
+                "node_id": ref.node_id,
+                "role": state[0] if state else None,
+                "rloc16": ref.rloc16,
+                "extaddr": ref.extaddr,
+            }
+        return snapshot
+
+    def _run_directed_parent_switch(self, timing: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+        directed = self.scenario["directed_switch"]
+        mode = str(directed["mode"])
+        seed = int(directed["random_seed"])
+        step_seconds = max(1, int(timing.get("step_seconds", 1)))
+        observe_seconds = int(timing.get("after_parent_removed_seconds", 0))
+        router_settle_seconds = int(timing.get("router_settling_seconds", 0))
+        child_attach_seconds = int(timing.get("child_attach_seconds", 0))
+        samples: list[dict[str, Any]] = []
+        switch_events: list[dict[str, Any]] = []
+        preferred_parent_events: list[dict[str, Any]] = []
+        labels: list[str] = []
+        total_outage = 0.0
+        outage_start: float | None = None
+        initial_parent_name: str | None = None
+        initial_parent_extaddr: str | None = None
+        initial_parent_rloc16: str | None = None
+        initial_parent_node_id: int | None = None
+        target_name: str | None = None
+        target_extaddr: str | None = None
+        target_rloc16: str | None = None
+        target_node_id: int | None = None
+        command_acknowledged = False
+        operation_generation: str | None = None
+        command_output_lines: list[str] = []
+        command_error: str | None = None
+        deletion_time_s: float | None = None
+        topology_before: dict[str, dict[str, Any]] = {}
+        topology_after: dict[str, dict[str, Any]] = {}
+
+        with OtnsSession(self.otns_command, cwd=self.otns_runtime_cwd) as session:
+            radio_model = self._configure_session(session)
+            router_node_names = list(
+                self.scenario.get("activation", {}).get("initial_nodes") or router_names(self.scenario)
+            )
+            named_ids = self._create_nodes(session, router_node_names)
+            if router_settle_seconds:
+                session.command_output(f"go {router_settle_seconds}")
+            topology_before = self._router_topology_snapshot(session)
+
+            named_ids.update(self._create_nodes(session, ["mobile"]))
+            if child_attach_seconds:
+                session.command_output(f"go {child_attach_seconds}")
+            self._refresh_node_identity(session)
+
+            mobile_ref = self.node_refs["mobile"]
+            parent_info: dict[str, str] = {}
+            try:
+                parent_info = parse_key_value_lines(
+                    session.command_output(f'node {mobile_ref.node_id} "parent"')
+                )
+            except OtnsSessionError as exc:
+                if "InvalidState" not in str(exc):
+                    raise
+            initial_parent_extaddr = parent_info.get("Ext Addr")
+            initial_parent_rloc16 = parent_info.get("Rloc") or parent_info.get("RLOC16")
+            initial_parent_name = self._parent_name_from_identity(parent_info)
+
+            if not parent_info:
+                labels.append("SKIP_NO_CHILD_PARENT")
+            elif initial_parent_name is None:
+                labels.append("SKIP_PARENT_NOT_MAPPED_TO_DEVICE")
+            else:
+                initial_ref = self.node_refs[initial_parent_name]
+                initial_parent_node_id = initial_ref.node_id
+                if topology_before.get(initial_parent_name, {}).get("role") == "leader":
+                    labels.append("SKIP_PARENT_IS_LEADER")
+                eligible = sorted(
+                    name
+                    for name in router_node_names
+                    if name != initial_parent_name and self.node_refs[name].extaddr
+                )
+                if not eligible:
+                    labels.append("SKIP_NO_ELIGIBLE_TARGET_PARENT")
+                else:
+                    target_name = random.Random(seed).choice(eligible)
+                    target_ref = self.node_refs[target_name]
+                    target_extaddr = target_ref.extaddr
+                    target_rloc16 = target_ref.rloc16
+                    target_node_id = target_ref.node_id
+                    try:
+                        command_output_lines = session.command_output(
+                            f'node {mobile_ref.node_id} "prefparent switch {target_extaddr} {mode}"'
+                        )
+                        now_s = first_integer_payload(session.command_output("time"), "simulation time") / 1_000_000.0
+                        command_events = parse_prefparent_events(command_output_lines, now_s)
+                        requested_event = next(
+                            (event for event in command_events if event.get("event") == "requested"),
+                            None,
+                        )
+                        command_acknowledged = requested_event is not None
+                        if requested_event is not None:
+                            operation_generation = requested_event.get("generation")
+                            preferred_parent_events.extend(
+                                event
+                                for event in command_events
+                                if event.get("generation") == operation_generation
+                            )
+                    except OtnsSessionError as exc:
+                        command_error = str(exc)
+                    if not command_acknowledged:
+                        labels.append("COMMAND_REJECTED")
+                    elif directed.get("remove_initial_parent", True):
+                        session.command_output(f"del {initial_ref.node_id}")
+                        self.removed_node_names.add(initial_parent_name)
+                        deletion_time_s = first_integer_payload(
+                            session.command_output("time"), "simulation time"
+                        ) / 1_000_000.0
+
+            previous_parent = initial_parent_name
+            mobile_x = float(self.scenario["nodes"]["mobile"]["x"])
+            mobile_y = float(self.scenario["nodes"]["mobile"]["y"])
+            sample_count = max(1, observe_seconds // step_seconds)
+            for index in range(sample_count):
+                parent_probe = self._send_mobile_to_parent_probe(session, named_ids["mobile"])
+                go_lines = session.command_output(f"go {step_seconds}")
+                sim_time_s = first_integer_payload(
+                    session.command_output("time"), "simulation time"
+                ) / 1_000_000.0
+                preferred_parent_events.extend(
+                    event
+                    for event in parse_prefparent_events(go_lines, sim_time_s)
+                    if operation_generation is not None
+                    and event.get("generation") == operation_generation
+                )
+                sample = self._collect_sample(
+                    session, index, mobile_x, mobile_y, go_lines, parent_probe
+                )
+                sample.update(
+                    {
+                        "selected_radio_model": radio_model,
+                        "scenario_phase": "post_parent_removal",
+                        "removed_parent_node": initial_parent_name if deletion_time_s is not None else None,
+                        "removed_parent_node_id": initial_parent_node_id if deletion_time_s is not None else None,
+                        "directed_target_node": target_name,
+                        "directed_target_extaddr": target_extaddr,
+                    }
+                )
+                parent_identity = sample.get("parent_node_guess")
+                switch = bool(previous_parent and parent_identity and parent_identity != previous_parent)
+                sample["parent_switch"] = switch
+                if switch:
+                    switch_events.append(
+                        {
+                            "sample_index": index,
+                            "sim_time_s": sample["sim_time_s"],
+                            "phase": "post_parent_removal",
+                            "from_parent": previous_parent,
+                            "to_parent": parent_identity,
+                        }
+                    )
+                previous_parent = parent_identity or previous_parent
+                connectivity_ok = self._connectivity_ok(sample)
+                if not connectivity_ok and outage_start is None:
+                    outage_start = sample["sim_time_s"]
+                elif connectivity_ok and outage_start is not None:
+                    total_outage += sample["sim_time_s"] - outage_start
+                    outage_start = None
+                sample["connectivity_ok"] = connectivity_ok
+                samples.append(sample)
+
+            if outage_start is not None and samples:
+                total_outage += samples[-1]["sim_time_s"] - outage_start
+            topology_after = self._router_topology_snapshot(session)
+
+        topology_changes = {
+            name: {"before": before, "after": topology_after.get(name)}
+            for name, before in topology_before.items()
+            if name != initial_parent_name
+            and (
+                topology_after.get(name, {}).get("role") != before.get("role")
+                or topology_after.get(name, {}).get("rloc16") != before.get("rloc16")
+            )
+        }
+        if topology_changes:
+            labels.append("ROUTER_TOPOLOGY_CHANGED")
+
+        final_parent = samples[-1].get("parent_node_guess") if samples else None
+        if command_acknowledged:
+            if final_parent == target_name:
+                labels.append("SELECTED_TARGET_REACHED")
+                directed_result = "selected_target_reached"
+            elif final_parent:
+                labels.append("ATTACHED_TO_NON_TARGET_PARENT")
+                directed_result = "attached_to_non_target_parent"
+            else:
+                labels.append("NO_REATTACHMENT")
+                directed_result = "no_reattachment"
+        elif command_error or "COMMAND_REJECTED" in labels:
+            directed_result = "command_rejected"
+        else:
+            directed_result = "skipped"
+
+        rows = flatten_samples(samples)
+        summary = build_summary(
+            scenario=self.scenario,
+            samples=samples,
+            switch_events=switch_events,
+            notes=self.notes,
+            selected_radio_model=rows[0]["selected_radio_model"] if rows else None,
+            total_outage_s=round(total_outage, 3),
+            mock=False,
+            thread_device_type=self.thread_device_type,
+            parent_search_config=self.parent_search_config,
+            sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
+            node_refs=self.node_refs,
+        )
+        summary.update(
+            {
+                "scenario_type": "directed_parent_switch",
+                "router_count": len(router_node_names),
+                "router_settling_seconds": router_settle_seconds,
+                "child_attach_seconds": child_attach_seconds,
+                "after_parent_removed_seconds": observe_seconds,
+                "directed_mode": mode,
+                "target_selection": directed["target_selection"],
+                "random_seed": seed,
+                "initial_parent": initial_parent_name,
+                "initial_parent_node_id": initial_parent_node_id,
+                "initial_parent_extaddr": initial_parent_extaddr,
+                "initial_parent_rloc16": initial_parent_rloc16,
+                "target_parent": target_name,
+                "target_parent_node_id": target_node_id,
+                "target_parent_extaddr": target_extaddr,
+                "target_parent_rloc16": target_rloc16,
+                "command_acknowledged": command_acknowledged,
+                "operation_generation": operation_generation,
+                "command_output": command_output_lines,
+                "command_error": command_error,
+                "parent_removal_time_s": deletion_time_s,
+                "final_parent": final_parent,
+                "preferred_parent_events": preferred_parent_events,
+                "labels": labels,
+                "router_topology_before": topology_before,
+                "router_topology_after": topology_after,
+                "router_topology_changes": topology_changes,
+                "directed_result_classification": directed_result,
+                "result_classification": directed_result,
+            }
+        )
+        return rows, summary
+
     def _run_static_parent_removal(self, timing: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         removal = self.scenario.get("removal", {})
         step_seconds = int(timing.get("step_seconds", 1))
@@ -1309,7 +1732,9 @@ class RealBenchmarkRunner:
                 removed_parent_extaddr = removed_ref.extaddr
                 session.command_output(f"del {removed_ref.node_id}")
                 self.removed_node_names.add(removed_parent_name)
-                removal_time_s = int(session.command_output("time")[0]) / 1_000_000.0
+                removal_time_s = first_integer_payload(
+                    session.command_output("time"), "simulation time"
+                ) / 1_000_000.0
                 self.notes.append(
                     f"Static removal scenario deleted observed mobile parent `{removed_parent_name}` "
                     f"(Node<{removed_ref.node_id}>) after {child_attach_seconds}s child attach wait."
@@ -1465,9 +1890,28 @@ class RealBenchmarkRunner:
         for name in node_names:
             config = self.scenario["nodes"][name]
             tx_power = node_tx_power_dbm(config)
+            is_mtd = config["type"] in {"med", "sed", "ssed"}
+            executable_override = config.get("executable")
+            executable_value = executable_override or (
+                self.node_binary_path if is_mtd else self.ftd_node_binary_path
+            )
+            default_profile = self.node_binary_profile if is_mtd else self.ftd_node_binary_profile
+            firmware_profile = (
+                config.get("firmware_profile")
+                if executable_override
+                else (default_profile or config.get("firmware_profile"))
+            )
+            executable_path = (
+                expand_executable_path(executable_value, self.scenario_path)
+                if executable_value is not None
+                else None
+            )
             # OTNS-specific command: create a stock node type in the simulator.
-            output = session.command_output(f'add {config["type"]}')
-            node_id = int(output[0])
+            add_command = f'add {config["type"]}'
+            if executable_path is not None:
+                add_command += f' exe "{executable_path}"'
+            output = session.command_output(add_command)
+            node_id = first_integer_payload(output, "node id")
             named_ids[name] = node_id
             session.command_output(f'move {node_id} {config["x"]} {config["y"]}')
             verified_tx_power = None
@@ -1484,6 +1928,9 @@ class RealBenchmarkRunner:
                 y=config["y"],
                 tx_power_dbm=tx_power,
                 verified_tx_power_dbm=verified_tx_power,
+                executable_path=str(executable_path) if executable_path is not None else None,
+                executable_sha256=sha256_file(executable_path) if executable_path is not None else None,
+                firmware_profile=firmware_profile,
             )
         return named_ids
 
@@ -1658,7 +2105,7 @@ class RealBenchmarkRunner:
             step = min(poll_interval, settle_seconds - elapsed)
             session.command_output(f"go {step}")
             elapsed += step
-            sim_time_us = int(session.command_output("time")[0])
+            sim_time_us = first_integer_payload(session.command_output("time"), "simulation time")
             parent_name = self._current_mobile_parent_name(session)
             previous_parent = self._record_pre_movement_parent_observation(
                 parent_name=parent_name,
@@ -1697,9 +2144,9 @@ class RealBenchmarkRunner:
         parent_probe: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         mobile = self.node_refs["mobile"]
-        sim_time_us = int(session.command_output("time")[0])
-        state_lines = session.command_output(f'node {mobile.node_id} "state"')
-        rloc_lines = session.command_output(f'node {mobile.node_id} "rloc16"')
+        sim_time_us = first_integer_payload(session.command_output("time"), "simulation time")
+        state_lines = command_payload_lines(session.command_output(f'node {mobile.node_id} "state"'))
+        rloc_lines = command_payload_lines(session.command_output(f'node {mobile.node_id} "rloc16"'))
         try:
             parent_lines = session.command_output(f'node {mobile.node_id} "parent"')
         except OtnsSessionError as exc:
@@ -1921,6 +2368,8 @@ class MockBenchmarkRunner:
     def run(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
         if self.scenario.get("scenario_type") == "static_parent_removal":
             return self._run_static_parent_removal_mock()
+        if self.scenario.get("scenario_type") == "directed_parent_switch":
+            return self._run_directed_parent_switch_mock()
 
         timing = self.scenario["timing"]
         positions = movement_positions(self.scenario)
@@ -2067,6 +2516,168 @@ class MockBenchmarkRunner:
             parent_search_config=self.parent_search_config,
             sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
             node_refs=mock_node_refs,
+        )
+        return rows, summary
+
+    def _run_directed_parent_switch_mock(self) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+        timing = self.scenario["timing"]
+        directed = self.scenario["directed_switch"]
+        routers = {name: self.scenario["nodes"][name] for name in router_names(self.scenario)}
+        router_names_list = list(routers)
+        router_identity = {
+            name: {
+                "extaddr": f"{index + 1:02x}" * 8,
+                "rloc16": f"0x{(index + 1) * 0x1000:04x}",
+            }
+            for index, name in enumerate(router_names_list)
+        }
+        initial_parent = router_names_list[0]
+        eligible = sorted(name for name in router_names_list if name != initial_parent)
+        target = random.Random(int(directed["random_seed"])).choice(eligible)
+        observe_seconds = int(timing.get("after_parent_removed_seconds", 0))
+        step_seconds = max(1, int(timing.get("step_seconds", 1)))
+        base_time = int(timing.get("router_settling_seconds", 0)) + int(
+            timing.get("child_attach_seconds", 0)
+        )
+        mobile = self.scenario["nodes"]["mobile"]
+        mobile_tx_power = node_tx_power_dbm(mobile)
+        samples: list[dict[str, Any]] = []
+        switch_events: list[dict[str, Any]] = []
+
+        for index in range(max(1, observe_seconds // step_seconds)):
+            sim_time_s = base_time + (index + 1) * step_seconds
+            parent = None if index < 1 else target
+            mobile_state = "detached" if parent is None else "child"
+            parent_identity = router_identity.get(parent or "", {})
+            parent_probe_rx = 1 if parent else 0
+            if index == 1:
+                switch_events.append(
+                    {
+                        "sample_index": index,
+                        "sim_time_s": sim_time_s,
+                        "phase": "post_parent_removal",
+                        "from_parent": initial_parent,
+                        "to_parent": target,
+                    }
+                )
+            sample = {
+                "sample_index": index,
+                "sim_time_s": sim_time_s,
+                "mobile_x": mobile["x"],
+                "mobile_y": mobile["y"],
+                "mobile_state": mobile_state,
+                "mobile_rloc16": "0x5400" if parent else "0xfffe",
+                "device_profile": self.scenario.get("device_profile", "minimal_end_device"),
+                "thread_device_type": self.thread_device_type,
+                "parent_search_config": self.parent_search_config,
+                "packet_probe_reliable": self.observability.get("packet_probe_reliable", True),
+                "primary_parent_observation": self.observability.get("primary_parent_observation", "packet_probe"),
+                "parent_extaddr": parent_identity.get("extaddr"),
+                "parent_rloc16": parent_identity.get("rloc16"),
+                "parent_link_quality_in": 3 if parent else None,
+                "parent_link_quality_out": 3 if parent else None,
+                "parent_age": 1 if parent else None,
+                "parent_version": 4 if parent else None,
+                "parent_node_guess": parent,
+                "mobile_to_parent_target": parent,
+                "mobile_to_parent_target_rloc16": parent_identity.get("rloc16"),
+                "mobile_to_parent_target_extaddr": parent_identity.get("extaddr"),
+                "mobile_tx_power_dbm": mobile_tx_power,
+                "mobile_verified_tx_power_dbm": mobile_tx_power,
+                "mobile_to_parent_target_tx_power_dbm": node_tx_power_dbm(routers[parent]) if parent else None,
+                "mobile_to_parent_target_verified_tx_power_dbm": node_tx_power_dbm(routers[parent]) if parent else None,
+                "mobile_to_parent_result": {
+                    "tx": 1 if parent else None,
+                    "rx": parent_probe_rx if parent else None,
+                    "loss_pct": 0.0 if parent else None,
+                    "rtt_min_ms": 8.0 if parent else None,
+                    "rtt_avg_ms": 10.0 if parent else None,
+                    "rtt_max_ms": 12.0 if parent else None,
+                },
+                "ip_counters": {},
+                "mle_counters": {},
+                "probe_results": {},
+                "probe_sim_rss": {},
+                "mobile_to_parent_sim_rss": {},
+                "selected_radio_model": "mock",
+                "connectivity_ok": bool(parent),
+                "parent_switch": index == 1,
+                "scenario_phase": "post_parent_removal",
+                "removed_parent_node": initial_parent,
+                "removed_parent_node_id": 1,
+                "directed_target_node": target,
+                "directed_target_extaddr": router_identity[target]["extaddr"],
+            }
+            for router_name in router_names_list:
+                sample[f"{router_name}_scan_dbm"] = "-40.0"
+                sample[f"{router_name}_scan_lqi"] = "3"
+            samples.append(sample)
+
+        rows = flatten_samples(samples)
+        mock_node_refs = {
+            name: NodeRef(
+                name=name,
+                node_id=index + 1,
+                extaddr=(router_identity.get(name) or {}).get("extaddr"),
+                rloc16=(router_identity.get(name) or {}).get("rloc16"),
+                tx_power_dbm=node_tx_power_dbm(config),
+                verified_tx_power_dbm=node_tx_power_dbm(config),
+                firmware_profile=config.get("firmware_profile"),
+            )
+            for index, (name, config) in enumerate(self.scenario["nodes"].items())
+        }
+        summary = build_summary(
+            scenario=self.scenario,
+            samples=samples,
+            switch_events=switch_events,
+            notes=["Mock mode was used. These results are for script validation only."],
+            selected_radio_model="mock",
+            total_outage_s=float(step_seconds),
+            mock=True,
+            thread_device_type=self.thread_device_type,
+            parent_search_config=self.parent_search_config,
+            sim_ping_rss_capture_enabled=self.capture_sim_ping_rss,
+            node_refs=mock_node_refs,
+        )
+        topology = {
+            name: {"node_id": index + 1, "role": "router", **router_identity[name]}
+            for index, name in enumerate(router_names_list)
+        }
+        preferred_events = [
+            {"observed_time_s": base_time, "event": "requested", "generation": "1", "target": router_identity[target]["extaddr"], "mode": directed["mode"]},
+            {"observed_time_s": base_time + step_seconds, "event": "succeeded", "generation": "1", "parent": router_identity[target]["extaddr"]},
+        ]
+        summary.update(
+            {
+                "scenario_type": "directed_parent_switch",
+                "router_count": len(router_names_list),
+                "router_settling_seconds": int(timing.get("router_settling_seconds", 0)),
+                "child_attach_seconds": int(timing.get("child_attach_seconds", 0)),
+                "after_parent_removed_seconds": observe_seconds,
+                "directed_mode": directed["mode"],
+                "target_selection": directed["target_selection"],
+                "random_seed": int(directed["random_seed"]),
+                "initial_parent": initial_parent,
+                "initial_parent_node_id": 1,
+                "initial_parent_extaddr": router_identity[initial_parent]["extaddr"],
+                "initial_parent_rloc16": router_identity[initial_parent]["rloc16"],
+                "target_parent": target,
+                "target_parent_node_id": router_names_list.index(target) + 1,
+                "target_parent_extaddr": router_identity[target]["extaddr"],
+                "target_parent_rloc16": router_identity[target]["rloc16"],
+                "command_acknowledged": True,
+                "command_output": [f"PREFPARENT event=requested generation=1 target={router_identity[target]['extaddr']} mode={directed['mode']}"],
+                "command_error": None,
+                "parent_removal_time_s": float(base_time),
+                "final_parent": target,
+                "preferred_parent_events": preferred_events,
+                "labels": ["SKIP_PARENT_IS_LEADER", "SELECTED_TARGET_REACHED"],
+                "router_topology_before": topology,
+                "router_topology_after": {name: value for name, value in topology.items() if name != initial_parent},
+                "router_topology_changes": {},
+                "directed_result_classification": "selected_target_reached",
+                "result_classification": "selected_target_reached",
+            }
         )
         return rows, summary
 
@@ -2287,6 +2898,8 @@ def flatten_samples(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "scenario_phase": sample.get("scenario_phase"),
             "removed_parent_node": sample.get("removed_parent_node"),
             "removed_parent_node_id": sample.get("removed_parent_node_id"),
+            "directed_target_node": sample.get("directed_target_node"),
+            "directed_target_extaddr": sample.get("directed_target_extaddr"),
             "ip_counters_json": json.dumps(sample["ip_counters"], sort_keys=True),
             "mle_counters_json": json.dumps(sample["mle_counters"], sort_keys=True),
         }
@@ -2510,6 +3123,20 @@ def scenario_model_rss_summary(scenario: dict[str, Any]) -> dict[str, Any]:
         "x": endpoint.get("x", mobile.get("x")),
         "y": endpoint.get("y", mobile.get("y")),
     }
+
+
+def node_executable_summary(node_refs: dict[str, NodeRef] | None) -> dict[str, dict[str, Any]]:
+    if not node_refs:
+        return {}
+    return {
+        name: {
+            "node_id": ref.node_id,
+            "firmware_profile": ref.firmware_profile,
+            "executable_path": ref.executable_path,
+            "executable_sha256": ref.executable_sha256,
+        }
+        for name, ref in sorted(node_refs.items())
+    }
     endpoint_rss: dict[str, float | None] = {}
     router_link_rss: dict[str, float | None] = {}
     routers = router_names(scenario)
@@ -2723,6 +3350,7 @@ def build_summary(
         "mobile_to_parent_end_dwell_sim_lqi_median": numeric_median(mobile_parent_end_lqi),
         "configured_node_tx_power_dbm": configured_tx_power,
         "verified_node_tx_power_dbm": verified_tx_power,
+        "node_executables": node_executable_summary(node_refs),
         "tx_power_command": "txpower",
         "scenario_model_rss": scenario_model_rss_summary(scenario),
         "oscillation_events": oscillations,
@@ -2751,6 +3379,19 @@ def write_json(data: dict[str, Any], path: Path) -> None:
 def main() -> int:
     args = parse_args()
     scenario = load_scenario(args.scenario)
+    try:
+        validate_scenario_configuration(
+            scenario,
+            args.scenario,
+            node_binary_path=args.node_binary_path,
+            node_binary_profile=args.node_binary_profile,
+            ftd_node_binary_path=args.ftd_node_binary_path,
+            ftd_node_binary_profile=args.ftd_node_binary_profile,
+            mock=args.mock,
+        )
+    except ValueError as exc:
+        print(f"Invalid scenario configuration: {exc}", file=sys.stderr)
+        return 2
     ensure_results_dir(args.results_dir)
 
     token = args.timestamp_token or timestamp_token()
@@ -2772,13 +3413,16 @@ def main() -> int:
         else RealBenchmarkRunner(
             scenario,
             args.otns_command,
-            args.otns_workdir,
-            args.otns_watch_level,
+            otns_workdir=args.otns_workdir,
+            otns_watch_level=args.otns_watch_level,
             node_binary_path=args.node_binary_path,
             ftd_node_binary_path=args.ftd_node_binary_path,
+            node_binary_profile=args.node_binary_profile,
+            ftd_node_binary_profile=args.ftd_node_binary_profile,
             thread_device_type=args.thread_device_type,
             parent_search_config=args.parent_search_config,
             capture_sim_ping_rss=args.capture_sim_ping_rss,
+            scenario_path=args.scenario,
         )
     )
 
@@ -2850,9 +3494,11 @@ def main() -> int:
     summary["thread_device_type"] = args.thread_device_type
     summary["parent_search_config"] = args.parent_search_config
     summary["node_binary_path"] = str(args.node_binary_path) if args.node_binary_path is not None else None
+    summary["node_binary_profile"] = args.node_binary_profile
     summary["ftd_node_binary_path"] = (
         str(args.ftd_node_binary_path) if args.ftd_node_binary_path is not None else None
     )
+    summary["ftd_node_binary_profile"] = args.ftd_node_binary_profile
     summary["build_config_source"] = args.build_config_source
     summary["equivalent_to"] = args.equivalent_to
     summary["openthread_commit"] = args.openthread_commit

@@ -1,8 +1,8 @@
 # OTNS-MAPS
 
-OTNS-MAPS is a baseline-benchmark workspace for studying stock OpenThread parent switching under mobility in the OpenThread Network Simulator (OTNS).
+OTNS-MAPS is a benchmark workspace for studying stock and directed OpenThread parent switching in the OpenThread Network Simulator (OTNS).
 
-This repository does not change OpenThread parent-selection logic. The first milestone is a repeatable reference experiment that measures how an unmodified mobile end device behaves while moving from one potential parent toward another.
+Stock scenarios use unmodified parent selection. Directed scenarios can run externally built preferred-parent and fast-response OpenThread executables while keeping each source variant in a separate native node process.
 
 ## Repository layout
 
@@ -107,6 +107,12 @@ The active benchmark matrix uses three stock scenarios:
 Static parent-removal scenarios are kept in `scenarios/static/` and mirror the
 local ESPHome stock switch-parent tests with 2, 3, or 4 routers. See
 [`docs/static_scenarios.md`](docs/static_scenarios.md).
+
+Directed multicast, unicast, and fast-response unicast scenarios are kept in
+`scenarios/directed/` for 2, 3, and 4 routers. They require explicit binary
+profiles, select a deterministic non-current target, command the preferred-parent
+controller, remove the initial parent, and classify the final attachment. See
+[`docs/directed_parent_switch.md`](docs/directed_parent_switch.md).
 
 The simple scenarios now use a four-router, static 0 dBm topology and the runner records one 1 Hz ICMP ping from the mobile end device to its currently observed parent: Router A at `(350, 300)`, Router B at `(875, 300)`, Router C at `(1400, 300)`, Router D at `(1925, 300)`, and a mobile path from `(350, 360)` to `(2125, 360)`. The mobile is created near Router A; Router B, Router C, and Router D are introduced after a fixed 600 s Router-A-only delay; and movement starts after a monitored 600 s post-activation settle period. During the post-activation settle period, the runner keeps polling the mobile parent so switches before movement sampling are recorded as `pre_movement_switch_observed` rather than hidden as unexpected first samples. OTNS `MeterPerUnit = 0.1` makes the movement path 177.5 m; 36 one-second movement steps target about 5 m/s, followed by a 600 s end dwell. See [`docs/scenarios.md`](docs/scenarios.md).
 

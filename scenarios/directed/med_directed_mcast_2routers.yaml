@@ -1,0 +1,19 @@
+name: med_directed_mcast_2routers
+title: Directed multicast MED parent switch with 2 routers
+description: Deterministic preferred-parent multicast switch matching the ESPHome hardware procedure.
+scenario_type: directed_parent_switch
+device_profile: minimal_end_device
+observability: {packet_probe_reliable: true, primary_parent_observation: packet_probe}
+radio_model: {preferred: MutualInterference, fallbacks: [MIDisc, Ideal_Rssi, Ideal]}
+timing: {router_settling_seconds: 300, child_attach_seconds: 5, after_parent_removed_seconds: 360, step_seconds: 1}
+activation: {initial_nodes: [router_a, router_b], child_node: mobile}
+directed_switch:
+  mode: multicast
+  target_selection: random_non_current_parent
+  remove_initial_parent: true
+  random_seed: 2901
+  expected_router_firmware: stock
+nodes:
+  router_a: {type: router, x: 300, y: 300, tx_power_dbm: 0, firmware_profile: stock}
+  router_b: {type: router, x: 450, y: 300, tx_power_dbm: 0, firmware_profile: stock}
+  mobile: {type: med, x: 375, y: 300, tx_power_dbm: 0, firmware_profile: preferred-parent}
