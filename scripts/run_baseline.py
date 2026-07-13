@@ -860,6 +860,7 @@ def tracked_results_manifest(
         "openthread_commit": openthread_commit,
         "otns_commit": otns_commit,
         "otns_command": otns_command,
+        "otns_seed": command_option_value(otns_command, "-seed"),
         "otns_workdir": str(otns_workdir) if otns_workdir is not None else None,
         "runner_invocation": runner_invocation,
         "runner_command": shlex.join(runner_invocation),
