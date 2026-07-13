@@ -52,9 +52,9 @@ If the mobile detaches, summaries record `detach_count`, first detach/reattach t
 
 | Scenario | Step seconds | Movement steps | Router-A-only delay before B/C (s) | Post-activation settle (s) | Hold end steps | End dwell (s) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| MED simple | 1 | 25 | 300 | 180 | 320 | 320 |
-| FED simple | 1 | 25 | 300 | 180 | 320 | 320 |
-| SED simple | 1 | 25 | 300 | 180 | 320 | 320 |
+| MED simple | 1 | 25 | 600 | 600 | 600 | 600 |
+| FED simple | 1 | 25 | 600 | 600 | 600 | 600 |
+| SED simple | 1 | 25 | 600 | 600 | 600 | 600 |
 
 The SED scenario now uses the same activation timing as MED/FED so the repeated PPS matrix uses a consistent geometry and movement schedule across profiles. SED observability remains different because regular SED packet probing is unreliable.
 

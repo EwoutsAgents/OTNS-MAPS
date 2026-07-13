@@ -1,0 +1,159 @@
+{
+  "build_config_source": "docs/pps_build_variants.md#pps-disabled",
+  "configured_node_tx_power_dbm": {
+    "mobile": 0.0,
+    "router_a": 0.0,
+    "router_b": 0.0,
+    "router_c": 0.0
+  },
+  "detach_count": 1,
+  "detach_events": [
+    {
+      "detach_position_x": 1600.0,
+      "detach_time_s": 1233.0,
+      "previous_parent": "router_a",
+      "reattach_latency_s": 1.0,
+      "reattach_parent": "router_c",
+      "reattach_position_x": 1600.0,
+      "reattach_time_s": 1234.0
+    }
+  ],
+  "device_profile": "sleepy_end_device",
+  "ended_detached": false,
+  "equivalent_to": null,
+  "expected_initial_parent": "router_a",
+  "final_mobile_state": "child",
+  "final_observed_parent": "router_c",
+  "firmware_variant": "stock-sed-pps-off",
+  "first_detach_position_x": 1600.0,
+  "first_detach_previous_parent": "router_a",
+  "first_detach_time_s": 1233.0,
+  "first_reattach_parent": "router_c",
+  "first_reattach_position_x": 1600.0,
+  "first_reattach_time_s": 1234.0,
+  "first_switch_time_s": 1234.0,
+  "ftd_node_binary_path": null,
+  "initial_attachment_expected_parent": null,
+  "initial_attachment_observed_parent": null,
+  "initial_attachment_timed_out": false,
+  "initial_attachment_wait_s": null,
+  "initial_observed_parent": "router_a",
+  "mle_attach_attempts": 2,
+  "mle_better_parent_attach_attempts": 0,
+  "mle_parent_changes": 1,
+  "mobile_to_parent_end_dwell_sim_lqi_median": 2.0,
+  "mobile_to_parent_end_dwell_sim_rss_dbm_mean": -77.313,
+  "mobile_to_parent_end_dwell_sim_rss_dbm_median": -77.313,
+  "mock": false,
+  "node_binary_path": "/home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim/build/stock-med-pps-off/bin/ot-cli-mtd",
+  "node_log_files": [
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260713T014057Z/run_001/node_log_mobile_2.log",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260713T014057Z/run_001/node_log_router_a_1.log",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260713T014057Z/run_001/node_log_router_b_3.log",
+    "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260713T014057Z/run_001/node_log_router_c_4.log"
+  ],
+  "notes": [
+    "Regular SEDs typically do not respond to ping probes in OTNS.",
+    "Parent attachment is inferred from the OT CLI parent command and child state.",
+    "MLE and IP counters are collected, but packet loss alone is not treated as disconnection.",
+    "OTNS MTD executable set to /home/ewout/.openclaw/workspace-softwaredeveloper/ot-ns/ot-rfsim/build/stock-med-pps-off/bin/ot-cli-mtd.",
+    "Delayed node activation applied: router_b, router_c after 600 simulated seconds.",
+    "Live OTNS scan compatibility is inconsistent in this setup; scan-derived RSSI/LQI fields are left empty.",
+    "OTNS parent command returned InvalidState for at least one sample; parent fields are empty for that sample."
+  ],
+  "openthread_commit": "7874555efb1772bad66049ab06a78a2ce0c925f3",
+  "oscillation_events": 0,
+  "otns_commit": "099a6c26cb1d2b8749d3171d5cdd8597fc71049c",
+  "otns_watch_level": "trace",
+  "packet_delivery_ratio": 0.988562,
+  "packet_probe_reliable": false,
+  "parent_probe_delivery_ratio": 0.988562,
+  "parent_probe_enabled": true,
+  "parent_probe_interval_s": 1,
+  "parent_probe_mean_rtt_avg_ms": 9.664463,
+  "parent_probe_total_rx": 605,
+  "parent_probe_total_tx": 612,
+  "parent_search_config": "disabled",
+  "parent_sequence": [
+    "router_a",
+    "router_c"
+  ],
+  "pre_movement_parent_before_delayed_nodes": "router_a",
+  "pre_movement_parent_events": [],
+  "pre_movement_parent_final": "router_a",
+  "pre_movement_parent_observation_count": 600,
+  "pre_movement_parent_sequence": [
+    "router_a"
+  ],
+  "pre_movement_switch_count": 0,
+  "primary_parent_observation": "parent_command",
+  "reattach_latency_s": 1.0,
+  "recovery_classification": "detached_reattached_new_parent",
+  "replay_capture_requested": true,
+  "replay_file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260713T014057Z/run_001/replay/sed_simple_parent_switch_20260713T014057Z.replay",
+  "replay_metadata_file": "/home/ewout/.openclaw/workspace-softwaredeveloper/OTNS-MAPS/results/repeated/sed_simple_parent_switch_20260713T014057Z/run_001/replay/sed_simple_parent_switch_20260713T014057Z.replay.json",
+  "result_classification": "switch_observed",
+  "sample_count": 626,
+  "scenario_model_rss": {
+    "endpoint_router_to_mobile_rss_dbm": {
+      "router_a": -107.098,
+      "router_b": -98.075,
+      "router_c": -77.313
+    },
+    "method": "otns_model_derived_at_ping",
+    "mobile_endpoint": {
+      "x": 1600,
+      "y": 360
+    },
+    "router_to_router_rss_dbm": {
+      "router_a_to_router_b": -92.649,
+      "router_b_to_router_c": -92.649
+    }
+  },
+  "scenario_name": "sed_simple_parent_switch",
+  "scenario_title": "Simple stock OpenThread SED parent-switch benchmark",
+  "second_switch_position_x": null,
+  "second_switch_time_s": null,
+  "selected_radio_model": "MutualInterference",
+  "sim_ping_rss_ambiguous_probe_events": 0,
+  "sim_ping_rss_capture_enabled": true,
+  "sim_ping_rss_capture_method": "otns_model_derived_at_ping",
+  "sim_ping_rss_capture_requested": true,
+  "sim_ping_rss_match_rate": 1.0,
+  "sim_ping_rss_matched_probe_events": 625,
+  "sim_ping_rss_policy": "request_and_reply_when_available",
+  "sim_ping_rss_probe_stats": {
+    "mobile_to_parent": {
+      "match_rate": 1.0,
+      "reply_rx_dbm_mean": -77.442486,
+      "reply_rx_dbm_median": -77.313,
+      "request_rx_dbm_mean": -78.228602,
+      "request_rx_dbm_median": -77.313
+    }
+  },
+  "sim_ping_rss_total_probe_events": 625,
+  "sim_ping_rss_unmatched_probe_events": 0,
+  "switch_count": 1,
+  "switch_events": [
+    {
+      "from_parent": "router_a",
+      "sample_index": 33,
+      "sim_time_s": 1234.0,
+      "to_parent": "router_c"
+    }
+  ],
+  "switch_position_x": 1600.0,
+  "thread_device_type": "sed",
+  "time_spent_by_parent_s": {
+    "router_a": 32.0,
+    "router_c": 593.0
+  },
+  "total_outage_s": 1.0,
+  "tx_power_command": "txpower",
+  "verified_node_tx_power_dbm": {
+    "mobile": 0.0,
+    "router_a": 0.0,
+    "router_b": 0.0,
+    "router_c": 0.0
+  }
+}

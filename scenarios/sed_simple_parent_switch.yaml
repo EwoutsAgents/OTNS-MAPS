@@ -42,11 +42,11 @@ activation:
     - router_a
     - mobile
   delayed_node_groups:
-    - delay_seconds: 300
+    - delay_seconds: 600
       nodes:
         - router_b
         - router_c
-  post_activation_settle_seconds: 180
+  post_activation_settle_seconds: 600
 
 nodes:
   router_a:
@@ -79,4 +79,4 @@ movement:
     x: 1600
     y: 360
   speed_mps: 5
-  hold_end_steps: 320
+  hold_end_steps: 600
