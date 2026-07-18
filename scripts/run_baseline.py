@@ -110,6 +110,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--scenario", type=Path, default=DEFAULT_SCENARIO)
     parser.add_argument("--results-dir", type=Path, default=DEFAULT_RESULTS_DIR)
     parser.add_argument(
+        "--directed-random-seed",
+        type=int,
+        default=None,
+        help="Override directed_switch.random_seed without modifying the scenario file.",
+    )
+    parser.add_argument(
         "--otns-command",
         default=os.environ.get("OTNS_COMMAND", "otns"),
         help="OTNS executable or full command string",
@@ -3723,6 +3729,11 @@ def write_json(data: dict[str, Any], path: Path) -> None:
 def main() -> int:
     args = parse_args()
     scenario = load_scenario(args.scenario)
+    if args.directed_random_seed is not None:
+        if scenario.get("scenario_type") != "directed_parent_switch":
+            print("--directed-random-seed requires a directed_parent_switch scenario", file=sys.stderr)
+            return 2
+        scenario["directed_switch"]["random_seed"] = args.directed_random_seed
     try:
         validate_scenario_configuration(
             scenario,

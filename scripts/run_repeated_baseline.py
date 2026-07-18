@@ -70,6 +70,12 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional deterministic OTNS seed for run 1; each following run increments it by one.",
     )
+    parser.add_argument(
+        "--target-seed-base",
+        type=int,
+        default=None,
+        help="Optional directed target-selection seed for run 1; each following run increments it by one.",
+    )
     parser.add_argument("--capture-replay", action="store_true", help="Pass through replay capture to each run.")
     parser.add_argument(
         "--capture-sim-ping-rss",
@@ -345,6 +351,7 @@ def validate_run_outputs(
     firmware_variant: str,
     simulation_id: int,
     watch_level: str,
+    target_selection_seed: int | None = None,
 ) -> dict[str, Any]:
     """Reject incomplete or cross-contaminated outputs before aggregation."""
     errors: list[str] = []
@@ -368,6 +375,14 @@ def validate_run_outputs(
         errors.append(f"runtime directory mismatch: {recorded_runtime}")
     else:
         checks.append("runtime_directory")
+
+    if target_selection_seed is not None:
+        if summary.get("random_seed") != target_selection_seed:
+            errors.append(
+                f"target-selection seed mismatch: expected {target_selection_seed}, got {summary.get('random_seed')}"
+            )
+        else:
+            checks.append("target_selection_seed")
 
     runtime_logs = sorted((runtime_dir / "tmp").glob("*.log"))
     wrong_simulation_logs = [path.name for path in runtime_logs if not path.name.startswith(f"{simulation_id}_")]
@@ -457,6 +472,8 @@ def execute_run(
         cmd.extend(["--otns-command", run_otns_command, "--otns-runtime-dir", str(runtime_dir.resolve())])
         if args.otns_workdir is not None:
             cmd.extend(["--otns-workdir", str(args.otns_workdir.resolve())])
+    if args.target_seed_base is not None:
+        cmd.extend(["--directed-random-seed", str(args.target_seed_base + index)])
     if args.capture_replay:
         cmd.append("--capture-replay")
         run_replay_dir = args.replay_dir if args.replay_dir is not None else run_dir / "replay"
@@ -510,6 +527,7 @@ def execute_run(
             firmware_variant=args.firmware_variant,
             simulation_id=simulation_id,
             watch_level=args.otns_watch_level,
+            target_selection_seed=(args.target_seed_base + index if args.target_seed_base is not None else None),
         )
         if validation["status"] != "ok":
             final_returncode = 1
@@ -526,6 +544,7 @@ def execute_run(
         "listen_port": port if not args.mock else None,
         "simulation_id": simulation_id if not args.mock else None,
         "otns_seed": args.otns_seed_base + index if args.otns_seed_base is not None else None,
+        "target_selection_seed": args.target_seed_base + index if args.target_seed_base is not None else None,
         "validation": validation,
     }
 
@@ -622,6 +641,7 @@ def main() -> int:
         "otns_commit": args.otns_commit,
         "otns_watch_level": args.otns_watch_level,
         "otns_seed_base": args.otns_seed_base,
+        "target_seed_base": args.target_seed_base,
         "capture_replay": args.capture_replay,
         "capture_sim_ping_rss": args.capture_sim_ping_rss,
         "tracked_experiment_dir": str(tracked_experiment_dir) if tracked_experiment_dir is not None else None,

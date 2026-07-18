@@ -60,7 +60,10 @@ The exact command for a recorded run is stored in `manifest.json` as
 
 Repeated experiments should set `--otns-seed-base`. Run 1 uses that seed and
 each subsequent run increments it by one. The scenario's `random_seed` remains
-the independent target-selection seed.
+the independent target-selection seed unless `--target-seed-base` is supplied.
+With that option, run 1 uses the requested target seed and subsequent runs
+increment it by one. Reuse both seed bases across variants for paired topology
+and target choices.
 
 Repeated real runs may use `--jobs 4`. Each worker launches OTNS from a private
 `run_NNN/otns_runtime/` directory and uses a distinct listen port and simulation

@@ -192,6 +192,7 @@ python3 scripts/run_repeated_baseline.py \
   --repeat-count 5 \
   --jobs 4 \
   --listen-port-base 12000 \
+  --otns-seed-base 5001 \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns
 ```
@@ -203,6 +204,10 @@ directory. The runtime directory isolates OTNS node logs, flash files,
 locks and rejects outputs whose simulation ID, firmware variant, runtime path,
 or directed target/mode do not match the run summary. Seeds remain tied to the
 run index, so changing `--jobs` does not change the experiment sequence.
+For directed scenarios, `--target-seed-base` assigns a distinct, recorded
+target-selection seed to each run. Reuse both seed bases across firmware
+variants to obtain paired topology and target choices, for example
+`--otns-seed-base 5001 --target-seed-base 1306`.
 
 Use one repeated-run command as the owner of a port range. If independent
 campaign commands run concurrently, give them non-overlapping ranges even
