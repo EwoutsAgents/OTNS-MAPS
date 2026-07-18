@@ -62,6 +62,15 @@ Repeated experiments should set `--otns-seed-base`. Run 1 uses that seed and
 each subsequent run increments it by one. The scenario's `random_seed` remains
 the independent target-selection seed.
 
+Repeated real runs may use `--jobs 4`. Each worker launches OTNS from a private
+`run_NNN/otns_runtime/` directory and uses a distinct listen port and simulation
+ID. This prevents concurrent workers from sharing `tmp/*.log`, flash files,
+`current.pcap`, replay files, or `/tmp/otns/socket_dispatcher_*`. The repeated
+manifest records the worker count, listen port, simulation ID, runtime path,
+and validation result for every run. A run is excluded from aggregation if its
+copied logs do not match its expected simulation ID, firmware variant, or
+directed target/mode.
+
 ## Bundle layout
 
 Each run contains:

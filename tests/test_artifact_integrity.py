@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -86,6 +87,70 @@ class ArtifactIntegrityTests(unittest.TestCase):
         self.assertEqual("otns -web=false -seed 3201", command)
         with self.assertRaisesRegex(ValueError, "cannot be combined"):
             run_repeated_baseline.command_with_seed("otns -seed 1", 3201)
+
+    def test_repeated_command_assigns_requested_listen_port(self) -> None:
+        self.assertEqual(
+            "otns -web=false -listen localhost:12000",
+            run_repeated_baseline.command_with_listen_port("otns -web=false", 12000),
+        )
+        self.assertEqual(
+            "otns -listen localhost:12010 -web=false",
+            run_repeated_baseline.command_with_listen_port(
+                "otns -listen localhost:9990 -web=false",
+                12010,
+            ),
+        )
+
+    def test_runtime_directory_mirrors_only_static_workdir_entries(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source = root / "source"
+            runtime = root / "runtime"
+            source.mkdir()
+            (source / "ot-rfsim").mkdir()
+            (source / "tmp").mkdir()
+            (source / "current.pcap").write_bytes(b"pcap")
+            (source / "otns_0.replay").write_text("replay", encoding="utf-8")
+
+            run_repeated_baseline.prepare_otns_runtime_dir(runtime, source)
+
+            self.assertTrue((runtime / "ot-rfsim").is_symlink())
+            self.assertFalse((runtime / "tmp").exists())
+            self.assertFalse((runtime / "current.pcap").exists())
+            self.assertFalse((runtime / "otns_0.replay").exists())
+
+    def test_port_reservation_rejects_overlapping_runner(self) -> None:
+        port = 100000 + os.getpid()
+        with run_repeated_baseline.reserve_otns_ports([port]):
+            with self.assertRaisesRegex(RuntimeError, "already reserved"):
+                with run_repeated_baseline.reserve_otns_ports([port]):
+                    pass
+
+    def test_run_validation_rejects_another_simulation_id(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            run_dir = root / "run"
+            runtime = run_dir / "otns_runtime"
+            (runtime / "tmp").mkdir(parents=True)
+            (runtime / "tmp" / "999_1.log").write_text("wrong simulation\n", encoding="utf-8")
+            run_baseline.write_json(
+                {
+                    "firmware_variant": "test",
+                    "otns_runtime_dir": str(runtime),
+                    "node_log_files": [],
+                },
+                run_dir / "baseline_summary_test.json",
+            )
+
+            validation = run_repeated_baseline.validate_run_outputs(
+                run_dir,
+                runtime,
+                firmware_variant="test",
+                simulation_id=100,
+                watch_level="off",
+            )
+            self.assertEqual("failed", validation["status"])
+            self.assertIn("another simulation ID", validation["errors"][0])
 
 
 if __name__ == "__main__":

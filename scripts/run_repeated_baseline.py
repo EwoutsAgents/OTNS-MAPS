@@ -4,16 +4,20 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
+import fcntl
 import hashlib
 import json
 import os
+import re
 import shlex
 import shutil
 import subprocess
 import sys
+from contextlib import contextmanager, nullcontext
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,6 +31,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--scenario", type=Path, default=DEFAULT_SCENARIO)
     parser.add_argument("--results-dir", type=Path, default=DEFAULT_RESULTS_DIR)
     parser.add_argument("--repeat-count", type=int, default=3, help="Number of runs to execute.")
+    parser.add_argument(
+        "--jobs",
+        type=int,
+        default=1,
+        help="Maximum number of isolated OTNS runs to execute concurrently.",
+    )
     parser.add_argument(
         "--experiment-name",
         default=None,
@@ -163,8 +173,6 @@ def timestamp_token() -> str:
 
 
 def slugify_variant(value: str) -> str:
-    import re
-
     lowered = value.strip().lower()
     slug = re.sub(r"[^a-z0-9]+", "-", lowered).strip("-")
     return slug or "run"
@@ -193,9 +201,17 @@ def scenario_name(path: Path) -> str:
 
 
 def command_with_listen_port(command: str, port: int) -> str:
-    if "-listen" in command.split():
-        return command
-    return f"{command} -listen localhost:{port}"
+    arguments = shlex.split(command)
+    for index, argument in enumerate(arguments):
+        if argument == "-listen":
+            if index + 1 >= len(arguments):
+                raise ValueError("-listen in --otns-command is missing its address")
+            arguments[index + 1] = f"localhost:{port}"
+            return shlex.join(arguments)
+        if argument.startswith("-listen="):
+            arguments[index] = f"-listen=localhost:{port}"
+            return shlex.join(arguments)
+    return shlex.join([*arguments, "-listen", f"localhost:{port}"])
 
 
 def command_with_seed(command: str, seed: int) -> str:
@@ -244,6 +260,8 @@ def write_results_readme(
         f"- Experiment name: `{experiment_name}`",
         f"- Scenario file: `{scenario}`",
         f"- Repeat count: `{manifest['repeat_count']}`",
+        f"- Concurrent jobs: `{manifest.get('jobs', 1)}`",
+        f"- Listen port base: `{manifest.get('listen_port_base')}`",
         f"- Firmware variant: `{manifest['firmware_variant']}`",
         f"- Thread device type: `{manifest['thread_device_type'] or 'unspecified'}`",
         f"- Parent search config: `{manifest['parent_search_config']}`",
@@ -275,13 +293,257 @@ def resolve_tracked_results_dir(
     return ROOT / "results" / collection / format_experiment_id(experiment_token)
 
 
+RUNTIME_EXCLUDES = {"tmp", "current.pcap"}
+
+
+def prepare_otns_runtime_dir(runtime_dir: Path, source_workdir: Path | None) -> None:
+    """Create an isolated OTNS cwd while preserving source-relative executables."""
+    runtime_dir.mkdir(parents=True, exist_ok=True)
+    if source_workdir is None:
+        return
+    source = source_workdir.resolve()
+    if not source.is_dir():
+        raise ValueError(f"OTNS workdir does not exist or is not a directory: {source}")
+    for entry in source.iterdir():
+        if entry.name in RUNTIME_EXCLUDES or entry.name.startswith("otns_") and entry.name.endswith(".replay"):
+            continue
+        destination = runtime_dir / entry.name
+        if destination.exists() or destination.is_symlink():
+            continue
+        destination.symlink_to(entry.resolve(), target_is_directory=entry.is_dir())
+
+
+@contextmanager
+def reserve_otns_ports(ports: list[int]) -> Iterator[None]:
+    """Reserve OTNS simulation IDs across concurrent repeated-run processes."""
+    lock_dir = Path("/tmp/otns-maps-port-locks")
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    handles: list[Any] = []
+    try:
+        for port in ports:
+            handle = (lock_dir / f"{port}.lock").open("a+", encoding="utf-8")
+            try:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError as exc:
+                handle.close()
+                raise RuntimeError(f"OTNS listen-port block {port} is already reserved") from exc
+            handle.seek(0)
+            handle.truncate()
+            handle.write(f"pid={os.getpid()} port={port}\n")
+            handle.flush()
+            handles.append(handle)
+        yield
+    finally:
+        for handle in reversed(handles):
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+            handle.close()
+
+
+def validate_run_outputs(
+    run_dir: Path,
+    runtime_dir: Path,
+    firmware_variant: str,
+    simulation_id: int,
+    watch_level: str,
+) -> dict[str, Any]:
+    """Reject incomplete or cross-contaminated outputs before aggregation."""
+    errors: list[str] = []
+    checks: list[str] = []
+    summaries = sorted(run_dir.glob("baseline_summary_*.json"))
+    if len(summaries) != 1:
+        errors.append(f"expected one summary JSON, found {len(summaries)}")
+        return {"status": "failed", "errors": errors, "checks": checks}
+
+    summary_path = summaries[0]
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if summary.get("firmware_variant") != firmware_variant:
+        errors.append(
+            f"firmware variant mismatch: expected {firmware_variant!r}, got {summary.get('firmware_variant')!r}"
+        )
+    else:
+        checks.append("firmware_variant")
+
+    recorded_runtime = summary.get("otns_runtime_dir")
+    if recorded_runtime is not None and Path(recorded_runtime).resolve() != runtime_dir.resolve():
+        errors.append(f"runtime directory mismatch: {recorded_runtime}")
+    else:
+        checks.append("runtime_directory")
+
+    runtime_logs = sorted((runtime_dir / "tmp").glob("*.log"))
+    wrong_simulation_logs = [path.name for path in runtime_logs if not path.name.startswith(f"{simulation_id}_")]
+    if wrong_simulation_logs:
+        errors.append("runtime contains logs from another simulation ID: " + ", ".join(wrong_simulation_logs))
+    else:
+        checks.append("simulation_id_log_prefix")
+
+    node_log_files = [Path(value) for value in summary.get("node_log_files", [])]
+    for path in node_log_files:
+        try:
+            path.resolve().relative_to(run_dir.resolve())
+        except ValueError:
+            errors.append(f"copied node log is outside its run directory: {path}")
+    if node_log_files:
+        checks.append("node_log_scope")
+    elif watch_level.lower() != "off":
+        errors.append("watch logging was enabled but no node logs were copied")
+
+    requested_events = [
+        event for event in summary.get("preferred_parent_events", []) if event.get("event") == "requested"
+    ]
+    if requested_events and node_log_files:
+        requested = requested_events[0]
+        target = str(requested.get("target", "")).lower()
+        mode = str(requested.get("mode", "")).lower()
+        mobile_logs = [path for path in node_log_files if path.name.startswith("node_log_mobile_")]
+        if len(mobile_logs) != 1:
+            errors.append(f"expected one copied mobile log, found {len(mobile_logs)}")
+        else:
+            requested_lines = [
+                line
+                for line in mobile_logs[0].read_text(encoding="utf-8", errors="replace").splitlines()
+                if "PREFPARENT event=requested" in line
+            ]
+            matching = [
+                line
+                for line in requested_lines
+                if f"target={target}" in line.lower() and f"mode={mode}" in line.lower()
+            ]
+            if not matching:
+                errors.append(f"mobile log does not contain the summary target/mode ({target}, {mode})")
+            else:
+                checks.append("preferred_parent_target_mode")
+
+    return {
+        "status": "ok" if not errors else "failed",
+        "errors": errors,
+        "checks": checks,
+        "summary_file": str(summary_path),
+        "runtime_log_count": len(runtime_logs),
+    }
+
+
+def execute_run(
+    index: int,
+    args: argparse.Namespace,
+    experiment_dir: Path,
+    tracked_experiment_dir: Path | None,
+) -> dict[str, Any]:
+    run_number = index + 1
+    run_dir = experiment_dir / f"run_{run_number:03d}"
+    ensure_results_dir(run_dir)
+    runtime_dir = run_dir / "otns_runtime"
+    run_token = timestamp_token()
+    run_id = format_run_id(run_token, run_number)
+    port = args.listen_port_base + index * 10
+    simulation_id = (port - 9000) // 10
+
+    cmd = [
+        sys.executable,
+        str(RUNNER),
+        "--scenario",
+        str(args.scenario.resolve()),
+        "--results-dir",
+        str(run_dir.resolve()),
+        "--timestamp-token",
+        run_token,
+    ]
+    if args.mock:
+        cmd.append("--mock")
+    else:
+        prepare_otns_runtime_dir(runtime_dir, args.otns_workdir)
+        run_otns_command = command_with_listen_port(args.otns_command, port)
+        if args.otns_seed_base is not None:
+            run_otns_command = command_with_seed(run_otns_command, args.otns_seed_base + index)
+        cmd.extend(["--otns-command", run_otns_command, "--otns-runtime-dir", str(runtime_dir.resolve())])
+        if args.otns_workdir is not None:
+            cmd.extend(["--otns-workdir", str(args.otns_workdir.resolve())])
+    if args.capture_replay:
+        cmd.append("--capture-replay")
+        run_replay_dir = args.replay_dir if args.replay_dir is not None else run_dir / "replay"
+        cmd.extend(["--replay-dir", str(run_replay_dir.resolve())])
+    if args.capture_sim_ping_rss:
+        cmd.append("--capture-sim-ping-rss")
+    cmd.extend(
+        [
+            "--firmware-variant",
+            args.firmware_variant,
+            "--parent-search-config",
+            args.parent_search_config,
+            "--openthread-commit",
+            args.openthread_commit,
+            "--otns-commit",
+            args.otns_commit,
+            "--otns-watch-level",
+            args.otns_watch_level,
+        ]
+    )
+    optional_path_args = (
+        ("--node-binary-path", args.node_binary_path),
+        ("--ftd-node-binary-path", args.ftd_node_binary_path),
+        ("--firmware-source-repo", args.firmware_source_repo),
+    )
+    for option, value in optional_path_args:
+        if value is not None:
+            cmd.extend([option, str(value.resolve())])
+    optional_args = (
+        ("--thread-device-type", args.thread_device_type),
+        ("--node-binary-profile", args.node_binary_profile),
+        ("--ftd-node-binary-profile", args.ftd_node_binary_profile),
+        ("--build-config-source", args.build_config_source),
+        ("--equivalent-to", args.equivalent_to),
+    )
+    for option, value in optional_args:
+        if value is not None:
+            cmd.extend([option, value])
+    if args.copy_results_to_artifact:
+        assert tracked_experiment_dir is not None
+        run_tracked_dir = tracked_experiment_dir / run_id / run_id
+        cmd.extend(["--copy-results-to-artifact", "--commit-artifact-dir", str(run_tracked_dir.resolve())])
+
+    completed = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
+    validation: dict[str, Any] = {"status": "not_run", "errors": [], "checks": []}
+    final_returncode = completed.returncode
+    if completed.returncode == 0:
+        validation = validate_run_outputs(
+            run_dir=run_dir,
+            runtime_dir=runtime_dir,
+            firmware_variant=args.firmware_variant,
+            simulation_id=simulation_id,
+            watch_level=args.otns_watch_level,
+        )
+        if validation["status"] != "ok":
+            final_returncode = 1
+
+    return {
+        "run_index": run_number,
+        "command": cmd,
+        "returncode": final_returncode,
+        "process_returncode": completed.returncode,
+        "stdout": completed.stdout.strip().splitlines(),
+        "stderr": completed.stderr.strip(),
+        "run_dir": str(run_dir),
+        "otns_runtime_dir": str(runtime_dir) if not args.mock else None,
+        "listen_port": port if not args.mock else None,
+        "simulation_id": simulation_id if not args.mock else None,
+        "otns_seed": args.otns_seed_base + index if args.otns_seed_base is not None else None,
+        "validation": validation,
+    }
+
+
 def main() -> int:
     args = parse_args()
     if args.repeat_count < 1:
         print("--repeat-count must be >= 1", file=sys.stderr)
         return 2
+    if args.jobs < 1:
+        print("--jobs must be >= 1", file=sys.stderr)
+        return 2
     if not args.mock and (args.listen_port_base < 9000 or args.listen_port_base % 10 != 0):
         print("--listen-port-base must be >= 9000 and divisible by 10 for real OTNS runs", file=sys.stderr)
+        return 2
+    last_port = args.listen_port_base + (args.repeat_count - 1) * 10
+    if not args.mock and last_port > 65530:
+        print(f"OTNS listen-port range ends at {last_port}, above the maximum usable port 65530", file=sys.stderr)
         return 2
     if args.otns_seed_base is not None:
         try:
@@ -306,133 +568,46 @@ def main() -> int:
             print(f"Tracked results directory already exists: {tracked_experiment_dir}", file=sys.stderr)
             return 2
 
+    ports = [args.listen_port_base + index * 10 for index in range(args.repeat_count)] if not args.mock else []
     runs: list[dict[str, Any]] = []
-    for index in range(args.repeat_count):
-        run_dir = experiment_dir / f"run_{index + 1:03d}"
-        ensure_results_dir(run_dir)
-        run_token = timestamp_token()
-        run_id = format_run_id(run_token, index + 1)
+    try:
+        reservation = reserve_otns_ports(ports) if ports else nullcontext()
+        with reservation:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=min(args.jobs, args.repeat_count)) as executor:
+                futures = {
+                    executor.submit(execute_run, index, args, experiment_dir, tracked_experiment_dir): index
+                    for index in range(args.repeat_count)
+                }
+                for future in concurrent.futures.as_completed(futures):
+                    index = futures[future]
+                    try:
+                        runs.append(future.result())
+                    except Exception as exc:
+                        runs.append(
+                            {
+                                "run_index": index + 1,
+                                "returncode": 1,
+                                "process_returncode": None,
+                                "stderr": f"runner orchestration failed: {exc}",
+                                "stdout": [],
+                                "run_dir": str(experiment_dir / f"run_{index + 1:03d}"),
+                                "validation": {"status": "not_run", "errors": [str(exc)], "checks": []},
+                            }
+                        )
+    except RuntimeError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
 
-        cmd = [
-            "python3",
-            str(RUNNER),
-            "--scenario",
-            str(args.scenario),
-            "--results-dir",
-            str(run_dir),
-            "--timestamp-token",
-            run_token,
-        ]
-        if args.mock:
-            cmd.append("--mock")
-        else:
-            port = args.listen_port_base + index * 10
-            run_otns_command = command_with_listen_port(args.otns_command, port)
-            if args.otns_seed_base is not None:
-                run_otns_command = command_with_seed(run_otns_command, args.otns_seed_base + index)
-            cmd.extend(["--otns-command", run_otns_command])
-            if args.otns_workdir is not None:
-                cmd.extend(["--otns-workdir", str(args.otns_workdir)])
-        if args.capture_replay:
-            cmd.append("--capture-replay")
-            run_replay_dir = args.replay_dir if args.replay_dir is not None else run_dir / "replay"
-            cmd.extend(["--replay-dir", str(run_replay_dir)])
-        if args.capture_sim_ping_rss:
-            cmd.append("--capture-sim-ping-rss")
-        cmd.extend(
-            [
-                "--firmware-variant",
-                args.firmware_variant,
-                "--parent-search-config",
-                args.parent_search_config,
-                "--openthread-commit",
-                args.openthread_commit,
-                "--otns-commit",
-                args.otns_commit,
-                "--otns-watch-level",
-                args.otns_watch_level,
-            ]
-        )
-        if args.thread_device_type is not None:
-            cmd.extend(["--thread-device-type", args.thread_device_type])
-        if args.node_binary_path is not None:
-            cmd.extend(["--node-binary-path", str(args.node_binary_path)])
-        if args.node_binary_profile is not None:
-            cmd.extend(["--node-binary-profile", args.node_binary_profile])
-        if args.ftd_node_binary_path is not None:
-            cmd.extend(["--ftd-node-binary-path", str(args.ftd_node_binary_path)])
-        if args.ftd_node_binary_profile is not None:
-            cmd.extend(["--ftd-node-binary-profile", args.ftd_node_binary_profile])
-        if args.build_config_source is not None:
-            cmd.extend(["--build-config-source", args.build_config_source])
-        if args.firmware_source_repo is not None:
-            cmd.extend(["--firmware-source-repo", str(args.firmware_source_repo)])
-        if args.equivalent_to is not None:
-            cmd.extend(["--equivalent-to", args.equivalent_to])
-        if args.copy_results_to_artifact:
-            run_tracked_dir = tracked_experiment_dir / run_id / run_id
-            cmd.extend(
-                [
-                    "--copy-results-to-artifact",
-                    "--commit-artifact-dir",
-                    str(run_tracked_dir),
-                ]
-            )
-
-        completed = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
-        run_entry: dict[str, Any] = {
-            "run_index": index + 1,
-            "command": cmd,
-            "returncode": completed.returncode,
-            "stdout": completed.stdout.strip().splitlines(),
-            "stderr": completed.stderr.strip(),
-            "run_dir": str(run_dir),
-            "otns_seed": args.otns_seed_base + index if args.otns_seed_base is not None else None,
-        }
-        runs.append(run_entry)
-        if completed.returncode != 0:
-            manifest_path = experiment_dir / "repeated_run_manifest.json"
-            with manifest_path.open("w", encoding="utf-8") as handle:
-                json.dump(
-                    {
-                        "experiment_name": experiment_name,
-                        "scenario": str(args.scenario),
-                        "repeat_count": args.repeat_count,
-                        "mock": args.mock,
-                        "firmware_variant": args.firmware_variant,
-                        "thread_device_type": args.thread_device_type,
-                        "parent_search_config": args.parent_search_config,
-                        "node_binary_path": str(args.node_binary_path) if args.node_binary_path is not None else None,
-                        "node_binary_profile": args.node_binary_profile,
-                        "ftd_node_binary_path": (
-                            str(args.ftd_node_binary_path) if args.ftd_node_binary_path is not None else None
-                        ),
-                        "ftd_node_binary_profile": args.ftd_node_binary_profile,
-                        "build_config_source": args.build_config_source,
-                        "firmware_source_repo": (
-                            str(args.firmware_source_repo) if args.firmware_source_repo is not None else None
-                        ),
-                        "openthread_commit": args.openthread_commit,
-                        "otns_commit": args.otns_commit,
-                        "otns_watch_level": args.otns_watch_level,
-                        "otns_seed_base": args.otns_seed_base,
-                        "capture_replay": args.capture_replay,
-                        "capture_sim_ping_rss": args.capture_sim_ping_rss,
-                        "runs": runs,
-                    },
-                    handle,
-                    indent=2,
-                    sort_keys=True,
-                )
-                handle.write("\n")
-            print(f"Repeated run failed at run {index + 1}", file=sys.stderr)
-            print(manifest_path)
-            return 1
+    runs.sort(key=lambda run: run["run_index"])
 
     manifest = {
         "experiment_name": experiment_name,
         "scenario": str(args.scenario),
         "repeat_count": args.repeat_count,
+        "jobs": min(args.jobs, args.repeat_count),
+        "listen_port_base": args.listen_port_base if not args.mock else None,
+        "isolated_runtime_directories": not args.mock,
+        "port_locking": not args.mock,
         "mock": args.mock,
         "firmware_variant": args.firmware_variant,
         "thread_device_type": args.thread_device_type,
@@ -456,6 +631,13 @@ def main() -> int:
     with manifest_path.open("w", encoding="utf-8") as handle:
         json.dump(manifest, handle, indent=2, sort_keys=True)
         handle.write("\n")
+
+    failed_runs = [run for run in runs if run.get("returncode") != 0]
+    if failed_runs:
+        failed_labels = ", ".join(str(run["run_index"]) for run in failed_runs)
+        print(f"Repeated runs failed validation or execution: {failed_labels}", file=sys.stderr)
+        print(manifest_path)
+        return 1
 
     if tracked_experiment_dir is not None:
         tracked_experiment_dir.mkdir(parents=True, exist_ok=True)

@@ -190,9 +190,23 @@ Run repeated experiments:
 python3 scripts/run_repeated_baseline.py \
   --scenario scenarios/med_simple_parent_switch.yaml \
   --repeat-count 5 \
+  --jobs 4 \
+  --listen-port-base 12000 \
   --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
   --otns-workdir /path/to/ot-ns
 ```
+
+`--jobs` runs independent simulations concurrently. Every run receives a
+unique listen-port-derived simulation ID and a private `otns_runtime/`
+directory. The runtime directory isolates OTNS node logs, flash files,
+`current.pcap`, and replay output. The runner also holds process-level port
+locks and rejects outputs whose simulation ID, firmware variant, runtime path,
+or directed target/mode do not match the run summary. Seeds remain tied to the
+run index, so changing `--jobs` does not change the experiment sequence.
+
+Use one repeated-run command as the owner of a port range. If independent
+campaign commands run concurrently, give them non-overlapping ranges even
+though the runner's lock files will reject accidental reuse.
 
 Run repeated experiments with replay capture and tracked results export:
 

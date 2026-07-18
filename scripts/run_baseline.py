@@ -121,6 +121,15 @@ def parse_args() -> argparse.Namespace:
         help="Optional working directory used to launch OTNS. Needed when OTNS relies on relative node paths.",
     )
     parser.add_argument(
+        "--otns-runtime-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Optional isolated directory used as the OTNS process working directory. "
+            "The repeated runner uses this to isolate tmp files, PCAPs, replays, and node logs."
+        ),
+    )
+    parser.add_argument(
         "--otns-watch-level",
         default="off",
         help="Optional OTNS default watch level for all newly created nodes: trace, debug, info, note, warn, error, off.",
@@ -531,12 +540,14 @@ def unavailable_sim_rss(status: str = "unavailable") -> dict[str, Any]:
     }
 
 
-def otns_runtime_cwd(otns_workdir: Path | None) -> Path:
+def otns_runtime_cwd(otns_workdir: Path | None, otns_runtime_dir: Path | None = None) -> Path:
+    if otns_runtime_dir is not None:
+        return otns_runtime_dir
     return otns_workdir if otns_workdir is not None else ROOT
 
 
-def otns_output_dir(otns_workdir: Path | None) -> Path:
-    return otns_runtime_cwd(otns_workdir) / DEFAULT_OTNS_OUTPUT_DIRNAME
+def otns_output_dir(otns_workdir: Path | None, otns_runtime_dir: Path | None = None) -> Path:
+    return otns_runtime_cwd(otns_workdir, otns_runtime_dir) / DEFAULT_OTNS_OUTPUT_DIRNAME
 
 
 def snapshot_replay_files(workdir: Path | None) -> dict[Path, float]:
@@ -587,6 +598,7 @@ def maybe_capture_replay(
     token: str,
     otns_command: str,
     otns_workdir: Path | None,
+    otns_runtime_dir: Path | None,
     replay_source: Path | None,
     replay_dir: Path,
     firmware_variant: str,
@@ -617,7 +629,8 @@ def maybe_capture_replay(
         info["warning"] = "Replay capture was requested in mock mode; no replay file was captured."
         return info
 
-    detected_source, warning = infer_replay_source(replay_source, otns_workdir, replay_before)
+    replay_workdir = otns_runtime_cwd(otns_workdir, otns_runtime_dir)
+    detected_source, warning = infer_replay_source(replay_source, replay_workdir, replay_before)
     if detected_source is None:
         info["warning"] = warning
         return info
@@ -649,6 +662,7 @@ def maybe_capture_replay(
         "otns_command": otns_command,
         "otns_seed": command_option_value(otns_command, "-seed"),
         "otns_workdir": str(otns_workdir) if otns_workdir is not None else None,
+        "otns_runtime_dir": str(replay_workdir),
         "replay_source": str(detected_source),
         "copied_replay_path": str(copied_path),
         "csv_path": str(csv_path),
@@ -692,6 +706,7 @@ def capture_node_logs(
     results_dir: Path,
     node_refs: dict[str, NodeRef],
     otns_workdir: Path | None,
+    otns_runtime_dir: Path | None,
     watch_level: str,
 ) -> dict[str, Any]:
     info: dict[str, Any] = {
@@ -703,7 +718,7 @@ def capture_node_logs(
     if watch_level.lower() == "off":
         return info
 
-    output_dir = otns_output_dir(otns_workdir)
+    output_dir = otns_output_dir(otns_workdir, otns_runtime_dir)
     if not output_dir.exists():
         info["warning"] = f"OTNS node log directory was not found: {output_dir}"
         return info
@@ -1572,6 +1587,7 @@ class RealBenchmarkRunner:
         scenario: dict[str, Any],
         otns_command: str,
         otns_workdir: Path | None = None,
+        otns_runtime_dir: Path | None = None,
         otns_watch_level: str = "off",
         node_binary_path: Path | None = None,
         ftd_node_binary_path: Path | None = None,
@@ -1586,6 +1602,7 @@ class RealBenchmarkRunner:
         self.scenario_path = scenario_path
         self.otns_command = with_otns_watch_level(otns_command, otns_watch_level)
         self.otns_workdir = otns_workdir
+        self.otns_runtime_dir = otns_runtime_dir
         self.otns_watch_level = otns_watch_level
         self.node_binary_path = node_binary_path
         self.ftd_node_binary_path = ftd_node_binary_path
@@ -1594,7 +1611,7 @@ class RealBenchmarkRunner:
         self.thread_device_type = thread_device_type
         self.parent_search_config = parent_search_config
         self.capture_sim_ping_rss = capture_sim_ping_rss
-        self.otns_runtime_cwd = otns_runtime_cwd(otns_workdir)
+        self.otns_runtime_cwd = otns_runtime_cwd(otns_workdir, otns_runtime_dir)
         self.notes: list[str] = []
         self.node_refs: dict[str, NodeRef] = {}
         self.parent_before_delayed_nodes: str | None = None
@@ -3727,7 +3744,10 @@ def main() -> int:
     parent_rank_path = args.results_dir / f"parent_rank_{token}.csv"
     preferred_parent_event_path = args.results_dir / f"preferred_parent_events_{token}.csv"
     captured_parent_rank_path: Path | None = None
-    replay_before = snapshot_replay_files(args.otns_workdir) if args.capture_replay and not args.mock else {}
+    runtime_dir = otns_runtime_cwd(args.otns_workdir, args.otns_runtime_dir)
+    if not args.mock:
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+    replay_before = snapshot_replay_files(runtime_dir) if args.capture_replay and not args.mock else {}
 
     runner: RealBenchmarkRunner | MockBenchmarkRunner
     runner = (
@@ -3742,6 +3762,7 @@ def main() -> int:
             scenario,
             args.otns_command,
             otns_workdir=args.otns_workdir,
+            otns_runtime_dir=args.otns_runtime_dir,
             otns_watch_level=args.otns_watch_level,
             node_binary_path=args.node_binary_path,
             ftd_node_binary_path=args.ftd_node_binary_path,
@@ -3771,6 +3792,7 @@ def main() -> int:
         token=token,
         otns_command=args.otns_command,
         otns_workdir=args.otns_workdir,
+        otns_runtime_dir=args.otns_runtime_dir,
         replay_source=args.replay_source,
         replay_dir=args.replay_dir,
         firmware_variant=args.firmware_variant,
@@ -3805,6 +3827,7 @@ def main() -> int:
             results_dir=args.results_dir,
             node_refs=runner.node_refs,
             otns_workdir=args.otns_workdir,
+            otns_runtime_dir=args.otns_runtime_dir,
             watch_level=args.otns_watch_level,
         )
         if node_log_info.get("warning"):
@@ -3835,6 +3858,7 @@ def main() -> int:
     summary["openthread_commit"] = args.openthread_commit
     summary["otns_commit"] = args.otns_commit
     summary["otns_watch_level"] = args.otns_watch_level
+    summary["otns_runtime_dir"] = str(runtime_dir) if not args.mock else None
     summary["node_log_files"] = node_log_info.get("copied_files", [])
     summary["replay_capture_requested"] = args.capture_replay
     summary["sim_ping_rss_capture_requested"] = args.capture_sim_ping_rss
