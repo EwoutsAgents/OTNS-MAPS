@@ -68,11 +68,40 @@ that expected internal transition as external failure. The controller now
 guards only that bounded completion section; external role changes still fail
 and clean up the operation. All three variants succeeded after rebuilding.
 
-## Remaining ladder steps
+## Four-router ESP32-C6 results
 
-The ESPHome unicast child firmware compiled successfully against ESP-IDF 5.5.4
-with the same canonical controller patch and GCC 14.2.0. No ESP32 was flashed
-for this report. Hardware PCAP timing must be
-remeasured under a new OpenThread-controller result directory before any
-repeated campaign. The archived ESPHome-controller hardware baseline was not
-modified.
+The hardware profiles used ESP-IDF 5.5.4, its vendored OpenThread commit
+`a12ff0d0f54fd41954b45047fcdd08f302731c5f`, and GCC 14.2.0. Each run kept the
+initial parent online and selected a different router. Results are stored below
+`testing/logs/openthread-native-controller` in the ESPHome repository; the
+archived ESPHome-controller baseline was not modified.
+
+| Variant | Run | Parent Request -> target response | Target response -> Child ID Request | Child ID Request -> response | Full attach |
+| --- | --- | ---: | ---: | ---: | ---: |
+| multicast | `mcast/20260719-175519` | 464 ms | 10 ms | 14 ms | 488 ms |
+| unicast | `ucast/20260719-181635` | 251 ms | 11 ms | 13 ms | 275 ms |
+| FastPR unicast | `ucast_fastpr-4router-1runs-20260719-182908/20260719-183732-run01` | 9 ms | 11 ms | 12 ms | 32 ms |
+
+The PCAP operation window contained exactly one Parent Request, one target
+Parent Response, and one target Child ID Request in each case. Multicast used
+destination `0xffff`; both unicast cases addressed only the selected extended
+address. FastPR produced one target response and no delayed duplicate during
+the six-minute observation window. The unicast and FastPR child logs emitted
+`requested -> parent_request_started -> target_response ->
+child_id_request_started -> succeeded`.
+
+Two integration defects were exposed before the completed multicast run. The
+thin ESPHome adapter initially registered its callback before the OpenThread
+instance lock existed, and the hardware runner still depended on an old
+adapter-controller parent log. The adapter now initializes immediately after
+OpenThread; the runner identifies the current parent from the child and router
+RLOC16 values. The skipped captures remain in the new result directory as
+failure evidence. A first build-only attempt outside the Git checkout also
+exposed ESP-IDF's archive revision lookup constraint; no board was flashed in
+that attempt, and isolated build roots now live under the repository's ignored
+testing cache directories.
+
+## Remaining ladder step
+
+No repeated 24-run simulation or hardware campaign was started. The single-run
+results are ready for review before approving a repeated comparison.
