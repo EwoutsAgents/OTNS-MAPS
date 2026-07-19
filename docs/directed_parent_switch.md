@@ -15,9 +15,9 @@ Every directed scenario uses:
 - 300 seconds of router settling;
 - 5 seconds for initial MED attachment;
 - deterministic selection of a non-current router by extended address;
-- immediate deletion of the observed initial parent after the controller emits
-  `event=requested`;
-- 360 seconds of post-removal observation at one-second intervals;
+- preservation of the observed initial parent while OpenThread discovers and
+  validates the selected replacement;
+- 360 seconds of post-request observation at one-second intervals;
 - disabled Periodic Parent Search in the Phase 8 MTD builds.
 
 ## Binary profiles

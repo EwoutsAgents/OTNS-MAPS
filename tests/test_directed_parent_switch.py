@@ -96,7 +96,7 @@ class DirectedParentSwitchTests(unittest.TestCase):
             {"event": "parent_request_started", "time_us": "1000", "timing_source": "otns_openthread_event", "resolution_us": "1"},
             {"event": "target_response", "time_us": "51000", "timing_source": "otns_openthread_event", "resolution_us": "1"},
             {"event": "child_id_request_started", "time_us": "56000", "timing_source": "otns_openthread_event", "resolution_us": "1"},
-            {"event": "child_id_response_received", "time_us": "66000", "timing_source": "otns_openthread_event", "resolution_us": "1"},
+            {"event": "succeeded", "time_us": "66000", "timing_source": "otns_openthread_event", "resolution_us": "1"},
         ]
         timing = runner.derive_preferred_parent_timing(
             events,

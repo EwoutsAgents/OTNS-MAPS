@@ -10,7 +10,7 @@ activation: {initial_nodes: [router_a, router_b], child_node: mobile}
 directed_switch:
   mode: unicast
   target_selection: random_non_current_parent
-  remove_initial_parent: true
+  remove_initial_parent: false
   random_seed: 2903
   expected_router_firmware: fastpr
 nodes:

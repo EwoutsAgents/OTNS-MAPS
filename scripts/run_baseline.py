@@ -1424,7 +1424,7 @@ PROTOCOL_EVENT_NAMES = {
     "send_parent_request": "parent_request_started",
     "receive_parent_response": "target_response",
     "send_child_id_request": "child_id_request_started",
-    "receive_child_id_response": "child_id_response_received",
+    "receive_child_id_response": "succeeded",
 }
 
 
@@ -1903,7 +1903,7 @@ class RealBenchmarkRunner:
                 sample.update(
                     {
                         "selected_radio_model": radio_model,
-                        "scenario_phase": "post_parent_removal",
+                        "scenario_phase": "post_parent_removal" if deletion_time_s is not None else "post_switch_request",
                         "removed_parent_node": initial_parent_name if deletion_time_s is not None else None,
                         "removed_parent_node_id": initial_parent_node_id if deletion_time_s is not None else None,
                         "directed_target_node": target_name,
