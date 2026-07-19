@@ -90,6 +90,12 @@ the six-minute observation window. The unicast and FastPR child logs emitted
 `requested -> parent_request_started -> target_response ->
 child_id_request_started -> succeeded`.
 
+A final serial-only smoke test verified the shortened ESPHome event contract
+fits its fixed log buffer, including the complete line
+`PREFPARENT event=succeeded parent=36a24035d9276591`. Its first command named
+the already-current parent and terminated cleanly with `error=Already`; a
+second operation selected another live router and succeeded.
+
 Two integration defects were exposed before the completed multicast run. The
 thin ESPHome adapter initially registered its callback before the OpenThread
 instance lock existed, and the hardware runner still depended on an old
