@@ -5,14 +5,15 @@ description: >
   switch-parent test structure with two router-capable devices and one
   Minimal End Device. Routers are created first, the child is created after a
   fixed router-settling period, the child's observed current parent is removed,
-  and the child is observed without mobility.
+  and the child is observed without mobility. Nodes mirror the hardware bench:
+  a horizontal, equally spaced 35 cm line at the ESP32-C6 default +20 dBm.
 
 scenario_type: static_parent_removal
 device_profile: minimal_end_device
 
 coordinate_system:
-  meter_per_unit: 0.1
-  source: "OTNS MeterPerUnit radio parameter default"
+  meter_per_unit: 0.01
+  source: "Measured hardware bench layout; coordinates are centimetres"
 
 observability:
   packet_probe_reliable: true
@@ -43,16 +44,16 @@ removal:
 nodes:
   router_a:
     type: router
-    x: 300
-    y: 300
-    tx_power_dbm: 0
+    x: 0
+    y: 0
+    tx_power_dbm: 20
   router_b:
     type: router
-    x: 450
-    y: 300
-    tx_power_dbm: 0
+    x: 35
+    y: 0
+    tx_power_dbm: 20
   mobile:
     type: med
-    x: 375
-    y: 300
-    tx_power_dbm: 0
+    x: 17.5
+    y: 0
+    tx_power_dbm: 20
