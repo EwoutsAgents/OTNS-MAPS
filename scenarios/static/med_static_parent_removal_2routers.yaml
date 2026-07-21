@@ -12,8 +12,8 @@ scenario_type: static_parent_removal
 device_profile: minimal_end_device
 
 coordinate_system:
-  meter_per_unit: 0.01
-  source: "Measured hardware bench layout; coordinates are centimetres"
+  meter_per_unit: 0.00125
+  source: "Measured hardware bench layout; integer coordinates use 1.25 mm units"
 
 observability:
   packet_probe_reliable: true
@@ -49,11 +49,11 @@ nodes:
     tx_power_dbm: 20
   router_b:
     type: router
-    x: 17.5
+    x: 140
     y: 0
     tx_power_dbm: 20
   mobile:
     type: med
-    x: 8.75
+    x: 70
     y: 0
     tx_power_dbm: 20
