@@ -6,7 +6,7 @@ description: >
   Minimal End Device. Routers are created first, the child is created after a
   fixed router-settling period, the child's observed current parent is removed,
   and the child is observed without mobility. Nodes mirror the hardware bench:
-  a horizontal, equally spaced 35 cm line at the ESP32-C6 default +20 dBm.
+  a horizontal line with 8.75 cm spacing at the ESP32-C6 default +20 dBm.
 
 scenario_type: static_parent_removal
 device_profile: minimal_end_device
