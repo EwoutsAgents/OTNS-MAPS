@@ -8,9 +8,21 @@ switch-parent tests in `ESPHome-Thread-ED-Switch-Parent/testing`.
 - `scenarios/static/med_static_parent_removal_2routers.yaml`
 - `scenarios/static/med_static_parent_removal_3routers.yaml`
 - `scenarios/static/med_static_parent_removal_4routers.yaml`
+- `scenarios/static/med_static_parent_removal_low_power_2routers.yaml`
+- `scenarios/static/med_static_parent_removal_low_power_3routers.yaml`
+- `scenarios/static/med_static_parent_removal_low_power_4routers.yaml`
 
 Each scenario uses stock OpenThread behavior, one static Minimal End Device, and
 2, 3, or 4 router-capable nodes.
+
+The `low_power` scenarios match the hardware `stock_low_power` variants:
+Routers 1/2 and the MED use +20 dBm, while present Routers 3/4 use -15 dBm.
+This keeps all routers connected at the 10 cm bench spacing but makes the
+remaining +20 dBm router the stronger second-attach candidate. Run these
+scenarios with the stock MTD and the separately built
+`stock-ftd-delay-diagnostic` FTD. The diagnostic changes only logging and emits
+the actual delay selected by `GenerateRandomDelay()` for exact subtraction from
+the packet-derived Parent Request to Parent Response interval.
 
 ## Timing
 
@@ -25,15 +37,14 @@ The timing matches the ESPHome stock test configuration:
 
 ## Geometry
 
-All nodes are placed close together on one horizontal line. Router spacing is
-150 OTNS coordinate units, which is 15 m with the default
-`MeterPerUnit = 0.1`.
+All nodes are placed close together on one horizontal line with
+`MeterPerUnit = 0.1`. Adjacent integer coordinates are therefore 10 cm apart.
 
 | Scenario | Router positions | Mobile position |
 |---|---|---|
-| 2 routers | `(300,300)`, `(450,300)` | `(375,300)` |
-| 3 routers | `(300,300)`, `(450,300)`, `(600,300)` | `(375,300)` |
-| 4 routers | `(300,300)`, `(450,300)`, `(600,300)`, `(750,300)` | `(375,300)` |
+| 2 routers | `(0,0)`, `(2,0)` | `(1,0)` |
+| 3 routers | `(0,0)`, `(1,0)`, `(3,0)` | `(2,0)` |
+| 4 routers | `(0,0)`, `(1,0)`, `(3,0)`, `(4,0)` | `(2,0)` |
 
 ## ESPHome Stock Correspondence
 
