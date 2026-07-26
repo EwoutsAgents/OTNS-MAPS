@@ -12,12 +12,12 @@ for two, three, and four routers. The corresponding stock baselines remain in
 
 Every directed scenario uses:
 
-- 300 seconds of router settling;
+- 180 seconds of router settling;
 - 5 seconds for initial MED attachment;
 - deterministic selection of a non-current router by extended address;
 - preservation of the observed initial parent while OpenThread discovers and
   validates the selected replacement;
-- 360 seconds of post-request observation at one-second intervals;
+- 255 seconds of post-request observation at one-second intervals;
 - disabled Periodic Parent Search in the Phase 8 MTD builds.
 
 ## Binary profiles
@@ -27,8 +27,10 @@ runner rejects multicast with fast-response routers, fast-response routers with
 multicast mode, stock MTDs, missing binaries, non-executable files, and router
 profiles that contradict the scenario.
 
-Use `preferred-parent` for the MTD profile. Use `stock` for multicast/unicast
-routers and `fastpr` for `ucast_fastpr` routers:
+Use `preferred-parent` for the MTD profile. Multicast and ordinary-unicast
+scenarios require the logging-only `stock-ftd-delay-diagnostic` router profile
+so the selected random Parent Response delay can be subtracted from packet
+timing. Use `fastpr` for `ucast_fastpr` routers:
 
 ```bash
 python3 scripts/run_baseline.py \
@@ -37,13 +39,23 @@ python3 scripts/run_baseline.py \
   --otns-workdir /path/to/ot-ns \
   --node-binary-path /path/to/preferred-parent-mtd-pps-off/ot-cli-mtd \
   --node-binary-profile preferred-parent \
-  --ftd-node-binary-path /path/to/stock-ftd/ot-cli-ftd \
-  --ftd-node-binary-profile stock \
+  --ftd-node-binary-path /path/to/stock-ftd-delay-diagnostic/ot-cli-ftd \
+  --ftd-node-binary-profile stock-ftd-delay-diagnostic \
   --firmware-variant otns-preferred-parent-ucast
 ```
 
 For `med_directed_ucast_fastpr_*.yaml`, select the fast-response FTD and pass
 `--ftd-node-binary-profile fastpr`.
+
+After a repeated multicast or ordinary-unicast campaign, derive the adjusted
+packet timing with:
+
+```bash
+python3 /path/to/ESPHome-Thread-ED-Switch-Parent/testing/scripts/analyze_test_logs.py \
+  --otns-results-dir /path/to/repeated-results \
+  --subtract-parent-response-random-delay \
+  --summary-only
+```
 
 `scripts/run_repeated_baseline.py` accepts the same binary paths and profile
 arguments, including `--node-binary-profile` and

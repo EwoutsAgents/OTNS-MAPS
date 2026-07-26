@@ -202,7 +202,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--ftd-node-binary-profile",
-        choices=("stock", "fastpr"),
+        choices=("stock", "stock-ftd-delay-diagnostic", "fastpr"),
         default=None,
         help="Declared profile for --ftd-node-binary-path; required by directed scenarios.",
     )
@@ -354,6 +354,11 @@ def validate_scenario_configuration(
     if expected_router_profile == "fastpr" and mode != "unicast":
         raise ValueError("fastpr router firmware is only valid with unicast mode")
 
+    observability = scenario.get("observability") or {}
+    requires_parent_response_delay_diagnostic = (
+        observability.get("parent_response_delay_diagnostic") == "required"
+    )
+
     mobile = scenario.get("nodes", {}).get("mobile", {})
     mobile_override = mobile.get("executable")
     mobile_path = mobile_override or node_binary_path
@@ -372,9 +377,18 @@ def validate_scenario_configuration(
         executable = executable_override or ftd_node_binary_path
         configured_profile = config.get("firmware_profile")
         profile = configured_profile if executable_override else (ftd_node_binary_profile or configured_profile)
-        if configured_profile != expected_router_profile or profile != expected_router_profile:
+        functional_profile = "stock" if profile == "stock-ftd-delay-diagnostic" else profile
+        if configured_profile != expected_router_profile or functional_profile != expected_router_profile:
             raise ValueError(
                 f"{name} firmware profile {profile!r} does not match expected {expected_router_profile!r}"
+            )
+        if (
+            requires_parent_response_delay_diagnostic
+            and not mock
+            and profile != "stock-ftd-delay-diagnostic"
+        ):
+            raise ValueError(
+                f"{name} requires --ftd-node-binary-profile stock-ftd-delay-diagnostic"
             )
         if not mock and executable is None:
             raise ValueError(f"directed switching requires an executable for {name}")

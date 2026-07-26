@@ -3,9 +3,9 @@ title: Directed multicast MED parent switch with 3 routers
 description: Deterministic preferred-parent multicast switch with one surviving non-target router.
 scenario_type: directed_parent_switch
 device_profile: minimal_end_device
-observability: {packet_probe_reliable: true, primary_parent_observation: packet_probe}
+observability: {packet_probe_reliable: true, primary_parent_observation: packet_probe, parent_response_delay_diagnostic: required}
 radio_model: {preferred: MutualInterference, fallbacks: [MIDisc, Ideal_Rssi, Ideal]}
-timing: {router_settling_seconds: 300, child_attach_seconds: 5, after_parent_removed_seconds: 360, step_seconds: 1}
+timing: {router_settling_seconds: 180, child_attach_seconds: 5, after_parent_removed_seconds: 255, step_seconds: 1}
 activation: {initial_nodes: [router_a, router_b, router_c], child_node: mobile}
 directed_switch: {mode: multicast, target_selection: random_non_current_parent, remove_initial_parent: false, random_seed: 2911, expected_router_firmware: stock}
 nodes:

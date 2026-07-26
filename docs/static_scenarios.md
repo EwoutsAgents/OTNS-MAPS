@@ -29,11 +29,11 @@ the packet-derived Parent Request to Parent Response interval.
 The timing matches the ESPHome stock test configuration:
 
 - Routers are created first.
-- Router settling delay: 300 s.
+- Router settling delay: 180 s.
 - The child is then created.
 - Child attach observation delay: 5 s.
 - The child's observed current parent is removed with OTNS `del <node-id>`.
-- Post-removal observation delay: 360 s.
+- Post-removal observation delay: 255 s.
 
 ## Geometry
 

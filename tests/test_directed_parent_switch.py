@@ -79,11 +79,25 @@ class DirectedParentSwitchTests(unittest.TestCase):
                 mock=False,
             )
 
+    def test_delay_diagnostic_scenario_rejects_plain_stock_ftd(self) -> None:
+        path = DIRECTED / "med_directed_ucast_2routers.yaml"
+        scenario = runner.load_scenario(path)
+        with self.assertRaisesRegex(ValueError, "stock-ftd-delay-diagnostic"):
+            runner.validate_scenario_configuration(
+                scenario,
+                path,
+                node_binary_path=Path("/tmp/not-checked-before-diagnostic-profile"),
+                node_binary_profile="preferred-parent",
+                ftd_node_binary_path=Path("/tmp/not-checked-before-diagnostic-profile"),
+                ftd_node_binary_profile="stock",
+                mock=False,
+            )
+
     def test_mock_run_reaches_deterministic_target(self) -> None:
         path = DIRECTED / "med_directed_ucast_2routers.yaml"
         scenario = runner.load_scenario(path)
         rows, summary = runner.MockBenchmarkRunner(scenario).run()
-        self.assertEqual(360, len(rows))
+        self.assertEqual(255, len(rows))
         self.assertTrue(summary["command_acknowledged"])
         self.assertEqual(summary["target_parent"], summary["final_parent"])
         self.assertEqual("selected_target_reached", summary["result_classification"])

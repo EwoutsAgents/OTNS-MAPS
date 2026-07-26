@@ -124,7 +124,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--ftd-node-binary-profile",
-        choices=("stock", "fastpr"),
+        choices=("stock", "stock-ftd-delay-diagnostic", "fastpr"),
         default=None,
         help="Declared FTD profile passed through to run_baseline.py.",
     )

@@ -27,9 +27,9 @@ radio_model:
     - Ideal
 
 timing:
-  router_settling_seconds: 300
+  router_settling_seconds: 180
   child_attach_seconds: 5
-  after_parent_removed_seconds: 360
+  after_parent_removed_seconds: 255
   step_seconds: 1
 
 activation:
