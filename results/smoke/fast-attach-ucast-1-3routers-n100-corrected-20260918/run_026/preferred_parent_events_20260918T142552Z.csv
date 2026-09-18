@@ -1,0 +1,6 @@
+observed_time_s,event,generation,target,parent,rloc16,rssi,time_us,timing_source,resolution_us,state,mode,reason,error
+185.0,requested,1,460fac82922d16d1,,,,5000000,otns_openthread_event,1,starting_discovery,unicast,,OK
+186.0,parent_request_started,1,460fac82922d16d1,,,,5001168,otns_openthread_event,1,waiting_target_response,unicast,,OK
+186.0,target_response,1,460fac82922d16d1,,9000,-67,5016232,otns_openthread_event,1,continuing_selected_attach,unicast,,OK
+186.0,child_id_request_started,1,460fac82922d16d1,,,,5016232,otns_openthread_event,1,waiting_child_id_response,unicast,,OK
+186.0,succeeded,1,460fac82922d16d1,,,,5025720,otns_openthread_event,1,succeeded,unicast,,OK
