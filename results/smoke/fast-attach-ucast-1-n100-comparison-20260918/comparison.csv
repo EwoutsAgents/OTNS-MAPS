@@ -1,0 +1,13 @@
+routers,interval,simulation_n,simulation_mean_ms,simulation_sd_ms,hardware_n,hardware_mean_ms,hardware_sd_ms,delta_ms,delta_percent
+2,parent_request_to_parent_response,100,15.497,3.023,100,11.45,1.27,4.047,35.3
+2,parent_response_to_child_id_request,100,0.000,0.000,100,10.61,0.81,-10.610,-100.0
+2,child_id_request_to_child_id_response,100,11.258,2.878,100,13.84,0.81,-2.582,-18.7
+2,full_attach,100,26.755,3.351,100,35.89,1.86,-9.135,-25.5
+3,parent_request_to_parent_response,100,16.101,3.281,100,11.24,0.94,4.861,43.2
+3,parent_response_to_child_id_request,100,0.000,0.000,100,10.73,0.83,-10.730,-100.0
+3,child_id_request_to_child_id_response,100,11.196,2.862,100,13.81,0.84,-2.614,-18.9
+3,full_attach,100,27.297,3.791,100,35.78,1.57,-8.483,-23.7
+4,parent_request_to_parent_response,100,16.316,3.895,100,11.58,0.98,4.736,40.9
+4,parent_response_to_child_id_request,100,0.000,0.000,100,10.61,0.95,-10.610,-100.0
+4,child_id_request_to_child_id_response,100,13.000,12.518,100,13.73,0.83,-0.730,-5.3
+4,full_attach,100,29.315,13.906,100,35.91,1.62,-6.595,-18.4
