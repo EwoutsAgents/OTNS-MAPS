@@ -7,8 +7,8 @@ mirror the ESPHome hardware procedure without running ESP32 firmware binaries.
 ## Matrix
 
 `scenarios/directed/` contains multicast, unicast, legacy `ucast_fastpr`,
-`fast_attach_32`, and `fast_attach_1` variants for two, three, and four routers.
-The latter two mirror the current ESPHome hardware arms. The corresponding
+and `fast_attach_1` variants for two, three, and four routers. The latter mirrors
+the current selected ESPHome hardware arm. The corresponding
 stock baselines remain in `scenarios/static/`.
 
 Every directed scenario uses:
@@ -48,11 +48,9 @@ python3 scripts/run_baseline.py \
 For `med_directed_ucast_fastpr_*.yaml`, select the fast-response FTD and pass
 `--ftd-node-binary-profile fastpr`.
 
-For `med_directed_ucast_fast_attach_32_*.yaml`, use the matching
-`fast-attach-ucast-32` MTD and FTD profiles. For
-`med_directed_ucast_fast_attach_1_*.yaml`, use `fast-attach-ucast-1` for both.
-These profiles use the same OpenThread controller and response-delay policies
-as the ESPHome hardware variants:
+For `med_directed_ucast_fast_attach_1_*.yaml`, use `fast-attach-ucast-1` for
+both profiles. It uses the same OpenThread controller and fixed response-delay
+policy as the selected ESPHome hardware variant:
 
 ```bash
 python3 scripts/run_baseline.py \

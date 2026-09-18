@@ -190,7 +190,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--node-binary-profile",
-        choices=("stock", "preferred-parent", "fast-attach", "fast-attach-ucast-32", "fast-attach-ucast-1"),
+        choices=("stock", "preferred-parent", "fast-attach", "fast-attach-ucast-1"),
         default=None,
         help="Declared profile for --node-binary-path; required by directed scenarios.",
     )
@@ -207,7 +207,6 @@ def parse_args() -> argparse.Namespace:
             "stock-ftd-delay-diagnostic",
             "fastpr",
             "fast-attach",
-            "fast-attach-ucast-32",
             "fast-attach-ucast-1",
         ),
         default=None,
@@ -354,12 +353,11 @@ def validate_scenario_configuration(
     if not isinstance(directed.get("random_seed"), int):
         raise ValueError("directed_switch.random_seed must be an integer")
     expected_router_profile = directed.get("expected_router_firmware")
-    directed_profiles = {"preferred-parent", "fast-attach-ucast-32", "fast-attach-ucast-1"}
-    router_profiles = {"stock", "fastpr", "fast-attach-ucast-32", "fast-attach-ucast-1"}
+    directed_profiles = {"preferred-parent", "fast-attach-ucast-1"}
+    router_profiles = {"stock", "fastpr", "fast-attach-ucast-1"}
     if expected_router_profile not in router_profiles:
         raise ValueError(
-            "directed_switch.expected_router_firmware must be stock, fastpr, "
-            "fast-attach-ucast-32, or fast-attach-ucast-1"
+            "directed_switch.expected_router_firmware must be stock, fastpr, or fast-attach-ucast-1"
         )
     if mode == "multicast" and expected_router_profile != "stock":
         raise ValueError("multicast directed switching requires stock router firmware")
@@ -378,7 +376,7 @@ def validate_scenario_configuration(
     mobile_profile = mobile_expected_profile if mobile_override else (node_binary_profile or mobile_expected_profile)
     expected_mobile_profile = (
         expected_router_profile
-        if expected_router_profile in {"fast-attach-ucast-32", "fast-attach-ucast-1"}
+        if expected_router_profile == "fast-attach-ucast-1"
         else "preferred-parent"
     )
     if mobile_expected_profile != expected_mobile_profile or mobile_profile != expected_mobile_profile:
