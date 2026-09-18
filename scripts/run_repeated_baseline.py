@@ -112,7 +112,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--node-binary-profile",
-        choices=("stock", "preferred-parent"),
+        choices=("stock", "preferred-parent", "fast-attach", "fast-attach-ucast-1"),
         default=None,
         help="Declared MTD profile passed through to run_baseline.py.",
     )
@@ -124,7 +124,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--ftd-node-binary-profile",
-        choices=("stock", "stock-ftd-delay-diagnostic", "fastpr"),
+        choices=("stock", "stock-ftd-delay-diagnostic", "fastpr", "fast-attach", "fast-attach-ucast-1"),
         default=None,
         help="Declared FTD profile passed through to run_baseline.py.",
     )
