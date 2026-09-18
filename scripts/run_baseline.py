@@ -190,7 +190,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--node-binary-profile",
-        choices=("stock", "preferred-parent"),
+        choices=("stock", "preferred-parent", "fast-attach", "fast-attach-ucast-32", "fast-attach-ucast-1"),
         default=None,
         help="Declared profile for --node-binary-path; required by directed scenarios.",
     )
@@ -202,7 +202,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--ftd-node-binary-profile",
-        choices=("stock", "stock-ftd-delay-diagnostic", "fastpr"),
+        choices=(
+            "stock",
+            "stock-ftd-delay-diagnostic",
+            "fastpr",
+            "fast-attach",
+            "fast-attach-ucast-32",
+            "fast-attach-ucast-1",
+        ),
         default=None,
         help="Declared profile for --ftd-node-binary-path; required by directed scenarios.",
     )
@@ -347,12 +354,17 @@ def validate_scenario_configuration(
     if not isinstance(directed.get("random_seed"), int):
         raise ValueError("directed_switch.random_seed must be an integer")
     expected_router_profile = directed.get("expected_router_firmware")
-    if expected_router_profile not in {"stock", "fastpr"}:
-        raise ValueError("directed_switch.expected_router_firmware must be stock or fastpr")
+    directed_profiles = {"preferred-parent", "fast-attach-ucast-32", "fast-attach-ucast-1"}
+    router_profiles = {"stock", "fastpr", "fast-attach-ucast-32", "fast-attach-ucast-1"}
+    if expected_router_profile not in router_profiles:
+        raise ValueError(
+            "directed_switch.expected_router_firmware must be stock, fastpr, "
+            "fast-attach-ucast-32, or fast-attach-ucast-1"
+        )
     if mode == "multicast" and expected_router_profile != "stock":
         raise ValueError("multicast directed switching requires stock router firmware")
-    if expected_router_profile == "fastpr" and mode != "unicast":
-        raise ValueError("fastpr router firmware is only valid with unicast mode")
+    if expected_router_profile != "stock" and mode != "unicast":
+        raise ValueError(f"{expected_router_profile} router firmware is only valid with unicast mode")
 
     observability = scenario.get("observability") or {}
     requires_parent_response_delay_diagnostic = (
@@ -364,8 +376,17 @@ def validate_scenario_configuration(
     mobile_path = mobile_override or node_binary_path
     mobile_expected_profile = mobile.get("firmware_profile")
     mobile_profile = mobile_expected_profile if mobile_override else (node_binary_profile or mobile_expected_profile)
-    if mobile_expected_profile != "preferred-parent" or mobile_profile != "preferred-parent":
-        raise ValueError("directed switching requires the preferred-parent MTD profile")
+    expected_mobile_profile = (
+        expected_router_profile
+        if expected_router_profile in {"fast-attach-ucast-32", "fast-attach-ucast-1"}
+        else "preferred-parent"
+    )
+    if mobile_expected_profile != expected_mobile_profile or mobile_profile != expected_mobile_profile:
+        profiles = ", ".join(sorted(directed_profiles))
+        raise ValueError(
+            f"directed switching requires the scenario's {expected_mobile_profile} MTD profile "
+            f"(supported: {profiles})"
+        )
     if not mock and mobile_path is None:
         raise ValueError("directed switching requires --node-binary-path or nodes.mobile.executable")
     if not mock and mobile_override is None and node_binary_profile is None:

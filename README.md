@@ -108,8 +108,9 @@ Static parent-removal scenarios are kept in `scenarios/static/` and mirror the
 local ESPHome stock switch-parent tests with 2, 3, or 4 routers. See
 [`docs/static_scenarios.md`](docs/static_scenarios.md).
 
-Directed multicast, unicast, and fast-response unicast scenarios are kept in
-`scenarios/directed/` for 2, 3, and 4 routers. They require explicit binary
+Directed multicast, unicast, fast-response unicast, Fast Attach unicast 32 ms,
+and Fast Attach unicast 1 ms scenarios are kept in `scenarios/directed/` for
+2, 3, and 4 routers. They require explicit binary
 profiles, select a deterministic non-current target, command the preferred-parent
 controller, remove the initial parent, and classify the final attachment. See
 [`docs/directed_parent_switch.md`](docs/directed_parent_switch.md).

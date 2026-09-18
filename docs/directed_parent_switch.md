@@ -6,9 +6,10 @@ mirror the ESPHome hardware procedure without running ESP32 firmware binaries.
 
 ## Matrix
 
-`scenarios/directed/` contains multicast, unicast, and `ucast_fastpr` variants
-for two, three, and four routers. The corresponding stock baselines remain in
-`scenarios/static/`.
+`scenarios/directed/` contains multicast, unicast, legacy `ucast_fastpr`,
+`fast_attach_32`, and `fast_attach_1` variants for two, three, and four routers.
+The latter two mirror the current ESPHome hardware arms. The corresponding
+stock baselines remain in `scenarios/static/`.
 
 Every directed scenario uses:
 
@@ -27,7 +28,7 @@ runner rejects multicast with fast-response routers, fast-response routers with
 multicast mode, stock MTDs, missing binaries, non-executable files, and router
 profiles that contradict the scenario.
 
-Use `preferred-parent` for the MTD profile. Multicast and ordinary-unicast
+Use `preferred-parent` for the legacy MTD profile. Multicast and ordinary-unicast
 scenarios require the logging-only `stock-ftd-delay-diagnostic` router profile
 so the selected random Parent Response delay can be subtracted from packet
 timing. Use `fastpr` for `ucast_fastpr` routers:
@@ -46,6 +47,24 @@ python3 scripts/run_baseline.py \
 
 For `med_directed_ucast_fastpr_*.yaml`, select the fast-response FTD and pass
 `--ftd-node-binary-profile fastpr`.
+
+For `med_directed_ucast_fast_attach_32_*.yaml`, use the matching
+`fast-attach-ucast-32` MTD and FTD profiles. For
+`med_directed_ucast_fast_attach_1_*.yaml`, use `fast-attach-ucast-1` for both.
+These profiles use the same OpenThread controller and response-delay policies
+as the ESPHome hardware variants:
+
+```bash
+python3 scripts/run_baseline.py \
+  --scenario scenarios/directed/med_directed_ucast_fast_attach_1_2routers.yaml \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 1' \
+  --otns-workdir /path/to/ot-ns \
+  --node-binary-path /path/to/fast-attach-ucast-1-mtd-pps-off/ot-cli-mtd \
+  --node-binary-profile fast-attach-ucast-1 \
+  --ftd-node-binary-path /path/to/fast-attach-ucast-1-ftd/ot-cli-ftd \
+  --ftd-node-binary-profile fast-attach-ucast-1 \
+  --firmware-variant otns-fast-attach-ucast-1
+```
 
 After a repeated multicast or ordinary-unicast campaign, derive the adjusted
 packet timing with:
@@ -97,7 +116,7 @@ Leader-parent and topology-change labels do not invalidate a run by themselves.
 
 ## Validation
 
-Mock validation covers all nine scenarios and invalid profile combinations.
+Mock validation covers all fifteen scenarios and invalid profile combinations.
 The Phase 9 real exit matrix ran all two-router variants with the Phase 8
 artifacts. Multicast, unicast, and fast-response unicast each acknowledged the
 command, emitted the selected-parent event sequence, and finished attached to

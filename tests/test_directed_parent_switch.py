@@ -14,7 +14,7 @@ DIRECTED = ROOT / "scenarios" / "directed"
 class DirectedParentSwitchTests(unittest.TestCase):
     def test_all_directed_scenarios_validate_in_mock_mode(self) -> None:
         paths = sorted(DIRECTED.glob("*.yaml"))
-        self.assertEqual(9, len(paths))
+        self.assertEqual(15, len(paths))
         for path in paths:
             scenario = runner.load_scenario(path)
             runner.validate_scenario_configuration(
@@ -62,6 +62,20 @@ class DirectedParentSwitchTests(unittest.TestCase):
                 node_binary_profile="stock",
                 ftd_node_binary_path=Path("/tmp/not-used-in-mock"),
                 ftd_node_binary_profile="stock",
+                mock=True,
+            )
+
+    def test_fast_attach_profiles_cannot_be_mixed(self) -> None:
+        path = DIRECTED / "med_directed_ucast_fast_attach_1_2routers.yaml"
+        scenario = runner.load_scenario(path)
+        with self.assertRaisesRegex(ValueError, "fast-attach-ucast-1 MTD"):
+            runner.validate_scenario_configuration(
+                scenario,
+                path,
+                node_binary_path=Path("/tmp/not-used-in-mock"),
+                node_binary_profile="fast-attach-ucast-32",
+                ftd_node_binary_path=Path("/tmp/not-used-in-mock"),
+                ftd_node_binary_profile="fast-attach-ucast-1",
                 mock=True,
             )
 
