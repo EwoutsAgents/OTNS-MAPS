@@ -39,6 +39,8 @@ results/repeated
 # OTNS local artifacts
 *.pcap
 *.replay
+!tests/fixtures/*.pcap
+!results/**/*.pcap
 !results/**/*.replay
 tmp/
 

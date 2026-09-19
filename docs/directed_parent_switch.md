@@ -122,6 +122,6 @@ the requested target.
 
 Timestamped native binaries add `time_us`, `timing_source`, and `resolution_us`
 to the four protocol events. The runner exports these events to
-`preferred_parent_events_<timestamp>.csv` and derives comparable attach
-intervals in the summary JSON. See
+`preferred_parent_events_<timestamp>.csv` as internal diagnostics. Canonical
+comparison intervals are derived separately from the preserved OTNS PCAP. See
 [`comparable_timing.md`](comparable_timing.md).

@@ -123,9 +123,10 @@ Self-describing result export, checksum verification, deterministic repeated
 seeds, and the Phase 12 reference artifacts are documented in
 [`docs/reproducible_artifacts.md`](docs/reproducible_artifacts.md).
 
-Native directed runs export microsecond protocol-event timestamps and derive the
-same four attach intervals used by the ESPHome PCAP analyzer. Timing-source and
-clock semantics are documented in
+Directed real runs preserve an isolated OTNS IEEE 802.15.4 PCAP and derive the
+canonical four air-to-air attach intervals from the selected operation's MLE
+packets. Native OpenThread event timing remains available separately for stack
+diagnostics. Timing-source and clock semantics are documented in
 [`docs/comparable_timing.md`](docs/comparable_timing.md).
 
 The simple scenarios now use a four-router, static 0 dBm topology and the runner records one 1 Hz ICMP ping from the mobile end device to its currently observed parent: Router A at `(350, 300)`, Router B at `(875, 300)`, Router C at `(1400, 300)`, Router D at `(1925, 300)`, and a mobile path from `(350, 360)` to `(2125, 360)`. The mobile is created near Router A; Router B, Router C, and Router D are introduced after a fixed 600 s Router-A-only delay; and movement starts after a monitored 600 s post-activation settle period. During the post-activation settle period, the runner keeps polling the mobile parent so switches before movement sampling are recorded as `pre_movement_switch_observed` rather than hidden as unexpected first samples. OTNS `MeterPerUnit = 0.1` makes the movement path 177.5 m; 36 one-second movement steps target about 5 m/s, followed by a 600 s end dwell. See [`docs/scenarios.md`](docs/scenarios.md).
@@ -201,7 +202,9 @@ python3 scripts/run_repeated_baseline.py \
 `--jobs` runs independent simulations concurrently. Every run receives a
 unique listen-port-derived simulation ID and a private `otns_runtime/`
 directory. The runtime directory isolates OTNS node logs, flash files,
-`current.pcap`, and replay output. The runner also holds process-level port
+`current.pcap`, and replay output. Directed runs copy the completed capture to
+`otns_packets_<token>.pcap` in the run directory and use it for canonical
+protocol timing. The runner also holds process-level port
 locks and rejects outputs whose simulation ID, firmware variant, runtime path,
 or directed target/mode do not match the run summary. Seeds remain tied to the
 run index, so changing `--jobs` does not change the experiment sequence.

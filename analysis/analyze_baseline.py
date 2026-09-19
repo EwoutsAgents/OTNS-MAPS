@@ -367,6 +367,11 @@ def summarize_run(path: Path) -> dict[str, Any]:
         "final_observed_parent": final_observed_parent,
         "parent_sequence": compact_parent_sequence,
         "result_classification": result_classification,
+        "protocol_timing_source": sibling_summary.get("protocol_timing_source"),
+        "protocol_timing_complete": sibling_summary.get("protocol_timing_complete"),
+        "protocol_timing_failure_reason": sibling_summary.get("protocol_timing_failure_reason"),
+        "protocol_timing_ms": sibling_summary.get("protocol_timing_ms") or {},
+        "openthread_event_timing": sibling_summary.get("openthread_event_timing") or {},
         "switch_count": len(switch_times),
         "first_switch_time_s": switch_times[0] if switch_times else None,
         "switch_position_x": next(
@@ -508,6 +513,26 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
     sim_match_rate_values = [summary.get("sim_ping_rss_match_rate") for summary in summaries]
     switch_counts = [summary.get("switch_count") or 0 for summary in summaries]
     oscillation_values = [summary.get("oscillation_events") or 0 for summary in summaries]
+    protocol_keys = (
+        "parent_request_to_response",
+        "parent_response_to_child_id_request",
+        "child_id_request_to_response",
+        "parent_request_to_child_id_response",
+    )
+    complete_pcap_summaries = [
+        summary
+        for summary in summaries
+        if summary.get("protocol_timing_source") == "otns_pcap"
+        and summary.get("protocol_timing_complete")
+    ]
+    protocol_timing_stats = {}
+    for key in protocol_keys:
+        values = [summary.get("protocol_timing_ms", {}).get(key) for summary in complete_pcap_summaries]
+        protocol_timing_stats[key] = {
+            "n": _sample_size(values),
+            "mean_ms": _mean_or_none(values),
+            "sample_sd_ms": _stddev_or_none(values),
+        }
     attachment_success_runs = sum(
         1
         for summary in summaries
@@ -550,6 +575,10 @@ def aggregate_runs(summaries: list[dict[str, Any]]) -> dict[str, Any] | None:
     oscillation_runs = sum(1 for value in oscillation_values if value > 0)
     return {
         "run_count": len(summaries),
+        "protocol_timing_source": "otns_pcap" if complete_pcap_summaries else None,
+        "protocol_timing_complete_runs": len(complete_pcap_summaries),
+        "protocol_timing_incomplete_runs": len(summaries) - len(complete_pcap_summaries),
+        "protocol_timing_stats": protocol_timing_stats,
         "initial_attachment_success_runs": attachment_success_runs,
         "initial_attachment_success_rate": round(attachment_success_runs / len(summaries), 6),
         "initial_attachment_timeout_runs": attachment_timeout_runs,

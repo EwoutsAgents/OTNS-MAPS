@@ -64,6 +64,23 @@ class ArtifactIntegrityTests(unittest.TestCase):
             self.assertEqual("ok", result["status"])
             self.assertEqual(6, result["payload_file_count"])
 
+    def test_pcap_timing_artifact_requires_preserved_capture(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            artifact = self.create_directed_artifact(Path(temporary_directory))
+            manifest_path = artifact / "manifest.json"
+            summary_path = artifact / "summary.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            summary = json.loads(summary_path.read_text(encoding="utf-8"))
+            manifest["protocol_timing_source"] = "otns_pcap"
+            manifest["pcap_file"] = "missing.pcap"
+            summary["protocol_timing_source"] = "otns_pcap"
+            summary["pcap_file"] = "missing.pcap"
+            run_baseline.write_json(manifest, manifest_path)
+            run_baseline.write_json(summary, summary_path)
+            run_baseline.write_artifact_checksums(artifact)
+            with self.assertRaisesRegex(ValueError, "OTNS PCAP"):
+                verify_artifact.verify_artifact(artifact)
+
     def test_tampered_payload_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             artifact = self.create_directed_artifact(Path(temporary_directory))

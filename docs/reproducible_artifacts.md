@@ -38,7 +38,7 @@ Use the normal directed runner with replay, node logging, and tracked export:
 ```bash
 python3 scripts/run_baseline.py \
   --scenario scenarios/directed/med_directed_ucast_fastpr_4routers.yaml \
-  --otns-command '/path/to/otns -web=false -autogo=false -speed 0 -seed 3214 -pcap off' \
+  --otns-command '/path/to/otns -web=false -autogo=false -speed 0 -seed 3214 -pcap wpan' \
   --otns-workdir /path/to/ot-ns \
   --node-binary-path /path/to/preferred-parent-mtd-pps-off/ot-cli-mtd \
   --node-binary-profile preferred-parent \
@@ -74,6 +74,11 @@ and validation result for every run. A run is excluded from aggregation if its
 copied logs do not match its expected simulation ID, firmware variant, or
 directed target/mode.
 
+For directed real runs the runner forces `-pcap wpan` even if a supplied OTNS
+command says `-pcap off`. After OTNS exits, each worker copies its private
+capture into its own run directory before parsing it. Workers therefore never
+read another worker's global or shared capture.
+
 ## Bundle layout
 
 Each run contains:
@@ -86,6 +91,7 @@ scenario.yaml
 baseline_run_<token>.csv
 baseline_summary_<token>.json
 preferred_parent_events_<token>.csv
+otns_packets_<token>.pcap
 <scenario>_<token>.replay
 <scenario>_<token>.replay.json
 node_log_<name>_<id>.log
@@ -115,7 +121,7 @@ Verification checks:
 - packaged scenario fingerprint;
 - required run files and artifact-relative references;
 - summary/manifest classification, seed, and timing agreement;
-- complete protocol timing for directed runs;
+- complete `otns_pcap` protocol timing and a preserved PCAP for new directed runs;
 - local executable fingerprints when the recorded binaries are available;
 - every nested run in a repeated experiment.
 
@@ -135,10 +141,11 @@ fast-response full-attach times were 19.200 ms, 25.600 ms, and 19.520 ms.
 
 ## Timing and platform limits
 
-Protocol intervals use the node-local RFSIM microsecond clock. Parent deletion
-uses global simulator time, and final-parent confirmation uses one-second
-polling. These clocks are not mixed. Hardware PCAP and OTNS native events share
-semantic boundaries but not timing precision or radio/execution behavior.
+Canonical protocol intervals use simulated packet timestamps from the preserved
+OTNS PCAP. Internal OpenThread timing remains under `openthread_event_timing`;
+parent deletion uses global simulator time, and final-parent confirmation uses
+one-second polling. These clocks are not mixed. Hardware and OTNS canonical
+timing now share air-to-air boundaries, but not physical radio behavior.
 
 The recorded OTNS source reports a tracked change in its OpenThread submodule.
 The Phase 12 binaries were built from the separately isolated Track A

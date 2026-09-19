@@ -23,6 +23,11 @@ from typing import Any
 
 import yaml
 
+try:
+    from scripts.otns_pcap_timing import DEFAULT_THREAD_NETWORK_KEY, extract_air_timing
+except ModuleNotFoundError:  # Direct `python scripts/run_baseline.py` execution.
+    from otns_pcap_timing import DEFAULT_THREAD_NETWORK_KEY, extract_air_timing
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SCENARIO = ROOT / "scenarios" / "med_simple_parent_switch.yaml"
@@ -139,6 +144,16 @@ def parse_args() -> argparse.Namespace:
         "--otns-watch-level",
         default="off",
         help="Optional OTNS default watch level for all newly created nodes: trace, debug, info, note, warn, error, off.",
+    )
+    parser.add_argument(
+        "--thread-network-key",
+        default=os.environ.get("THREAD_NETWORK_KEY", DEFAULT_THREAD_NETWORK_KEY),
+        help="Thread network key used to decode directed-run OTNS PCAPs.",
+    )
+    parser.add_argument(
+        "--tshark",
+        default=os.environ.get("TSHARK", "tshark"),
+        help="tshark executable used to decode directed-run OTNS PCAPs.",
     )
     parser.add_argument(
         "--mock",
@@ -480,6 +495,22 @@ def with_otns_watch_level(command: str, watch_level: str) -> str:
     if "-watch" in parts:
         return command
     return f"{command} -watch {watch_level}"
+
+
+def with_otns_pcap(command: str, enabled: bool) -> str:
+    """Force isolated IEEE 802.15.4 PCAP output for directed real runs."""
+    if not enabled:
+        return command
+    parts = shlex.split(command)
+    for index, part in enumerate(parts):
+        if part == "-pcap" and index + 1 < len(parts):
+            parts[index + 1] = "wpan"
+            return shlex.join(parts)
+        if part.startswith("-pcap="):
+            parts[index] = "-pcap=wpan"
+            return shlex.join(parts)
+    parts.extend(["-pcap", "wpan"])
+    return shlex.join(parts)
 
 
 def numeric_mean(values: list[float]) -> float | None:
@@ -882,6 +913,7 @@ def tracked_results_manifest(
     summary_file: str,
     preferred_parent_event_file: str | None,
     parent_rank_file: str | None,
+    pcap_file: str | None,
     replay_file: str | None,
     replay_metadata_file: str | None,
     node_log_files: list[str],
@@ -922,6 +954,8 @@ def tracked_results_manifest(
         "summary_file": summary_file,
         "preferred_parent_event_file": preferred_parent_event_file,
         "parent_rank_file": parent_rank_file,
+        "pcap_file": pcap_file,
+        "pcap_sha256": summary.get("pcap_sha256"),
         "replay_file": replay_file,
         "replay_metadata_file": replay_metadata_file,
         "node_log_files": node_log_files,
@@ -989,6 +1023,9 @@ def tracked_results_manifest(
         "protocol_timing_complete": summary.get("protocol_timing_complete"),
         "protocol_timing_source": summary.get("protocol_timing_source"),
         "protocol_timing_resolution_us": summary.get("protocol_timing_resolution_us"),
+        "protocol_timing_failure_reason": summary.get("protocol_timing_failure_reason"),
+        "pcap_protocol_timing": summary.get("pcap_protocol_timing", {}),
+        "openthread_event_timing": summary.get("openthread_event_timing", {}),
         "parent_deletion_to_target_observed_ms": summary.get("parent_deletion_to_target_observed_ms"),
         "parent_deletion_to_target_observed_source": summary.get("parent_deletion_to_target_observed_source"),
         "router_topology_changes": summary.get("router_topology_changes", {}),
@@ -1086,6 +1123,15 @@ def write_tracked_results_readme(
             f'- Post-removal first switch time (s): `{manifest["post_removal_first_switch_time_s"]}`',
             f'- Post-removal reattach latency (s): `{manifest["post_removal_reattach_latency_s"]}`',
             "",
+            "## Protocol Timing",
+            "",
+            f'- Canonical source: `{manifest["protocol_timing_source"]}`',
+            f'- Complete: `{manifest["protocol_timing_complete"]}`',
+            f'- Failure reason: `{manifest.get("protocol_timing_failure_reason")}`',
+            f'- OTNS PCAP: `{manifest.get("pcap_file") or "not captured"}`',
+            f'- Air timing (ms): `{manifest.get("protocol_timing_ms", {})}`',
+            f'- Internal OpenThread timing: `{manifest.get("openthread_event_timing", {})}`',
+            "",
             "## Parent Ranking",
             "",
             f'- Ranking CSV: `{manifest["parent_rank_file"] or "not captured"}`',
@@ -1135,6 +1181,7 @@ def export_tracked_results(
     json_path: Path,
     preferred_parent_event_path: Path | None,
     parent_rank_path: Path | None,
+    pcap_path: Path | None,
     replay_info: dict[str, Any],
     node_log_files: list[str],
     summary: dict[str, Any],
@@ -1161,6 +1208,12 @@ def export_tracked_results(
         tracked_parent_rank = tracked_dir / parent_rank_path.name
         shutil.copy2(parent_rank_path, tracked_parent_rank)
         parent_rank_relpath = tracked_parent_rank.name
+
+    pcap_relpath = None
+    if pcap_path is not None:
+        tracked_pcap = tracked_dir / pcap_path.name
+        shutil.copy2(pcap_path, tracked_pcap)
+        pcap_relpath = tracked_pcap.name
 
     replay_relpath = None
     metadata_relpath = None
@@ -1194,6 +1247,7 @@ def export_tracked_results(
     tracked_summary_data = json.loads(tracked_summary.read_text(encoding="utf-8"))
     tracked_summary_data["preferred_parent_event_file"] = preferred_parent_event_relpath
     tracked_summary_data["parent_rank_file"] = parent_rank_relpath
+    tracked_summary_data["pcap_file"] = pcap_relpath
     tracked_summary_data["replay_file"] = replay_relpath
     tracked_summary_data["replay_metadata_file"] = metadata_relpath
     tracked_summary_data["node_log_files"] = tracked_node_log_files
@@ -1225,6 +1279,7 @@ def export_tracked_results(
         summary_file=tracked_summary.name,
         preferred_parent_event_file=preferred_parent_event_relpath,
         parent_rank_file=parent_rank_relpath,
+        pcap_file=pcap_relpath,
         replay_file=replay_relpath,
         replay_metadata_file=metadata_relpath,
         node_log_files=tracked_node_log_files,
@@ -2028,6 +2083,7 @@ class RealBenchmarkRunner:
                 "initial_parent_node_id": initial_parent_node_id,
                 "initial_parent_extaddr": initial_parent_extaddr,
                 "initial_parent_rloc16": initial_parent_rloc16,
+                "mobile_extaddr": mobile_ref.extaddr,
                 "target_parent": target_name,
                 "target_parent_node_id": target_node_id,
                 "target_parent_extaddr": target_extaddr,
@@ -3759,6 +3815,87 @@ def write_json(data: dict[str, Any], path: Path) -> None:
         handle.write("\n")
 
 
+def capture_directed_pcap_timing(
+    *,
+    scenario: dict[str, Any],
+    summary: dict[str, Any],
+    runtime_dir: Path,
+    results_dir: Path,
+    token: str,
+    network_key: str,
+    tshark: str,
+) -> Path | None:
+    """Preserve one run's PCAP and make air-to-air timing canonical."""
+    if scenario.get("scenario_type") != "directed_parent_switch":
+        return None
+
+    internal_timing = {
+        "source": summary.get("protocol_timing_source"),
+        "complete": summary.get("protocol_timing_complete"),
+        "timestamp_resolution_us": summary.get("protocol_timing_resolution_us"),
+        "timing_ms": summary.get("protocol_timing_ms", {}),
+        "event_timestamps": summary.get("protocol_event_timestamps", {}),
+    }
+    summary["openthread_event_timing"] = internal_timing
+    summary["openthread_event_timing_ms"] = internal_timing["timing_ms"]
+    summary["openthread_event_timing_complete"] = internal_timing["complete"]
+    summary["openthread_event_timing_source"] = internal_timing["source"]
+
+    source = runtime_dir / "current.pcap"
+    pcap_path: Path | None = None
+    if source.is_file():
+        pcap_path = results_dir / f"otns_packets_{token}.pcap"
+        shutil.copy2(source, pcap_path)
+
+    requested_event = next(
+        (event for event in summary.get("preferred_parent_events", []) if event.get("event") == "requested"),
+        None,
+    )
+    child_extaddr = summary.get("mobile_extaddr")
+    target_extaddr = summary.get("target_parent_extaddr")
+    operation_start = requested_event.get("observed_time_s") if requested_event else None
+    if pcap_path is None:
+        pcap_timing = {
+            "source": "otns_pcap",
+            "complete": False,
+            "failure_reason": "pcap_missing",
+            "timing_ms": {},
+            "packets": {},
+            "timestamp_resolution_us": 1,
+        }
+    elif not child_extaddr or not target_extaddr or operation_start is None:
+        pcap_timing = {
+            "source": "otns_pcap",
+            "complete": False,
+            "failure_reason": "pcap_parse_error",
+            "error": "Directed operation context is missing child, target, or operation-start identity",
+            "timing_ms": {},
+            "packets": {},
+            "timestamp_resolution_us": 1,
+        }
+    else:
+        pcap_timing = extract_air_timing(
+            pcap_path,
+            child_extaddr=str(child_extaddr),
+            target_extaddr=str(target_extaddr),
+            mode=str(summary.get("directed_mode")),
+            operation_start_s=float(operation_start),
+            network_key=network_key,
+            tshark=tshark,
+        )
+
+    summary["pcap_protocol_timing"] = pcap_timing
+    summary["protocol_timing_ms"] = pcap_timing["timing_ms"]
+    summary["protocol_timing_complete"] = pcap_timing["complete"]
+    summary["protocol_timing_source"] = "otns_pcap"
+    summary["protocol_timing_resolution_us"] = pcap_timing["timestamp_resolution_us"]
+    summary["protocol_timing_failure_reason"] = pcap_timing.get("failure_reason")
+    summary["protocol_packet_timestamps"] = pcap_timing.get("packets", {})
+    summary["pcap_file"] = str(pcap_path) if pcap_path is not None else None
+    summary["pcap_sha256"] = sha256_file(pcap_path) if pcap_path is not None else None
+    return pcap_path
+
+
 def main() -> int:
     args = parse_args()
     scenario = load_scenario(args.scenario)
@@ -3793,6 +3930,9 @@ def main() -> int:
         runtime_dir.mkdir(parents=True, exist_ok=True)
     replay_before = snapshot_replay_files(runtime_dir) if args.capture_replay and not args.mock else {}
 
+    directed_real_run = not args.mock and scenario.get("scenario_type") == "directed_parent_switch"
+    effective_otns_command = with_otns_pcap(args.otns_command, directed_real_run)
+
     runner: RealBenchmarkRunner | MockBenchmarkRunner
     runner = (
         MockBenchmarkRunner(
@@ -3804,7 +3944,7 @@ def main() -> int:
         if args.mock
         else RealBenchmarkRunner(
             scenario,
-            args.otns_command,
+            effective_otns_command,
             otns_workdir=args.otns_workdir,
             otns_runtime_dir=args.otns_runtime_dir,
             otns_watch_level=args.otns_watch_level,
@@ -3828,13 +3968,25 @@ def main() -> int:
         print(f"Benchmark execution failed: {exc}", file=sys.stderr)
         return 1
 
+    pcap_path = None
+    if directed_real_run:
+        pcap_path = capture_directed_pcap_timing(
+            scenario=scenario,
+            summary=summary,
+            runtime_dir=runtime_dir,
+            results_dir=args.results_dir,
+            token=token,
+            network_key=args.thread_network_key,
+            tshark=args.tshark,
+        )
+
     replay_info = maybe_capture_replay(
         capture_replay=args.capture_replay,
         mock=args.mock,
         scenario=scenario,
         scenario_path=args.scenario,
         token=token,
-        otns_command=args.otns_command,
+        otns_command=effective_otns_command,
         otns_workdir=args.otns_workdir,
         otns_runtime_dir=args.otns_runtime_dir,
         replay_source=args.replay_source,
@@ -3947,7 +4099,7 @@ def main() -> int:
                 equivalent_to=args.equivalent_to,
                 openthread_commit=args.openthread_commit,
                 otns_commit=args.otns_commit,
-                otns_command=args.otns_command,
+                otns_command=effective_otns_command,
                 otns_workdir=args.otns_workdir,
                 runner_invocation=[sys.executable, str(Path(__file__).resolve()), *sys.argv[1:]],
                 token=token,
@@ -3955,6 +4107,7 @@ def main() -> int:
                 json_path=json_path,
                 preferred_parent_event_path=(preferred_parent_event_path if preferred_parent_events else None),
                 parent_rank_path=captured_parent_rank_path,
+                pcap_path=pcap_path,
                 replay_info=replay_info,
                 node_log_files=node_log_info.get("copied_files", []),
                 summary=summary,

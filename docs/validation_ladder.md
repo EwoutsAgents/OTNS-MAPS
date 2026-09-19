@@ -95,9 +95,10 @@ with complete timing.
 
 ## Four-router hardware comparison
 
-The hardware and OTNS four-router runs use the same semantic event boundaries,
-but different clocks and radio models. Hardware timing comes from PCAP; OTNS
-timing comes from native node-local RFSIM events.
+The historical table below predates canonical OTNS-PCAP extraction. Hardware
+timing came from PCAP while these OTNS smoke values came from native node-local
+RFSIM events, so it is retained only as historical evidence. New directed runs
+use `otns_pcap` air-to-air intervals and retain native timing separately.
 
 | Variant | Hardware full attach (ms) | OTNS smoke full attach (ms) |
 | --- | ---: | ---: |

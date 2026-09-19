@@ -1,54 +1,73 @@
 # Comparable Attach Timing
 
-Directed preferred-parent runs expose four timestamped native OpenThread
-events:
+Directed real OTNS runs retain two separate timing views. They must not be
+mixed within an interval.
 
-| Semantic boundary | Native event |
-| --- | --- |
-| Parent Request sent | `parent_request_started` after successful `SendTo()` acceptance |
-| Target Parent Response received | `target_response` after MLE validation and target matching |
-| Child ID Request sent | `child_id_request_started` after successful `SendChildIdRequest()` |
-| Child ID Response received | `child_id_response_received` after the response is accepted and child state is installed |
+## Canonical air-to-air metrics
 
-The event fields are:
+`protocol_timing_ms` is derived from the run's OTNS IEEE 802.15.4 PCAP and is
+labeled `protocol_timing_source = otns_pcap`. The runner forces `-pcap wpan`
+for directed real runs, copies `current.pcap` out of the isolated runtime as
+`otns_packets_<token>.pcap`, and includes that file in tracked artifacts and
+their checksum inventory.
 
-```text
-time_us=<uint32>
-timing_source=otns_openthread_event
-resolution_us=1
-```
+The extractor decrypts Thread traffic with the configured network key and
+selects one operation-specific sequence using the operation start time, child
+extended address, selected target extended address, MLE command, and packet
+direction:
 
-`time_us` comes from `otPlatAlarmMicroGetNow()` in the child node process. It is
-a 32-bit node-local simulated clock, not the global OTNS scenario clock. The
-runner handles wraparound when deriving short intervals. Absolute event times
-must not be subtracted from the global parent-deletion time.
+| Boundary | MLE command | Required direction |
+| --- | ---: | --- |
+| Parent Request on air | 9 | child to selected target (or multicast for multicast mode) |
+| Parent Response on air | 10 | selected target to child |
+| Child ID Request on air | 11 | child to selected target |
+| Child ID Response on air | 12 | selected target to child |
 
-## Derived intervals
-
-`protocol_timing_ms` uses the same semantic sequence as the hardware PCAP
-analyzer:
+The canonical intervals are:
 
 - `parent_request_to_response`;
 - `parent_response_to_child_id_request`;
 - `child_id_request_to_response`;
 - `parent_request_to_child_id_response` (full attach).
 
-The summary identifies these values as `otns_openthread_event` with 1 µs source
-resolution. The raw events are also written to
-`preferred_parent_events_<timestamp>.csv`.
+All four values come from the same packet sequence. Initial attachment traffic,
+other routers, ACK frames, and unrelated MLE traffic are excluded. An absent or
+ambiguous sequence leaves canonical timing incomplete with one of:
+`pcap_missing`, `pcap_parse_error`, `missing_parent_request`,
+`missing_parent_response`, `missing_child_id_request`,
+`missing_child_id_response`, or `ambiguous_attach_sequence`. The runner never
+falls back to internal event timing for a missing PCAP interval.
 
-RFSIM may report 0 µs between Parent Response handling and Child ID Request
-submission. This means no simulated time elapsed between the two callbacks; it
-does not claim that physical hardware performs the work instantaneously.
+OTNS classic PCAP timestamps have microsecond resolution and represent the
+simulator's captured IEEE 802.15.4 frame time. They provide equivalent
+air-to-air boundaries for comparison with hardware sniffer PCAP, but they are
+not a cycle-accurate ESP32-C6 radio model.
 
-## Parent-removal observation
+## Internal OpenThread metrics
 
-Parent deletion uses the global OTNS CLI time and is labeled
-`otns_simulator_time`. Final target confirmation is sampled by the runner and
-is labeled `otns_parent_poll`. With the current one-second sampling interval,
-`parent_deletion_to_target_observed_ms` has one-second resolution and must not be
-presented as equivalent to the microsecond protocol intervals.
+The existing native events remain in `preferred_parent_events_<token>.csv` and
+the summary under `openthread_event_timing`:
 
-Hardware results retain `hardware_pcap` as their timing source. Comparing
-hardware and OTNS is valid at the interval-definition level, not as
-cycle-accurate or radio-equivalent execution.
+| Native event | Meaning |
+| --- | --- |
+| `parent_request_started` | `SendTo()` accepted the Parent Request |
+| `target_response` | MLE validated and matched the target response |
+| `child_id_request_started` | `SendChildIdRequest()` accepted the request |
+| `child_id_response_received` / `succeeded` | response accepted and child state installed |
+
+Their `time_us` values come from `otPlatAlarmMicroGetNow()` in the child
+process and are labeled `otns_openthread_event`. This is a 32-bit node-local
+simulated clock. RFSIM can report 0 us between Parent Response handling and
+Child ID Request submission because synchronous stack execution consumes no
+simulated time. That remains useful diagnostic evidence, but is no longer used
+as the hardware-comparison metric.
+
+## Other clocks
+
+Parent deletion uses global OTNS CLI time (`otns_simulator_time`). Final target
+confirmation uses one-second runner polling (`otns_parent_poll`). Neither is
+substituted into the packet-derived protocol intervals.
+
+Hardware results use `hardware_pcap`; canonical OTNS results use `otns_pcap`.
+Both now measure packet-to-packet boundaries, while their physical and
+simulated radio environments remain different.

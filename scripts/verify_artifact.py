@@ -123,8 +123,10 @@ def verify_artifact(artifact_dir: Path) -> dict[str, Any]:
         )
         if not manifest.get("protocol_timing_complete"):
             raise ValueError("Directed artifact has incomplete protocol timing")
+        if manifest.get("protocol_timing_source") == "otns_pcap":
+            require_relative_file(artifact_dir, manifest.get("pcap_file"), "OTNS PCAP")
 
-    for key in ("parent_rank_file", "replay_file", "replay_metadata_file"):
+    for key in ("parent_rank_file", "pcap_file", "replay_file", "replay_metadata_file"):
         value = manifest.get(key)
         if value is not None:
             require_relative_file(artifact_dir, value, key)
@@ -144,6 +146,7 @@ def verify_artifact(artifact_dir: Path) -> dict[str, Any]:
     for key in (
         "preferred_parent_event_file",
         "parent_rank_file",
+        "pcap_file",
         "replay_file",
         "replay_metadata_file",
     ):

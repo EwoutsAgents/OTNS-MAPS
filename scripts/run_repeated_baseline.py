@@ -59,6 +59,16 @@ def parse_args() -> argparse.Namespace:
         help="Optional OTNS default watch level passed through to run_baseline.py.",
     )
     parser.add_argument(
+        "--thread-network-key",
+        default=os.environ.get("THREAD_NETWORK_KEY", "00112233445566778899aabbccddeeff"),
+        help="Thread network key passed to directed-run PCAP analysis.",
+    )
+    parser.add_argument(
+        "--tshark",
+        default=os.environ.get("TSHARK", "tshark"),
+        help="tshark executable passed to directed-run PCAP analysis.",
+    )
+    parser.add_argument(
         "--listen-port-base",
         type=int,
         default=9990,
@@ -426,6 +436,27 @@ def validate_run_outputs(
             else:
                 checks.append("preferred_parent_target")
 
+    if summary.get("scenario_type") == "directed_parent_switch":
+        pcap_value = summary.get("pcap_file")
+        pcap_path = Path(pcap_value) if pcap_value else None
+        if pcap_path is None or not pcap_path.is_file():
+            errors.append("directed run did not preserve its PCAP artifact")
+        else:
+            try:
+                pcap_path.resolve().relative_to(run_dir.resolve())
+                checks.append("pcap_scope")
+            except ValueError:
+                errors.append(f"copied PCAP is outside its run directory: {pcap_path}")
+        if summary.get("protocol_timing_source") != "otns_pcap":
+            errors.append("directed run canonical timing source is not otns_pcap")
+        elif summary.get("protocol_timing_complete"):
+            checks.append("pcap_protocol_timing")
+        else:
+            errors.append(
+                "directed run has incomplete PCAP timing: "
+                + str(summary.get("protocol_timing_failure_reason") or "unknown")
+            )
+
     return {
         "status": "ok" if not errors else "failed",
         "errors": errors,
@@ -506,6 +537,8 @@ def execute_run(
         ("--ftd-node-binary-profile", args.ftd_node_binary_profile),
         ("--build-config-source", args.build_config_source),
         ("--equivalent-to", args.equivalent_to),
+        ("--thread-network-key", args.thread_network_key),
+        ("--tshark", args.tshark),
     )
     for option, value in optional_args:
         if value is not None:

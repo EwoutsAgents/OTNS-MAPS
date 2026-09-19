@@ -1,0 +1,2198 @@
+{
+  "router_counts": {
+    "2": {
+      "campaigns": [
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919"
+      ],
+      "excluded": [
+        {
+          "reason": "beyond_requested_sample_size",
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_101/baseline_summary_20260919T090319Z.json"
+        },
+        {
+          "reason": "beyond_requested_sample_size",
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_102/baseline_summary_20260919T090319Z.json"
+        }
+      ],
+      "selected_count": 100,
+      "selected_runs": [
+        {
+          "pcap_file": "pcaps/2_routers/run_001.pcap",
+          "pcap_sha256": "56c45d010aa143d54d26b11df34541e707029abf43c0d56c8128bf710e2240fc",
+          "sample_index": 1,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_001/baseline_summary_20260919T090249Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_002.pcap",
+          "pcap_sha256": "a426d26ab0565587b00a109d7275510aacf2b479493c5d74c26992c15dba42e3",
+          "sample_index": 2,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_002/baseline_summary_20260919T090249Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_003.pcap",
+          "pcap_sha256": "8ecbee7187a25ee8a71f48d7d3b9dd456213ce64df13fa92e432bf46454f644d",
+          "sample_index": 3,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_003/baseline_summary_20260919T090249Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_004.pcap",
+          "pcap_sha256": "4115034dbd83964ffc9e7d4dee7f9f68aff6cc48d8d3f46108970df7d145397c",
+          "sample_index": 4,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_004/baseline_summary_20260919T090249Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_005.pcap",
+          "pcap_sha256": "0577caf421e4fb489aefb98ffd3198bc611ab2fa026de4d29361bc50e7379263",
+          "sample_index": 5,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_005/baseline_summary_20260919T090249Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_006.pcap",
+          "pcap_sha256": "4b0ee095a2ca331680e8d1be006ff9fce28addb7e115cbea411adfe46a36774b",
+          "sample_index": 6,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_006/baseline_summary_20260919T090249Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_007.pcap",
+          "pcap_sha256": "77beca89e28400ebfe9666cb4f163d563dcf04fbde6148d8178f899b6deb4a7e",
+          "sample_index": 7,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_007/baseline_summary_20260919T090249Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_008.pcap",
+          "pcap_sha256": "7142232321f22a286d8afd18148b2c2d2ab6ec67c97fa53d931a5929fcd6fdf5",
+          "sample_index": 8,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_008/baseline_summary_20260919T090249Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_009.pcap",
+          "pcap_sha256": "0cf1a3e0c864ffa7dac1ccc6d423502f87593f9b23b7dec7ae20545e09ca1531",
+          "sample_index": 9,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_009/baseline_summary_20260919T090252Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_010.pcap",
+          "pcap_sha256": "88f05237a2a16b8fc6d20aedac8fc567b47b1f155844d00e35d1efe795f0c64e",
+          "sample_index": 10,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_010/baseline_summary_20260919T090252Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_011.pcap",
+          "pcap_sha256": "6ad7ae4d1e31dc6423482eb8d97552cbd83689f0150644b275be4005c175a7f7",
+          "sample_index": 11,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_011/baseline_summary_20260919T090252Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_012.pcap",
+          "pcap_sha256": "8585b0928d1e229900bf8a31fba08150b28142ff4f18af5237ed6adc14052bd6",
+          "sample_index": 12,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_012/baseline_summary_20260919T090252Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_013.pcap",
+          "pcap_sha256": "3610e460ee5aa02372e8b4959c1770c042bc2fae87eb2db561fdcbdf59b8dc08",
+          "sample_index": 13,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_013/baseline_summary_20260919T090252Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_014.pcap",
+          "pcap_sha256": "5284e484b57941f80f51f5df80641ed1a4b81758c1b7fdbfaa4b8cd5823702e4",
+          "sample_index": 14,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_014/baseline_summary_20260919T090252Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_015.pcap",
+          "pcap_sha256": "429305b546aafc366a733f3531e2398d72ae2e489ab9f3c35d778f70029907ea",
+          "sample_index": 15,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_015/baseline_summary_20260919T090252Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_016.pcap",
+          "pcap_sha256": "1799d54f2bad12800a2f136ecfbb3e39fdd7f57adc90dbca716f4720590e2938",
+          "sample_index": 16,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_016/baseline_summary_20260919T090252Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_017.pcap",
+          "pcap_sha256": "186feae834ebf949fcc95f90c2b8252dcd5f2f170ad0bc716b1297d3e91986de",
+          "sample_index": 17,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_017/baseline_summary_20260919T090254Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_018.pcap",
+          "pcap_sha256": "03ed4b2ed8355224f4c8ead404813821b2e89de78bbd1b493f4fe209f4bcef27",
+          "sample_index": 18,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_018/baseline_summary_20260919T090254Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_019.pcap",
+          "pcap_sha256": "76860afec74e457c2135c33be24656ca77f2411fe0795decfbaa4bef6b7a8c86",
+          "sample_index": 19,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_019/baseline_summary_20260919T090254Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_020.pcap",
+          "pcap_sha256": "b59355cae48e017efe804e49705eb5c1627c017a79e76cd6ba4c5d69a8e1aaf9",
+          "sample_index": 20,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_020/baseline_summary_20260919T090254Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_021.pcap",
+          "pcap_sha256": "01b59e3ae1bc93a4e03b0954aef6c2e4ba0e6e088bbece787c22a1038d0bd1c2",
+          "sample_index": 21,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_021/baseline_summary_20260919T090254Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_022.pcap",
+          "pcap_sha256": "67d69c5d92a9e989c665582bb594d83f1ceea347d8ac78bd13a8ca856f90a562",
+          "sample_index": 22,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_022/baseline_summary_20260919T090254Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_023.pcap",
+          "pcap_sha256": "253b1f9f03ea9c0e6a2aac64aff10882c1a40a1b9aff5a212ff2576ccf09a57d",
+          "sample_index": 23,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_023/baseline_summary_20260919T090254Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_024.pcap",
+          "pcap_sha256": "533aee4cf7f12ae7b814ab330c5197aecb62dcaaff68ea3aa6a9730b4a4165b6",
+          "sample_index": 24,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_024/baseline_summary_20260919T090254Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_025.pcap",
+          "pcap_sha256": "8a24f36f7d30b9a8b0b08214095c8722c316cbfaafdd3386894280814b7fb76e",
+          "sample_index": 25,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_025/baseline_summary_20260919T090257Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_026.pcap",
+          "pcap_sha256": "f90d684ce474b4d902fe12005b3756e7e6321b2e1a538b64f7c3f4bef8706b8a",
+          "sample_index": 26,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_026/baseline_summary_20260919T090257Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_027.pcap",
+          "pcap_sha256": "af3aa7ece7786f957535398529fdb4cfae88fbec2c31bc10051a8815b4d0578d",
+          "sample_index": 27,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_027/baseline_summary_20260919T090257Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_028.pcap",
+          "pcap_sha256": "e535254c516c2a8ef0306d7fbb490f9cee208945f3627aa29435148e20f7959e",
+          "sample_index": 28,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_028/baseline_summary_20260919T090257Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_029.pcap",
+          "pcap_sha256": "2049350a6d6b21a49161bae347b3d0edb1d2c001726f237173e0fd818660dfa5",
+          "sample_index": 29,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_029/baseline_summary_20260919T090257Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_030.pcap",
+          "pcap_sha256": "5e3adbcc14fa6bd0a0a6f66e23db841cc4f77b9fa26c0b4f6d745d407913f706",
+          "sample_index": 30,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_030/baseline_summary_20260919T090257Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_031.pcap",
+          "pcap_sha256": "377c07249bca37d4363805461f0c4e0c8ccdd834982e0353fbfcbc3e224ff3f0",
+          "sample_index": 31,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_031/baseline_summary_20260919T090257Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_032.pcap",
+          "pcap_sha256": "29117fd691f82b3db4c59b4631810a3b086bce35cd620add6aa2ab6b6d6aae3e",
+          "sample_index": 32,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_032/baseline_summary_20260919T090257Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_033.pcap",
+          "pcap_sha256": "aabb0b5890286e57121d9bd2b9a1a9c93d41058c84493408963f0a9d3dc9e9cd",
+          "sample_index": 33,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_033/baseline_summary_20260919T090259Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_034.pcap",
+          "pcap_sha256": "18ebe7f6fe582253420cbe41f4a245404891412806ec4bae50079721ef4ff930",
+          "sample_index": 34,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_034/baseline_summary_20260919T090259Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_035.pcap",
+          "pcap_sha256": "e25bd636f569ea2cc513b58d1e0c28c77acddffaeb06addba22df1164ff177c7",
+          "sample_index": 35,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_035/baseline_summary_20260919T090259Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_036.pcap",
+          "pcap_sha256": "6d6b6487ae46e79c3b1cdd23d4cc9ed148197d435926779b3d9d72201b469ebf",
+          "sample_index": 36,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_036/baseline_summary_20260919T090259Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_037.pcap",
+          "pcap_sha256": "4d7f0bb3d670fcdc88136fc50d16f99e86d0360ee68392364d22654fbe6f1f03",
+          "sample_index": 37,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_037/baseline_summary_20260919T090259Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_038.pcap",
+          "pcap_sha256": "47b154b2faf4a3320a60041ed49cd5f8f78b368fa06dc7fc0966048963bf9afb",
+          "sample_index": 38,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_038/baseline_summary_20260919T090259Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_039.pcap",
+          "pcap_sha256": "0ecc4e49f262a873f5441257d1ec74eb692c5780bfc69b36ff9b1c1ceedc1dfc",
+          "sample_index": 39,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_039/baseline_summary_20260919T090259Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_040.pcap",
+          "pcap_sha256": "b583060ec70aa1e54696b6f0afd8bf41c611300e442a3adb163369584c8f5037",
+          "sample_index": 40,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_040/baseline_summary_20260919T090259Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_041.pcap",
+          "pcap_sha256": "785c2cdf628a927f12592ed0246ed8a8ca23b926715d3b11b24945fcf0b84629",
+          "sample_index": 41,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_041/baseline_summary_20260919T090302Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_042.pcap",
+          "pcap_sha256": "ae26c3367aa4317a3917a21579d89ca79bd4d03f0c5caede6b66506be2e3f1ed",
+          "sample_index": 42,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_042/baseline_summary_20260919T090302Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_043.pcap",
+          "pcap_sha256": "a6a36acfae599a74fdf4bfc65a3cfd08865f1380a9f97ef5f91a082cc1dead2f",
+          "sample_index": 43,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_043/baseline_summary_20260919T090302Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_044.pcap",
+          "pcap_sha256": "cc6ae8353eb91b5d752b8224e5b46a05d8522c54c5bf61530ac52bd5eae1acda",
+          "sample_index": 44,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_044/baseline_summary_20260919T090302Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_045.pcap",
+          "pcap_sha256": "52927079ed50fc3cb15f50d6c48a81c28853bc8fbfde5729020d640ebde5fcf7",
+          "sample_index": 45,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_045/baseline_summary_20260919T090302Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_046.pcap",
+          "pcap_sha256": "7c4f32703c56402fd56d4d72f84ff1d9449c4e8d703de25daefaf09dbc8324f2",
+          "sample_index": 46,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_046/baseline_summary_20260919T090302Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_047.pcap",
+          "pcap_sha256": "69ccdc5da6d1113f879c83f8c535c4e813d2afd90e57b26e0c51c0081256a47f",
+          "sample_index": 47,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_047/baseline_summary_20260919T090302Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_048.pcap",
+          "pcap_sha256": "75c66347c1c084d6b61cec90698e589efe300f59aab70a7dbaef34b40a8b85e6",
+          "sample_index": 48,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_048/baseline_summary_20260919T090302Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_049.pcap",
+          "pcap_sha256": "70bd97cff062642685ba98d5cdb42de931d972e1dde135034729c07b03986ad6",
+          "sample_index": 49,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_049/baseline_summary_20260919T090304Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_050.pcap",
+          "pcap_sha256": "ff2c7b28dd6fac11183b47b2cca9c4725bf1690f11ccaf3836224348119e1ab8",
+          "sample_index": 50,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_050/baseline_summary_20260919T090304Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_051.pcap",
+          "pcap_sha256": "fa7f8093b42c01b1684bf41c1469fd21d041696d27eff31e5ab6219f140facfe",
+          "sample_index": 51,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_051/baseline_summary_20260919T090304Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_052.pcap",
+          "pcap_sha256": "8d9b473ee8afe2f5894ba51475ca36cff5dd7bb02bb75470e13e4e2899192fa5",
+          "sample_index": 52,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_052/baseline_summary_20260919T090304Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_053.pcap",
+          "pcap_sha256": "6a75e5232c6a15b0537c2ac7d5ef9a062eb90629a53d6f19048121c8e824d213",
+          "sample_index": 53,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_053/baseline_summary_20260919T090304Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_054.pcap",
+          "pcap_sha256": "4c15063593a63c5fd5b3012fbc23a86859a06718b50f5efc287089777841802c",
+          "sample_index": 54,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_054/baseline_summary_20260919T090304Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_055.pcap",
+          "pcap_sha256": "20b98bd4e364e4ced22900fb175d66aa3ce6a465113f66f4a8b81423c8c15298",
+          "sample_index": 55,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_055/baseline_summary_20260919T090304Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_056.pcap",
+          "pcap_sha256": "fa7669ff8e9a1e2830ac1bcf9f1a13c91dacc5fe9a70410b14e6d9981ed875cf",
+          "sample_index": 56,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_056/baseline_summary_20260919T090304Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_057.pcap",
+          "pcap_sha256": "dd94898d55c6eff7397fb17b647b52df47f829ada3320722cfd4a9d1ec0148d2",
+          "sample_index": 57,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_057/baseline_summary_20260919T090306Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_058.pcap",
+          "pcap_sha256": "5c93b4f223fc85b133c7186e03a1b4dda9300d0d75b8deaa8d541e9cf9637cad",
+          "sample_index": 58,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_058/baseline_summary_20260919T090307Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_059.pcap",
+          "pcap_sha256": "de9b13e3bcbe62451c48f7fa18141c87a5236889c500fb8720d400be0453ebad",
+          "sample_index": 59,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_059/baseline_summary_20260919T090307Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_060.pcap",
+          "pcap_sha256": "106ecaf6d6a7f853751ae8ab80ce4db670f2110ce8b190b906c9fb370cf8b9b7",
+          "sample_index": 60,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_060/baseline_summary_20260919T090307Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_061.pcap",
+          "pcap_sha256": "3e1672281b2af7397d7f7a1afab63b5a59b934ceb8cc5ef6fe22c8824b76c44b",
+          "sample_index": 61,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_061/baseline_summary_20260919T090307Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_062.pcap",
+          "pcap_sha256": "48610d00f03d764c54b4ca60ea3e54cf8a9dc429388d9b5e1f61c68db64e1988",
+          "sample_index": 62,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_062/baseline_summary_20260919T090307Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_063.pcap",
+          "pcap_sha256": "e056f70efc17300e6f28905599e4f808d4c57cf15de42e111c736b5cadcd92e7",
+          "sample_index": 63,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_063/baseline_summary_20260919T090307Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_064.pcap",
+          "pcap_sha256": "d4d6a3d215a5dac67d0dffcb77209ace336100ac3162c481020e42e760593ab5",
+          "sample_index": 64,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_064/baseline_summary_20260919T090307Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_065.pcap",
+          "pcap_sha256": "3bd8280628c2065473a17e3b6275a6ee953a32de85df119dbfba5d3469cd5a5f",
+          "sample_index": 65,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_065/baseline_summary_20260919T090309Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_066.pcap",
+          "pcap_sha256": "abd67ae20a7530afe290c2db34696a0f47d7debeaccdcd8e69d6410411e32846",
+          "sample_index": 66,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_066/baseline_summary_20260919T090309Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_067.pcap",
+          "pcap_sha256": "9b06afa16aec2737c35c1e849445de42e0c229b4cd41b003cb878fa4d8fa57a9",
+          "sample_index": 67,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_067/baseline_summary_20260919T090309Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_068.pcap",
+          "pcap_sha256": "2372ad3bca078d13f98591c1685667b8e4403e9e2d6d9fa469cceb67b096b275",
+          "sample_index": 68,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_068/baseline_summary_20260919T090309Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_069.pcap",
+          "pcap_sha256": "e5328a41784941b22a1cd216471dac213db2c928c3f68aa93e161fe54fea1906",
+          "sample_index": 69,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_069/baseline_summary_20260919T090309Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_070.pcap",
+          "pcap_sha256": "ee5b8ffb3aa8077993df7ed2730bc11b99873858327ffa71387be65669b55681",
+          "sample_index": 70,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_070/baseline_summary_20260919T090309Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_071.pcap",
+          "pcap_sha256": "d520d56fd68b39667dc3cabea1c1ffb024e1954e114198dbcbf85e6ae8e93ef9",
+          "sample_index": 71,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_071/baseline_summary_20260919T090309Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_072.pcap",
+          "pcap_sha256": "042409c9a0ae71db4460502129f5aab1e60e5122b85ddd49a54d75afdeb80f9f",
+          "sample_index": 72,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_072/baseline_summary_20260919T090309Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_073.pcap",
+          "pcap_sha256": "d6c4f379fb3452742b6aa22f73fd558f25943ffd308741d113a217200f156500",
+          "sample_index": 73,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_073/baseline_summary_20260919T090311Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_074.pcap",
+          "pcap_sha256": "6abc398ca88e7e17d85beaa5df42242be72c6d38a4fd3538723f9f24c70e406b",
+          "sample_index": 74,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_074/baseline_summary_20260919T090311Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_075.pcap",
+          "pcap_sha256": "6a88182aa753a87288f7788fdd1e3d151b34e31fa339d240534c7b8a4d82f9c0",
+          "sample_index": 75,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_075/baseline_summary_20260919T090311Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_076.pcap",
+          "pcap_sha256": "c6493f614c587dc3a7a5a07f9eaa2a02d9178fb08b524ea26c9a0f92daa3b07e",
+          "sample_index": 76,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_076/baseline_summary_20260919T090311Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_077.pcap",
+          "pcap_sha256": "2755f3089ce1042529323f82a7816ee1df9914f7f93e6b85c0ee17dadbbc1b7a",
+          "sample_index": 77,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_077/baseline_summary_20260919T090311Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_078.pcap",
+          "pcap_sha256": "544a2ee40fc7a717ea71e384a1df1d4cb403ed60a29db094497c20af2eaa44c5",
+          "sample_index": 78,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_078/baseline_summary_20260919T090311Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_079.pcap",
+          "pcap_sha256": "845a329c737d25108b9daae5ae1ac64072a630488e50204d898044762091be27",
+          "sample_index": 79,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_079/baseline_summary_20260919T090311Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_080.pcap",
+          "pcap_sha256": "c6226efe9241db17b033b7be6bf461ac518794968523887801e78b1ffaf1b9be",
+          "sample_index": 80,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_080/baseline_summary_20260919T090311Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_081.pcap",
+          "pcap_sha256": "8cf9692ba5d909569a7a2c48a9579f941a6bece790ed38a38e870e3513153cab",
+          "sample_index": 81,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_081/baseline_summary_20260919T090313Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_082.pcap",
+          "pcap_sha256": "65e0826bfe6e04158013683bd576fc9d84acf721e21afc0e54a53da8209b3de7",
+          "sample_index": 82,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_082/baseline_summary_20260919T090314Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_083.pcap",
+          "pcap_sha256": "998b5205d814cefe802f005c3bafe16c3974f88f14d4f2b3280c7eddb888827c",
+          "sample_index": 83,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_083/baseline_summary_20260919T090314Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_084.pcap",
+          "pcap_sha256": "5c215487ba0913927eb4736fcb63162f7986d373c6ff7c549626594b667b7469",
+          "sample_index": 84,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_084/baseline_summary_20260919T090314Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_085.pcap",
+          "pcap_sha256": "b0ada931c0c73975611f646fbffbbecdb10e7329b04fc49aa567d7a612fdecc2",
+          "sample_index": 85,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_085/baseline_summary_20260919T090314Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_086.pcap",
+          "pcap_sha256": "c5a78ca071a737d3ea599c573af2314f60a4d167166a708bf0259b296d986374",
+          "sample_index": 86,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_086/baseline_summary_20260919T090314Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_087.pcap",
+          "pcap_sha256": "6e0630c04354d4747c9fe685a333bd1852f198d948fa5991e66c271c64d4c4d2",
+          "sample_index": 87,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_087/baseline_summary_20260919T090314Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_088.pcap",
+          "pcap_sha256": "5c0d3260542043db10082d103601a717aa394ca16769e5ed88b890386c9fa2e2",
+          "sample_index": 88,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_088/baseline_summary_20260919T090314Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_089.pcap",
+          "pcap_sha256": "d9383e490fae39979a9c6fa52ccbd24746552b1aead7d9d086e50f8bf2802ac3",
+          "sample_index": 89,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_089/baseline_summary_20260919T090316Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_090.pcap",
+          "pcap_sha256": "1066ca92e0d651a83f418ee472c56a98a70005c1d522f71fbbd29e3a4e4890b7",
+          "sample_index": 90,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_090/baseline_summary_20260919T090316Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_091.pcap",
+          "pcap_sha256": "32fc0c72b9714c9154084d331e948da6b0bd89ed627e3d27c35b89be0636a07d",
+          "sample_index": 91,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_091/baseline_summary_20260919T090316Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_092.pcap",
+          "pcap_sha256": "2549bfb0aa8138e913536dac0dd51eb50912c72228eb038c587485d5e38e183d",
+          "sample_index": 92,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_092/baseline_summary_20260919T090316Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_093.pcap",
+          "pcap_sha256": "0bdba2d86e6a5b7abb5117a74ef7f448d1ebd809b90a9fd600f2cfcf24eea528",
+          "sample_index": 93,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_093/baseline_summary_20260919T090316Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_094.pcap",
+          "pcap_sha256": "ba19ed7ef60175d5a5007e983bda7de1e47dba3f7d715f9777d25585a2a90b74",
+          "sample_index": 94,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_094/baseline_summary_20260919T090316Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_095.pcap",
+          "pcap_sha256": "32ee78400261153aa5b360cd4b4f222450c2193aea9ce93d7e316f91ebfa09bd",
+          "sample_index": 95,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_095/baseline_summary_20260919T090316Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_096.pcap",
+          "pcap_sha256": "8be63d13b1b9b6b4bb1eb04dbef255887d7363914595c17fc3c8d65d5b30844a",
+          "sample_index": 96,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_096/baseline_summary_20260919T090316Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_097.pcap",
+          "pcap_sha256": "ecc659e75f2db21a8ca6baa9a6e12d5aebfc272650b66bfa835360e6484c6e99",
+          "sample_index": 97,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_097/baseline_summary_20260919T090318Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_098.pcap",
+          "pcap_sha256": "695c2ab0a1c63a71a02bcd97c3462e014f377aee261d96f0485653802eb2d7bb",
+          "sample_index": 98,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_098/baseline_summary_20260919T090319Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_099.pcap",
+          "pcap_sha256": "c4cce0d287d7f95a0b6ffa12544525a02337bc2a3db16d7d99e5244ec7730aa4",
+          "sample_index": 99,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_099/baseline_summary_20260919T090319Z.json"
+        },
+        {
+          "pcap_file": "pcaps/2_routers/run_100.pcap",
+          "pcap_sha256": "dfe4dc67d1bdbb972832d711f6cfadd1211afb719d50a6162e80d472e327f661",
+          "sample_index": 100,
+          "summary": "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_100/baseline_summary_20260919T090319Z.json"
+        }
+      ],
+      "selected_summaries": [
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_001/baseline_summary_20260919T090249Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_002/baseline_summary_20260919T090249Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_003/baseline_summary_20260919T090249Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_004/baseline_summary_20260919T090249Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_005/baseline_summary_20260919T090249Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_006/baseline_summary_20260919T090249Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_007/baseline_summary_20260919T090249Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_008/baseline_summary_20260919T090249Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_009/baseline_summary_20260919T090252Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_010/baseline_summary_20260919T090252Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_011/baseline_summary_20260919T090252Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_012/baseline_summary_20260919T090252Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_013/baseline_summary_20260919T090252Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_014/baseline_summary_20260919T090252Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_015/baseline_summary_20260919T090252Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_016/baseline_summary_20260919T090252Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_017/baseline_summary_20260919T090254Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_018/baseline_summary_20260919T090254Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_019/baseline_summary_20260919T090254Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_020/baseline_summary_20260919T090254Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_021/baseline_summary_20260919T090254Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_022/baseline_summary_20260919T090254Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_023/baseline_summary_20260919T090254Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_024/baseline_summary_20260919T090254Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_025/baseline_summary_20260919T090257Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_026/baseline_summary_20260919T090257Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_027/baseline_summary_20260919T090257Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_028/baseline_summary_20260919T090257Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_029/baseline_summary_20260919T090257Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_030/baseline_summary_20260919T090257Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_031/baseline_summary_20260919T090257Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_032/baseline_summary_20260919T090257Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_033/baseline_summary_20260919T090259Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_034/baseline_summary_20260919T090259Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_035/baseline_summary_20260919T090259Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_036/baseline_summary_20260919T090259Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_037/baseline_summary_20260919T090259Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_038/baseline_summary_20260919T090259Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_039/baseline_summary_20260919T090259Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_040/baseline_summary_20260919T090259Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_041/baseline_summary_20260919T090302Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_042/baseline_summary_20260919T090302Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_043/baseline_summary_20260919T090302Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_044/baseline_summary_20260919T090302Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_045/baseline_summary_20260919T090302Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_046/baseline_summary_20260919T090302Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_047/baseline_summary_20260919T090302Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_048/baseline_summary_20260919T090302Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_049/baseline_summary_20260919T090304Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_050/baseline_summary_20260919T090304Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_051/baseline_summary_20260919T090304Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_052/baseline_summary_20260919T090304Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_053/baseline_summary_20260919T090304Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_054/baseline_summary_20260919T090304Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_055/baseline_summary_20260919T090304Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_056/baseline_summary_20260919T090304Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_057/baseline_summary_20260919T090306Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_058/baseline_summary_20260919T090307Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_059/baseline_summary_20260919T090307Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_060/baseline_summary_20260919T090307Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_061/baseline_summary_20260919T090307Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_062/baseline_summary_20260919T090307Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_063/baseline_summary_20260919T090307Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_064/baseline_summary_20260919T090307Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_065/baseline_summary_20260919T090309Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_066/baseline_summary_20260919T090309Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_067/baseline_summary_20260919T090309Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_068/baseline_summary_20260919T090309Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_069/baseline_summary_20260919T090309Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_070/baseline_summary_20260919T090309Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_071/baseline_summary_20260919T090309Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_072/baseline_summary_20260919T090309Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_073/baseline_summary_20260919T090311Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_074/baseline_summary_20260919T090311Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_075/baseline_summary_20260919T090311Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_076/baseline_summary_20260919T090311Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_077/baseline_summary_20260919T090311Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_078/baseline_summary_20260919T090311Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_079/baseline_summary_20260919T090311Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_080/baseline_summary_20260919T090311Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_081/baseline_summary_20260919T090313Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_082/baseline_summary_20260919T090314Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_083/baseline_summary_20260919T090314Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_084/baseline_summary_20260919T090314Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_085/baseline_summary_20260919T090314Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_086/baseline_summary_20260919T090314Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_087/baseline_summary_20260919T090314Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_088/baseline_summary_20260919T090314Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_089/baseline_summary_20260919T090316Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_090/baseline_summary_20260919T090316Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_091/baseline_summary_20260919T090316Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_092/baseline_summary_20260919T090316Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_093/baseline_summary_20260919T090316Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_094/baseline_summary_20260919T090316Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_095/baseline_summary_20260919T090316Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_096/baseline_summary_20260919T090316Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_097/baseline_summary_20260919T090318Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_098/baseline_summary_20260919T090319Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_099/baseline_summary_20260919T090319Z.json",
+        "results/smoke/fast-attach-ucast-1-2routers-pcap-validation-20260919/run_100/baseline_summary_20260919T090319Z.json"
+      ]
+    },
+    "3": {
+      "campaigns": [
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919"
+      ],
+      "excluded": [
+        {
+          "classification": "attached_to_non_target_parent",
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_045/baseline_summary_20260919T090335Z.json",
+          "timing_failure_reason": "missing_parent_response",
+          "timing_source": "otns_pcap"
+        },
+        {
+          "reason": "beyond_requested_sample_size",
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_102/baseline_summary_20260919T090354Z.json"
+        }
+      ],
+      "selected_count": 100,
+      "selected_runs": [
+        {
+          "pcap_file": "pcaps/3_routers/run_001.pcap",
+          "pcap_sha256": "9458d7cc72f7c65f9ea1aae8d6bcb24f5751cd8217f4bb430e148b999280968d",
+          "sample_index": 1,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_001/baseline_summary_20260919T090321Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_002.pcap",
+          "pcap_sha256": "8ff68c6b94bcf72e94c7382ac8737c53ed9616a1bf513cc4eb76320a9aee1bb9",
+          "sample_index": 2,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_002/baseline_summary_20260919T090321Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_003.pcap",
+          "pcap_sha256": "80e13c253bf03647488f2a80c4a494cd3ef741d701de41347a621aa645ad9abe",
+          "sample_index": 3,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_003/baseline_summary_20260919T090321Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_004.pcap",
+          "pcap_sha256": "40efb0a512531821e3c4b9a1a1ace0d9aeda1e8d727df5cc8eaf3fabe7afaeb2",
+          "sample_index": 4,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_004/baseline_summary_20260919T090321Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_005.pcap",
+          "pcap_sha256": "c6a20549876e4c3f20951ef0d8c92c8593d02e38c761d74a5e58c0f286c4eef3",
+          "sample_index": 5,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_005/baseline_summary_20260919T090321Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_006.pcap",
+          "pcap_sha256": "9b07eea4985c4b40c635bc7e4045296aa5177799fed7064004a6c116f074b4ef",
+          "sample_index": 6,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_006/baseline_summary_20260919T090321Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_007.pcap",
+          "pcap_sha256": "41eb2f574d58beb79de406e9ea9bc199b9a9215dc47ea38ed02fbac82723a39e",
+          "sample_index": 7,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_007/baseline_summary_20260919T090321Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_008.pcap",
+          "pcap_sha256": "53afc705d7d77531901bf6d157eecd2fb42e99318494c4bc9934b73cff90562c",
+          "sample_index": 8,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_008/baseline_summary_20260919T090321Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_009.pcap",
+          "pcap_sha256": "a5f38f6525feec864de4f432b2f58ab85d201c96be8d1137002a582e175cc341",
+          "sample_index": 9,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_009/baseline_summary_20260919T090324Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_010.pcap",
+          "pcap_sha256": "18014d9fb13a67d228099cb0721e9ffe2dfe182339e8c4ea4c783b73e3098fb2",
+          "sample_index": 10,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_010/baseline_summary_20260919T090324Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_011.pcap",
+          "pcap_sha256": "c3337e7d95670fa2a5be96e44c2dca1abe9b5aead6f17aa4be22331d9e741875",
+          "sample_index": 11,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_011/baseline_summary_20260919T090324Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_012.pcap",
+          "pcap_sha256": "3463d5320f923a100351f7fb9361fe6d0d14317f46a9b9dbe439ed299822e696",
+          "sample_index": 12,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_012/baseline_summary_20260919T090324Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_013.pcap",
+          "pcap_sha256": "2add5295e34e5a3d95e08090de3c0100cbf11cbaa8155ad6321b5390dbcb218f",
+          "sample_index": 13,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_013/baseline_summary_20260919T090324Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_014.pcap",
+          "pcap_sha256": "096ce182237a9ea502d06374acd08e3e85d184eabb29e7180dfe67a018354237",
+          "sample_index": 14,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_014/baseline_summary_20260919T090324Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_015.pcap",
+          "pcap_sha256": "eddd6826ad62ad3bb787cbaae8399d8ee311e4f5271fbc0b61ab83eebbd0549e",
+          "sample_index": 15,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_015/baseline_summary_20260919T090324Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_016.pcap",
+          "pcap_sha256": "a77f193baf26f2effdfdcd414f8b0ecffaa65badc2651aeca8d9ebfc001c0e29",
+          "sample_index": 16,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_016/baseline_summary_20260919T090324Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_017.pcap",
+          "pcap_sha256": "7e835de72f954b47715871b977463d6f98fc8aca4940ba3c755496acc88c3fe1",
+          "sample_index": 17,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_017/baseline_summary_20260919T090326Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_018.pcap",
+          "pcap_sha256": "fe0d433539dcf6c137c46d8d0f5d159d10ae37a482c9ef4cc2b8031365a459c5",
+          "sample_index": 18,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_018/baseline_summary_20260919T090326Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_019.pcap",
+          "pcap_sha256": "504123e1e4280567e85ada2a66162cbae44f0583b5e1ff196cd01b480be48992",
+          "sample_index": 19,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_019/baseline_summary_20260919T090326Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_020.pcap",
+          "pcap_sha256": "dd8d8b859902784a06dcadfd7025b62e899a716191170afdcc994dd3a3032a4b",
+          "sample_index": 20,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_020/baseline_summary_20260919T090326Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_021.pcap",
+          "pcap_sha256": "7cd1e51771daca78f9847bb973166efe3eb3cdd823b9867e29ff0334a23ae3db",
+          "sample_index": 21,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_021/baseline_summary_20260919T090326Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_022.pcap",
+          "pcap_sha256": "757de5cf8aa75e1ff8b1fc7cecdf20c138fe0a02fb7d1ce6e60ef700cbc82c1e",
+          "sample_index": 22,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_022/baseline_summary_20260919T090326Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_023.pcap",
+          "pcap_sha256": "488b595fb2cb5178ff854a9e73e3a69f33ba37979b745975830b732858cc0425",
+          "sample_index": 23,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_023/baseline_summary_20260919T090326Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_024.pcap",
+          "pcap_sha256": "aa206e33eae460ed982b7addefa23e6f7785e34903056d106555f6f0f8cf122b",
+          "sample_index": 24,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_024/baseline_summary_20260919T090327Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_025.pcap",
+          "pcap_sha256": "871897c06441937e28fe7af8f125fee99c3d4beda894fbf163e53e2739663f25",
+          "sample_index": 25,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_025/baseline_summary_20260919T090329Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_026.pcap",
+          "pcap_sha256": "ed3dc1f1760fe5a979a9559729216382056b4c868de286ae7ee389daf0537714",
+          "sample_index": 26,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_026/baseline_summary_20260919T090329Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_027.pcap",
+          "pcap_sha256": "5898e3a224969c6e65ff39459fc21b401f8d951deed6aea9cb07b630b21374be",
+          "sample_index": 27,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_027/baseline_summary_20260919T090329Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_028.pcap",
+          "pcap_sha256": "8eb2f70be1b1a3afbb2076e4fc6a488d62e023f98c25f159cd57a4120224e20a",
+          "sample_index": 28,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_028/baseline_summary_20260919T090329Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_029.pcap",
+          "pcap_sha256": "f40906578d553821797f53f4001cf0dc6ce0cbd17e8a39bc6f2e4e118b051e29",
+          "sample_index": 29,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_029/baseline_summary_20260919T090329Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_030.pcap",
+          "pcap_sha256": "fe7ad5c78079b1541c0d12d76d81210bdae4a14b0e92f5b9aa4c6e033cff6815",
+          "sample_index": 30,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_030/baseline_summary_20260919T090329Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_031.pcap",
+          "pcap_sha256": "5f1a2bf0c4469d05f355c1748ef14ba2d7dd5ca814bc7a1684c74fdcd56cfe0b",
+          "sample_index": 31,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_031/baseline_summary_20260919T090329Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_032.pcap",
+          "pcap_sha256": "5e3075e572c61396fd374a5212f4e14d35590381fbb4ee07ba506f2966d5f321",
+          "sample_index": 32,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_032/baseline_summary_20260919T090329Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_033.pcap",
+          "pcap_sha256": "27e153e5a7293d317e1e89bc2138d30af5a93b77d181f01b147f5dd79f63d302",
+          "sample_index": 33,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_033/baseline_summary_20260919T090332Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_034.pcap",
+          "pcap_sha256": "35a93674d3457d67d053d5ba268e063c6b5b11d80dc3284534615c97881d7a8e",
+          "sample_index": 34,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_034/baseline_summary_20260919T090332Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_035.pcap",
+          "pcap_sha256": "ce4153904e21eb42f9976244c75b445060aecf8eba8c1dce63693ee49ada9ccb",
+          "sample_index": 35,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_035/baseline_summary_20260919T090332Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_036.pcap",
+          "pcap_sha256": "73b2e44e7b0a226c48bab82b8270baff8c5c015d06ca4c3b2116b74547a6ed48",
+          "sample_index": 36,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_036/baseline_summary_20260919T090332Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_037.pcap",
+          "pcap_sha256": "bf9d3dd1961d61d27d4c44d4f7b81b0faff290334b6bdb598ae3650d0cfe0fb6",
+          "sample_index": 37,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_037/baseline_summary_20260919T090332Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_038.pcap",
+          "pcap_sha256": "ea261dec09ae2c68a88c8ce34863f07d65be1fde2c33f8e3462e00746fb1d9c3",
+          "sample_index": 38,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_038/baseline_summary_20260919T090332Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_039.pcap",
+          "pcap_sha256": "a134504a372b86e34e605619349b34bc78ede298216e70a47d1f9ca3c951d4f3",
+          "sample_index": 39,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_039/baseline_summary_20260919T090332Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_040.pcap",
+          "pcap_sha256": "fac8c72cb83b96c128685deba9f79536e36451439334477fa269256fab4a3a76",
+          "sample_index": 40,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_040/baseline_summary_20260919T090332Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_041.pcap",
+          "pcap_sha256": "13eda20a562d602f38366f0a6e8e3d332a53f400bc397ee004227a0bb27db92a",
+          "sample_index": 41,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_041/baseline_summary_20260919T090335Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_042.pcap",
+          "pcap_sha256": "edaf206788787c95326095acd482e54bf5c3b5d849af3e2701f1f5e602b1d1ac",
+          "sample_index": 42,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_042/baseline_summary_20260919T090335Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_043.pcap",
+          "pcap_sha256": "02475b9aad28f1ffc05b41a2a2c99ce2d8d771409b5a3cf6d6bcd2e5e5c34e15",
+          "sample_index": 43,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_043/baseline_summary_20260919T090335Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_044.pcap",
+          "pcap_sha256": "eaa042ce1fcf05a5981584857d64089a728cfa2fe432fe170424729983eccdbe",
+          "sample_index": 44,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_044/baseline_summary_20260919T090335Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_045.pcap",
+          "pcap_sha256": "d45baae05250a053218143f2c2372d304b077fee1e6285c4cf50b40fa03ee105",
+          "sample_index": 45,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_046/baseline_summary_20260919T090335Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_046.pcap",
+          "pcap_sha256": "98dc6dd54aa432c84f8bcdb4a385c951a7a85c47935767d2d8108d7e1479d488",
+          "sample_index": 46,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_047/baseline_summary_20260919T090335Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_047.pcap",
+          "pcap_sha256": "390ef01387656310894da92eb6d44e44e6c887e25922b07e50a114f5f11777b5",
+          "sample_index": 47,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_048/baseline_summary_20260919T090335Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_048.pcap",
+          "pcap_sha256": "d092e70ee8128d4e7305b87224d8bad9fe333bd16cd52510ad1ea278708eb3ed",
+          "sample_index": 48,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_049/baseline_summary_20260919T090337Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_049.pcap",
+          "pcap_sha256": "d2dd8d3a53341553674908ff773f06b39e0eeccfa594eac021f3f0b5a605d183",
+          "sample_index": 49,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_050/baseline_summary_20260919T090337Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_050.pcap",
+          "pcap_sha256": "a72883706d72bbd30f708094a1f9dc0cee31d5401d69893f0d5bc6b9932a8512",
+          "sample_index": 50,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_051/baseline_summary_20260919T090337Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_051.pcap",
+          "pcap_sha256": "2076aacdf9f6ffc286150790cc63005197c950a7fca95205f1efbe2fb9e109c6",
+          "sample_index": 51,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_052/baseline_summary_20260919T090337Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_052.pcap",
+          "pcap_sha256": "9642101849d0683ed2ce992889a8a0ee7777f62c957598cd041c1bc85398a7fb",
+          "sample_index": 52,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_053/baseline_summary_20260919T090337Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_053.pcap",
+          "pcap_sha256": "097a0b85ac262417b6142ae7de827ac2b48cdecf015e33d7763b6647909f9714",
+          "sample_index": 53,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_054/baseline_summary_20260919T090337Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_054.pcap",
+          "pcap_sha256": "c3d40c0ed7005ce301bf955527e7840922083050cfe2a644924999f5eb00dfa9",
+          "sample_index": 54,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_055/baseline_summary_20260919T090337Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_055.pcap",
+          "pcap_sha256": "348a329f045361fcaed02e6d4d3b42cb8c32b199bd5fc7d68927ddff92cdf638",
+          "sample_index": 55,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_056/baseline_summary_20260919T090337Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_056.pcap",
+          "pcap_sha256": "a73442483f027439499dd81360db7b44086ec63cdf86678b22693961001fa479",
+          "sample_index": 56,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_057/baseline_summary_20260919T090340Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_057.pcap",
+          "pcap_sha256": "0ace34ab618c06912c1b8532c87bb115e94c23326296d60663a72d80f2bbe5ed",
+          "sample_index": 57,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_058/baseline_summary_20260919T090340Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_058.pcap",
+          "pcap_sha256": "981ef98e3538c17afe525e11858e7443b016d986f55f298ff81a92688426a064",
+          "sample_index": 58,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_059/baseline_summary_20260919T090340Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_059.pcap",
+          "pcap_sha256": "1230499c6217ad914c974899d8125ac5767733a7ad0f0add1c6acfa32b7a99b0",
+          "sample_index": 59,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_060/baseline_summary_20260919T090340Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_060.pcap",
+          "pcap_sha256": "7276ff51a31dbb46cf342b61b370d15e08bcc73563715f94ad60b8999c45b0d4",
+          "sample_index": 60,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_061/baseline_summary_20260919T090340Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_061.pcap",
+          "pcap_sha256": "4bae34cd490b5a63c956165010f03f023d00d04fa5758b38888dd0c39509bb32",
+          "sample_index": 61,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_062/baseline_summary_20260919T090340Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_062.pcap",
+          "pcap_sha256": "965bdcc1ff9172c337b9fab10f8a65f281b613954d1b0031bab6d89a818b5a01",
+          "sample_index": 62,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_063/baseline_summary_20260919T090340Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_063.pcap",
+          "pcap_sha256": "dff9384b09370ea2df4f56116614909936b6ce5ac3947e020baab68e0f967b56",
+          "sample_index": 63,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_064/baseline_summary_20260919T090340Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_064.pcap",
+          "pcap_sha256": "19a896d9696b7dcd7d013e4634b0c0c4bfbae2e690bf309e0cd6b9fac4394ff8",
+          "sample_index": 64,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_065/baseline_summary_20260919T090343Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_065.pcap",
+          "pcap_sha256": "46b8565c71168ef05f7a6e8ed3846f8f76adbbbbf26c161816e7727843939280",
+          "sample_index": 65,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_066/baseline_summary_20260919T090343Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_066.pcap",
+          "pcap_sha256": "7f249675c8920fb54e0b6eef2574a66fdbeef14e7605ab16613a54c79912bedc",
+          "sample_index": 66,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_067/baseline_summary_20260919T090343Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_067.pcap",
+          "pcap_sha256": "eb103ab4fd6f51d3a4e73cba440252f3880216570200dac14f779cb9cf3fbe93",
+          "sample_index": 67,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_068/baseline_summary_20260919T090343Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_068.pcap",
+          "pcap_sha256": "a830001dc18dade6ed64160518c58945ede0b9e817e5d20637cd013b3e2f0894",
+          "sample_index": 68,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_069/baseline_summary_20260919T090343Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_069.pcap",
+          "pcap_sha256": "584e9f0cc4cc1f22db4b5cb5bd3be81765fe71ef9c7b3e703f7d49f806f2cf2a",
+          "sample_index": 69,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_070/baseline_summary_20260919T090343Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_070.pcap",
+          "pcap_sha256": "2caa006760cb48bcc42274ba238e88d01c91579a4dda6a76a83a141b9d07f118",
+          "sample_index": 70,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_071/baseline_summary_20260919T090343Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_071.pcap",
+          "pcap_sha256": "da2cba4edf92db45b664a296660df92df2fd7980d510ed1e83a9d2c544158ed9",
+          "sample_index": 71,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_072/baseline_summary_20260919T090343Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_072.pcap",
+          "pcap_sha256": "a22f1df14fb26336308628f14e01a3e0b18c8d603ff5a0350ea3046edf5fbeaa",
+          "sample_index": 72,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_073/baseline_summary_20260919T090345Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_073.pcap",
+          "pcap_sha256": "1029eba0c52080cf4757007162406033b5fa66383f49318d83b7212384338072",
+          "sample_index": 73,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_074/baseline_summary_20260919T090345Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_074.pcap",
+          "pcap_sha256": "2127e758a1c789da81c0cd45495f2a4fa2a91167af8275ba420f57f02ae28034",
+          "sample_index": 74,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_075/baseline_summary_20260919T090346Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_075.pcap",
+          "pcap_sha256": "1dcd3aa294e9291ceb910463a0356de857cbbf5e0d201617921f18b02819ff21",
+          "sample_index": 75,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_076/baseline_summary_20260919T090346Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_076.pcap",
+          "pcap_sha256": "25ffd40133a9a7e0f5d7dc736146143c8d9d6d734c1a32760151a7acb845f752",
+          "sample_index": 76,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_077/baseline_summary_20260919T090346Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_077.pcap",
+          "pcap_sha256": "f2e03627a92283d0fd8ce7744e548e599757a93cfaf1e1db6a153abacc4ab945",
+          "sample_index": 77,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_078/baseline_summary_20260919T090346Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_078.pcap",
+          "pcap_sha256": "a7e98c69bd91dfd5d541302771700a9a55287046225e3d21efae15c61cf14626",
+          "sample_index": 78,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_079/baseline_summary_20260919T090346Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_079.pcap",
+          "pcap_sha256": "864ad52478cae5729af90d3b0f495d62ab32c6417c1b717c0a34441a9269f0e0",
+          "sample_index": 79,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_080/baseline_summary_20260919T090346Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_080.pcap",
+          "pcap_sha256": "1222db435c23d66c2bbfc1f1ee213cc857a85d2fbec0a0d6bca89258d90aac57",
+          "sample_index": 80,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_081/baseline_summary_20260919T090348Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_081.pcap",
+          "pcap_sha256": "b4a641beb11e98ab5799e1db495fb1f8576e301dbb39e154cc926dccdbc4d6f3",
+          "sample_index": 81,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_082/baseline_summary_20260919T090348Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_082.pcap",
+          "pcap_sha256": "d8cd494cb9f1b28bb9ebaa80a1a87fec8e7bc1b1489e4f2df8d3768488266cd9",
+          "sample_index": 82,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_083/baseline_summary_20260919T090348Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_083.pcap",
+          "pcap_sha256": "216a065ee54cd52947f173645655fba7d5af112da207593245b8bff374adcac1",
+          "sample_index": 83,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_084/baseline_summary_20260919T090348Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_084.pcap",
+          "pcap_sha256": "2997a2991d7b392f522b9768b0ca84b07f71746f689140b07a77123e57531222",
+          "sample_index": 84,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_085/baseline_summary_20260919T090348Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_085.pcap",
+          "pcap_sha256": "cb371f61856a710b3189596227d448cf7a8e86f175165aa5c142d89eda83c3db",
+          "sample_index": 85,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_086/baseline_summary_20260919T090348Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_086.pcap",
+          "pcap_sha256": "6f1e40c95f7be2df755b6349e2268f71ed5c78e307529cd192d6b5f3168fcf4d",
+          "sample_index": 86,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_087/baseline_summary_20260919T090348Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_087.pcap",
+          "pcap_sha256": "4ca208b0427c4cfdf3e792323576cd943d8a4bc8b92a19dc630f6b2be1254d69",
+          "sample_index": 87,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_088/baseline_summary_20260919T090348Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_088.pcap",
+          "pcap_sha256": "7e4b3107d93616dd29a089206c1e92412aaa175051d03ec799db580c28f55aeb",
+          "sample_index": 88,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_089/baseline_summary_20260919T090351Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_089.pcap",
+          "pcap_sha256": "3d48f35e2ebfb2c793202e4aaff8d70fe0025c4e4c3d11349882dc9c21b808c6",
+          "sample_index": 89,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_090/baseline_summary_20260919T090351Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_090.pcap",
+          "pcap_sha256": "a397a52d090619096edefc8e8de3ddbca18ea32929ee73c94b3e8b0cc6bc4f6f",
+          "sample_index": 90,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_091/baseline_summary_20260919T090351Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_091.pcap",
+          "pcap_sha256": "920f9d80c8a902eb6f8054583c05c9065bc6422881cd0e7c78d8d5dc2d82b147",
+          "sample_index": 91,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_092/baseline_summary_20260919T090351Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_092.pcap",
+          "pcap_sha256": "049ffb907168fa33cfa799cb37b3fdedafc89897c78cb76b423d26f1212835ac",
+          "sample_index": 92,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_093/baseline_summary_20260919T090351Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_093.pcap",
+          "pcap_sha256": "6edbc3f2e6b2a4c688f29e79d618104f835731bee59e73b702fbf378cc92bebd",
+          "sample_index": 93,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_094/baseline_summary_20260919T090351Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_094.pcap",
+          "pcap_sha256": "66d103d82e69a007d27af7305bc41d009500cd044d9a922c8ad450113e51eb30",
+          "sample_index": 94,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_095/baseline_summary_20260919T090351Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_095.pcap",
+          "pcap_sha256": "570d4bef0a4eb4c7bc07b15235f49b4e24533a3076c4acaecc12fb794a22ec8a",
+          "sample_index": 95,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_096/baseline_summary_20260919T090351Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_096.pcap",
+          "pcap_sha256": "3e271c535592dd16c1b76a08edd8d9d129905bb962ac5ea0b0807076d1037a8a",
+          "sample_index": 96,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_097/baseline_summary_20260919T090354Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_097.pcap",
+          "pcap_sha256": "6a825af5d46da4c4394980fab8b945084cd3d8db423145beefd997274710c4d6",
+          "sample_index": 97,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_098/baseline_summary_20260919T090354Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_098.pcap",
+          "pcap_sha256": "fccaa0b8ba3d967299cc46de0082e01d836473b05e8665df2b9dafdfa00a8094",
+          "sample_index": 98,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_099/baseline_summary_20260919T090354Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_099.pcap",
+          "pcap_sha256": "da3a807855bdec8f3b548f03fbe2c74c8f6aac98117f52346cf44e0d93a242cc",
+          "sample_index": 99,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_100/baseline_summary_20260919T090354Z.json"
+        },
+        {
+          "pcap_file": "pcaps/3_routers/run_100.pcap",
+          "pcap_sha256": "74f826d0fad9d7e1442b0033c95488d24df0efb67500abd4b0bb35ca47bb83e5",
+          "sample_index": 100,
+          "summary": "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_101/baseline_summary_20260919T090354Z.json"
+        }
+      ],
+      "selected_summaries": [
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_001/baseline_summary_20260919T090321Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_002/baseline_summary_20260919T090321Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_003/baseline_summary_20260919T090321Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_004/baseline_summary_20260919T090321Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_005/baseline_summary_20260919T090321Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_006/baseline_summary_20260919T090321Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_007/baseline_summary_20260919T090321Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_008/baseline_summary_20260919T090321Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_009/baseline_summary_20260919T090324Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_010/baseline_summary_20260919T090324Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_011/baseline_summary_20260919T090324Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_012/baseline_summary_20260919T090324Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_013/baseline_summary_20260919T090324Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_014/baseline_summary_20260919T090324Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_015/baseline_summary_20260919T090324Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_016/baseline_summary_20260919T090324Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_017/baseline_summary_20260919T090326Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_018/baseline_summary_20260919T090326Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_019/baseline_summary_20260919T090326Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_020/baseline_summary_20260919T090326Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_021/baseline_summary_20260919T090326Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_022/baseline_summary_20260919T090326Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_023/baseline_summary_20260919T090326Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_024/baseline_summary_20260919T090327Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_025/baseline_summary_20260919T090329Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_026/baseline_summary_20260919T090329Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_027/baseline_summary_20260919T090329Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_028/baseline_summary_20260919T090329Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_029/baseline_summary_20260919T090329Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_030/baseline_summary_20260919T090329Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_031/baseline_summary_20260919T090329Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_032/baseline_summary_20260919T090329Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_033/baseline_summary_20260919T090332Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_034/baseline_summary_20260919T090332Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_035/baseline_summary_20260919T090332Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_036/baseline_summary_20260919T090332Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_037/baseline_summary_20260919T090332Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_038/baseline_summary_20260919T090332Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_039/baseline_summary_20260919T090332Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_040/baseline_summary_20260919T090332Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_041/baseline_summary_20260919T090335Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_042/baseline_summary_20260919T090335Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_043/baseline_summary_20260919T090335Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_044/baseline_summary_20260919T090335Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_046/baseline_summary_20260919T090335Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_047/baseline_summary_20260919T090335Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_048/baseline_summary_20260919T090335Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_049/baseline_summary_20260919T090337Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_050/baseline_summary_20260919T090337Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_051/baseline_summary_20260919T090337Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_052/baseline_summary_20260919T090337Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_053/baseline_summary_20260919T090337Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_054/baseline_summary_20260919T090337Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_055/baseline_summary_20260919T090337Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_056/baseline_summary_20260919T090337Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_057/baseline_summary_20260919T090340Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_058/baseline_summary_20260919T090340Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_059/baseline_summary_20260919T090340Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_060/baseline_summary_20260919T090340Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_061/baseline_summary_20260919T090340Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_062/baseline_summary_20260919T090340Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_063/baseline_summary_20260919T090340Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_064/baseline_summary_20260919T090340Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_065/baseline_summary_20260919T090343Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_066/baseline_summary_20260919T090343Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_067/baseline_summary_20260919T090343Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_068/baseline_summary_20260919T090343Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_069/baseline_summary_20260919T090343Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_070/baseline_summary_20260919T090343Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_071/baseline_summary_20260919T090343Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_072/baseline_summary_20260919T090343Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_073/baseline_summary_20260919T090345Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_074/baseline_summary_20260919T090345Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_075/baseline_summary_20260919T090346Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_076/baseline_summary_20260919T090346Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_077/baseline_summary_20260919T090346Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_078/baseline_summary_20260919T090346Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_079/baseline_summary_20260919T090346Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_080/baseline_summary_20260919T090346Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_081/baseline_summary_20260919T090348Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_082/baseline_summary_20260919T090348Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_083/baseline_summary_20260919T090348Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_084/baseline_summary_20260919T090348Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_085/baseline_summary_20260919T090348Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_086/baseline_summary_20260919T090348Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_087/baseline_summary_20260919T090348Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_088/baseline_summary_20260919T090348Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_089/baseline_summary_20260919T090351Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_090/baseline_summary_20260919T090351Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_091/baseline_summary_20260919T090351Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_092/baseline_summary_20260919T090351Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_093/baseline_summary_20260919T090351Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_094/baseline_summary_20260919T090351Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_095/baseline_summary_20260919T090351Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_096/baseline_summary_20260919T090351Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_097/baseline_summary_20260919T090354Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_098/baseline_summary_20260919T090354Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_099/baseline_summary_20260919T090354Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_100/baseline_summary_20260919T090354Z.json",
+        "results/smoke/fast-attach-ucast-1-3routers-pcap-validation-20260919/run_101/baseline_summary_20260919T090354Z.json"
+      ]
+    },
+    "4": {
+      "campaigns": [
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-replacements-20260919"
+      ],
+      "excluded": [
+        {
+          "classification": "attached_to_non_target_parent",
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_040/baseline_summary_20260919T090409Z.json",
+          "timing_failure_reason": "missing_parent_response",
+          "timing_source": "otns_pcap"
+        },
+        {
+          "classification": "attached_to_non_target_parent",
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_045/baseline_summary_20260919T090412Z.json",
+          "timing_failure_reason": "missing_parent_response",
+          "timing_source": "otns_pcap"
+        },
+        {
+          "classification": "attached_to_non_target_parent",
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_060/baseline_summary_20260919T090418Z.json",
+          "timing_failure_reason": "missing_parent_response",
+          "timing_source": "otns_pcap"
+        },
+        {
+          "classification": "attached_to_non_target_parent",
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_067/baseline_summary_20260919T090421Z.json",
+          "timing_failure_reason": null,
+          "timing_source": "otns_pcap"
+        },
+        {
+          "classification": "attached_to_non_target_parent",
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_077/baseline_summary_20260919T090424Z.json",
+          "timing_failure_reason": "missing_parent_response",
+          "timing_source": "otns_pcap"
+        },
+        {
+          "reason": "beyond_requested_sample_size",
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-replacements-20260919/run_004/baseline_summary_20260919T090454Z.json"
+        },
+        {
+          "reason": "beyond_requested_sample_size",
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-replacements-20260919/run_005/baseline_summary_20260919T090454Z.json"
+        }
+      ],
+      "selected_count": 100,
+      "selected_runs": [
+        {
+          "pcap_file": "pcaps/4_routers/run_001.pcap",
+          "pcap_sha256": "b1a14b1c8e7a32b3c61b936d649bfd1dd24ee61817f9125d2bf2eb4fb8433275",
+          "sample_index": 1,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_001/baseline_summary_20260919T090356Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_002.pcap",
+          "pcap_sha256": "4751ef6adabdc9f05e65b00ba7293541858009aaa2ef6c3f0fb620270c0aad79",
+          "sample_index": 2,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_002/baseline_summary_20260919T090356Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_003.pcap",
+          "pcap_sha256": "35198e516db43097693556f3762f000c8177043cdd1215ab5313852b1429d96b",
+          "sample_index": 3,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_003/baseline_summary_20260919T090356Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_004.pcap",
+          "pcap_sha256": "16d96f1a2c23d676833be16b4673d0727418af74d4b3d44ef78e780fbf8a5925",
+          "sample_index": 4,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_004/baseline_summary_20260919T090356Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_005.pcap",
+          "pcap_sha256": "e095a19e23c3d0a3531106c1c207536399dc1bae5dff1813ef871c5acbd74f2d",
+          "sample_index": 5,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_005/baseline_summary_20260919T090356Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_006.pcap",
+          "pcap_sha256": "07bbd62be9dc5a790f5d60ea6ad4a5c740d8416b3c7697b35121709a46ba36d6",
+          "sample_index": 6,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_006/baseline_summary_20260919T090356Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_007.pcap",
+          "pcap_sha256": "8f6a81255a1fabf9174af347579258fbc83e682f67c7ba3e8ae10ce567bf8989",
+          "sample_index": 7,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_007/baseline_summary_20260919T090356Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_008.pcap",
+          "pcap_sha256": "e77c4eba3b502d7e3c0b1ae5f555c42cfd41d93ce27fac48df0fbc7ef7f8ced5",
+          "sample_index": 8,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_008/baseline_summary_20260919T090356Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_009.pcap",
+          "pcap_sha256": "93e80d0ef2f5331b090c6499ba1fc856b4467f2cea773e7d1cbb6bcbbb266b73",
+          "sample_index": 9,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_009/baseline_summary_20260919T090359Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_010.pcap",
+          "pcap_sha256": "d495d0133c23170561defaaf5d44b9c37ff298c2e02c73b2c48240fa92599281",
+          "sample_index": 10,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_010/baseline_summary_20260919T090359Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_011.pcap",
+          "pcap_sha256": "83a7466da41a2c93f3e597beb91823e600aecc5330ed089ae3e52a11ba2b851c",
+          "sample_index": 11,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_011/baseline_summary_20260919T090359Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_012.pcap",
+          "pcap_sha256": "b9b5c2f9739d2f98b603eaa735feaf2de2a872ead9faadbbc8edabc70ff4b636",
+          "sample_index": 12,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_012/baseline_summary_20260919T090359Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_013.pcap",
+          "pcap_sha256": "7854b55b3bf47dde888e64f1719f161c6065ae8a84d6a953b6f371bf41dbfb67",
+          "sample_index": 13,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_013/baseline_summary_20260919T090359Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_014.pcap",
+          "pcap_sha256": "5a0c93cea16c0588b0a6a09b7375d4c5ab7090945d931c74928d83dd20b7c79f",
+          "sample_index": 14,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_014/baseline_summary_20260919T090359Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_015.pcap",
+          "pcap_sha256": "2e1f8310176b5f89797245e52de1505f4abbce3e5f75caa892d9da660033340e",
+          "sample_index": 15,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_015/baseline_summary_20260919T090359Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_016.pcap",
+          "pcap_sha256": "8473e524929e9172bafdaff1ae576196a68ccfd45e33eb593c8715ebfaffaf4b",
+          "sample_index": 16,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_016/baseline_summary_20260919T090359Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_017.pcap",
+          "pcap_sha256": "6df0fe7d7522f44e8925089cee21c73ca02266c38aec5495c4259e0cd55595b6",
+          "sample_index": 17,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_017/baseline_summary_20260919T090402Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_018.pcap",
+          "pcap_sha256": "21ccafa5a17fcf4c414edd1c84aa8b380981072e0cc9c4541be56361eb7f3d9c",
+          "sample_index": 18,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_018/baseline_summary_20260919T090402Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_019.pcap",
+          "pcap_sha256": "21ddb0dc1edc68c0d7ea629e756d6099ec67691add04eb739fcb7353c337d97d",
+          "sample_index": 19,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_019/baseline_summary_20260919T090402Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_020.pcap",
+          "pcap_sha256": "6c1e02f3bb1c9d3b1ea669dfee0741fc75f0cae9736da467a45d49d25fa4bfcc",
+          "sample_index": 20,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_020/baseline_summary_20260919T090402Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_021.pcap",
+          "pcap_sha256": "1dbe7ff42dea621ebff22da59a8da638fbdfe2eaa4f84fd74a5cf19d8941345c",
+          "sample_index": 21,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_021/baseline_summary_20260919T090402Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_022.pcap",
+          "pcap_sha256": "c7e6436c4557b2e35db360ab08ca25d5e08d780338940309fb7c2a9dca89ce22",
+          "sample_index": 22,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_022/baseline_summary_20260919T090402Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_023.pcap",
+          "pcap_sha256": "bad798829ef1345ab1165f179eabc3af757b2ff2bb7b1a8ae3e6848080ed51c1",
+          "sample_index": 23,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_023/baseline_summary_20260919T090402Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_024.pcap",
+          "pcap_sha256": "5a869a65d48e6a20e20c0c5526e2c3f285182410fde91ad6e4616b388efb6367",
+          "sample_index": 24,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_024/baseline_summary_20260919T090402Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_025.pcap",
+          "pcap_sha256": "79411f13136b81bd90c5f36810f305391ebaa99b3a0b2bdeb81f8126a1eeb7c9",
+          "sample_index": 25,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_025/baseline_summary_20260919T090405Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_026.pcap",
+          "pcap_sha256": "4454a8928a3fa614e80a76ab163aab6d37e20f8188aba12b8575539020261984",
+          "sample_index": 26,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_026/baseline_summary_20260919T090405Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_027.pcap",
+          "pcap_sha256": "67daaaba75d5a4f486f5a1be444906eed0078b9a631a7d3cc001abe9f92cae75",
+          "sample_index": 27,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_027/baseline_summary_20260919T090405Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_028.pcap",
+          "pcap_sha256": "9c7642754cff5ee5c3f53c3b4b2d17c87bf4f79ec99c331a4b3ac1b16402b8bd",
+          "sample_index": 28,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_028/baseline_summary_20260919T090406Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_029.pcap",
+          "pcap_sha256": "e2fd00d60e94059da7cd88fa0dfaed371116f325e7043a0b9e47c431361ca158",
+          "sample_index": 29,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_029/baseline_summary_20260919T090406Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_030.pcap",
+          "pcap_sha256": "b6af8aa5753016bc4257dc85e437cc441d91b7ffdbc3df4af8fa754feea4bee5",
+          "sample_index": 30,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_030/baseline_summary_20260919T090406Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_031.pcap",
+          "pcap_sha256": "266aaa51e671aa0391037ea6a7991f23889edc8e2eb3d982b335d5cedfe34bce",
+          "sample_index": 31,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_031/baseline_summary_20260919T090406Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_032.pcap",
+          "pcap_sha256": "ba30584d5cf4685324b1c25a8aef4393894edc4fb6d75b6e239e32d308e6c00f",
+          "sample_index": 32,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_032/baseline_summary_20260919T090406Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_033.pcap",
+          "pcap_sha256": "f0e1602873802d2feec3392259a494eda8bc4a877067b57a61ff305b4ae5dbec",
+          "sample_index": 33,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_033/baseline_summary_20260919T090409Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_034.pcap",
+          "pcap_sha256": "fda076a03316dc54fb19ec1290aa314459f8ee18c2a9a2eeec7cd6a53c6a76a4",
+          "sample_index": 34,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_034/baseline_summary_20260919T090409Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_035.pcap",
+          "pcap_sha256": "543acc4d39514d1a0e6ce6ece1ba47493a1edc56920719739d9cb9002dcd0eca",
+          "sample_index": 35,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_035/baseline_summary_20260919T090409Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_036.pcap",
+          "pcap_sha256": "e7b4b69a9ba5e3d9f9d538e930499bd7335b5ccd70763ac7f2cb396123ac68e6",
+          "sample_index": 36,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_036/baseline_summary_20260919T090409Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_037.pcap",
+          "pcap_sha256": "9dcb5097803346e73d647b3a845e245f29247e24a00c19d21b2637bb9bd5d7c2",
+          "sample_index": 37,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_037/baseline_summary_20260919T090409Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_038.pcap",
+          "pcap_sha256": "79a4f828f21887a561f3afd231c3362461d61d8aa98ed538016cb7331e13793c",
+          "sample_index": 38,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_038/baseline_summary_20260919T090409Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_039.pcap",
+          "pcap_sha256": "118d2599b6d31200023f29b3edc429d8d1c9ca50f77981616225f764e042a370",
+          "sample_index": 39,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_039/baseline_summary_20260919T090409Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_040.pcap",
+          "pcap_sha256": "caa044481686675e83b19c0ad330078ac037fd41ea439a72abbc283869ef2d4f",
+          "sample_index": 40,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_041/baseline_summary_20260919T090412Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_041.pcap",
+          "pcap_sha256": "df6ab60282bd0c89e07502e5f921cb6a765676c129f8e6385be48ed43f5122f7",
+          "sample_index": 41,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_042/baseline_summary_20260919T090412Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_042.pcap",
+          "pcap_sha256": "dcc5d3d6d791c83e6503ad0dde73c157949bb9dfcf918d24074c163e7c0c71e0",
+          "sample_index": 42,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_043/baseline_summary_20260919T090412Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_043.pcap",
+          "pcap_sha256": "614df1f3d91be1c52865343a3a00b2d4bf185ef5c14e5678130dfc2a872c2d4b",
+          "sample_index": 43,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_044/baseline_summary_20260919T090412Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_044.pcap",
+          "pcap_sha256": "48bdfa71eebf73118c22ede8a23c6be718e21185cbdb3881a0f60dc71a421520",
+          "sample_index": 44,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_046/baseline_summary_20260919T090412Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_045.pcap",
+          "pcap_sha256": "ed70b036c998fe1c1f41c7f5d860e94d6c86c7043de393de180346b71bf8374e",
+          "sample_index": 45,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_047/baseline_summary_20260919T090412Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_046.pcap",
+          "pcap_sha256": "095d35d0d88b70162b23eeac611dc9f7ecbfac9d52f514e41814327acc36663e",
+          "sample_index": 46,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_048/baseline_summary_20260919T090412Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_047.pcap",
+          "pcap_sha256": "16e9577fd1e3970ed22f691ece1998203392ffdda752e225ca7052d091a5b3fe",
+          "sample_index": 47,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_049/baseline_summary_20260919T090415Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_048.pcap",
+          "pcap_sha256": "5b28b10674749eefb5e057fab99faa64a21b5c80a531704816c6665e1e536fdf",
+          "sample_index": 48,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_050/baseline_summary_20260919T090415Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_049.pcap",
+          "pcap_sha256": "2e3cff9d02da4b790adb879149dc2223d1b915c8cf04afd7c77336b8af5282a5",
+          "sample_index": 49,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_051/baseline_summary_20260919T090415Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_050.pcap",
+          "pcap_sha256": "7acbb19ca3b87901bd15983e4eef7cd63ca7be81b8319a5119d827e3e417e08d",
+          "sample_index": 50,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_052/baseline_summary_20260919T090415Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_051.pcap",
+          "pcap_sha256": "80b1320ca14f989c7b8cba2012e470e7b9114a6f5de330273613e106c7955931",
+          "sample_index": 51,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_053/baseline_summary_20260919T090415Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_052.pcap",
+          "pcap_sha256": "3b78794c2c521932540ce6179e350a9437f129c33298edd3b95626ae83e989d2",
+          "sample_index": 52,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_054/baseline_summary_20260919T090415Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_053.pcap",
+          "pcap_sha256": "450299a05d4dc2c648d0c55043f880a390175f9209d6b2993e05afd2090c144d",
+          "sample_index": 53,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_055/baseline_summary_20260919T090415Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_054.pcap",
+          "pcap_sha256": "7e95ab4b87b2a0c02caece914153009b1dc782a6952431ce32f71db36a7288d8",
+          "sample_index": 54,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_056/baseline_summary_20260919T090415Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_055.pcap",
+          "pcap_sha256": "a5a9127186be450bd2f1748442413a9434aef049de261d4973d1e3ff9d215f1c",
+          "sample_index": 55,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_057/baseline_summary_20260919T090418Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_056.pcap",
+          "pcap_sha256": "f04b8151c679cc74da7927ad96815af7ed2f3af2b16a87cc55d31aaf4c8d7650",
+          "sample_index": 56,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_058/baseline_summary_20260919T090418Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_057.pcap",
+          "pcap_sha256": "83ae0623617c5ede8c073133fd82aec2e7a9b0db21866d50cad19563dfbc1e10",
+          "sample_index": 57,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_059/baseline_summary_20260919T090418Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_058.pcap",
+          "pcap_sha256": "9783e9deecce9482ba5abea23eb1c29056037b59d18463cd2a1722419ae090a4",
+          "sample_index": 58,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_061/baseline_summary_20260919T090418Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_059.pcap",
+          "pcap_sha256": "9e2ccee0e16b022c138b01ee4cd5215ba422fb88d78ffe90cd3c16ffb71225b5",
+          "sample_index": 59,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_062/baseline_summary_20260919T090418Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_060.pcap",
+          "pcap_sha256": "c2c5a1cf732fb9b45b9a5d2d922d5a0a6205ff20cfa4730df11d0a9f925d9996",
+          "sample_index": 60,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_063/baseline_summary_20260919T090418Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_061.pcap",
+          "pcap_sha256": "9d6717d6b953aaaae7ff85e8110fd51a268f092e0aff932078bb45bd6389dfef",
+          "sample_index": 61,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_064/baseline_summary_20260919T090418Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_062.pcap",
+          "pcap_sha256": "476c9071fa32c70aedfaf0f5865b1ae1b9b4596a4dbf5e50dd4c43bfe2d13e0e",
+          "sample_index": 62,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_065/baseline_summary_20260919T090421Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_063.pcap",
+          "pcap_sha256": "a5594a71c4b609dac9caf55ba8c4510d6fd3fb9fb46686d979dc79a550c65e4a",
+          "sample_index": 63,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_066/baseline_summary_20260919T090421Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_064.pcap",
+          "pcap_sha256": "2763cd7e500f07065ace723b087392827919880343d4c4e5ebdc3bcd4bbfd6ca",
+          "sample_index": 64,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_068/baseline_summary_20260919T090421Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_065.pcap",
+          "pcap_sha256": "042aef1b0d656fa653711b4e127c3c431334f203dcdc939be040722d4d905838",
+          "sample_index": 65,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_069/baseline_summary_20260919T090421Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_066.pcap",
+          "pcap_sha256": "6f26e3e2d2722edc29296ff2e30c7ecaea0c74e59f90a7c5b6f3032ed152fd40",
+          "sample_index": 66,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_070/baseline_summary_20260919T090421Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_067.pcap",
+          "pcap_sha256": "16e156fa8d3a557dc8e6b09c326b0043ccd79fa7da12c0afffef9b161aca0712",
+          "sample_index": 67,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_071/baseline_summary_20260919T090421Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_068.pcap",
+          "pcap_sha256": "6f05fd9ccbfbc4fad84f8aed1a72d6536ebc63e41db36c9e649f2a382e75e473",
+          "sample_index": 68,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_072/baseline_summary_20260919T090421Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_069.pcap",
+          "pcap_sha256": "6114668701091b47b1aefbdc1ab3a8d36c1735378503bf0417510fbc163de5cf",
+          "sample_index": 69,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_073/baseline_summary_20260919T090424Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_070.pcap",
+          "pcap_sha256": "d7f040cc1662b26fee8a7b46151f2b8138e338783b051c938dfbd0ada5e1128b",
+          "sample_index": 70,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_074/baseline_summary_20260919T090424Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_071.pcap",
+          "pcap_sha256": "5bd78a7e250a449c51303a4288a50c11ec072e33a60284de7303e11a50eff3ae",
+          "sample_index": 71,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_075/baseline_summary_20260919T090424Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_072.pcap",
+          "pcap_sha256": "790c357374ca1f56ef66998d7e90c50914e9752bbec93719afb5280aa0766cc4",
+          "sample_index": 72,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_076/baseline_summary_20260919T090424Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_073.pcap",
+          "pcap_sha256": "132ee01ba49bcec6347c8c5665b6b33f2f4cb6a1847d1faafb420b14dd378c0a",
+          "sample_index": 73,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_078/baseline_summary_20260919T090424Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_074.pcap",
+          "pcap_sha256": "980e7d4f705036dc3da5d7c4982682eef77b77958eaad3782bbfd1a003dd168d",
+          "sample_index": 74,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_079/baseline_summary_20260919T090424Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_075.pcap",
+          "pcap_sha256": "6b31fa3c42fa87e356cce49d00005d2a917c7b4b0cd6d950faf3af66456660b2",
+          "sample_index": 75,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_080/baseline_summary_20260919T090424Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_076.pcap",
+          "pcap_sha256": "ce28b6c09630986ad96a40376e6710941ec7ddfc41c948f1ab14f069f1266d8d",
+          "sample_index": 76,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_081/baseline_summary_20260919T090427Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_077.pcap",
+          "pcap_sha256": "b824fbfd30b67de9e99e11af28ec28a15fc4cb6cd2d91de1e876b1be7550c394",
+          "sample_index": 77,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_082/baseline_summary_20260919T090427Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_078.pcap",
+          "pcap_sha256": "6126dd3fd9ea281ea81c4a0453a35fb2450918ff79318da860891129d6f00b23",
+          "sample_index": 78,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_083/baseline_summary_20260919T090427Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_079.pcap",
+          "pcap_sha256": "4bd56a75980193ca56dd80d15f0d66ad556a11cc4807199d294864658196caa6",
+          "sample_index": 79,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_084/baseline_summary_20260919T090427Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_080.pcap",
+          "pcap_sha256": "03208fd739897593a20e017ad70d2072ed56695fee09f13b8bcb793657de26cd",
+          "sample_index": 80,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_085/baseline_summary_20260919T090427Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_081.pcap",
+          "pcap_sha256": "5c3ce1341db5cb85e2b869103416f560d34522a2339f9c9ee10ce87ce3deacb0",
+          "sample_index": 81,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_086/baseline_summary_20260919T090427Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_082.pcap",
+          "pcap_sha256": "9154351d4069ee1c3635a7eab2160cb7bad7fdda29a382b41fc92d81b380b2e5",
+          "sample_index": 82,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_087/baseline_summary_20260919T090427Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_083.pcap",
+          "pcap_sha256": "30563a56aa32d9669889afcd7f178fd1b6f2c5ba8ae193c384933dacb49751f7",
+          "sample_index": 83,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_088/baseline_summary_20260919T090427Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_084.pcap",
+          "pcap_sha256": "95fc92ce8f7267ce2b25ae5f2bcab61175c23273f09baf155681a336d9a5d62a",
+          "sample_index": 84,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_089/baseline_summary_20260919T090430Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_085.pcap",
+          "pcap_sha256": "0ed9dc41276586b5f7390577633f26f5fe55a9fc551209c451a6229a8c97e3fa",
+          "sample_index": 85,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_090/baseline_summary_20260919T090430Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_086.pcap",
+          "pcap_sha256": "bd01cc2f007e66487a1fa9df806aeaf75d7ee70ebdf7d09a81e2d61284af0e5a",
+          "sample_index": 86,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_091/baseline_summary_20260919T090430Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_087.pcap",
+          "pcap_sha256": "94a04500101a201edd7acdd0720abaef91b3126ebf5241adb864b3afb4057f4e",
+          "sample_index": 87,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_092/baseline_summary_20260919T090430Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_088.pcap",
+          "pcap_sha256": "9a8ff1b627e403bec440010bf6dc4cdc87593da4e0fa71e37c405b5385fe9b12",
+          "sample_index": 88,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_093/baseline_summary_20260919T090430Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_089.pcap",
+          "pcap_sha256": "4a54dc83a7f809feeda657be4eeebd77fba8a9cce8ccb6e417c5237dd1b7ba6a",
+          "sample_index": 89,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_094/baseline_summary_20260919T090430Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_090.pcap",
+          "pcap_sha256": "af91e2637f90833814de6ab5c47ad4315c23777d90dbc3fbaa8ad7ca6ca7c582",
+          "sample_index": 90,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_095/baseline_summary_20260919T090430Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_091.pcap",
+          "pcap_sha256": "66b4365514476f8f2cb0fe83fcc89b51e75422c9b101817037674cb1736f4593",
+          "sample_index": 91,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_096/baseline_summary_20260919T090430Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_092.pcap",
+          "pcap_sha256": "ec019dc4e09242e1e92276fd37f4b8dc576c38c8e1ea35ae4bd983df17576d86",
+          "sample_index": 92,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_097/baseline_summary_20260919T090433Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_093.pcap",
+          "pcap_sha256": "a02286b5a760f5051a7624d63d28b635ec5f55ad8832f1b622df8c7bcdec3d0c",
+          "sample_index": 93,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_098/baseline_summary_20260919T090433Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_094.pcap",
+          "pcap_sha256": "e82f8919d167c8023d04b29fd2b64e68f3ed2cb2f300808061e702734815749f",
+          "sample_index": 94,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_099/baseline_summary_20260919T090433Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_095.pcap",
+          "pcap_sha256": "67d9d0e83fa16598fd81252776f6ef3f8a072ef8f7a122407ed21d0bb879bfaa",
+          "sample_index": 95,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_100/baseline_summary_20260919T090433Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_096.pcap",
+          "pcap_sha256": "df8d6927a333d5d10ea45357708e2867879b30a9f43f67d203b5e3492bb5fe5f",
+          "sample_index": 96,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_101/baseline_summary_20260919T090433Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_097.pcap",
+          "pcap_sha256": "18b9e80b84f0b62ca9b88b641c602221dc6a2065cad9658285fa0c028d3aa1bc",
+          "sample_index": 97,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_102/baseline_summary_20260919T090433Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_098.pcap",
+          "pcap_sha256": "cc03b4d273fb53c32ba69bf5ff3be270552d8d34ee3d1c4d31fb1fdd040b8053",
+          "sample_index": 98,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-replacements-20260919/run_001/baseline_summary_20260919T090454Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_099.pcap",
+          "pcap_sha256": "52fd7578b9e9bd1fe50c4b3dce915a1a07448101741504378ed540ac16cc04f9",
+          "sample_index": 99,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-replacements-20260919/run_002/baseline_summary_20260919T090454Z.json"
+        },
+        {
+          "pcap_file": "pcaps/4_routers/run_100.pcap",
+          "pcap_sha256": "7658634107bae0afcc0107e6912d29b0f7e597ee28b15bd25011b18532d458e2",
+          "sample_index": 100,
+          "summary": "results/smoke/fast-attach-ucast-1-4routers-pcap-replacements-20260919/run_003/baseline_summary_20260919T090454Z.json"
+        }
+      ],
+      "selected_summaries": [
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_001/baseline_summary_20260919T090356Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_002/baseline_summary_20260919T090356Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_003/baseline_summary_20260919T090356Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_004/baseline_summary_20260919T090356Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_005/baseline_summary_20260919T090356Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_006/baseline_summary_20260919T090356Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_007/baseline_summary_20260919T090356Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_008/baseline_summary_20260919T090356Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_009/baseline_summary_20260919T090359Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_010/baseline_summary_20260919T090359Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_011/baseline_summary_20260919T090359Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_012/baseline_summary_20260919T090359Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_013/baseline_summary_20260919T090359Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_014/baseline_summary_20260919T090359Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_015/baseline_summary_20260919T090359Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_016/baseline_summary_20260919T090359Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_017/baseline_summary_20260919T090402Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_018/baseline_summary_20260919T090402Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_019/baseline_summary_20260919T090402Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_020/baseline_summary_20260919T090402Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_021/baseline_summary_20260919T090402Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_022/baseline_summary_20260919T090402Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_023/baseline_summary_20260919T090402Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_024/baseline_summary_20260919T090402Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_025/baseline_summary_20260919T090405Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_026/baseline_summary_20260919T090405Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_027/baseline_summary_20260919T090405Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_028/baseline_summary_20260919T090406Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_029/baseline_summary_20260919T090406Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_030/baseline_summary_20260919T090406Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_031/baseline_summary_20260919T090406Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_032/baseline_summary_20260919T090406Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_033/baseline_summary_20260919T090409Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_034/baseline_summary_20260919T090409Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_035/baseline_summary_20260919T090409Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_036/baseline_summary_20260919T090409Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_037/baseline_summary_20260919T090409Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_038/baseline_summary_20260919T090409Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_039/baseline_summary_20260919T090409Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_041/baseline_summary_20260919T090412Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_042/baseline_summary_20260919T090412Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_043/baseline_summary_20260919T090412Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_044/baseline_summary_20260919T090412Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_046/baseline_summary_20260919T090412Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_047/baseline_summary_20260919T090412Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_048/baseline_summary_20260919T090412Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_049/baseline_summary_20260919T090415Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_050/baseline_summary_20260919T090415Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_051/baseline_summary_20260919T090415Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_052/baseline_summary_20260919T090415Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_053/baseline_summary_20260919T090415Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_054/baseline_summary_20260919T090415Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_055/baseline_summary_20260919T090415Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_056/baseline_summary_20260919T090415Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_057/baseline_summary_20260919T090418Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_058/baseline_summary_20260919T090418Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_059/baseline_summary_20260919T090418Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_061/baseline_summary_20260919T090418Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_062/baseline_summary_20260919T090418Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_063/baseline_summary_20260919T090418Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_064/baseline_summary_20260919T090418Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_065/baseline_summary_20260919T090421Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_066/baseline_summary_20260919T090421Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_068/baseline_summary_20260919T090421Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_069/baseline_summary_20260919T090421Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_070/baseline_summary_20260919T090421Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_071/baseline_summary_20260919T090421Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_072/baseline_summary_20260919T090421Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_073/baseline_summary_20260919T090424Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_074/baseline_summary_20260919T090424Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_075/baseline_summary_20260919T090424Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_076/baseline_summary_20260919T090424Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_078/baseline_summary_20260919T090424Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_079/baseline_summary_20260919T090424Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_080/baseline_summary_20260919T090424Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_081/baseline_summary_20260919T090427Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_082/baseline_summary_20260919T090427Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_083/baseline_summary_20260919T090427Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_084/baseline_summary_20260919T090427Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_085/baseline_summary_20260919T090427Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_086/baseline_summary_20260919T090427Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_087/baseline_summary_20260919T090427Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_088/baseline_summary_20260919T090427Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_089/baseline_summary_20260919T090430Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_090/baseline_summary_20260919T090430Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_091/baseline_summary_20260919T090430Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_092/baseline_summary_20260919T090430Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_093/baseline_summary_20260919T090430Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_094/baseline_summary_20260919T090430Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_095/baseline_summary_20260919T090430Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_096/baseline_summary_20260919T090430Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_097/baseline_summary_20260919T090433Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_098/baseline_summary_20260919T090433Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_099/baseline_summary_20260919T090433Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_100/baseline_summary_20260919T090433Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_101/baseline_summary_20260919T090433Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-validation-20260919/run_102/baseline_summary_20260919T090433Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-replacements-20260919/run_001/baseline_summary_20260919T090454Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-replacements-20260919/run_002/baseline_summary_20260919T090454Z.json",
+        "results/smoke/fast-attach-ucast-1-4routers-pcap-replacements-20260919/run_003/baseline_summary_20260919T090454Z.json"
+      ]
+    }
+  },
+  "sample_limit": 100
+}
