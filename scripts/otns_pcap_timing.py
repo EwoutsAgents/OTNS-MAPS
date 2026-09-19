@@ -183,21 +183,83 @@ def _find_complete_sequences(
     return sequences, furthest_command
 
 
+def _find_inferred_multicast_sequences(
+    packets: Iterable[AttachPacket],
+    *,
+    child_extaddr: str,
+    operation_start_s: float,
+) -> tuple[list[dict[int, AttachPacket]], int | None]:
+    """Find multicast attaches whose selected router is learned from CID Request."""
+    child = normalize_extaddr(child_extaddr)
+    if child is None:
+        raise ValueError("Child extended address must contain 16 hexadecimal characters")
+    relevant = [packet for packet in packets if packet.timestamp_s >= operation_start_s]
+    sequences: list[dict[int, AttachPacket]] = []
+    furthest_command: int | None = None
+    for request_index, request in enumerate(relevant):
+        if request.command != 9 or request.src64 != child or not _is_broadcast(request):
+            continue
+        furthest_command = max(furthest_command or 0, 9)
+        next_request_index = next(
+            (
+                index
+                for index in range(request_index + 1, len(relevant))
+                if relevant[index].command == 9 and relevant[index].src64 == child
+            ),
+            len(relevant),
+        )
+        window = relevant[request_index + 1 : next_request_index]
+        for child_request_index, child_request in enumerate(window):
+            if child_request.command != 11 or child_request.src64 != child or not child_request.dst64:
+                continue
+            target = child_request.dst64
+            matching_responses = [
+                packet
+                for packet in window[:child_request_index]
+                if packet.command == 10 and _matches_direction(packet, target, child)
+            ]
+            if not matching_responses:
+                continue
+            furthest_command = max(furthest_command or 0, 11)
+            child_response = next(
+                (
+                    packet
+                    for packet in window[child_request_index + 1 :]
+                    if packet.command == 12 and _matches_direction(packet, target, child)
+                ),
+                None,
+            )
+            if child_response is None:
+                continue
+            furthest_command = 12
+            sequences.append(
+                {9: request, 10: matching_responses[-1], 11: child_request, 12: child_response}
+            )
+    return sequences, furthest_command
+
+
 def derive_air_timing(
     packets: Iterable[AttachPacket],
     *,
     child_extaddr: str,
-    target_extaddr: str,
+    target_extaddr: str | None,
     mode: str,
     operation_start_s: float,
 ) -> dict[str, Any]:
-    sequences, furthest_command = _find_complete_sequences(
-        packets,
-        child_extaddr=child_extaddr,
-        target_extaddr=target_extaddr,
-        mode=mode,
-        operation_start_s=operation_start_s,
-    )
+    if target_extaddr is None and mode == "multicast":
+        sequences, furthest_command = _find_inferred_multicast_sequences(
+            packets, child_extaddr=child_extaddr, operation_start_s=operation_start_s
+        )
+    else:
+        if target_extaddr is None:
+            raise ValueError("Unicast timing requires a target extended address")
+        sequences, furthest_command = _find_complete_sequences(
+            packets,
+            child_extaddr=child_extaddr,
+            target_extaddr=target_extaddr,
+            mode=mode,
+            operation_start_s=operation_start_s,
+        )
     if not sequences:
         missing_command = 9 if furthest_command is None else min(furthest_command + 1, 12)
         return {
@@ -253,7 +315,7 @@ def extract_air_timing(
     pcap_path: Path,
     *,
     child_extaddr: str,
-    target_extaddr: str,
+    target_extaddr: str | None,
     mode: str,
     operation_start_s: float,
     network_key: str = DEFAULT_THREAD_NETWORK_KEY,

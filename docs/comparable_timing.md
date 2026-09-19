@@ -1,13 +1,13 @@
 # Comparable Attach Timing
 
-Directed real OTNS runs retain two separate timing views. They must not be
-mixed within an interval.
+Directed and static parent-removal OTNS runs retain separate timing views. They
+must not be mixed within an interval.
 
 ## Canonical air-to-air metrics
 
 `protocol_timing_ms` is derived from the run's OTNS IEEE 802.15.4 PCAP and is
 labeled `protocol_timing_source = otns_pcap`. The runner forces `-pcap wpan`
-for directed real runs, copies `current.pcap` out of the isolated runtime as
+for attach runs, copies `current.pcap` out of the isolated runtime as
 `otns_packets_<token>.pcap`, and includes that file in tracked artifacts and
 their checksum inventory.
 
@@ -22,6 +22,12 @@ direction:
 | Parent Response on air | 10 | selected target to child |
 | Child ID Request on air | 11 | child to selected target |
 | Child ID Response on air | 12 | selected target to child |
+
+For static parent-removal operations the replacement parent is not known in
+advance. The extractor therefore learns it from the Child ID Request
+destination, then matches that router's preceding Parent Response and following
+Child ID Response. This avoids selecting the first response from an unrelated
+router.
 
 The canonical intervals are:
 

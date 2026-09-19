@@ -47,6 +47,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--hardware-csv", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--variant", default="fast-attach-ucast-1")
     parser.add_argument("--limit", type=int, default=100)
     return parser.parse_args()
 
@@ -62,13 +63,13 @@ def parse_campaigns(values: list[str]) -> dict[int, list[Path]]:
     return campaigns
 
 
-def load_hardware(path: Path) -> dict[int, dict[str, str]]:
+def load_hardware(path: Path, variant: str) -> dict[int, dict[str, str]]:
     with path.open("r", encoding="utf-8", newline="") as handle:
         rows = csv.DictReader(handle)
         return {
             int(row["routers"]): row
             for row in rows
-            if row["variant"] == "fast-attach-ucast-1"
+            if row["variant"] == variant
         }
 
 
@@ -79,7 +80,7 @@ def load_selected(campaigns: list[Path], limit: int) -> tuple[list[tuple[Path, d
         for path in sorted(campaign.rglob("baseline_summary_*.json")):
             summary = json.loads(path.read_text(encoding="utf-8"))
             accepted = (
-                summary.get("result_classification") == "selected_target_reached"
+                summary.get("result_classification") in {"selected_target_reached", "switch_observed"}
                 and summary.get("protocol_timing_source") == "otns_pcap"
                 and summary.get("protocol_timing_complete") is True
                 and all(summary.get("protocol_timing_ms", {}).get(key) is not None for key, _ in INTERVALS)
@@ -126,7 +127,7 @@ def format_stat(value: dict[str, float | int]) -> str:
 def main() -> int:
     args = parse_args()
     campaigns = parse_campaigns(args.campaign)
-    hardware = load_hardware(args.hardware_csv)
+    hardware = load_hardware(args.hardware_csv, args.variant)
     args.output_dir.mkdir(parents=True, exist_ok=False)
 
     result_rows: list[dict[str, Any]] = []
@@ -172,7 +173,9 @@ def main() -> int:
             }
             for key, _label in INTERVALS:
                 accepted_row[f"pcap_{key}_ms"] = summary["protocol_timing_ms"][key]
-                accepted_row[f"event_{key}_ms"] = summary["openthread_event_timing"]["timing_ms"][key]
+                accepted_row[f"event_{key}_ms"] = (
+                    summary.get("openthread_event_timing", {}).get("timing_ms", {}).get(key)
+                )
             for packet_name, packet_data in summary.get("protocol_packet_timestamps", {}).items():
                 accepted_row[f"{packet_name}_frame"] = packet_data.get("frame_number")
                 accepted_row[f"{packet_name}_timestamp_s"] = packet_data.get("timestamp_s")
@@ -180,9 +183,13 @@ def main() -> int:
         selection["router_counts"][str(routers)]["selected_runs"] = selected_manifest_rows
         for key, label in INTERVALS:
             pcap = stats([float(summary["protocol_timing_ms"][key]) for _path, summary in selected])
-            internal = stats(
-                [float(summary["openthread_event_timing"]["timing_ms"][key]) for _path, summary in selected]
-            )
+            internal_values = [
+                float(value)
+                for _path, summary in selected
+                if (value := summary.get("openthread_event_timing", {}).get("timing_ms", {}).get(key))
+                is not None
+            ]
+            internal = stats(internal_values) if internal_values else None
             mean_column, sd_column = HARDWARE_COLUMNS[key]
             hw = {
                 "n": int(hardware_row["n"]),
@@ -190,11 +197,10 @@ def main() -> int:
                 "sample_sd_ms": float(hardware_row[sd_column]),
             }
             report_rows.append((routers, label, internal, pcap, hw))
-            for source, value in (
-                ("otns_openthread_event", internal),
-                ("otns_pcap", pcap),
-                ("hardware_pcap", hw),
-            ):
+            sources = [("otns_pcap", pcap), ("hardware_pcap", hw)]
+            if internal is not None:
+                sources.insert(0, ("otns_openthread_event", internal))
+            for source, value in sources:
                 result_rows.append(
                     {
                         "routers": routers,
@@ -225,16 +231,16 @@ def main() -> int:
     )
 
     lines = [
-        "# Fast Attach Ucast 1: internal events, simulated PCAP, and hardware PCAP",
+        f"# {args.variant}: simulated PCAP and hardware PCAP",
         "",
-        f"Each OTNS column uses exactly {args.limit} accepted selected-target runs. Values are mean +/- sample SD in ms.",
+        f"Each OTNS column uses exactly {args.limit} accepted runs. Values are mean +/- sample SD in ms.",
         "",
-        "| Routers | Interval | Old OTNS event | New OTNS PCAP | Hardware PCAP |",
+        "| Routers | Interval | Internal OTNS event | OTNS PCAP | Hardware PCAP |",
         "| ---: | --- | ---: | ---: | ---: |",
     ]
     for routers, label, internal, pcap, hw in report_rows:
         lines.append(
-            f"| {routers} | {label} | {format_stat(internal)} | {format_stat(pcap)} | {format_stat(hw)} |"
+            f"| {routers} | {label} | {format_stat(internal) if internal is not None else 'n/a'} | {format_stat(pcap)} | {format_stat(hw)} |"
         )
     lines.extend(
         [

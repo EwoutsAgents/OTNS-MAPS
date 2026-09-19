@@ -2234,6 +2234,9 @@ class RealBenchmarkRunner:
                 "removed_parent_node_id": removed_parent_node_id,
                 "removed_parent_rloc16": removed_parent_rloc16,
                 "removed_parent_extaddr": removed_parent_extaddr,
+                "mobile_extaddr": self.node_refs.get("mobile").extaddr
+                if self.node_refs.get("mobile")
+                else None,
                 "parent_removal_time_s": removal_time_s,
                 "parent_after_removal_final": samples[-1].get("parent_node_guess") if samples else None,
                 "post_removal_switch_events": switch_events,
@@ -3815,7 +3818,7 @@ def write_json(data: dict[str, Any], path: Path) -> None:
         handle.write("\n")
 
 
-def capture_directed_pcap_timing(
+def capture_attach_pcap_timing(
     *,
     scenario: dict[str, Any],
     summary: dict[str, Any],
@@ -3826,7 +3829,8 @@ def capture_directed_pcap_timing(
     tshark: str,
 ) -> Path | None:
     """Preserve one run's PCAP and make air-to-air timing canonical."""
-    if scenario.get("scenario_type") != "directed_parent_switch":
+    scenario_type = scenario.get("scenario_type")
+    if scenario_type not in {"directed_parent_switch", "static_parent_removal"}:
         return None
 
     internal_timing = {
@@ -3852,8 +3856,13 @@ def capture_directed_pcap_timing(
         None,
     )
     child_extaddr = summary.get("mobile_extaddr")
-    target_extaddr = summary.get("target_parent_extaddr")
-    operation_start = requested_event.get("observed_time_s") if requested_event else None
+    target_extaddr = summary.get("target_parent_extaddr") if scenario_type == "directed_parent_switch" else None
+    operation_start = (
+        requested_event.get("observed_time_s")
+        if requested_event
+        else summary.get("parent_removal_time_s")
+    )
+    mode = str(summary.get("directed_mode")) if scenario_type == "directed_parent_switch" else "multicast"
     if pcap_path is None:
         pcap_timing = {
             "source": "otns_pcap",
@@ -3863,7 +3872,7 @@ def capture_directed_pcap_timing(
             "packets": {},
             "timestamp_resolution_us": 1,
         }
-    elif not child_extaddr or not target_extaddr or operation_start is None:
+    elif not child_extaddr or operation_start is None or (mode == "unicast" and not target_extaddr):
         pcap_timing = {
             "source": "otns_pcap",
             "complete": False,
@@ -3877,8 +3886,8 @@ def capture_directed_pcap_timing(
         pcap_timing = extract_air_timing(
             pcap_path,
             child_extaddr=str(child_extaddr),
-            target_extaddr=str(target_extaddr),
-            mode=str(summary.get("directed_mode")),
+            target_extaddr=str(target_extaddr) if target_extaddr else None,
+            mode=mode,
             operation_start_s=float(operation_start),
             network_key=network_key,
             tshark=tshark,
@@ -3894,6 +3903,10 @@ def capture_directed_pcap_timing(
     summary["pcap_file"] = str(pcap_path) if pcap_path is not None else None
     summary["pcap_sha256"] = sha256_file(pcap_path) if pcap_path is not None else None
     return pcap_path
+
+
+# Retain the original public helper name for callers and tests.
+capture_directed_pcap_timing = capture_attach_pcap_timing
 
 
 def main() -> int:
@@ -3930,8 +3943,10 @@ def main() -> int:
         runtime_dir.mkdir(parents=True, exist_ok=True)
     replay_before = snapshot_replay_files(runtime_dir) if args.capture_replay and not args.mock else {}
 
-    directed_real_run = not args.mock and scenario.get("scenario_type") == "directed_parent_switch"
-    effective_otns_command = with_otns_pcap(args.otns_command, directed_real_run)
+    attach_real_run = not args.mock and scenario.get("scenario_type") in {
+        "directed_parent_switch", "static_parent_removal"
+    }
+    effective_otns_command = with_otns_pcap(args.otns_command, attach_real_run)
 
     runner: RealBenchmarkRunner | MockBenchmarkRunner
     runner = (
@@ -3969,8 +3984,8 @@ def main() -> int:
         return 1
 
     pcap_path = None
-    if directed_real_run:
-        pcap_path = capture_directed_pcap_timing(
+    if attach_real_run:
+        pcap_path = capture_attach_pcap_timing(
             scenario=scenario,
             summary=summary,
             runtime_dir=runtime_dir,

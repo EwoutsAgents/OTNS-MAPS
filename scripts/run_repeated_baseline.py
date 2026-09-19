@@ -436,11 +436,11 @@ def validate_run_outputs(
             else:
                 checks.append("preferred_parent_target")
 
-    if summary.get("scenario_type") == "directed_parent_switch":
+    if summary.get("scenario_type") in {"directed_parent_switch", "static_parent_removal"}:
         pcap_value = summary.get("pcap_file")
         pcap_path = Path(pcap_value) if pcap_value else None
         if pcap_path is None or not pcap_path.is_file():
-            errors.append("directed run did not preserve its PCAP artifact")
+            errors.append("attach run did not preserve its PCAP artifact")
         else:
             try:
                 pcap_path.resolve().relative_to(run_dir.resolve())
@@ -448,12 +448,12 @@ def validate_run_outputs(
             except ValueError:
                 errors.append(f"copied PCAP is outside its run directory: {pcap_path}")
         if summary.get("protocol_timing_source") != "otns_pcap":
-            errors.append("directed run canonical timing source is not otns_pcap")
+            errors.append("attach run canonical timing source is not otns_pcap")
         elif summary.get("protocol_timing_complete"):
             checks.append("pcap_protocol_timing")
         else:
             errors.append(
-                "directed run has incomplete PCAP timing: "
+                "attach run has incomplete PCAP timing: "
                 + str(summary.get("protocol_timing_failure_reason") or "unknown")
             )
 

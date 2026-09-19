@@ -115,7 +115,7 @@ def verify_artifact(artifact_dir: Path) -> dict[str, Any]:
     require_relative_file(artifact_dir, "README.md", "README")
 
     scenario_type = manifest.get("scenario_type")
-    if scenario_type == "directed_parent_switch":
+    if scenario_type in {"directed_parent_switch", "static_parent_removal"}:
         require_relative_file(
             artifact_dir,
             manifest.get("preferred_parent_event_file"),

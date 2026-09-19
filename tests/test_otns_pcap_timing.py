@@ -68,6 +68,26 @@ class OtnsPcapTimingTests(unittest.TestCase):
         self.assertTrue(result["complete"])
         self.assertEqual(200.0, result["timing_ms"]["parent_request_to_response"])
 
+    def test_parent_removal_infers_selected_router_from_child_id_request(self) -> None:
+        other = "1111111111111111"
+        packets = [
+            otns_pcap_timing.AttachPacket(1, 185.1, 9, CHILD, None, dst16="0xffff"),
+            packet(2, 185.2, 10, other, CHILD),
+            packet(3, 185.3, 10, TARGET, CHILD),
+            packet(4, 185.4, 11, CHILD, TARGET),
+            packet(5, 185.5, 12, TARGET, CHILD),
+        ]
+        result = otns_pcap_timing.derive_air_timing(
+            packets,
+            child_extaddr=CHILD,
+            target_extaddr=None,
+            mode="multicast",
+            operation_start_s=185.0,
+        )
+        self.assertTrue(result["complete"])
+        self.assertEqual(TARGET, result["packets"]["parent_response"]["src64"])
+        self.assertEqual(200.0, result["timing_ms"]["parent_request_to_response"])
+
     def test_multicast_request_is_correlated_to_selected_target_response(self) -> None:
         packets = [
             otns_pcap_timing.AttachPacket(1, 1.0, 9, CHILD, None, dst16="0xffff"),
