@@ -840,6 +840,147 @@ def parse_parent_rank_events(node_log_files: list[str]) -> list[dict[str, Any]]:
     return events
 
 
+def analyze_fast_attach_lifecycle(
+    node_log_files: list[str], *, expected: bool, router_count: int
+) -> dict[str, Any]:
+    """Validate plain Fast Attach from native child and router diagnostics."""
+    result: dict[str, Any] = {
+        "expected": expected,
+        "detached_observed": False,
+        "arm_attempted": False,
+        "arm_attempt_count": 0,
+        "arm_succeeded": False,
+        "enabled_after_arm": False,
+        "fast_attach_parent_request_observed": False,
+        "router_fast_attach_request_observed": False,
+        "router_delay_rule_valid": False,
+        "acceptable_lq3_response_observed": False,
+        "early_timer_zero_observed": False,
+        "child_id_request_observed": False,
+        "one_shot_cleared": False,
+        "valid": not expected,
+        "failure_reason": None,
+        "events": [],
+        "router_response_delays_ms": [],
+        "router_response_delay_ceiling_ms": router_count * 32,
+    }
+    if not expected:
+        return result
+
+    mobile_lines: list[tuple[int, str]] = []
+    router_lines: list[tuple[int, str]] = []
+    for log_name in node_log_files:
+        path = Path(log_name)
+        if not path.is_file():
+            continue
+        destination = mobile_lines if "mobile" in path.name else router_lines
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            match = re.match(r"\s*(\d+)\s+", line)
+            if match and ("FAST_ATTACH" in line or "ParentResponseDelay" in line):
+                destination.append((int(match.group(1)), line.strip()))
+
+    def record(event: str, time_us: int, line: str) -> None:
+        result["events"].append({"event": event, "sim_time_us": time_us, "log": line})
+
+    attached_before_detach = False
+    detached_time: int | None = None
+    arm_time: int | None = None
+    request_time: int | None = None
+    early_time: int | None = None
+    for time_us, line in sorted(mobile_lines):
+        if "event=attached_seen" in line:
+            enabled_match = re.search(r"enabled=(\d+)", line)
+            enabled = int(enabled_match.group(1)) if enabled_match else None
+            if not result["detached_observed"]:
+                attached_before_detach = True
+            elif enabled == 0:
+                result["one_shot_cleared"] = True
+            record("attached_seen", time_us, line)
+        elif "event=detached_seen" in line:
+            result["detached_observed"] = True
+            detached_time = time_us if detached_time is None else min(detached_time, time_us)
+            record("detached_seen", time_us, line)
+        elif "event=arm_after_detach" in line:
+            result["arm_attempted"] = True
+            result["arm_attempt_count"] += 1
+            result["arm_succeeded"] = "api_error=0" in line
+            result["enabled_after_arm"] = "enabled=1" in line
+            arm_time = time_us
+            record("arm_after_detach", time_us, line)
+        elif "event=parent_request_sent" in line:
+            mask_match = re.search(r"scan_mask=0x([0-9a-fA-F]+)", line)
+            mask = int(mask_match.group(1), 16) if mask_match else 0
+            if mask & 0x20:
+                result["fast_attach_parent_request_observed"] = True
+                request_time = time_us
+                record("fast_attach_parent_request", time_us, line)
+        elif "event=acceptable_lq3_response" in line:
+            result["acceptable_lq3_response_observed"] = True
+            record("acceptable_lq3_response", time_us, line)
+        elif "event=early_timer_zero" in line:
+            result["early_timer_zero_observed"] = True
+            early_time = time_us
+            record("early_timer_zero", time_us, line)
+        elif "event=child_id_request" in line and "enabled=1" in line:
+            result["child_id_request_observed"] = True
+            record("child_id_request", time_us, line)
+        elif "event=attached_clear" in line and "enabled=0" in line:
+            result["one_shot_cleared"] = True
+            record("attached_clear", time_us, line)
+
+    ceiling = router_count * 32
+    for time_us, line in sorted(router_lines):
+        match = re.search(r"ParentResponseDelay delay_ms=(\d+) scan_mask=0x([0-9a-fA-F]+)", line)
+        if not match or not (int(match.group(2), 16) & 0x20):
+            continue
+        delay = int(match.group(1))
+        result["router_fast_attach_request_observed"] = True
+        result["router_response_delays_ms"].append(delay)
+        record("router_fast_attach_response_scheduled", time_us, line)
+    result["router_delay_rule_valid"] = bool(result["router_response_delays_ms"]) and all(
+        0 <= delay <= ceiling for delay in result["router_response_delays_ms"]
+    )
+    result["ordering_valid"] = bool(
+        attached_before_detach
+        and detached_time is not None
+        and arm_time is not None
+        and request_time is not None
+        and detached_time <= arm_time
+        and arm_time < request_time
+        and (early_time is None or request_time <= early_time)
+    )
+
+    required = (
+        "detached_observed",
+        "arm_attempted",
+        "arm_succeeded",
+        "enabled_after_arm",
+        "fast_attach_parent_request_observed",
+        "router_fast_attach_request_observed",
+        "router_delay_rule_valid",
+        "acceptable_lq3_response_observed",
+        "early_timer_zero_observed",
+        "child_id_request_observed",
+        "one_shot_cleared",
+        "ordering_valid",
+    )
+    missing = [field for field in required if not result.get(field)]
+    if result["arm_attempt_count"] != 1:
+        missing.append("exactly_one_arm_attempt")
+    result["valid"] = not missing
+    if missing:
+        if not result["arm_attempted"]:
+            result["failure_reason"] = "fast_attach_not_armed"
+        elif not result["arm_succeeded"] or not result["enabled_after_arm"]:
+            result["failure_reason"] = "fast_attach_arm_failed"
+        elif not result["fast_attach_parent_request_observed"]:
+            result["failure_reason"] = "fast_attach_parent_request_missing_f_flag"
+        else:
+            result["failure_reason"] = "fast_attach_lifecycle_incomplete"
+        result["missing_proofs"] = missing
+    return result
+
+
 def parent_rank_summary(events: list[dict[str, Any]]) -> dict[str, Any]:
     decisions: dict[str, int] = {}
     criteria: dict[str, int] = {}
@@ -1026,6 +1167,7 @@ def tracked_results_manifest(
         "protocol_timing_failure_reason": summary.get("protocol_timing_failure_reason"),
         "pcap_protocol_timing": summary.get("pcap_protocol_timing", {}),
         "openthread_event_timing": summary.get("openthread_event_timing", {}),
+        "fast_attach": summary.get("fast_attach", {}),
         "parent_deletion_to_target_observed_ms": summary.get("parent_deletion_to_target_observed_ms"),
         "parent_deletion_to_target_observed_source": summary.get("parent_deletion_to_target_observed_source"),
         "router_topology_changes": summary.get("router_topology_changes", {}),
@@ -4052,6 +4194,32 @@ def main() -> int:
         summary.setdefault("notes", []).append(
             "Parent ranking export requires OTNS node logs; rerun with --otns-watch-level info or lower."
         )
+    plain_fast_attach_expected = (
+        not args.mock
+        and scenario.get("scenario_type") == "static_parent_removal"
+        and args.node_binary_profile == "fast-attach"
+    )
+    fast_attach = analyze_fast_attach_lifecycle(
+        node_log_info.get("copied_files", []),
+        expected=plain_fast_attach_expected,
+        router_count=len(router_names(scenario)),
+    )
+    if plain_fast_attach_expected:
+        fast_attach["initial_attachment_succeeded"] = any(
+            event["event"] == "attached_seen" for event in fast_attach["events"]
+        )
+        fast_attach["parent_removed"] = summary.get("removed_parent_node") is not None
+        fast_attach["attach_sequence_complete"] = summary.get("protocol_timing_complete") is True
+        fast_attach["reattached"] = summary.get("result_classification") == "switch_observed"
+        if not fast_attach["attach_sequence_complete"]:
+            fast_attach["valid"] = False
+            fast_attach["failure_reason"] = "fast_attach_attach_sequence_incomplete"
+        elif not fast_attach["reattached"]:
+            fast_attach["valid"] = False
+            fast_attach["failure_reason"] = "fast_attach_reattach_failed"
+        if not fast_attach["valid"]:
+            summary["result_classification"] = fast_attach["failure_reason"]
+    summary["fast_attach"] = fast_attach
     summary["firmware_variant"] = args.firmware_variant
     summary["thread_device_type"] = args.thread_device_type
     summary["parent_search_config"] = args.parent_search_config

@@ -457,6 +457,16 @@ def validate_run_outputs(
                 + str(summary.get("protocol_timing_failure_reason") or "unknown")
             )
 
+    fast_attach = summary.get("fast_attach", {})
+    if fast_attach.get("expected"):
+        if fast_attach.get("valid"):
+            checks.append("fast_attach_lifecycle")
+        else:
+            errors.append(
+                "plain fast-attach lifecycle is invalid: "
+                + str(fast_attach.get("failure_reason") or "unknown")
+            )
+
     return {
         "status": "ok" if not errors else "failed",
         "errors": errors,

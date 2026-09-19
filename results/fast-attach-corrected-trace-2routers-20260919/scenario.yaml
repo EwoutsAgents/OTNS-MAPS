@@ -1,0 +1,60 @@
+name: med_static_parent_removal_2routers
+title: Static stock OpenThread MED parent-removal benchmark with 2 routers
+description: >
+  Static stock OTNS parent-removal benchmark mirroring the ESPHome stock
+  switch-parent test structure with two router-capable devices and one
+  Minimal End Device. Routers are created first, the child is created after a
+  fixed router-settling period, the child's observed current parent is removed,
+  and the child is observed without mobility. Nodes mirror the hardware bench:
+  a horizontal line with the nearest OTNS-representable spacing of 10 cm at
+  the ESP32-C6 default +20 dBm.
+
+scenario_type: static_parent_removal
+device_profile: minimal_end_device
+
+coordinate_system:
+  meter_per_unit: 0.1
+  source: "Hardware bench approximation; OTNS integer coordinates use 0.1 m units"
+
+observability:
+  packet_probe_reliable: true
+  primary_parent_observation: packet_probe
+
+radio_model:
+  preferred: MutualInterference
+  fallbacks:
+    - MIDisc
+    - Ideal_Rssi
+    - Ideal
+
+timing:
+  router_settling_seconds: 180
+  child_attach_seconds: 5
+  after_parent_removed_seconds: 255
+  step_seconds: 1
+
+activation:
+  initial_nodes:
+    - router_a
+    - router_b
+  child_node: mobile
+
+removal:
+  target: observed_mobile_parent
+
+nodes:
+  router_a:
+    type: router
+    x: 0
+    y: 0
+    tx_power_dbm: 20
+  router_b:
+    type: router
+    x: 2
+    y: 0
+    tx_power_dbm: 20
+  mobile:
+    type: med
+    x: 1
+    y: 0
+    tx_power_dbm: 20

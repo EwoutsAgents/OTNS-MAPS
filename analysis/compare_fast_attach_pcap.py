@@ -83,6 +83,10 @@ def load_selected(campaigns: list[Path], limit: int) -> tuple[list[tuple[Path, d
                 summary.get("result_classification") in {"selected_target_reached", "switch_observed"}
                 and summary.get("protocol_timing_source") == "otns_pcap"
                 and summary.get("protocol_timing_complete") is True
+                and (
+                    not summary.get("fast_attach", {}).get("expected")
+                    or summary.get("fast_attach", {}).get("valid") is True
+                )
                 and all(summary.get("protocol_timing_ms", {}).get(key) is not None for key, _ in INTERVALS)
             )
             if accepted:

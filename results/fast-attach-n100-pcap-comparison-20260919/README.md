@@ -1,5 +1,7 @@
 # fast-attach: simulated PCAP and hardware PCAP
 
+> **Historical invalid Fast Attach campaign.** Fast Attach was compiled but never armed after detachment. Recovery requests had F=0 and followed the ordinary approximately 750 ms scan timeout. Retained as before-fix evidence; use `../fast-attach-corrected-n100-pcap-comparison-20260919/` for the valid comparison.
+
 Each OTNS column uses exactly 100 accepted runs. Values are mean +/- sample SD in ms.
 
 | Routers | Interval | Internal OTNS event | OTNS PCAP | Hardware PCAP | OTNS - hardware |

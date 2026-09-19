@@ -1,0 +1,375 @@
+{
+  "after_parent_removed_seconds": 255,
+  "build_config_source": "../ESPHome-Thread-ED-Switch-Parent/scripts/build_otns_native_variants.sh",
+  "child_attach_seconds": 5,
+  "configured_node_tx_power_dbm": {
+    "mobile": 20.0,
+    "router_a": 20.0,
+    "router_b": 20.0
+  },
+  "detach_count": 1,
+  "detach_events": [
+    {
+      "detach_position_x": 1.0,
+      "detach_time_s": 420.0,
+      "previous_parent": null,
+      "reattach_latency_s": 1.0,
+      "reattach_parent": "router_b",
+      "reattach_position_x": 1.0,
+      "reattach_time_s": 421.0
+    }
+  ],
+  "device_profile": "minimal_end_device",
+  "ended_detached": false,
+  "equivalent_to": null,
+  "expected_initial_parent": null,
+  "fast_attach": {
+    "acceptable_lq3_response_observed": true,
+    "arm_attempted": true,
+    "arm_succeeded": true,
+    "attach_sequence_complete": true,
+    "child_id_request_observed": true,
+    "detached_observed": true,
+    "early_timer_zero_observed": true,
+    "enabled_after_arm": true,
+    "events": [
+      {
+        "event": "attached_clear",
+        "log": "180845556 00:00:00.845 [N] Mle-----------: FAST_ATTACH event=attached_clear enabled=0",
+        "sim_time_us": 180845556
+      },
+      {
+        "event": "attached_seen",
+        "log": "180845556 FAST_ATTACH event=attached_seen time_us=845556 role=2 enabled=0",
+        "sim_time_us": 180845556
+      },
+      {
+        "event": "arm_after_detach",
+        "log": "419950096 FAST_ATTACH event=arm_after_detach time_us=239950096 role=1 api_error=0 enabled=1",
+        "sim_time_us": 419950096
+      },
+      {
+        "event": "detached_seen",
+        "log": "419950096 FAST_ATTACH event=detached_seen time_us=239950096 role=1",
+        "sim_time_us": 419950096
+      },
+      {
+        "event": "fast_attach_parent_request",
+        "log": "420344568 00:04:00.344 [N] Mle-----------: FAST_ATTACH event=parent_request_sent scan_mask=0xa0 enabled=1",
+        "sim_time_us": 420344568
+      },
+      {
+        "event": "acceptable_lq3_response",
+        "log": "420368280 00:04:00.368 [N] Mle-----------: FAST_ATTACH event=acceptable_lq3_response parent=bee088b8373dd2c6",
+        "sim_time_us": 420368280
+      },
+      {
+        "event": "child_id_request",
+        "log": "420368280 00:04:00.368 [N] Mle-----------: FAST_ATTACH event=child_id_request parent=bee088b8373dd2c6 enabled=1",
+        "sim_time_us": 420368280
+      },
+      {
+        "event": "early_timer_zero",
+        "log": "420368280 00:04:00.368 [N] Mle-----------: FAST_ATTACH event=early_timer_zero",
+        "sim_time_us": 420368280
+      },
+      {
+        "event": "attached_clear",
+        "log": "420377768 00:04:00.377 [N] Mle-----------: FAST_ATTACH event=attached_clear enabled=0",
+        "sim_time_us": 420377768
+      },
+      {
+        "event": "attached_seen",
+        "log": "420377768 FAST_ATTACH event=attached_seen time_us=240377768 role=2 enabled=0",
+        "sim_time_us": 420377768
+      },
+      {
+        "event": "router_fast_attach_response_scheduled",
+        "log": "420346944 00:07:00.346 [N] Mle-----------: ParentResponseDelay delay_ms=17 scan_mask=0xa0 child=1ed9ba0d1f524ce8",
+        "sim_time_us": 420346944
+      }
+    ],
+    "expected": true,
+    "failure_reason": null,
+    "fast_attach_parent_request_observed": true,
+    "initial_attachment_succeeded": true,
+    "one_shot_cleared": true,
+    "ordering_valid": true,
+    "parent_removed": true,
+    "reattached": true,
+    "router_delay_rule_valid": true,
+    "router_fast_attach_request_observed": true,
+    "router_response_delay_ceiling_ms": 64,
+    "router_response_delays_ms": [
+      17
+    ],
+    "valid": true
+  },
+  "final_mobile_state": "child",
+  "final_observed_parent": "router_b",
+  "firmware_source_repo": "/home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent",
+  "firmware_variant": "otns-fast-attach-corrected-pcap",
+  "first_detach_position_x": 1.0,
+  "first_detach_previous_parent": null,
+  "first_detach_time_s": 420.0,
+  "first_reattach_parent": "router_b",
+  "first_reattach_position_x": 1.0,
+  "first_reattach_time_s": 421.0,
+  "first_switch_time_s": 421.0,
+  "ftd_node_binary_path": "/tmp/otns-fast-attach-fixed-build/bin/ot-cli-ftd",
+  "ftd_node_binary_profile": "fast-attach",
+  "initial_attachment_expected_parent": null,
+  "initial_attachment_observed_parent": null,
+  "initial_attachment_timed_out": false,
+  "initial_attachment_wait_s": null,
+  "initial_observed_parent": null,
+  "mle_attach_attempts": 2,
+  "mle_better_parent_attach_attempts": 0,
+  "mle_parent_changes": 1,
+  "mobile_extaddr": "1ed9ba0d1f524ce8",
+  "mobile_to_parent_end_dwell_sim_lqi_median": null,
+  "mobile_to_parent_end_dwell_sim_rss_dbm_mean": null,
+  "mobile_to_parent_end_dwell_sim_rss_dbm_median": null,
+  "mock": false,
+  "node_binary_path": "/tmp/otns-fast-attach-fixed-build/bin/ot-cli-mtd",
+  "node_binary_profile": "fast-attach",
+  "node_executables": {
+    "mobile": {
+      "executable_path": "/tmp/otns-fast-attach-fixed-build/bin/ot-cli-mtd",
+      "executable_sha256": "08d1e625e49c09efc400e02530f78a3fd4b917a9a59dba7f9d9993e653abca6e",
+      "firmware_profile": "fast-attach",
+      "node_id": 3
+    },
+    "router_a": {
+      "executable_path": "/tmp/otns-fast-attach-fixed-build/bin/ot-cli-ftd",
+      "executable_sha256": "4131ceb4b9ba87aa83981e1fff11dc1c505bf4ef3da2d64e9a62d245e684047a",
+      "firmware_profile": "fast-attach",
+      "node_id": 1
+    },
+    "router_b": {
+      "executable_path": "/tmp/otns-fast-attach-fixed-build/bin/ot-cli-ftd",
+      "executable_sha256": "4131ceb4b9ba87aa83981e1fff11dc1c505bf4ef3da2d64e9a62d245e684047a",
+      "firmware_profile": "fast-attach",
+      "node_id": 2
+    }
+  },
+  "node_log_files": [
+    "node_log_mobile_3.log",
+    "node_log_router_a_1.log",
+    "node_log_router_b_2.log"
+  ],
+  "notes": [
+    "OTNS FTD executable set to /tmp/otns-fast-attach-fixed-build/bin/ot-cli-ftd.",
+    "OTNS MTD executable set to /tmp/otns-fast-attach-fixed-build/bin/ot-cli-mtd.",
+    "Static removal scenario deleted observed mobile parent `router_a` (Node<1>) after 5s child attach wait.",
+    "Live OTNS scan compatibility is inconsistent in this setup; scan-derived RSSI/LQI fields are left empty.",
+    "OTNS parent command returned InvalidState for at least one sample; parent fields are empty for that sample."
+  ],
+  "openthread_commit": "a12ff0d0f54fd41954b45047fcdd08f302731c5f",
+  "openthread_event_timing": {
+    "complete": null,
+    "event_timestamps": {},
+    "source": null,
+    "timestamp_resolution_us": null,
+    "timing_ms": {}
+  },
+  "openthread_event_timing_complete": null,
+  "openthread_event_timing_ms": {},
+  "openthread_event_timing_source": null,
+  "oscillation_events": 0,
+  "otns_commit": "099a6c2",
+  "otns_runtime_dir": "/tmp/fast-attach-final-trace-ltwTgB/otns_runtime",
+  "otns_watch_level": "note",
+  "packet_delivery_ratio": 1.0,
+  "packet_probe_reliable": true,
+  "parent_after_removal_final": "router_b",
+  "parent_before_removal": "router_a",
+  "parent_probe_delivery_ratio": 1.0,
+  "parent_probe_enabled": true,
+  "parent_probe_interval_s": 1,
+  "parent_probe_mean_rtt_avg_ms": 7.578947,
+  "parent_probe_total_rx": 19,
+  "parent_probe_total_tx": 19,
+  "parent_rank_criterion_counts": {},
+  "parent_rank_decision_counts": {},
+  "parent_rank_event_count": 0,
+  "parent_rank_file": null,
+  "parent_removal_time_s": 185.0,
+  "parent_search_config": "disabled",
+  "parent_sequence": [
+    "router_b"
+  ],
+  "pcap_file": "otns_packets_20260919T143000Z.pcap",
+  "pcap_protocol_timing": {
+    "complete": true,
+    "failure_reason": null,
+    "packets": {
+      "child_id_request": {
+        "command": 11,
+        "dst16": null,
+        "dst64": "bee088b8373dd2c6",
+        "frame_number": 211,
+        "src16": null,
+        "src64": "1ed9ba0d1f524ce8",
+        "timestamp_s": 420.370368
+      },
+      "child_id_response": {
+        "command": 12,
+        "dst16": null,
+        "dst64": "1ed9ba0d1f524ce8",
+        "frame_number": 213,
+        "src16": null,
+        "src64": "bee088b8373dd2c6",
+        "timestamp_s": 420.374824
+      },
+      "parent_request": {
+        "command": 9,
+        "dst16": "0xffff",
+        "dst64": null,
+        "frame_number": 208,
+        "src16": null,
+        "src64": "1ed9ba0d1f524ce8",
+        "timestamp_s": 420.344736
+      },
+      "parent_response": {
+        "command": 10,
+        "dst16": null,
+        "dst64": "1ed9ba0d1f524ce8",
+        "frame_number": 209,
+        "src16": null,
+        "src64": "bee088b8373dd2c6",
+        "timestamp_s": 420.364472
+      }
+    },
+    "source": "otns_pcap",
+    "timestamp_resolution_us": 1,
+    "timing_ms": {
+      "child_id_request_to_response": 4.456,
+      "parent_request_to_child_id_response": 30.088,
+      "parent_request_to_response": 19.736,
+      "parent_response_to_child_id_request": 5.896
+    }
+  },
+  "pcap_sha256": "7833ebb1749e7501677120c142ed526ed91454df7597cc4499887dad665e7110",
+  "post_removal_first_switch_time_s": 421.0,
+  "post_removal_reattach_latency_s": 236.0,
+  "post_removal_switch_count": 1,
+  "post_removal_switch_events": [
+    {
+      "from_parent": "router_a",
+      "phase": "post_parent_removal",
+      "sample_index": 235,
+      "sim_time_s": 421.0,
+      "to_parent": "router_b"
+    }
+  ],
+  "pre_movement_parent_before_delayed_nodes": null,
+  "pre_movement_parent_events": [],
+  "pre_movement_parent_final": null,
+  "pre_movement_parent_observation_count": 0,
+  "pre_movement_parent_sequence": [],
+  "pre_movement_switch_count": 0,
+  "preferred_parent_event_file": null,
+  "primary_parent_observation": "packet_probe",
+  "protocol_packet_timestamps": {
+    "child_id_request": {
+      "command": 11,
+      "dst16": null,
+      "dst64": "bee088b8373dd2c6",
+      "frame_number": 211,
+      "src16": null,
+      "src64": "1ed9ba0d1f524ce8",
+      "timestamp_s": 420.370368
+    },
+    "child_id_response": {
+      "command": 12,
+      "dst16": null,
+      "dst64": "1ed9ba0d1f524ce8",
+      "frame_number": 213,
+      "src16": null,
+      "src64": "bee088b8373dd2c6",
+      "timestamp_s": 420.374824
+    },
+    "parent_request": {
+      "command": 9,
+      "dst16": "0xffff",
+      "dst64": null,
+      "frame_number": 208,
+      "src16": null,
+      "src64": "1ed9ba0d1f524ce8",
+      "timestamp_s": 420.344736
+    },
+    "parent_response": {
+      "command": 10,
+      "dst16": null,
+      "dst64": "1ed9ba0d1f524ce8",
+      "frame_number": 209,
+      "src16": null,
+      "src64": "bee088b8373dd2c6",
+      "timestamp_s": 420.364472
+    }
+  },
+  "protocol_timing_complete": true,
+  "protocol_timing_failure_reason": null,
+  "protocol_timing_ms": {
+    "child_id_request_to_response": 4.456,
+    "parent_request_to_child_id_response": 30.088,
+    "parent_request_to_response": 19.736,
+    "parent_response_to_child_id_request": 5.896
+  },
+  "protocol_timing_resolution_us": 1,
+  "protocol_timing_source": "otns_pcap",
+  "reattach_latency_s": 1.0,
+  "recovery_classification": "detached_reattached_same_parent",
+  "removed_parent_extaddr": "7e28de12a391d189",
+  "removed_parent_node": "router_a",
+  "removed_parent_node_id": 1,
+  "removed_parent_rloc16": "4800",
+  "replay_capture_requested": false,
+  "replay_file": null,
+  "replay_metadata_file": null,
+  "result_classification": "switch_observed",
+  "router_count": 2,
+  "router_settling_seconds": 180,
+  "sample_count": 255,
+  "scenario_file": "scenario.yaml",
+  "scenario_model_rss": null,
+  "scenario_name": "med_static_parent_removal_2routers",
+  "scenario_title": "Static stock OpenThread MED parent-removal benchmark with 2 routers",
+  "scenario_type": "static_parent_removal",
+  "second_switch_position_x": null,
+  "second_switch_time_s": null,
+  "selected_radio_model": "MutualInterference",
+  "sim_ping_rss_ambiguous_probe_events": 0,
+  "sim_ping_rss_capture_enabled": false,
+  "sim_ping_rss_capture_method": null,
+  "sim_ping_rss_capture_requested": false,
+  "sim_ping_rss_match_rate": null,
+  "sim_ping_rss_matched_probe_events": 0,
+  "sim_ping_rss_policy": "request_and_reply_when_available",
+  "sim_ping_rss_probe_stats": {},
+  "sim_ping_rss_total_probe_events": 0,
+  "sim_ping_rss_unmatched_probe_events": 0,
+  "switch_count": 1,
+  "switch_events": [
+    {
+      "from_parent": "router_a",
+      "phase": "post_parent_removal",
+      "sample_index": 235,
+      "sim_time_s": 421.0,
+      "to_parent": "router_b"
+    }
+  ],
+  "switch_position_x": 1.0,
+  "thread_device_type": "med",
+  "time_spent_by_parent_s": {
+    "router_b": 20.0
+  },
+  "total_outage_s": 236.0,
+  "tx_power_command": "txpower",
+  "verified_node_tx_power_dbm": {
+    "mobile": 20.0,
+    "router_a": 20.0,
+    "router_b": 20.0
+  }
+}
