@@ -124,6 +124,15 @@ def format_stat(value: dict[str, float | int]) -> str:
     return f'{float(value["mean_ms"]):.3f} +/- {float(value["sample_sd_ms"]):.3f}'
 
 
+def timing_delta(pcap: dict[str, float | int], hardware: dict[str, float | int]) -> dict[str, float]:
+    hardware_mean = float(hardware["mean_ms"])
+    delta_ms = float(pcap["mean_ms"]) - hardware_mean
+    return {
+        "delta_ms": round(delta_ms, 6),
+        "delta_percent": round(delta_ms / hardware_mean * 100.0, 6),
+    }
+
+
 def main() -> int:
     args = parse_args()
     campaigns = parse_campaigns(args.campaign)
@@ -133,7 +142,7 @@ def main() -> int:
     result_rows: list[dict[str, Any]] = []
     accepted_rows: list[dict[str, Any]] = []
     selection: dict[str, Any] = {"sample_limit": args.limit, "router_counts": {}}
-    report_rows: list[tuple[int, str, dict[str, Any], dict[str, Any], dict[str, Any]]] = []
+    report_rows: list[tuple[int, str, dict[str, Any] | None, dict[str, Any], dict[str, Any], dict[str, float]]] = []
     for routers in sorted(campaigns):
         selected, excluded = load_selected(campaigns[routers], args.limit)
         if routers not in hardware:
@@ -196,7 +205,8 @@ def main() -> int:
                 "mean_ms": float(hardware_row[mean_column]),
                 "sample_sd_ms": float(hardware_row[sd_column]),
             }
-            report_rows.append((routers, label, internal, pcap, hw))
+            delta = timing_delta(pcap, hw)
+            report_rows.append((routers, label, internal, pcap, hw, delta))
             sources = [("otns_pcap", pcap), ("hardware_pcap", hw)]
             if internal is not None:
                 sources.insert(0, ("otns_openthread_event", internal))
@@ -207,6 +217,7 @@ def main() -> int:
                         "interval": key,
                         "source": source,
                         **value,
+                        **(delta if source == "otns_pcap" else {"delta_ms": "", "delta_percent": ""}),
                     }
                 )
 
@@ -214,7 +225,10 @@ def main() -> int:
     with csv_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=("routers", "interval", "source", "n", "mean_ms", "sample_sd_ms"),
+            fieldnames=(
+                "routers", "interval", "source", "n", "mean_ms", "sample_sd_ms",
+                "delta_ms", "delta_percent",
+            ),
             lineterminator="\n",
         )
         writer.writeheader()
@@ -235,12 +249,14 @@ def main() -> int:
         "",
         f"Each OTNS column uses exactly {args.limit} accepted runs. Values are mean +/- sample SD in ms.",
         "",
-        "| Routers | Interval | Internal OTNS event | OTNS PCAP | Hardware PCAP |",
-        "| ---: | --- | ---: | ---: | ---: |",
+        "| Routers | Interval | Internal OTNS event | OTNS PCAP | Hardware PCAP | OTNS - hardware |",
+        "| ---: | --- | ---: | ---: | ---: | ---: |",
     ]
-    for routers, label, internal, pcap, hw in report_rows:
+    for routers, label, internal, pcap, hw, delta in report_rows:
         lines.append(
-            f"| {routers} | {label} | {format_stat(internal) if internal is not None else 'n/a'} | {format_stat(pcap)} | {format_stat(hw)} |"
+            f"| {routers} | {label} | {format_stat(internal) if internal is not None else 'n/a'} | "
+            f"{format_stat(pcap)} | {format_stat(hw)} | {delta['delta_ms']:+.3f} ms "
+            f"({delta['delta_percent']:+.1f}%) |"
         )
     lines.extend(
         [
