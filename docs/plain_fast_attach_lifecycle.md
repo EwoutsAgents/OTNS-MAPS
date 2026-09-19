@@ -16,6 +16,15 @@ Fast Attach support was compiled into both node types, but the application-level
 
 The missing behavior was the OTNS equivalent of the hardware `thread_fast_attach` component: observe a post-attachment Detached role and call the public Fast Attach API before recovery begins.
 
+| Behavioral check | Before | After |
+| --- | --- | --- |
+| Fast Attach compiled into MTD and FTD | yes | yes |
+| Armed after post-attachment detach | no | yes, public API returns success |
+| Recovery Parent Request F bit | 0 (`scan_mask=0x80`) | 1 (`scan_mask=0xa0`) |
+| First acceptable LQ3 response ends the scan | no | yes |
+| Ordinary approximately 750 ms timeout path | yes | no |
+| One-shot state clears after attachment | not exercised | yes |
+
 ## Implementation
 
 The plain Fast Attach MTD build applies `patches/otns/plain-fast-attach-native-adapter.patch` from the hardware/reference repository. A CLI application state-change callback records initial attachment, waits for a later Detached transition, calls `otThreadSetFastAttachEnabled(instance, true)` exactly once, confirms `otThreadIsFastAttachEnabled(instance)`, and then leaves the existing MLE implementation to conduct recovery.
