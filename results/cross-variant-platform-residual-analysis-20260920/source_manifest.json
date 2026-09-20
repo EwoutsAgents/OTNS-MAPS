@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "analysis": "independent-sample cross-variant platform residuals",
+  "valid_variants": [
+    "stock",
+    "stock-low-power",
+    "ucast",
+    "fast-attach-corrected",
+    "fast-attach-ucast-1"
+  ],
+  "excluded_historical_dataset": "results/fast-attach-n100-pcap-comparison-20260919",
+  "otns_commit": "7bf760e127f58ed38d57ac9413b1408744ce27b8",
+  "hardware_commit": "c269aca295e621253878384364b13a87525a497e",
+  "openthread_commit": "a12ff0d0f54fd41954b45047fcdd08f302731c5f",
+  "sample_count": 3000,
+  "samples_per_platform_variant_topology": 100,
+  "bootstrap_iterations": 5000,
+  "tshark": "tshark",
+  "sources": {
+    "otns": [
+      "results/stock-n100-pcap-comparison-20260919",
+      "results/stock-low-power-n100-pcap-comparison-20260919",
+      "results/ucast-n100-pcap-comparison-20260919",
+      "results/fast-attach-corrected-n100-pcap-comparison-20260919",
+      "results/fast-attach-ucast-1-n100-pcap-comparison-20260919"
+    ],
+    "hardware": "/home/ewout/.openclaw/workspace-softwaredeveloper/ESPHome-Thread-ED-Switch-Parent/testing/results/n100-comparison-2026-09"
+  },
+  "ack_rule": "ACK request required; matching MAC sequence; within next four frames; stop at next selected MLE frame"
+}
