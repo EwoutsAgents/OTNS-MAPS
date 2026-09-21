@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "analysis": "independent-sample cross-variant platform residuals",
   "valid_variants": [
     "stock",
@@ -9,7 +9,8 @@
     "fast-attach-ucast-1"
   ],
   "excluded_historical_dataset": "results/fast-attach-n100-pcap-comparison-20260919",
-  "otns_commit": "7bf760e127f58ed38d57ac9413b1408744ce27b8",
+  "analysis_commit": "790194f663bc545c4f6df9b2747c1e2e7e913e6c",
+  "otns_input_commit": "7bf760e127f58ed38d57ac9413b1408744ce27b8",
   "hardware_commit": "c269aca295e621253878384364b13a87525a497e",
   "openthread_commit": "a12ff0d0f54fd41954b45047fcdd08f302731c5f",
   "sample_count": 3000,

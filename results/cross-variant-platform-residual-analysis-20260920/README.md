@@ -46,11 +46,11 @@ Across clean exchanges pooled over applicable variants and topologies:
 
 | Interval | Hardware mean | OTNS mean | Difference |
 | --- | ---: | ---: | ---: |
-| directed Parent Request → ACK | 2.563819 | 2.563819 | <0.000001 ms |
-| Parent Response → ACK | 4.003779 | 4.003779 | <0.000001 ms |
-| Child ID Request → ACK | 3.843819 | 3.843819 | <0.000001 ms |
+| directed Parent Request → ACK | 2.567553 | 2.560000 | 0.007553 ms |
+| Parent Response → ACK | 4.007531 | 4.000000 | 0.007531 ms |
+| Child ID Request → ACK | 3.847612 | 3.840000 | 0.007612 ms |
 
-Per-cell ordinary means usually differ by about 0.008 ms; cells containing retransmitted attempts can move the ordinary mean. Restricting to clean exchanges makes the pooled values identical at capture precision because corresponding frame lengths and modeled airtime are identical.
+Hardware is consistently about 7.5–7.6 µs slower. Immediate frame-to-ACK timing therefore agrees within approximately 8 µs and is not the source of the multi-millisecond residual. Cells containing retransmitted attempts can move the unfiltered ordinary mean.
 
 The residual is after ACK completion. For immediate-selection variants, hardware-minus-OTNS ACK(PRsp)→CIDReq mean residuals are normally 4.4–6.4 ms. Robust median residuals are 4.8–5.5 ms, including the outlier-sensitive Fast-Attach-Ucast-1 four-router cell. ACK(CIDReq)→CIDRsp accounts for essentially the entire final-leg residual.
 

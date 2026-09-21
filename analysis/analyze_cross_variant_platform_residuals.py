@@ -419,9 +419,10 @@ def main() -> int:
     write_csv(output / "clean_exchange_summary.csv", clean_summary)
     (output / "generated_tables.md").write_text(render_tables(comparisons), encoding="utf-8")
     manifest = {
-        "schema_version": 1, "analysis": "independent-sample cross-variant platform residuals",
+        "schema_version": 2, "analysis": "independent-sample cross-variant platform residuals",
         "valid_variants": list(VALID_VARIANTS), "excluded_historical_dataset": "results/fast-attach-n100-pcap-comparison-20260919",
-        "otns_commit": subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip(),
+        "analysis_commit": subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip(),
+        "otns_input_commit": "7bf760e127f58ed38d57ac9413b1408744ce27b8",
         "hardware_commit": subprocess.check_output(["git", "-C", str(hardware.parents[2]), "rev-parse", "HEAD"], text=True).strip(),
         "openthread_commit": "a12ff0d0f54fd41954b45047fcdd08f302731c5f",
         "sample_count": len(rows), "samples_per_platform_variant_topology": 100,

@@ -1,6 +1,5 @@
 import csv
 import importlib.util
-import math
 import unittest
 from pathlib import Path
 
@@ -58,7 +57,22 @@ class CrossVariantResidualTests(unittest.TestCase):
         self.assertEqual(decoded["parent_response_ack_match"], "mac_sequence_and_adjacency")
 
     def test_full_attach_reconstructs_from_three_legs(self):
-        self.assertTrue(math.isclose(10.0 + 5.0 + 8.0, 23.0))
+        normalized = ROOT / "results/cross-variant-platform-residual-analysis-20260920/normalized_runs.csv"
+        with normalized.open(newline="", encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+
+        self.assertEqual(len(rows), 3000)
+        for row in rows:
+            reconstructed = sum(
+                float(row[key])
+                for key in (
+                    "parent_request_to_response_ms",
+                    "parent_response_to_child_id_request_ms",
+                    "child_id_request_to_response_ms",
+                )
+            )
+            with self.subTest(platform=row["platform"], source_run=row["source_run"]):
+                self.assertAlmostEqual(reconstructed, float(row["full_attach_ms"]), delta=2e-6)
 
 
 if __name__ == "__main__":
