@@ -401,6 +401,15 @@ def main() -> int:
     parser.add_argument("--tshark", default="tshark")
     parser.add_argument("--workers", type=int, default=12)
     parser.add_argument("--bootstrap-iterations", type=int, default=5000)
+    parser.add_argument(
+        "--analysis-commit",
+        help="Analysis implementation revision recorded in provenance (default: current repository HEAD)",
+    )
+    parser.add_argument(
+        "--otns-input-commit",
+        default="7bf760e127f58ed38d57ac9413b1408744ce27b8",
+        help="Revision of the committed OTNS input datasets",
+    )
     args = parser.parse_args()
     root, hardware, output = args.repo_root.resolve(), args.hardware_results.resolve(), args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -418,11 +427,14 @@ def main() -> int:
     write_csv(output / "outliers.csv", outliers or [{"disposition": "none"}])
     write_csv(output / "clean_exchange_summary.csv", clean_summary)
     (output / "generated_tables.md").write_text(render_tables(comparisons), encoding="utf-8")
+    analysis_commit = args.analysis_commit or subprocess.check_output(
+        ["git", "-C", str(root), "rev-parse", "HEAD"], text=True
+    ).strip()
     manifest = {
         "schema_version": 2, "analysis": "independent-sample cross-variant platform residuals",
         "valid_variants": list(VALID_VARIANTS), "excluded_historical_dataset": "results/fast-attach-n100-pcap-comparison-20260919",
-        "analysis_commit": subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip(),
-        "otns_input_commit": "7bf760e127f58ed38d57ac9413b1408744ce27b8",
+        "analysis_commit": analysis_commit,
+        "otns_input_commit": args.otns_input_commit,
         "hardware_commit": subprocess.check_output(["git", "-C", str(hardware.parents[2]), "rev-parse", "HEAD"], text=True).strip(),
         "openthread_commit": "a12ff0d0f54fd41954b45047fcdd08f302731c5f",
         "sample_count": len(rows), "samples_per_platform_variant_topology": 100,
